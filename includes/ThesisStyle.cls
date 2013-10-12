@@ -744,7 +744,7 @@
 
 
 %%%%from thloria
-\newcommand{\@DFD}{D\'epartement de formation doctorale en informatique
+\newcommand{\@DFD}{Département de formation doctorale en informatique
             \hfill\'Ecole doctorale SPI Lille}
 \newcommand{\@TL@cmn@head}{\par\nointerlineskip\vskip1mm\noindent\hrulefill\\
                           \@DFD}
@@ -754,7 +754,7 @@
          \setbox0=\hbox{$\lower2.4\baselineskip\hbox{\INPLLogotitle}$}%
          \wd0=0pt$\smash{\copy0}$\hfill
           \vtop{\hsize13.8cm\leftskip0pt plus1fill
-                D\'epartement de formation doctorale en informatique%
+                Département de formation doctorale en informatique%
                 \vadjust{\vskip-2mm}\par
                 \centerline{\hrulefill}%
                 \'Ecole doctorale SPI Lille\par
@@ -770,7 +770,7 @@
                     {\setbox0=\hbox{$\raise2.5cm\hbox{\UHPLogo}$}%
                      \ht0=\baselineskip\box0}\hfill
                 \else
-                    Universit\'e des Sciences et Technologies de Lille -- Lille 1%
+                    Université des Sciences et Technologies de Lille -- Lille 1%
                 \fi}%
     \@TL@cmn@head\\
     UFR IEEA\par
@@ -791,7 +791,7 @@
      \centerline{\UseEntryFont{ThesisFirstPageFoot}%
                  INRIA Lille - Nord Europe
 				 }
-	 {\footnotesize Num\'ero d'ordre: XXXXX} %40109
+	 {\footnotesize Numéro d'ordre: XXXXX} %40109
      \centerline{\UseEntryFont{ThesisFirstPageFoot}%
                  ~
 				 }
@@ -815,7 +815,7 @@
 \newcommand{\@ThesisDate}{\fbox{{\tt\char`\\ThesisDate}}}
 \newcommand\ThesisDate[1]{\renewcommand{\@ThesisDate}{#1}}
 \newcommand{\@ThesisPresentedThe}{{\UseEntryFont{ThesisPresentedThe}%
-         pr\'esent\'ee et soutenue publiquement le \@ThesisDate}}
+         présentée et soutenue publiquement le \@ThesisDate}}
 \newcommand\ThesisPresentedThe[1]%
   {\renewcommand{\@ThesisPresentedThe}{{\UseEntryFont{ThesisPresentedThe}#1}}}
 \newcommand{\@ThesisInOrderToGet}%
@@ -825,15 +825,15 @@
 \newcommand\ThesisINPL{\renewcommand{\@ThesisFirstPageHead}{\@INPLhead}%
                        \ThesisDiploma{{\UseEntryFont{ThesisDiploma}%
       Doctorat de l'Institut National Polytechnique de Lorraine\\[3mm]
-            {\UseEntryFont{ThesisSpecialty}(sp\'ecialit\'e informatique)}}}}
+            {\UseEntryFont{ThesisSpecialty}(spécialité informatique)}}}}
 \newcommand\ThesisLilleI{\renewcommand{\@ThesisFirstPageHead}{\@LilleIhead}%
                          \ThesisDiploma{{\UseEntryFont{ThesisDiploma}%
-                Doctorat de l'Universit\'e des Sciences et Technologies de Lille \\[3mm]
-            {\UseEntryFont{ThesisSpecialty}(sp\'ecialit\'e informatique)}}}}
+                Doctorat de l'Université des Sciences et Technologies de Lille \\[3mm]
+            {\UseEntryFont{ThesisSpecialty}(spécialité informatique)}}}}
 \newcommand\ThesisLilleII{\renewcommand{\@ThesisFirstPageHead}{\@INPLhead}%
                          \ThesisDiploma{{\UseEntryFont{ThesisDiploma}%
-                         Doctorat de l'universit\'e Nancy 2\\[3mm]
-            {\UseEntryFont{ThesisSpecialty}(sp\'ecialit\'e informatique)}}}}
+                         Doctorat de l'université Nancy 2\\[3mm]
+            {\UseEntryFont{ThesisSpecialty}(spécialit\'e informatique)}}}}
 \newcommand{\@ThesisDiploma}%
          {\fbox{Choisir {\tt\char`\\ThesisINPL} ou {\tt\char`\\ThesisLilleI}}}
 \newcommand\ThesisDiploma[1]%
@@ -843,7 +843,7 @@
    {\renewcommand{\@ThesisPresentedBy}{{\UseEntryFont{ThesisPresentedBy}#1}}}
 \newcommand{\@ThesisAuthor}%
         {{\UseEntryFont{ThesisAuthor}%
-            \fbox{\'ecrire \tt\char`\\ThesisAuthor\{ l'auteur \}}}}
+            \fbox{écrire \tt\char`\\ThesisAuthor\{ l'auteur \}}}}
 \newcommand\ThesisAuthor[1]%
         {\renewcommand{\@ThesisAuthor}{{\UseEntryFont{ThesisAuthor}#1}}}
 \newcommand{\@ThesisJuryTitle}%
@@ -953,12 +953,12 @@
   }
 \newcommand{\ClearJury}{\@thesis@jury={}}
 \ClearJury
-\NewJuryCategory{President}{\textit{Pr\'esident :}}{\textit{Pr\'esidents :}}
+\NewJuryCategory{President}{\textit{Président :}}{\textit{Présidents :}}
 \NewJuryCategory{Rapporteurs}{\textit{Rapporteur :}}{\textit{Rapporteurs :}}
 \NewJuryCategory{Examinateurs}{\textit{Examinateur :}}{\textit{Examinateurs :}}
-\NewJuryCategory{Directeur}{\textit{Directeur de th\`ese :}}{\textit{Directeurs de th\`ese :}}
-\NewJuryCategory{Coencadreur}{\textit{Co-Encadreur de th\`ese :}}{\textit{Co-Encadreur de th\`ese :}}
-\NewJuryCategory{Invites}{\textit{Invit\'e :}}{\textit{Invit\'es :}}
+\NewJuryCategory{Directeur}{\textit{Directeur de thèse :}}{\textit{Directeurs de thèse :}}
+\NewJuryCategory{Coencadreur}{\textit{Co-Encadreur de thèse :}}{\textit{Co-Encadreur de thèse :}}
+\NewJuryCategory{Invites}{\textit{Invité :}}{\textit{Invités :}}
 \def\@selecti#1{\expandafter\@@selecti#1}
 \def\@@selecti#1#2{{#1}}
 \def\@selectii#1{\expandafter\@@selectii#1}
@@ -1015,7 +1015,7 @@
     \setlength\@bindingshift{#1}%
     \divide\@bindingshift2\relax
     }
-\let\SetBounding\SetBinding % compatibilite'
+\let\SetBounding\SetBinding % compatibility
 \newcommand\@titlepage@height{24.5cm}
 \newcommand\@titlepage@width{17cm}
 \newlength\@htitlepageshift
@@ -1044,7 +1044,7 @@
                   \@thesis@titlep@gebody
 %%%%%%%%%%%
 %\vbox to0pt{\vss
-%	\hbox{\footnotesize\fbox{\textit{ThËse : version du jeudi 14 fÈvrier 2008}}}%
+%	\hbox{\footnotesize\fbox{\textit{Thèse : version du jeudi 14 fèvrier 2008}}}%
 %	\vskip\headheight
 %}
 %%%%%%%%%%%
