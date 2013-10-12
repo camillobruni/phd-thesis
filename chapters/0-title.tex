@@ -1,0 +1,38 @@
+\ifx\wholebook\relax\else
+    \documentclass[a4paper,12pt,twoside]{../includes/ThesisStyle}
+
+	\input{../includes/header}
+	
+	\newcommand\logoInria{../includes/logos/Inria}
+	\newcommand \logoLifl{../includes/logos/lifl}
+	\newcommand \logoUSTL{../includes/logos/Lille1}
+
+	\graphicspath{{.}{../figures/}}
+	\begin{document}
+\fi
+
+% =============================================================================
+\ThesisTitle{
+Title
+} 
+\ThesisDate{}
+\ThesisAuthor{Camillo Bruni} 
+\ThesisLilleI
+\President = {???} 
+\Rapporteurs = {
+	
+} 
+\Examinateurs = {
+	
+} 
+\Directeur = {
+	Stéphane Ducasse  \quad   \xspace(Directeur de recherche -- INRIA Lille Nord-Europe)}
+\Coencadreur = {
+	another?
+}
+\MakeThesisTitlePage 
+
+% =============================================================================
+\ifx\wholebook\relax\else
+    \end{document}
+\fi

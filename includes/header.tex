@@ -1,0 +1,184 @@
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
+\usepackage[left=1.5in,right=1.3in,top=1.1in,bottom=1.1in,includefoot,includehead,headheight=13.6pt]{geometry}\renewcommand{\baselinestretch}{1.05}
+
+
+% =============================================================================
+%\usepackage[sectionbib]{chapterbib}	% Cross-reference package (Natural BiB)
+%\usepackage{bibunits}
+%\usepackage{natbib}					% Put References at the end of each chapter
+\usepackage{algorithm}
+\usepackage{alltt}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{cite}
+\usepackage{color}
+\usepackage{enumerate}
+\usepackage{fancyhdr}					% Fancy Header and Footer
+\usepackage{graphicx}
+\usepackage{ifthen}
+\usepackage{latexsym}
+\usepackage{multirow}
+\usepackage{rotating}					% Sideways of figures & tables
+\usepackage{stmaryrd}
+\usepackage{subfigure}
+\usepackage{url}         
+\usepackage{xspace}
+
+\usepackage[a4paper,pagebackref,hyperindex=true]{hyperref}
+        
+
+% =============================================================================
+
+% Table of contents for each chapter
+\usepackage[nottoc, notlof, notlot]{tocbibind}
+\usepackage{minitoc}
+\setcounter{minitocdepth}{1}
+\mtcindent=15pt
+
+\setcounter{secnumdepth}{3}
+\setcounter{tocdepth}{2}
+  
+% =============================================================================
+% Fancy Header Style Options
+
+\pagestyle{fancy}                       % Sets fancy header and footer
+\fancyfoot{}                            % Delete current footer settings
+
+%\renewcommand{\chaptermark}[1]{         % Lower Case Chapter marker style
+%  \markboth{\chaptername\ \thechapter.\ #1}}{}} %
+
+%\renewcommand{\sectionmark}[1]{         % Lower case Section marker style
+%  \markright{\thesection.\ #1}}         %
+
+\fancyhead[LE,RO]{\bfseries\thepage}    % Page number (boldface) in left on even
+% pages and right on odd pages
+\fancyhead[RE]{\bfseries\nouppercase{\leftmark}}      % Chapter in the right on even pages
+\fancyhead[LO]{\bfseries\nouppercase{\rightmark}}     % Section in the left on odd pages
+
+\let\headruleORIG\headrule
+\renewcommand{\headrule}{\color{black} \headruleORIG}
+\renewcommand{\headrulewidth}{1.0pt}
+\usepackage{colortbl}
+\arrayrulecolor{black}
+
+\fancypagestyle{plain}{
+  \fancyhead{}
+  \fancyfoot{}
+  \renewcommand{\headrulewidth}{0pt}
+}
+
+
+% =============================================================================
+% Clear Header Style on the Last Empty Odd pages
+\makeatletter
+
+\def\cleardoublepage{\clearpage\if@twoside \ifodd\c@page\else%
+  \hbox{}%
+  \thispagestyle{empty}%              % Empty header styles
+  \newpage%
+  \if@twocolumn\hbox{}\newpage\fi\fi\fi}
+
+\makeatother
+
+\newenvironment{maxime}[1]
+{
+\vspace*{0cm}
+\hfill
+\begin{minipage}{0.5\textwidth}%
+%\rule[0.5ex]{\textwidth}{0.1mm}\\%
+\hrulefill $\:$ {\bf #1}\\
+%\vspace*{-0.25cm}
+\it 
+}%
+{%
+
+\hrulefill
+\vspace*{0.5cm}%
+\end{minipage}
+}
+
+\let\minitocORIG\minitoc
+\renewcommand{\minitoc}{\minitocORIG \vspace{1.5em}}
+
+
+\renewcommand{\epsilon}{\varepsilon}
+
+% centered page environment
+\newenvironment{vcenterpage}
+	{\newpage\vspace*{\fill}\thispagestyle{empty}\renewcommand{\headrulewidth}{0pt}}
+	{\vspace*{\fill}}
+	
+	
+% =============================================================================
+\newboolean{showcomments}
+\setboolean{showcomments}{true}
+
+\ifthenelse{\boolean{showcomments}} {
+	\newcommand{\ugh}[1] {\textcolor{red}{\uwave{#1}}}	% please rephrase
+	\newcommand{\ins}[1] {\textcolor{blue}{\uline{#1}}}	% please insert
+	\newcommand{\del}[1] {\textcolor{red}{\sout{#1}}}	% please delete
+	\newcommand{\chg}[2] {								% please change
+		\textcolor{red}{\sout{#1}}{\ra}
+		\textcolor{blue}{\uline{#2}}}
+	\newcommand{\nbc}[3]{								% comment
+		{\colorbox{#3}{\bfseries\sffamily\scriptsize\textcolor{white}{#1}}}
+		{\textcolor{#3}{\sf\small$\blacktriangleright$\textit{#2}$\blacktriangleleft$}}}
+
+}{
+	\newcommand{\ugh}[1]{#1}							% please rephrase
+	\newcommand{\ins}[1]{#1}							% please insert
+	\newcommand{\del}[1]{}								% please delete
+	\newcommand{\chg}[2]{#2}							% please change
+	\newcommand{\nbc}[3]{}								% comment
+}
+
+% =============================================================================
+\usepackage[a4paper,pagebackref,hyperindex=true]{hyperref}
+
+
+% Links in pdf
+\usepackage{color}
+\definecolor{linkcol}{rgb}{0.0, 0.0, 0.0} 
+\definecolor{citecol}{rgb}{0.0, 0.0, 0.0} 
+
+% Change this to change the informations included in the pdf file
+% See hyperref documentation for information on those parameters
+\hypersetup {
+	bookmarksopen=true,
+	pdftitle="Design and Use of Anatomical Atlases for Radiotherapy",
+	pdfauthor="Olivier COMMOWICK", 
+	pdfsubject="Creation of atlases and atlas based segmentation", %subject of the document
+	%pdftoolbar=false, % toolbar hidden
+	pdfmenubar=true, %menubar shown
+	pdfhighlight=/O, %effect of clicking on a link
+	colorlinks=true,
+	pdfpagemode=None,
+	pdfpagelayout=SinglePage,
+	pdffitwindow=true,
+	linkcolor=linkcol,
+	citecolor=citecol,
+	urlcolor=linkcol
+}
+
+% =============================================================================
+\newcommand{\figlabel}[1]{\label{fig:#1}}
+\newcommand{\seclabel}[1]{\label{sec:#1}}
+\newcommand{\tablabel}[1]{\label{tab:#1}}
+
+\newcommand{\figref}[1]{Figure~\ref{fig:#1}}
+\newcommand{\secref}[1]{Section~\ref{sec:#1}}
+\newcommand{\tabref}[1]{Table~\ref{tab:#1}}
+
+\newcommand{\commented}[1]{}
+
+\newcommand{\eg}{\emph{e.g.,}\xspace}
+\newcommand{\ie}{\emph{i.e.,}\xspace}
+
+
+\newcommand\fix[1]{\nb{FIX}{#1}}
+\newcommand\todo[1]{\nb{TO DO}{#1}}
+
+% =============================================================================
