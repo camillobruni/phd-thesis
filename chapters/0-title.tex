@@ -1,16 +1,9 @@
-\ifx\wholebook\relax\else
-    \documentclass[a4paper,12pt,twoside]{../includes/ThesisStyle}
+\input{chapter-header.tex}
 
-	\input{../includes/header}
+\newcommand\logoInria{../includes/logos/Inria}
+\newcommand \logoLifl{../includes/logos/lifl}
+\newcommand \logoUSTL{../includes/logos/Lille1}
 	
-	\newcommand\logoInria{../includes/logos/Inria}
-	\newcommand \logoLifl{../includes/logos/lifl}
-	\newcommand \logoUSTL{../includes/logos/Lille1}
-
-	\graphicspath{{.}{../figures/}}
-	\begin{document}
-\fi
-
 % =============================================================================
 \ThesisTitle{
 Title
@@ -33,6 +26,4 @@ Title
 \MakeThesisTitlePage 
 
 % =============================================================================
-\ifx\wholebook\relax\else
-    \end{document}
-\fi
+\input{chapter-footer.tex}
