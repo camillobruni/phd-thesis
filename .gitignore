@@ -1,0 +1,13 @@
+**.aux
+**.out
+**.mtc
+**.lot
+*.lot
+*.synctex.gz
+**.log
+**.mtc0
+**.toc
+*.of
+*.lof
+*.mtc1
+*.maf

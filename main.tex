@@ -1,0 +1,41 @@
+\documentclass[a4paper,10pt,twoside]{includes/ThesisStyle}
+% =============================================================================
+
+\input{includes/header}
+\graphicspath{{.}{figures/}}
+
+\let\wholebook=\relax
+\begin{document}
+
+% =============================================================================
+\include{chapters/0-titlePage}
+% =============================================================================
+
+\dominitoc
+\pagenumbering{roman}
+
+% =============================================================================
+\cleardoublepage
+\section*{Acknowledgments}
+Last thing to do :-)
+
+% =============================================================================
+\tableofcontents
+\listoffigures
+\listoftables
+% =============================================================================
+\mainmatter
+% =============================================================================
+
+\include{chapters/1-intro}
+
+% =============================================================================
+\appendix
+\include{appendix/def}
+
+% =============================================================================
+
+\bibliographystyle{includes/ThesisStyle}
+\bibliography{local}
+
+\end{document}
