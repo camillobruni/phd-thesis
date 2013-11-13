@@ -290,7 +290,7 @@ A \B primitive is responsible for the native code activation which consists of t
 	\item Activate the native code for execution.
 \end{enumerate}
 %
-The example in Listing \lstref{basic-native-code} uses \Bs generator to create and install the native code which would trigger a low-level interrupt. Behind the scenes \B adds some more information to the code as the already mentioned platform marker. 
+The example in Listing \lstref{basic-native-code} uses \B's generator to create and install the native code which would trigger a low-level interrupt. Behind the scenes \B adds some more information to the code as the already mentioned platform marker. 
 For activation \B uses reflective features to restart the method containing the native code.
 Upon the second activation, after already generating the native code, \B moves the native code to the end of the compiled method and activates it.
 This mechanism is shown in Figure \figref{nativeCodeActivation}.
@@ -304,7 +304,6 @@ This mechanism is shown in Figure \figref{nativeCodeActivation}.
 \end{figure}
 
 % ===========================================================================
-\newpage
 \section{\B in Practice}
 \seclabel{usecase}
 % ===========================================================================
@@ -382,7 +381,6 @@ Each language-side library can define its own highly efficient conversion routin
 \cb{fill the page...}
 
 %----------------------------------------------------------------------------
-\newpage
 \subsection{Reflective Primitives}
 \seclabel{waterfall}
 %----------------------------------------------------------------------------
@@ -422,7 +420,7 @@ Essential primitives are required for the bootstrapping and the essential operat
 The second category of primitives are mainly used for optimization purposes.
 
 \paragraph{Dynamically Interchangeable Primitives.}
-Waterfall uses \Bs mechanism for replacing primitive methods with customized versions that are nativized dynamically as described in Section~\secref{benzo}.
+Waterfall uses \B's mechanism for replacing primitive methods with customized versions that are nativized dynamically as described in Section~\secref{benzo}.
 The loophole described there is exploited by Waterfall to enable dynamic modification of VM behavior and hence bring primitives to life at language-side.
 
 
@@ -676,9 +674,6 @@ Instead of focusing on the final performance of the generated code, we present t
     \tablabel{nabujito-performance-small}
 \end{table}
 \vspace{-5mm}
-
-\reve{The fact that you used such a trivial method in the benchmark for Nabujito (the results of which are shown in Table 3) makes me wonder what's going on there. Could it be that the performance of Nabujito on a more realistic method would be so bad that you chose not to include any results? I don't think that's the case, but I think the paper should address this concern, either by including a less trivial benchmark, or by explaining why it does not matter that the benchmark that was used is so trivial.}
-\cb{need to address this clearly again here!}
 
 In Table \tabref{nabujito-performance-small} we compare the compilation speed of the standard \PH compiler and Nabujito.
 We measure the accumulated time spent to compile the method 1000 times.
