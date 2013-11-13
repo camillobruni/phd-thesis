@@ -16,6 +16,7 @@
 \usepackage{cite}
 \usepackage{color}
 \usepackage{enumerate}
+\usepackage{booktabs} % used for \midrule
 \usepackage{fancyhdr}					% Fancy Header and Footer
 \usepackage{graphicx}
 \usepackage{ifthen}
@@ -26,6 +27,10 @@
 \usepackage{subfigure}
 \usepackage{url}         
 \usepackage{xspace}
+\usepackage[normalem]{ulem} % for \sout
+\usepackage{xcolor}
+\usepackage{tablefootnote}
+\usepackage{pifont}
 
 % =============================================================================
 
@@ -108,7 +113,101 @@
 	{\newpage\vspace*{\fill}\thispagestyle{empty}\renewcommand{\headrulewidth}{0pt}}
 	{\vspace*{\fill}}
 	
-	
+
+%=============================================================================
+
+\usepackage{needspace}
+\newcommand{\needlines}[1]{\Needspace{#1\baselineskip}}
+
+\usepackage{xcolor}
+\definecolor{source}{gray}{0.95}
+% source code formatting
+\usepackage{listings}
+    % global settings for source code listing package
+\lstset{
+    basicstyle=\ttfamily\small,
+    showspaces=false,
+    showstringspaces=false,
+    captionpos=b, 
+    columns=fullflexible}
+
+\lstdefinelanguage{ST}{
+    keywordsprefix=\#,
+    morekeywords=[0]{true,false,nil},
+    morekeywords=[1]{self,super,thisContext},
+    morekeywords=[2]{ifTrue:,ifFalse:,whileTrue:,whileFalse:,and:,or:,xor:,not:,by:,timesRepeat:},
+    sensitive=true,
+    morecomment=[s]{"}{"},
+    morestring=[d]',
+    escapechar={!},
+    alsoletter={., :, -, =, +, <},
+    moredelim=**[is][\itshape]{/+}{+/},
+    literate=
+        {^}{{$\uparrow$}}1
+        {:=}{{$\leftarrow$}}1
+        {~}{{$\sim$}}1
+        {-}{{\sf -\hspace{-0.13em}-}}1  % the goal is to make - the same width as +
+        {+}{\raisebox{0.08ex}{+}}1		% and to raise + off the baseline to match V
+        , % Don't forget the comma at the end!
+    style=STStyle
+}
+\lstdefinestyle{STStyle}{
+    tabsize=4,
+    %frame=leftline,
+    % frame=bl,
+    %framerule=2pt,
+    %rulecolor=\color{gray},
+    % backgroundcolor=\color{white},
+    %backgroundcolor=\usebeamercolor[bg]{listing},
+    basicstyle=\ttfamily\small,
+    keywordstyle=\bf\ttfamily,
+    % stringstyle=\color{orange},
+    stringstyle=\mdseries\slshape,
+    commentstyle=\it\rmfamily\color{darkgray}, 
+    commentstyle=\mdseries\slshape\color{gray},
+    %commentstyle=\mdseries\slshape,
+    emphstyle=\bf\ttfamily,
+    escapeinside={!}{!},
+	%backgroundcolor=\color{source},
+    %emphstyle={[2]\color{red}},
+    %emphstyle={[3]\color{blue}\bf},
+    %emphstyle={[4]\color{blue}},
+    keepspaces=true
+} 
+
+%\lstnewenvironment{javacode}  [1][]{\lstset{language=java,#1}\needlines{#2}}{} 
+%\lstnewenvironment{pythoncode}[2][]{\lstset{language=python,#1}\needlines{#2}}{}
+\lstnewenvironment{stcode}    [2][]{\lstset{language=ST,#1}\needlines{#2}}{}
+\lstnewenvironment{ccode}     [2][]
+    {\lstset{language=C,numbers=left,escapechar=\$,numberstyle=\tiny,#1}\needlines{#2}}{}
+
+% ON: I tried to pass the line number options in as arg #1 but it does not work for me
+% I also could net get the line numbers to consistently increase
+\lstnewenvironment{numstcode} [2][]
+    {\lstset{language=ST,numbers=left,numberstyle=\tiny,numbersep=2pt,#1}\needlines{#2}}{}
+\lstnewenvironment{numstcodecont} [2][]
+    {\lstset{language=ST,numbers=left,numberstyle=\tiny,numbersep=2pt,firstnumber=last#1}\needlines{#2}}{}
+
+\newcommand{\lst}[1]{{\tt #1}}
+
+% In-line code (literal)
+
+% In-line code (latex enabled)
+% Use this only in special situations where \ct does not work
+% (within Section headings ...):
+\newcommand{\lct}[1]{{\textsf{\textup{#1}}}}
+% Code environments
+\lstnewenvironment{code}{%
+	\lstset{%
+		% frame=lines,
+		frame=single,
+		framerule=0pt,
+		mathescape=false
+	}
+}{}
+
+%\renewcommand{\lstlistingname}{Code Example}
+
 % =============================================================================
 \newboolean{showcomments}
 \setboolean{showcomments}{true}
@@ -161,21 +260,43 @@
 }
 
 % =============================================================================
-\newcommand{\figlabel}[1]{\label{fig:#1}}
-\newcommand{\seclabel}[1]{\label{sec:#1}}
-\newcommand{\tablabel}[1]{\label{tab:#1}}
+\newcommand{\figlabel}[1] {\label{fig:#1}}
+\newcommand{\chaplabel}[1]{\label{chap:#1}}
+\newcommand{\seclabel}[1] {\label{sec:#1}}
+\newcommand{\tablabel}[1] {\label{tab:#1}}
+\newcommand{\lstlabel}[1] {\label{lst:#1}}
 
-\newcommand{\figref}[1]{Figure~\ref{fig:#1}}
-\newcommand{\secref}[1]{Section~\ref{sec:#1}}
-\newcommand{\tabref}[1]{Table~\ref{tab:#1}}
+\newcommand{\figref}[1] {Figure~\ref{fig:#1}}
+\newcommand{\chapref}[1]{Chapter~\ref{sec:#1}}
+\newcommand{\secref}[1] {Section~\ref{sec:#1}}
+\newcommand{\tabref}[1] {Table~\ref{tab:#1}}
+\newcommand{\lstref}[1] {Listing~\ref{tab:#1}}
 
 \newcommand{\commented}[1]{}
 
-\newcommand{\eg}{\emph{e.g.,}\xspace}
-\newcommand{\ie}{\emph{i.e.,}\xspace}
+\newcommand{\bs}    {\symbol{'134}} % backslash
+\newcommand{\us}    {\symbol{'137}} % underscore
+\newcommand{\ttt}[1]{\texttt{#1}}
+\newcommand{\ie}    {\emph{i.e.},\xspace}
+\newcommand{\eg}    {\emph{e.g.},\xspace}
+\newcommand{\etal}  {\emph{et al.}\xspace}
+\newcommand{\ns}    {\!\!\!\!} %big negative space
+\newcommand{\cnull} {\textbackslash0\xspace}
 
 
 \newcommand\fix[1]{\nb{FIX}{#1}}
 \newcommand\todo[1]{\nb{TO DO}{#1}}
+\newcommand\cb[1]{\nbc{CB}{#1}{purple}}
+\newcommand\sd[1]{\nbc{SD}{#1}{orange}}
+\newcommand\is[1]{\nbc{IS}{#1}{gray}}
+\newcommand\gc[1]{\nbc{GC}{#1}{olive}}
+\newcommand\ct[1]{\nbc{CT}{#1}{teal}}
+\newcommand\md[1]{\nbc{MD}{#1}{blue}}
+\newcommand\dc[1]{\nbc{DC}{#1}{green}}
 
 % =============================================================================
+\newcommand{\NBFFI}  {Native\-Boost-FFI\xspace}
+\newcommand{\NB}  {Native\-Boost\xspace}
+\newcommand{\B}   {Benzo\xspace}
+\newcommand{\ST}  {Small\-talk\xspace}
+\newcommand{\PH}  {Pharo\xspace}
