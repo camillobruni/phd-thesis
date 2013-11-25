@@ -1,7 +1,7 @@
 \input{chapter-header.tex}
 % =============================================================================
 
-\chapter{FFI}
+\chapter{Validation: FFI}
 \chaplabel{ffi}
 \minitoc
 
@@ -12,7 +12,7 @@
 
 \begin{figure*}[ht]
 	\centering
-	\includegraphics{extensionComparison}
+	\includegraphics[width=\textwidth]{extensionComparison}
 	\caption{Comparing different extension mechanisms: a) library implemented completely at language-side running on a standard VM, b) language using features from a VM extension, c) language using features from a VM plugin, d) language-side implementation of an extension.}
 	\figlabel{extensionComparison}
 \end{figure*}
@@ -482,7 +482,7 @@ This native code is responsible of the marshalling and calling the external func
 % General FFI overview and difference of NB
 \begin{figure*}[t]
 	\centering
-	\includegraphics{ffiOverview}
+	\includegraphics[width=\textwidth]{ffiOverview}
 	\caption{Comparison of FFI calls propagation in \NBFFI and a typical VM plugin-based implementation. \NB resorts to VM-level only for the native-code activation, whereas typical implementations cross this barrier much earlier.}
 	\figlabel{ffi}
 \end{figure*}
@@ -884,6 +884,12 @@ They advocate a Python VM that allows for dynamically shared objects with extern
 It uses the low-level DWARF debugging information present in the external libraries to gather enough metadata to automatically generate FFIs.
 
 % ===========================================================================
+\section{Problems}
+\seclabel{problems}
+% ===========================================================================
+
+
+% ===========================================================================
 \section{Future Work}
 \seclabel{futurework}
 % ===========================================================================
@@ -900,10 +906,13 @@ A current prototype directly inlines the native code of a \NB method in the JIT.
 Hence the cost for the context switch plus the cost of activating the \NB callout primitive can be avoided.
 % \lf{This modification aims at better integrating \NB and the JIT such as it is done in LuaJIT.}
 
+
+
 % ===========================================================================
 \section{Conclusion}
 \seclabel{conclusion}
 % ===========================================================================
+\todo{make proper summary}
 In this paper we presented \NB a novel approach to foreign function interfaces.
 Our approach relies only on a very generic extension of the VM to allow for language-side code to directly call native instructions.
 
