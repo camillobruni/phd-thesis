@@ -1,36 +1,41 @@
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 
-\usepackage[left=1.5in,right=1.3in,top=1.1in,bottom=1.1in,includefoot,includehead,headheight=13.6pt]{geometry}\renewcommand{\baselinestretch}{1.05}
+\usepackage[left=1.5in,right=1.3in,top=1.1in,bottom=1.1in,includefoot,includehead,headheight=13.6pt]{geometry}
+\renewcommand{\baselinestretch}{1.30}
 
 
 % =============================================================================
 %\usepackage[sectionbib]{chapterbib}	% Cross-reference package (Natural BiB)
 %\usepackage{bibunits}
-%\usepackage{natbib}					% Put References at the end of each chapter
+%\usepackage{natbib}	% Put References at the end of each chapter
 \usepackage{algorithm}
-\usepackage{alltt}
+\usepackage{alltt} % math support in verbatim text
 \usepackage{amsfonts}
 \usepackage{amsmath}
 \usepackage{amssymb}
+\usepackage[hypcap]{caption} % with hyperref point to the head of the pic
 \usepackage{cite}
 \usepackage{color}
 \usepackage{enumerate}
+\usepackage{enumitem} % enables [noitemsep,nolistsep] for more compact lists
 \usepackage{booktabs} % used for \midrule
-\usepackage{fancyhdr}					% Fancy Header and Footer
+\usepackage{fancyhdr} % Fancy Header and Footer
+\usepackage{float}      % for the strong here [H] of figures
 \usepackage{graphicx}
 \usepackage{ifthen}
 \usepackage{latexsym}
+\usepackage{tgtermes} % tex gyre thermes font
 \usepackage{multirow}
-\usepackage{rotating}					% Sideways of figures & tables
-\usepackage{stmaryrd}
+\usepackage{rotating} % Sideways of figures & tables
+\usepackage{stmaryrd} % St Mary Road symbols for theoretical computer science
 \usepackage{subfigure}
 \usepackage{url}         
 \usepackage{xspace}
 \usepackage[normalem]{ulem} % for \sout
 \usepackage{xcolor}
 \usepackage{tablefootnote}
-\usepackage{pifont}
+\usepackage{pifont} %  Access to PostScript standard Symbol and Dingbats fonts
 
 % =============================================================================
 
@@ -55,14 +60,14 @@
 %\renewcommand{\sectionmark}[1]{         % Lower case Section marker style
 %  \markright{\thesection.\ #1}}         %
 
-\fancyhead[LE,RO]{\bfseries\thepage}    % Page number (boldface) in left on even
+\fancyhead[LE,RO]{\thepage}    % Page number (boldface) on left on even
 % pages and right on odd pages
-\fancyhead[RE]{\bfseries\nouppercase{\leftmark}}      % Chapter in the right on even pages
-\fancyhead[LO]{\bfseries\nouppercase{\rightmark}}     % Section in the left on odd pages
+\fancyhead[RE]{\nouppercase{\leftmark}}      % Chapter on the right on even pages
+\fancyhead[LO]{\nouppercase{\rightmark}}     % Section on the left on odd pages
 
 \let\headruleORIG\headrule
 \renewcommand{\headrule}{\color{black} \headruleORIG}
-\renewcommand{\headrulewidth}{1.0pt}
+\renewcommand{\headrulewidth}{0.5pt}
 \usepackage{colortbl}
 \arrayrulecolor{black}
 
@@ -85,26 +90,22 @@
 
 \makeatother
 
-\newenvironment{maxime}[1]
-{
-\vspace*{0cm}
-\hfill
-\begin{minipage}{0.5\textwidth}%
-%\rule[0.5ex]{\textwidth}{0.1mm}\\%
-\hrulefill $\:$ {\bf #1}\\
-%\vspace*{-0.25cm}
-\it 
-}%
-{%
-
-\hrulefill
-\vspace*{0.5cm}%
-\end{minipage}
+\newenvironment{maxime}[1]{
+	\vspace*{0cm}
+	\hfill
+	\begin{minipage}{0.5\textwidth}%
+	%\rule[0.5ex]{\textwidth}{0.1mm}\\%
+	\hrulefill $\:$ {\bf #1}\\
+	%\vspace*{-0.25cm}
+	\it 
+}{
+	\hrulefill
+	\vspace*{0.5cm}%
+	\end{minipage}
 }
 
 \let\minitocORIG\minitoc
 \renewcommand{\minitoc}{\minitocORIG \vspace{1.5em}}
-
 
 \renewcommand{\epsilon}{\varepsilon}
 
@@ -294,6 +295,13 @@
 \newcommand\ct[1]  {\nbc{CT}{#1}{teal}}
 \newcommand\md[1]  {\nbc{MD}{#1}{blue}}
 \newcommand\dc[1]  {\nbc{DC}{#1}{green}}
+
+% italic quotes
+\let\oldquote\quote
+\let\oldendquote\endquote
+\renewenvironment{quote}
+	{\oldquote\itshape}
+	{\oldendquote}
 
 % =============================================================================
 \newcommand{\NBFFI}  {Native\-Boost-FFI\xspace}

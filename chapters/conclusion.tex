@@ -30,10 +30,16 @@ The main contributions of this thesis are:
 % -----------------------------------------------------------------------------
 \subsection{Flexible object layouts: enabling lightweight language extensions by intercepting slot access}
 % -----------------------------------------------------------------------------
-\begin{quote}
-\end{quote}
 
 \begin{description}
+	\item[Abstract:] \emph{
+Programming idioms, design patterns and application libraries often introduce cumbersome and repetitive boilerplate code to a software system.
+Language extensions and external {DSLs} (domain specific languages) are sometimes introduced to reduce the need for boilerplate code, but they also complicate the system by introducing the need for language dialects and inter-language mediation.
+To address this, we propose to extend the structural reflective model of the language with object layouts, layout scopes and slots.
+Based on the new reflective language model we can 1) provide behavioral hooks to object layouts that are triggered when the fields of an object are accessed and 2) simplify the implementation of state-related language extensions such as stateful traits.
+By doing this we show how many idiomatic use cases that normally require boilerplate code can be more effectively supported.
+We present an implementation in Smalltalk, and illustrate its usage through a series of extended examples.}
+
 	\item[Authors:] Toon Verwaest, Camillo Bruni, David Gurtner, Adrian Lienhard and Oscar Nierstrasz. 
 	\item[Revenue:] In Onward! 2011, Reno/Tahoe, Nevada, USA, 2011.
 \end{description}
@@ -41,10 +47,15 @@ The main contributions of this thesis are:
 % -----------------------------------------------------------------------------
 \subsection{Language-side Foreign Function Interfaces with NativeBoost}
 % -----------------------------------------------------------------------------
-\begin{quote}
-\end{quote}
 
 \begin{description}
+	\item[Abstract:] \emph{
+Foreign-Function-Interfaces (FFIs) are a prerequisite for close system integration of a high-level language.
+With FFIs the high-level environment interacts with low-level functions allowing for a unique combination of features.
+This duality has a strong impact on the implementation of the FFI: it has to be flexible and fast at the same time.
+We propose NativeBoost a language-side approach to FFIs that only requires minimal changes to the VM.
+NativeBoost directly creates specific native code at language-side and thus combines the flexibility of a language-side library with the performance of a native plugin.}
+
 	\item[Authors:]  Camillo Bruni, Luc Fabresse, Stéphane Ducasse and Igor Stasenko. 
 	\item[Revenue:] In International Workshop on Smalltalk Technologies, Annecy, France, 2013.
 \end{description}
