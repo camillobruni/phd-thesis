@@ -745,6 +745,6 @@
 
 
 %%%%from thloria
-\input{includes/Lille-1-Title.cls}
+\input{include/Lille-1-Title.cls}
 
 %% End of file `book.cls'.
