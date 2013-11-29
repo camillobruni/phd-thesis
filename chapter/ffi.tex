@@ -225,7 +225,7 @@ This list of mapping is not exhaustive and \NB also supports the definition of n
 
 
 % memory alloc & structs
-\begin{table*}[t]
+\begin{table}[t]
     \centering
     \begin{tabular}{lcccc}
                     &  Memory 	& Address & Marshalling & Constraint  \\\midrule
@@ -235,7 +235,7 @@ Pharo-managed struct & Object memory & variable & passed by reference & may move
     \end{tabular}
     \caption{Wrapping structures possibilities in \NB}
     \tablabel{wrappingstruct}
-\end{table*}
+\end{table}
 
 % ===========================================================================
 \subsection{Supporting new types}\seclabel{newtypes}
@@ -474,7 +474,7 @@ This native code is responsible of the marshalling and calling the external func
 
 \begin{figure}[h]
 	\centering
-	\includegraphics{nbArchitecture}
+	\includegraphics[scale=1.1]{nbArchitecture}
 	\caption{\NB main components that major part of the code resides at language-side.}
 	\figlabel{nbArchitecture}
 \end{figure}
@@ -722,6 +722,8 @@ Through reflective access to the execution context we can retrieve the method's 
 % ---------------------------------------------------------------------------
 \subsubsection{Memory Management}
 
+\todo{strip BENZO duplication}
+
 \NB supports external heap management with explicit allocation and freeing of memory regions.
 There are interfaces for \ttt{allocate} and \ttt{free} as well as for \ttt{memcopy}:
 %
@@ -751,7 +753,7 @@ Pharo has a moving garbage collector which means that you can not refer directly
 \begin{figure}[h]
 	\centering
 	\includegraphics{externalRoots}
-	\caption{Pointers in a CompiledMethod to objects registered as external roots are pinpointed at fixed offset in global VM-level object.
+	\caption{Pointers in a CompiledMethod to objects registered as external roots are pinpointed at fixed offset in global VM-level object. \todo{possibly remove}
 	}
 	\figlabel{externalRoots}
 \end{figure}
@@ -787,6 +789,8 @@ Hence the heap has to be executable in order to jump to the native instructions.
 %   4. restart method and reenter primitive, this time running the native code
 % - check for the VM identifier => mismatch triggers code regeneration
 
+\todo{strip BENZO duplication: see how much overlaps, only put a small summary here and push detailed explanation to the benzo chapter}
+
 In Section~\secref{generating} we explained how \NB creates FFI callouts at language-side.
 However, so far we left out the part on how the generated native code is activated.
 
@@ -796,7 +800,7 @@ Figure \figref{nativeCodeActivation} shows how a \NB method is activated.
 
 \begin{figure}[h]
 	\centering
-	\includegraphics{nativeCodeActivation}
+	\includegraphics[scale=1.1]{nativeCodeActivation}
 	\caption{Native code activation. The first call triggers the code generation. Then the method is restarted and the native code executed.}
 	\figlabel{nativeCodeActivation}
 \end{figure}
@@ -836,7 +840,7 @@ Figure \figref{nativeCodeActivation} shows how a \NB method is activated.
 \section{Related Work}
 \seclabel{relatedWork}
 % ===========================================================================
-
+\todo{only show FFI related work here! all the abstract implementations are covered in the Benzo secrtion}
 % explain typical approaches (static and dynamic)
 
 % - need to go into detail with ALIEN
@@ -887,6 +891,20 @@ It uses the low-level DWARF debugging information present in the external librar
 \section{Problems}
 \seclabel{problems}
 % ===========================================================================
+
+\subsection{Difficult Debug Cycles}
+% debugging facility
+
+
+\subsection{Platform Independence}
+% general / direct dependence on assembler which is not good
+% platform independence (future reference to VirtualCPU)
+
+\subsection{Limited Expressiveness}
+% fork example is hard to achieve (vm is not directly forkable)
+% current design makes it difficult to perform more C-like operations in one run
+ 
+
 
 
 % ===========================================================================
