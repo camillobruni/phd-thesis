@@ -11,6 +11,7 @@
 \section{Introduction}
 \seclabel{introduction}
 % ===========================================================================
+\todo{Write thesis introduction, the current introduction is more background / motivation}
 High-level low-level programming \cite{Fram09a} encourages to use high-level languages such as Java to build low-level execution infrastructures or to do system programming. 
 It is successfully used in experimental high-level self-hosted virtual machines (VMs) such as Jikes~\cite{Alpe99a}.  
 Frampton et al. present a framework that is biased towards a statically typed high-level language, taking strict security aspects into account.
@@ -116,6 +117,8 @@ However, the JIT space does not hold normal \ST objects but special low-level st
 \subsubsection{VM Interaction.}
 \seclabel{vm-interaction}
 
+\todo{dig up the older versions of this section with the longer text}
+
 The standard way in \ST to execute low-level code is to use a tag in the method definition. The following example shows such a method on the \ttt{Float} class.
 %
 \begin{stcode}[label={lst:basic-primitive}]{5}
@@ -125,17 +128,17 @@ The standard way in \ST to execute low-level code is to use a tag in the method 
 \end{stcode}
 %
 Here we use the primitive 49 to call a VM function which efficiently multiplies two floats. 
-%Figure~\figref{smalltalkPrimitive}-a describes the case where the primitive is successfully executed.
+Figure~\figref{smalltalkPrimitive}-a describes the case where the primitive is successfully executed.
 However, if the primitive is unable to do the operation, for instance if the argument \ttt{aNumber} is not a float, it will signal a failure which causes the VM to execute the fallback \ST code in the method body.  
-%Fig.~\figref{smalltalkPrimitive}-b describes it. 
+Fig.~\figref{smalltalkPrimitive}-b describes it. 
 
-%\begin{figure}[ht]
-%	\centering
-%	\includegraphics{smalltalkPrimitive}
-%	%\nocaptionrule
-%	\caption{Generic primitive methods in \PH: a) A primitive completely bypasses the bytecode, b) A failing primitive executes the \ST bytecode as fallback.}
-%	\figlabel{smalltalkPrimitive}
-%\end{figure}
+\begin{figure}[ht]
+	\centering
+	\includegraphics[scale=1.1]{smalltalkPrimitive}
+	%\nocaptionrule
+	\caption{Generic primitive methods in \PH: a) A primitive completely bypasses the bytecode, b) A failing primitive executes the \ST bytecode as fallback.}
+	\figlabel{smalltalkPrimitive}
+\end{figure}
 
 
 \B uses the primitives as a gate to enter the low-level world from the language-side.
@@ -179,10 +182,12 @@ Moreover, it does not have to flush the native code when the application is rest
 %----------------------------------------------------------------------------
 \subsubsection{Garbage Collector Interaction.}
 \seclabel{gc-interaction}
-%Compiled methods in \PH have a special section, the literal frame, which stores objects referenced in the bytecodes.
-%Bytecodes then only have indirect access to these objects by indexing into the literal frame.
-%This simplifies the implementation of the garbage collector as it only has to scan the beginning of each method for possible references to objects. 
-%So the GC only tracks \ST objects when they are in the method literal frame. 
+\todo{dig up the older versions of this section with the longer text}
+
+Compiled methods in \PH have a special section, the literal frame, which stores objects referenced in the bytecodes.
+Bytecodes then only have indirect access to these objects by indexing into the literal frame.
+This simplifies the implementation of the garbage collector as it only has to scan the beginning of each method for possible references to objects. 
+So the GC only tracks \ST objects when they are in the method literal frame. 
 The moving GC of the VM used for \PH has a significant impact on the low-level code we can generate using \B.
 For instance it is not possible to statically refer to language-side objects from native code as object addresses change after each garbage collection.
 Modifying the GC to support regions of non-moving objects would solve this problem.
@@ -221,6 +226,8 @@ The performance boost of this optimization is further discussed in Section \secr
 %----------------------------------------------------------------------------
 \subsubsection{Error Handling.}
 \seclabel{error-handling}
+
+\todo{extend with an explicit example}
 
 \B provides an error handling facility that allows to return high-level error messages from the low-level code. 
 The native code builder provides a helper method called \ttt{failWithMessage:} 
@@ -301,6 +308,7 @@ This mechanism is shown in Figure \figref{nativeCodeActivation}.
 \section{\B in Practice}
 \seclabel{usecase}
 % ===========================================================================
+\todo{keep this section as is and introduce forward pointers to the separate chapters}
 
 In this Section, for illustrating better the contribution of the solution proposed, we will present different dynamic language-side applications and tools based on \B.
 %These implementations, a FFI, dynamic primitives and a language-side JIT, are typically done at VM-level.
@@ -563,6 +571,8 @@ The JIT lives on the same level as the information it needs relying on the alrea
 \section{Performance}
 \seclabel{issues-performance}
 %----------------------------------------------------------------------------
+
+\todo{Shorten this section and put forward pointers to the real validation chapters yet to come}
 \B allows the generation of speficic and thus efficient native code.
 In Section~\secref{benzo} we explained how \B causes only a one-time overhead for native code generation. 
 Thereafter it is cached for later activations.
@@ -682,6 +692,7 @@ Hence our approach is even valid for short-timed script-like applications as mos
 \seclabel{related}
 % ===========================================================================
 \todo{find older versions with more related work}
+\todo{ensure that the FFI related work is not that much}
 
 In the context of \B we have to respect a variety of related work spawning different abstraction levels.
 On a more abstract scale \B allows for a new way of extending the complete language runtime, hence we classify the related work according the following categories show in Figure~\figref{extensionComparison}: general language-side extensions, extensions using reflection, VM-level extensions, and hybrid approaches.
@@ -829,18 +840,35 @@ However, Klein is built on a completely new VM infrastructure, whereas \B requir
 \section{Problems of Benzo}
 \seclabel{problems}
 % ===========================================================================
+% most problems are related to the missing debugging facilities
+
 
 % -----------------------------------------------------------------------------
-\subsection{Low-level Inspection}
+\subsection{Robustness}
 % -----------------------------------------------------------------------------
+% show a problematic piece of code
+% sketch an outline for a safe benzo test by forking the main process
+% - image + code example
+% possible emulation of the code to highlight very common bugs?
+
 
 % -----------------------------------------------------------------------------
 \subsection{Low-level Debugging}
 % -----------------------------------------------------------------------------
+% sketch a possible debugger with ptrace and Co based on the previously forked process
+% outlook to the FFI section (reeified structures)
+% hard to debug when only looking at the memory
+% - need full stack view
+% - need register view
+% - need possible view on references to ST objects
 
 % -----------------------------------------------------------------------------
 \subsection{Platform Independence}
 % -----------------------------------------------------------------------------
+% missing abstraction on the assembler level
+% - outlook to the VirtualCPU
+% - image: mini architecture picture
+
 
 % ===========================================================================
 \section{Conclusion and Summary}

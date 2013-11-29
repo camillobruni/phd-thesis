@@ -891,19 +891,29 @@ It uses the low-level DWARF debugging information present in the external librar
 \section{Problems}
 \seclabel{problems}
 % ===========================================================================
+% - most problems overlap with the problems mentioned in the Benzo chapter
+% - address problems on a more high-level view
+
 
 \subsection{Difficult Debug Cycles}
-% debugging facility
+% - debugging facility (on a higher level than Benzo, see invisible VMs)
+% 	- resolve C symbols
+% 	- show C source code?
 
 
 \subsection{Platform Independence}
-% general / direct dependence on assembler which is not good
-% platform independence (future reference to VirtualCPU)
+% - general / direct dependence on assembler which is not good
+% - low-level platform independence solved by Benzo (link to future reference to VirtualCPU)
+% - platform independence on function level (see OSEnvironment as an Example)
+% 	- requires explicit subclasses
+% 	- manual maintenance + singletons
+% - missing support for multi-platform code definition in a single method
+
 
 \subsection{Limited Expressiveness}
-% fork example is hard to achieve (vm is not directly forkable)
-% current design makes it difficult to perform more C-like operations in one run
- 
+% - fork example is hard to achieve (vm is not directly forkable)
+% - current design makes it difficult to perform more C-like operations in one run
+% - adopt benzo-level abstractions on VirtualCPU
 
 
 
