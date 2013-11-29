@@ -21,3 +21,6 @@
 *.mtc7
 *.mtc8
 *.mtc9
+*.bbl
+*.blg
+*.brf
