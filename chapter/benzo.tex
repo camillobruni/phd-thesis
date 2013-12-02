@@ -35,7 +35,7 @@ Hence throughout this paper we use the term language runtime to refer to the run
 
 \subsection{Requirements.}
 Extending the VM is only one particular case of modifying or extending the complete language runtime.
-Language-side libraries, reflective capabilities, VM extensions or hybrid approaches are other possibilities which we discuss in detail in Section~\secref{related}.
+Language-side libraries, reflective capabilities, VM extensions or hybrid approaches are other possibilities which we discuss in detail in \secref{related}.
 All these typical extension mechanisms are not sufficient if we want to modify the VM from language-side, or in our terminology, to reflectively modify the language runtime. Furthermore these mechanisms are based on the fact that there is a clear barrier between language and VM.
 A solution that crosses these barriers requires the following properties:
 
@@ -52,26 +52,23 @@ A solution that crosses these barriers requires the following properties:
 
 High-level low-level programming is a powerful technique for system programming without resorting to static low-level environments \cite{Fram09a,Wimm13a} that \ugh{almost} fulfills our requirements.
 However, in a reflective setup it fails to comply with the first requirement mentioned in the previous paragraph: it does not allow reflective changes at runtime.
-Our approach for overcoming this limtation consists of \B, a lightweight and reflective framework that dynamically generates native code from language-side and allows its execution on the fly.
-It relies only on a small set of generic VM extensions described in Section~\secref{vm-requirements}, whereas the vast majority of the framework is implemented as a language-side library.
+Our approach for overcoming this limitation consists of \B, a lightweight and reflective framework that dynamically generates native code from language-side and allows its execution on the fly.
+It relies only on a small set of generic VM extensions described in \secref{vm-requirements}, whereas the vast majority of the framework is implemented as a language-side library.
 
 \subsection{\B Applications.}
-In Section \secref{usecase} we advocate the contribution of this approach by providing three different incremental examples that heavily use the framework.
+In \secref{usecase} we advocate the contribution of this approach by providing three different incremental examples that heavily use the framework.
 Unlike typical implementations that would focus on writing them as VM extensions, we implement them completely at language-side using \B:
-%\ugh{They rely on it} for extending or even improving language runtime capabilities.
 
-%\begin{description}[noitemsep]
 \begin{description}
-	\item[FFI] A complete language-side Foreign Function Interface (FFI) implementation, described in Section \secref{ffi}.
-	\item[Dynamic Primitives] A language-side compilation toolchain that replaces system primitives at runtime with customized code, described in Section \secref{waterfall}. 
-	\item[Language-side JIT Compiler] A JIT compiler that works at language-side and interacts with the VM for code synchronization, described in Section \secref{nabujito}
+	\item[FFI] A complete language-side Foreign Function Interface (FFI) implementation, described in \secref{ffi}.
+	\item[Dynamic Primitives] A language-side compilation toolchain that replaces system primitives at runtime with customized code, described in \secref{waterfall}. 
+	\item[Language-side JIT Compiler] A JIT compiler that works at language-side and interacts with the VM for code synchronization, described in \secref{nabujito}
 \end{description}
 
 
 \noindent Illustrated by these three distinct examples, the contributions of this paper are:
 \begin{enumerate} 
 	\item A \emph{reflective} high-level low-level programming framework that encourages the extension of high-level language runtimes on the fly without the overheads imposed by pure high-level solutions. 
-	%\item The framework promotes open interactions with the low-level world .
 	\item A proof of concept of the proposal with the implementation and description of three different tools that heavily use reflective low-level programming and covers distinct scenarios.
 \end{enumerate}
 
@@ -93,14 +90,13 @@ Unlike typical implementations that would focus on writing them as VM extensions
 \B is implemented in \PH\footnote{\url{http://pharo.org}}, a \ST inspired language.
 \PH comes with all the reflective capabilities known from \ST where most language-side components can be altered dynamically.
 \B is implemented at language-side and only requires the help of two simple and generic primitives to activate \cb{ad-hoc has a negative conotation} native code and resolve the entry point address position of referenced C functions.
-
 %----------------------------------------------------------------------------
 \subsection{VM Context}
 \seclabel{vm-requirements}
 %----------------------------------------------------------------------------
 \PH emerged from the Squeak project \cite{Inga97a}.
 The \PH VM (Cog) implementation \cite{Mira11a} also evolved from the original Squeak bytecode interpreter.
-The current VM uses a moving Garbage Collector (GC) with two generations\gc{ref?} and uses a JIT that applies basic register allocation to reduce stack load. 
+The current VM uses a moving Garbage  Collector (GC) with two generations\gc{ref?} and uses a JIT that applies basic register allocation to reduce stack load. 
 This situation is not a direct requirement for \B but it is assumed as given and thus not further discussed in detail.
 However, \B requires certain features that were not supported in the existing VM implementation.
 Mainly our requirement is being able to generate executable code and activate it at runtime.
@@ -133,9 +129,9 @@ The standard way in \ST to execute low-level code is to use a tag in the method 
 \end{stcode}
 %
 Here we use the primitive 49 to call a VM function which efficiently multiplies two floats. 
-Figure~\figref{smalltalkPrimitive}-a describes the case where the primitive is successfully executed.
+\figref{smalltalkPrimitive}-a describes the case where the primitive is successfully executed.
 However, if the primitive is unable to do the operation, for instance if the argument \ttt{aNumber} is not a float, it will signal a failure which causes the VM to execute the fallback \ST code in the method body.  
-Fig.~\figref{smalltalkPrimitive}-b describes it. 
+\figref{smalltalkPrimitive}-b describes it. 
 
 \begin{figure}[ht]
 	\centering
@@ -149,7 +145,8 @@ Fig.~\figref{smalltalkPrimitive}-b describes it.
 \B uses the primitives as a gate to enter the low-level world from the language-side.
 Our custom primitive then executes the generated native code and returns to language-side. 
 This code is appended inside the compiled method object.
-When the primitive is activated, it  accesses the currently executed compiled method via a VM function. Figure \figref{nativeCodeMethod} shows the structure of a \ST compiled method that has native code attached to it.
+When the primitive is activated, it  accesses the currently executed compiled method via a VM function. 
+\figref{nativeCodeMethod} shows the structure of a \ST compiled method that has native code attached to it.
 We see the primitive tag on top, followed by the literal frame which holds references to symbols and classes used in the method.
 The subsequent \ST bytecode is the fallback code executed only if the primitive fails. Only then appears the native instructions.
 A marker at the end of the compiled method called trailer type is used to flag methods that actually have native code attached to them.
@@ -165,7 +162,7 @@ A marker at the end of the compiled method called trailer type is used to flag m
 Since compiled methods are first-class objects it is possible to modify them at runtime and append the native code.
 The primitive \ttt{primitiveNativeCall}, which is implemented by \B, is the responsible of running the native instructions in a \ST method.
 The code example \ttt{interrupt3} shows a very basic application of our infrastructure.
-In Section \secref{benzo-language-side}, through more detailed examples, we describe how \B uses \ST code to generate the native instructions.
+In \secref{benzo-language-side}, through more detailed examples, we describe how \B uses \ST code to generate the native instructions.
 %
 \begin{stcode}[label={lst:basic-native-code}, caption={\ST method using \B for very basic low-level debugging.}, escapeinside={@}{@}]{5}
 interrupt3
@@ -213,7 +210,7 @@ Hence we have the static address of the external roots object as an entry point 
 \end{figure}
 %
 Summarizing, for accessing \ST objects within native code we first register it as an external root object and access it only indirectly.
-This means that for native code, instead of a method-local literal array we share a global literal array as shown in Figure \figref{externalRoots}. 
+This means that for native code, instead of a method-local literal array we share a global literal array as shown in \figref{externalRoots}. 
 \B only adds an \ttt{Array} to the external root objects which is managed from language-side and administers all references.
 
 %\revc{The external roots concept appears here first but the idea of "indirection" has been mentioned. The regular literal frame of compiled methods are discussed heavily; that would suggest that the generated native code could use relative offset from the code location and still be able to "pin-point" the literal slot in the literal frame. What is the downside of this approach? (And how slots in the external roots garbage collected?)}
@@ -226,7 +223,7 @@ When the Pharo VM starts the execution of dynamic generated code the execution e
 Similarly, when entering primitives or plugin code, the managed execution mode is left and a normal C-level execution environment is reestablished until the primitive finishes and the VM jumps back to the jitted code. 
 To avoid these context changes that imply a considerable performance overhead, we extend the VM to support inlining of native code in the JIT phase following the same strategy as other existing primitives which are inlined at JIT-level.
 The \B prologue and epilogue used for managing the low-level stack are replaced by an adapted version for the JIT.
-The performance boost of this optimization is further discussed in Section \secref{issues-performance}.
+The performance boost of this optimization is further discussed in \secref{issues-performance}.
 
 %----------------------------------------------------------------------------
 \paragraph{Error Handling.}
@@ -238,9 +235,6 @@ The performance boost of this optimization is further discussed in Section \secr
 The native code builder provides a helper method called \ttt{failWithMessage:} 
 that generates the proper assembler instructions to return a full error message.
 This allows plugins to return clear and meaningful error codes, improving the debugging tasks and enabling a better interaction with users.
-
-%\reve{does a call to "failWithMessage:" result in an exception being thrown, or does it just display an error message. The former would be more useful b/c it would enable language-side code to catch the exception and do something about it, but the paper doesn't make it clear that this is the case.}
-
 
 %----------------------------------------------------------------------------
 \subsection{\B's Language-Side Implementation}
@@ -262,9 +256,6 @@ Benzo x86 generate: [ :asm |
 %
 The implementation first creates a slightly more abstract intermediate format.
 The abstract operations can be extended by custom operations that may expand to several native instructions. For pragmatic reasons current implementation only supports \textsc{x86} and \textsc{x86-64}.
-%
-%	\reve{You claim that the "assembler is platform-agnostic", but how so? In the examples, you seem to use instructions that are clearly x86-specific, e.g., MOVs involving EAX. On a related note, you say in the same section that "there are plans to improve the platform independence by implementing a more abstract DSL for NativeBoost."}
-%
 The full features of the high-level environment are available when generating native code.
 Hence complex instruction sequences can easily be delegated to other objects.
 In the following example we use a VM helper to instantiate an array. It is worth noting that all are standard message sends:
@@ -279,7 +270,7 @@ Benzo x86 generate: [ :asm :helper | | register |
 \end{stcode}
 %
 The VM helper exposes a basic, low-level interface to access objects and its properties.
-Additional methods cover the access to the external roots described in Section \secref{gc-interaction}.
+Additional methods cover the access to the external roots described in \secref{gc-interaction}.
 In this case the \ttt{\#instantiateClass:indexableSize:} will generate the proper native code to call to a VM function and make sure that the side-effects of a possible GC run are handled properly.
 By default the value in the result register is returned back to the language-side. On \textsc{x86} this defaults to \ttt{EAX}.
 In section \secref{usecase} we introduce more substantial applications based on \B.
@@ -290,17 +281,16 @@ In section \secref{usecase} we introduce more substantial applications based on 
  
 A \B primitive is responsible for the native code activation which consists of three main steps:
 %
-%\begin{itemize}[noitemsep,nolistsep] 
 \begin{enumerate}
 	\item Check if there is native code in the actual compiled method and if it is compatible with the current platform.
 	\item Generate native code if necessary.
 	\item Activate the native code for execution.
 \end{enumerate}
 %
-The example in Listing \lstref{basic-native-code} uses \B's generator to create and install the native code which would trigger a low-level interrupt. Behind the scenes \B adds some more information to the code as the already mentioned platform marker. 
+The example in \lstref{basic-native-code} uses \B's generator to create and install the native code which would trigger a low-level interrupt. Behind the scenes \B adds some more information to the code as the already mentioned platform marker. 
 For activation \B uses reflective features to restart the method containing the native code.
 Upon the second activation, after already generating the native code, \B moves the native code to the end of the compiled method and activates it.
-This mechanism is shown in Figure \figref{nativeCodeActivation}.
+This mechanism is shown in \figref{nativeCodeActivation}.
 
 \begin{figure}[ht]
 	\centering
@@ -316,20 +306,12 @@ This mechanism is shown in Figure \figref{nativeCodeActivation}.
 \todo{keep this section as is and introduce forward pointers to the separate chapters}
 
 In this Section, for illustrating better the contribution of the solution proposed, we will present different dynamic language-side applications and tools based on \B.
-%These implementations, a FFI, dynamic primitives and a language-side JIT, are typically done at VM-level.
-%We show that \B is a competitive solution.
+These implementations, a FFI, dynamic primitives and a language-side JIT, are typically done at VM-level.
 
 %----------------------------------------------------------------------------
 \subsection{\NB: \B-based Foreign Function Interface}
 \seclabel{ffi}
 %----------------------------------------------------------------------------
-
-%\begin{figure*}[t]
-%\centering
-%\includegraphics[width=\linewidth]{ffiOverview}
-%\caption{\NB Overview: Unlike typical FFI implementations \NB only resorts to the VM-level when actually calling the external function in step 4. Typical implementations already cross the low-level barrier during the type conversions at step 2.}
-%\figlabel{ffi}
-%\end{figure*}
 
 FFIs enable a programmer to call external functions without the need to implement additional VM extensions.
 \NB \cite{Brun13a} is a production-ready FFI for \PH, developed on top of \B.
@@ -357,9 +339,9 @@ This way the VM no longer requires to have a specific FFI extension.
 %This is preferable since the language-side part of the FFI code relies on better abstractions and infrastructure for debugging.
 %\NB does not even depend on a specific VM plugin but on the generic infrastructure provided by \B.
 %All the FFI is implemented at high-level language-side. 
-%\del{Figure \figref{ffi} shows how only the last step in calling an external function relies on low-level VM interaction.}
-%Section \secref{ffi-low-level} explains the execution component details.
-%Via reflection techniques \NB provides a simple yet powerful marshalling library which is further described in Section \secref{ffi-symbiosis}.
+%\del{\figref{ffi} shows how only the last step in calling an external function relies on low-level VM interaction.}
+%\secref{ffi-low-level} explains the execution component details.
+%Via reflection techniques \NB provides a simple yet powerful marshalling library which is further described in \secref{ffi-symbiosis}.
 %
 %----------------------------------------------------------------------------
 %\subsubsection{\NB in a Nutshell.}
@@ -378,7 +360,7 @@ The most important aspect about this example is that it is written with standard
 \NB, additionally to the native code activation, relies on two simple primitives provided by \B to retrieve addresses of external functions (\ttt{dlsym}) and to load external libraries (\ttt{dlopen}).
 
 \NB generates the glue code to call external functions dynamically at run time.
-It relies on \B's features presented in Section~\secref{benzo-language-side} to generate and activate native code at runtime.
+It relies on \B's features presented in \secref{benzo-language-side} to generate and activate native code at runtime.
 This gives \NB a significant advantage over static approaches: the generated native code is specific to the callout.
 For instance in the \ttt{getenv} example, the marshalling code for converting from the internal \PH strings to C strings is written a small assembler routine.
 In this specific context, the assembler code is faster than any language-side code.
@@ -416,10 +398,10 @@ Then this AST representation is translated to native code enforcing C-like Slang
 The second item enables the execution of the dynamically generated native code.
 This includes for instance the finding of addresses of VM internal symbols and all the effort to link the two worlds, \ST and native.
 Waterfall relies on \B for most of this low-level functionalities.
-In particular \NB, the \B-based FFI presented in Section~\secref{ffi}, is used for interfacing with C libraries (\ttt{dlsym}). 
+In particular \NB, the \B-based FFI presented in \secref{ffi}, is used for interfacing with C libraries (\ttt{dlsym}). 
 
 \paragraph{Primitives in Smalltalk.}
-As already partially explained, whenever a method is compiled with the \ttt{primitive} pragma as shown in Section \secref{vm-interaction} a flag is set on the \ttt{CompiledMethod}. 
+As already partially explained, whenever a method is compiled with the \ttt{primitive} pragma as shown in \secref{vm-interaction} a flag is set on the \ttt{CompiledMethod}. 
 If the VM tries to activate such a method, instead of interpreting the bytecodes it calls the corresponding function at VM-level~\cite{Gold83a}.
 %The binding between primitives and numbers is described in a table indexed by number.
 Smalltalk distinguishes two types of primitives: essential and non-essential primitives.
@@ -427,7 +409,7 @@ Essential primitives are required for the bootstrapping and the essential operat
 The second category of primitives are mainly used for optimization purposes.
 
 \paragraph{Dynamically Interchangeable Primitives.}
-Waterfall uses \B's mechanism for replacing primitive methods with customized versions that are nativized dynamically as described in Section~\secref{benzo}.
+Waterfall uses \B's mechanism for replacing primitive methods with customized versions that are nativized dynamically as described in \secref{benzo}.
 The loophole described there is exploited by Waterfall to enable dynamic modification of VM behavior and hence bring primitives to life at language-side.
 
 
@@ -441,7 +423,7 @@ We identified two main benefits of changing VM primitives at runtime:
 \end{enumerate}
 
 \paragraph{Reducing VM Complexity.}
-VM extensions are only justified in the presence of strong performance requirements (see Section~\secref{related}).
+VM extensions are only justified in the presence of strong performance requirements (see \secref{related}).
 All non-essential primitives fall into this category.
 Using Waterfall, these primitives can be implemented at language-side.
 This means that these primitives become first-class citizens of the high-level environment and thus evolve with less effort.
@@ -520,9 +502,9 @@ Since in \PH, compiling a method to bytecode is handled completely with language
 
 \paragraph{Primitives in the Existing JIT.}
 The existing JIT reimplements the most used primitives at VM-level.
-This guarantees that the VM stays as long as possible in the JIT context (see Section~\secref{jit-interaction}). Additionally this enables new performance optimizations that for instance are hard to achieve with standard compliant C code.
+This guarantees that the VM stays as long as possible in the JIT context (see \secref{jit-interaction}). Additionally this enables new performance optimizations that for instance are hard to achieve with standard compliant C code.
 A typical example is the integer addition which has to deal with overflow checks and conversion of tagged integers.
-In Section \secref{waterfall} we describe how Waterfall suffers a similar constraint. Waterfall manually defines such primitives in terms of native assembler instructions through the language-side \B interface.
+In \secref{waterfall} we describe how Waterfall suffers a similar constraint. Waterfall manually defines such primitives in terms of native assembler instructions through the language-side \B interface.
 Nabujito reuses the same optimized primitives so we rely on a single optimized definition which is shared amongst all native code libraries.
 
 %----------------------------------------------------------------------------
@@ -568,12 +550,12 @@ The JIT lives on the same level as the information it needs relying on the alrea
 
 \todo{Shorten this section and put forward pointers to the real validation chapters yet to come}
 \B allows the generation of speficic and thus efficient native code.
-In Section~\secref{benzo} we explained how \B causes only a one-time overhead for native code generation. 
+In \secref{benzo} we explained how \B causes only a one-time overhead for native code generation. 
 Thereafter it is cached for later activations.
-The three usecase presented in Section~\secref{usecase} heavily benefit from this fact.
+The three usecase presented in \secref{usecase} heavily benefit from this fact.
 Even though the code generation at language-side is generally slower than a C-level implementation, the overhead can mostly be neglected.
-Even better, for instance the \B-based FFI implementation presented in Section~\secref{ffi} outperforms a VM-level FFI-plugin due to a more flexible language-side implementation. 
-These results are shown in the following Table \tabref{ffi-performance-simple}.
+Even better, for instance the \B-based FFI implementation presented in \secref{ffi} outperforms a VM-level FFI-plugin due to a more flexible language-side implementation. 
+These results are shown in the following \tabref{ffi-performance-simple}.
 
 The rest of this section discusses in more details the performance of our three \B-base usecases: an FFI, dynamic primitives and a language-side JIT compiler.
 %Unless stated otherwise, the performance evaluation is based on using SMark\, a benchmarking framework which measures 
@@ -583,11 +565,11 @@ The rest of this section discusses in more details the performance of our three 
 % ---------------------------------------------------------------------------
 \seclabel{nb-performance}
 
-Compared to a static plugin-based FFI implementation \NB has only a one-time startup overhead with its numbers shown in Section~\secref{issues-performance}.
+Compared to a static plugin-based FFI implementation \NB has only a one-time startup overhead with its numbers shown in \secref{issues-performance}.
 Generating the native code at language-side is substantially slower than directly setting up all the conversions and calling the external functions from C code. 
 In some cases the penalty for some compilation effort on \NB is as high as a factor of 100 compared to classic approaches.
 Under the assumption that the method is called several times this overhead may be considered negligible.
-An in-depth evaluation of NativeBoost comparing against other solutions, is presented in a separate paper~\cite{Brun13a}.
+An in-depth evaluation of \NB comparing against other solutions, is presented in a separate paper~\cite{Brun13a}.
 The following table contains a performance comparison of three different FFI implementations for \PH that represents the typical showcase.
 
 \begin{table}[!ht]
@@ -603,11 +585,11 @@ The following table contains a performance comparison of three different FFI imp
     \tablabel{ffi-performance-simple}
 \end{table}
 
-Table \tabref{ffi-performance-simple} measures the accumulative time of 100'000 FFI calls.
+\tabref{ffi-performance-simple} measures the accumulative time of 100'000 FFI calls.
 Included in these numbers is at least one additional \ST message send to activate the \NB method containing the actual call to the C function.
 Each benchmark itself is run 1000 times and the average and standard deviation is taken.
 We also measured calls with more complex type conversions where the performance boost against Alien pronounced even more because \NB's language-side marshalling is nativized.
-The JIT interaction described in Section \secref{jit-interaction} is also an important optimization factor especially when calling out small helper routines where the context switch from jitted mode is not negligible.
+The JIT interaction described in \secref{jit-interaction} is also an important optimization factor especially when calling out small helper routines where the context switch from jitted mode is not negligible.
 
 
 
@@ -653,7 +635,7 @@ However, Nabujito is clearly slower during the warm-up phase.
 Compilation of the native instructions will take considerably more time compared to the VM-level implementation of the same bytecode to assembler transformation.
 The cost of transforming the bytecodes to native code at VM-level can be measured in native instructions, whereas the unit at language-side is bytecodes.
 However, we point out again, that this is a one-time overhead.
-From the in-production experience of NativeBoost, the \B-based FFI (see Section~\secref{nb-performance}), we know that these costs amortized, especially for long-term applications.
+From the in-production experience of NativeBoost, the \B-based FFI (see \secref{nb-performance}), we know that these costs amortized, especially for long-term applications.
 Instead of focusing on the final performance of the generated code, we present the compilation time compared to the normal \PH bytecode compiler, which also resides at language-side.
 
 \begin{table}[!ht]
@@ -667,15 +649,15 @@ Instead of focusing on the final performance of the generated code, we present t
     \tablabel{nabujito-performance-small}
 \end{table}
 
-In Table \tabref{nabujito-performance-small} we compare the compilation speed of the standard \PH compiler and Nabujito.
+In \tabref{nabujito-performance-small} we compare the compilation speed of the standard \PH compiler and Nabujito.
 We measure the accumulated time spent to compile the method 1000 times.
 The average and deviation are taken over 100 runs. 
 The \PH compiler takes source code as input and outputs \ST bytecodes.
 Nabujito takes bytecodes as input and outputs native code.
 
-We see that in the simple case displayed in Table \tabref{nabujito-performance-small} Nabujito's compilation speed lies within the same range as the standard \ST compiler.
+We see that in the simple case displayed in \tabref{nabujito-performance-small} Nabujito's compilation speed lies within the same range as the standard \ST compiler.
 We expect that in the future we apply more low-level optimizations and thus increase the compilation time of Nabujito.
-However, we have shown in the performance evaluation for \NB, the \B-based FFI, in Section \secref{nb-performance} that even a rather high one-time overhead is quickly amortized.
+However, we have shown in the performance evaluation for \NB, the \B-based FFI, in \secref{nb-performance} that even a rather high one-time overhead is quickly amortized.
 Furthermore with Smalltalk's image approach the generated native code is persistent over several sessions.
 A subsequent restart of the same runtime will not cause the JIT to nativize the same methods it did during the last launch.
 Hence our approach is even valid for short-timed script-like applications as most of the methods will already be available in optimized native code from a previous run.
@@ -689,7 +671,7 @@ Hence our approach is even valid for short-timed script-like applications as mos
 \todo{ensure that the FFI related work is not that much}
 
 In the context of \B we have to respect a variety of related work spawning different abstraction levels.
-On a more abstract scale \B allows for a new way of extending the complete language runtime, hence we classify the related work according the following categories show in Figure~\figref{extensionComparison}: general language-side extensions, extensions using reflection, VM-level extensions, and hybrid approaches.
+On a more abstract scale \B allows for a new way of extending the complete language runtime, hence we classify the related work according the following categories show in \figref{extensionComparison}: general language-side extensions, extensions using reflection, VM-level extensions, and hybrid approaches.
 %
 %We present now an overview of the approaches used to extend a language runtime and expose their limits.
 %High-level languages are in general sustained by a VM and a vast set of libraries written in the language itself. 
@@ -707,7 +689,7 @@ On a more abstract scale \B allows for a new way of extending the complete langu
 %\end{description}
 %
 
-%The relation between the side concerning the abstraction and implementation levels (VM vs. Language) of these extensions is illustrated in Figure \figref{extensionComparison}.
+%The relation between the side concerning the abstraction and implementation levels (VM vs. Language) of these extensions is illustrated in \figref{extensionComparison}.
 
 \begin{figure}
 	\includegraphics[width=\linewidth]{extensionComparison}
@@ -809,7 +791,7 @@ Other high-level languages such as Lua leverage FFI performance by using a close
 LuaJIT \cite{luaffi} for instance is an efficient Lua implementation that inlines FFI calls directly into the JIT compiled code.
 Similar to \B this allows to minimize the constant overhead by generating custom-made native code.
 LuaJIT is mainly written in C which has clearly different semantics than Lua itself.
-Compared to \ugh{our} approach the efficient VM implementation suffers from the shortcomings described in Section \secref{vm-extensions}. 
+Compared to \ugh{our} approach the efficient VM implementation suffers from the shortcomings described in \secref{vm-extensions}. 
 
 Kell and Irwin \cite{Kell11a} take a different look at interacting with external libraries.
 They advocate a Python VM that allows for dynamically shared objects with external libraries.
