@@ -1,49 +1,292 @@
 \input{chapter-header.tex}
-% =============================================================================
+% ===========================================================================
 
 \chapter{Prototype Validation: Dynamic Primitives and JIT}
 \chaplabel{nabujito}
 \minitoc
 
-% =============================================================================
+% ===========================================================================
 
 % ===========================================================================
 \section{Introduction}
 \seclabel{introduction}
 % ===========================================================================
 
+\todo{Introduction explaining why a different chapter for Nabujito + Waterfall}
+
 % ===========================================================================
 \section{Nabujito: Language-side JIT}
 \seclabel{nabujito}
 % ===========================================================================
+\todo{Introduction}
 
-% -----------------------------------------------------------------------------
+% ---------------------------------------------------------------------------
+\subsection{Background}
+\seclabel{nabujito-background}
+% ---------------------------------------------------------------------------
+In this section we present Nabujito, a \B-based approach for a language-side JIT compiler.
+Nabujito goes even further than Waterfall using almost the same techniques.
+However, instead of focusing on primitives, Nabujito generates native executable code for standard \ST methods.
+Primitives tend to be more low-level, whereas Nabujito focuses on high-level \ST code. 
+
+
+%----------------------------------------------------------------------------
+\paragraph{The JIT of the Pharo VM.}
+The \PH VM (Cog) already comes with a JIT that translates bytecodes to native instructions.
+It transforms \ST methods into slightly optimized native code at runtime.
+The main speed improvement comes from avoiding bytecode dispatching and by inlining certain known operations and primitives \cite{Ayco03a}.
+The most complex logic of the JIT infrastructure deals with the dynamic nature of the \ST environment.
+Methods and classes can be changed at runtime and that has to be addressed by the JIT infrastructure.
+The JIT compiler, by which we refer in this context to the transformation of bytecodes to native code, represents a small part of the whole infrastructure.
+There exists more important stages as an additional register allocation pass to reduce the number of stack operations \cite{Mira99a,Mira11a}.
+The existing JIT infrastructure is implemented in Slang \cite[Ch.\ 5]{Blac09a} as the rest of the VM.
+
+%----------------------------------------------------------------------------
+\paragraph{Limitations of VM-level JIT Compilers.}
+In the context of Nabujito we separate a JIT infrastructure into separate parts.
+The major part is to have a VM that uses stack-mapping.
+In the case of a bytecode-based interpreter, we assume that the VM provides routines to switch between a bytecode interpretation context and a low-level native execution context.
+With Nabujito we move the JIT compiler,the part that generates native code at runtime, from the VM to the image.%, the part that generates native code at runtime, typically from bytecodes.
+ Since the JIT compiler is quite decoupled from the rest of the JIT infrastructure we believe that a hard-coded static and low-level implementation is not optimal for several reasons:
+
+\begin{itemize}
+	\item Optimizing \ST code requires strong interactions with the dynamic environment.
+	\item Accessing language-side properties from the VM-side is hard.
+	\item Changing the JIT compiler requires changes at VM-level.
+	\item The JIT reimplements primitives for optimization reasons resulting in code duplication.
+\end{itemize}
+
+\paragraph{Optimization Limitations for \PH.}
+In \ST methods tend to be very small and it is considered good practice to delegate behavior to other objects.
+This implies that several common optimization techniques for static languages do not work well.
+Dynamic method activation does not provide enough context for a static compiler to optimize methods.
+Hence after inline caches and register allocation the next optimization technique is inlining.
+However, inlining in a dynamic context is difficult and requires hooks at VM-level to invalidate native code when the language-side changes.
+Since in \PH, compiling a method to bytecode is handled completely with language-side code most of the infrastructure to get notified about method changes is already present.
+
+\paragraph{Primitives in the Existing JIT.}
+The existing JIT reimplements the most used primitives at VM-level.
+This guarantees that the VM stays as long as possible in the JIT context (see \secref{jit-interaction}). Additionally this enables new performance optimizations that for instance are hard to achieve with standard compliant C code.
+A typical example is the integer addition which has to deal with overflow checks and conversion of tagged integers.
+In \secref{waterfall} we describe how Waterfall suffers a similar constraint. Waterfall manually defines such primitives in terms of native assembler instructions through the language-side \B interface.
+Nabujito reuses the same optimized primitives so we rely on a single optimized definition which is shared amongst all native code libraries.
+
+%----------------------------------------------------------------------------
 \subsection{Implementation}
-% -----------------------------------------------------------------------------
+\seclabel{nabujito-implementation}
+%----------------------------------------------------------------------------
+\todo{EXTEND: Show more internals}
+\todo{Add overview picture}
+Nabujito is an experimental JIT implementation which replaces the bytecode to native code translation of the existing JIT infrastructure with a dynamic language-side implementation.
+Nabujito is implemented mainly with a visitor strategy over the existing intermediate bytecode representation. 
+Additionally we reimplemented vital native routines for the JIT which are not directly exported by the VM using \B. 
+Nabujito relies on the following VM-level infrastructure to manage and run native code for any \PH method:
+
+%\begin{itemize}[noitemsep]
+\begin{itemize}
+	\item Fixed native code memory segments.
+	\item Routines for switching contexts.
+	\item Native stack management.
+\end{itemize}
+
+\paragraph{Dynamic Code Generation.}
+To simplify the implementation we decide to manually trigger JIT compilation.
+For primitives known by Waterfall we rely on that infrastructure to generate the native code.
+For standard methods Nabujito takes the bytecodes and transforms them to native code.
+It also applies optimizations such as creating low-level branches for \ST level branching operations like \ttt{ifTrue:}.
+Optimizations for additional methods are all implemented flexibly at language-side.
+Wherever possible, we reimplement the same behavior as the existing native JIT compiler.
+Eventually the native code is ready and \B attaches it to the existing compiled method.
+When the language-side jitted code is activated \B ensures that we do not have to leave the JIT execution mode, and thus we can call methods at the same speed as the existing JIT.
+The benchmarks of section \secref{nabujito-performance} show the empirical results.
 
 % -----------------------------------------------------------------------------
 \subsection{Validation}
+\seclabel{nabujito-performance}
 % -----------------------------------------------------------------------------
+
+The performance evaluation for our \B-based JIT compiler is focused on the language-side code-generation part.
+Nabujito essentially generates the same native code as the VM-level JIT, hence there is no performance difference at evaluation time.
+However, Nabujito is clearly slower during the warm-up phase.
+Compilation of the native instructions will take considerably more time compared to the VM-level implementation of the same bytecode to assembler transformation.
+The cost of transforming the bytecodes to native code at VM-level can be measured in native instructions, whereas the unit at language-side is bytecodes.
+However, we point out again, that this is a one-time overhead.
+From the in-production experience of \NB, the \B-based FFI (see \secref{nb-performance}), we know that these costs amortized, especially for long-term applications.
+Instead of focusing on the final performance of the generated code, we present the compilation time compared to the normal \PH bytecode compiler, which also resides at language-side.
+
+\begin{table}[!ht]
+    \centering
+    \begin{tabular}{rll}
+                      & Compilation Time \\\midrule
+        \PH Compiler  & \ttt{71} $\pm$ \ttt{1} ms   \\
+        Nabujito      & \ttt{73} $\pm$ \ttt{1} ms
+    \end{tabular}
+    \caption{Compilation efforts of the standard \ST compiler in \PH and Nabujito for the a simple method returning the constant \ttt{nil}.}
+    \tablabel{nabujito-performance-small}
+\end{table}
+
+In \tabref{nabujito-performance-small} we compare the compilation speed of the standard \PH compiler and Nabujito.
+We measure the accumulated time spent to compile the method 1000 times.
+The average and deviation are taken over 100 runs. 
+The \PH compiler takes source code as input and outputs \ST bytecodes.
+Nabujito takes bytecodes as input and outputs native code.
+
+We see that in the simple case displayed in \tabref{nabujito-performance-small} Nabujito's compilation speed lies within the same range as the standard \ST compiler.
+We expect that in the future we apply more low-level optimizations and thus increase the compilation time of Nabujito.
+However, we have shown in the performance evaluation for \NB, the \B-based FFI, in \secref{nb-performance} that even a rather high one-time overhead is quickly amortized.
+Furthermore with Smalltalk's image approach the generated native code is persistent over several sessions.
+A subsequent restart of the same runtime will not cause the JIT to nativize the same methods it did during the last launch.
+Hence our approach is even valid for short-timed script-like applications as most of the methods will already be available in optimized native code from a previous run.
 
 % -----------------------------------------------------------------------------
 \subsection{Problems}
+\seclabel{nabujito-problems}
 % -----------------------------------------------------------------------------
+\paragraph{Hidden VM Internals.}
+
+\paragraph{Debugging Cycle.}
+
+\paragraph{Outlook.}
+One major performance optimization missing in both, the original \PH VM-level JIT and Nabujito, is inlining. 
+By inlining we are able to create methods that are potentially big enough for optimizations.
+However, inlining is a difficult task in a highly dynamic language such as \ST or Self \cite{Cham89a}. 
+Efficient inlining can only be performed with sufficient knowledge of the system. 
+Accessing this high-level information from within the VM is cumbersome and requires duplication of language-side reflective features.
+The JIT lives on the same level as the information it needs relying on the already present reflective features of Smalltalk.
+
 
 % ===========================================================================
 \section{Waterfall: Dynamic Primitives}
 \seclabel{waterfall}
 % ===========================================================================
+
+\todo{Introduction}
+
+% -----------------------------------------------------------------------------
+\subsection{Background}
+\seclabel{waterfall-background}
+% -----------------------------------------------------------------------------
+
+The Pharo VM (Cog) is developed in a language that is a subset of \ST, known as Slang, which is transformed to C and then compiled using a standard C compiler.  
+Slang basically has the same syntax as \ST but is semantically constrained to expressions that can be resolved statically at compilation or code generation time and are compatible with C.
+Hence Slang's semantics are closer to C than to \ST. 
+
+The primitives of the VM are written in Slang and that is why even in a highly reflective languages such as \ST, where almost every aspect of the language is available for inspection and modification \cite{Denk10a}, primitives can not be changed at runtime. They can only be intercepted with reflective techniques with considerable performance overheads.
+This is an important limitation since primitives are, in general, performance demanding components.
+Waterfall~\cite{Char13a,Waterfall} is a tool that allows developers to change the code written in Slang for primitives and translate it to native code at runtime.
+This replaces the indirection via C that is used in the default compilation process.
+Given that Slang source code can be modified at runtime as any other \ST method, Waterfall fosters primitives to be dynamically adapted without imposing the common pure reflective techniques performance degradation.
+
+From a high-level point of view Waterfall provides two services which work transparently: 
+%
+\begin{enumerate}
+	\item Compilation of Slang code on demand (lazily).
+	\item A clear interface for executing, at runtime and from language-side, the native code generated.
+\end{enumerate}
+%
+The first item allows to change the code of primitives at language-side and generate the corresponding native code when needed. 
+It also provides the possibility to write methods or functionality with the same Smalltalk syntax but with a static semantic. 
+It consists essentially of a transformation toolchain that uses the AST that is generated by the standard \PH compiler harnessing that Slang and \ST have the same syntax. 
+Then this AST representation is translated to native code enforcing C-like Slang semantics. The current prototype has only three fully implemented stages: Slang to AST, AST to an IR (between TAC and SSA) and finally AST or IR to native. The design is open for future additions at any level. One typical enhancement missing is having different levels of intermediate representations with various techniques on code optimization and register allocation strategies as modern compilers propose \cite[Ch.\ 1]{Appe98a}. 
+The second item enables the execution of the dynamically generated native code.
+This includes for instance the finding of addresses of VM internal symbols and all the effort to link the two worlds, \ST and native.
+Waterfall relies on \B for most of this low-level functionality.
+In particular \NB, the \B-based FFI presented in \secref{ffi}, is used for interfacing with C libraries (\ttt{dlsym}). 
+
+\paragraph{Primitives in Smalltalk.}
+As already partially explained, whenever a method is compiled with the \ttt{primitive} pragma as shown in \secref{vm-interaction} a flag is set on the \ttt{CompiledMethod}. 
+If the VM tries to activate such a method, instead of interpreting the bytecodes it calls the corresponding function at VM-level~\cite{Gold83a}.
+%The binding between primitives and numbers is described in a table indexed by number.
+Smalltalk distinguishes two types of primitives: essential and non-essential primitives.
+Essential primitives are required for the bootstrapping and the essential operations of the language, such as creating a new object or activating a block.
+The second category of primitives are mainly used for optimization purposes.
+
+\paragraph{Dynamically Interchangeable Primitives.}
+Waterfall uses \B's mechanism for replacing primitive methods with customized versions that are nativized dynamically as described in \secref{benzo}.
+The loophole described there is exploited by Waterfall to enable dynamic modification of VM behavior and hence bring primitives to life at language-side.
+
+
+%----------------------------------------------------------------------------
+\paragraph{Benefits} 
+We identified two main benefits of changing VM primitives at runtime:
+
+\begin{enumerate}
+	\item Reducing VM complexity by implementing non-essential primitives reflectively at language-side.
+	\item Dynamic instrumentation of primitives.
+\end{enumerate}
+
+\paragraph{Reducing VM Complexity.}
+VM extensions are only justified in the presence of strong performance requirements (see \secref{related}).
+All non-essential primitives fall into this category.
+Using Waterfall, these primitives can be implemented at language-side.
+This means that these primitives become first-class citizens of the high-level environment and thus evolve with less effort.
+
+\paragraph{Essential Primitives.}
+For essential primitives the previous argument does not hold since a static version is needed for a correct startup of the system.
+These primitives can not be fully replace by a language-side implementation using Waterfall.
+For instance, essential primitives are required for system startup.
+They would trigger an endless recursion when booting up the system and trying to generate them using Waterfall at the same time.
+However, nothing prevents from replacing essential primitives at runtime with customized versions, once the system startup is completed. 
+
+\paragraph{Why do we need better instrumentation?}
+Instrumentation of essential primitives from language side is an error-prone task falling in many cases in non-termination due to recursive loops. 
+An example of this behavior, can be observed when changing the essential \ttt{basicNew} primitive, which is responsible for instantiating new objects.
+Even a very simple instrumentation task such as printing the address in memory of the created object is problematic.
+If during the printing process another object is created the very same instrumented \ttt{basicNew} primitive would be triggered.
+Using reflective techniques it is possible to avoid this loop, however, with a considerable overhead.
+With Waterfall we can forget about these issues since the instrumentation code will be implemented at the lowest level.
+On section \secref{wf-performance} we show how Waterfall, the \B based approach for generating primitives on the fly, outperforms the reflective solutions for primitives instrumentation. 
+
+
 % -----------------------------------------------------------------------------
 \subsection{Implementation}
+\seclabel{waterfall-implementation}
 % -----------------------------------------------------------------------------
+\todo{Copy Over Waterfall Explanation from the Paper}
+\todo{Create overview Image}
+
 
 % -----------------------------------------------------------------------------
 \subsection{Validation}
+\seclabel{waterfall-performance}
 % -----------------------------------------------------------------------------
+\todo{Copy Over Benchmarks from the WF Paper}
+For comparing performance we implement a very simple integer operation primitive (\ttt{$>$}) using three different approaches.
+The first approach is the implementation with Waterfall.
+The second is to run the language-side implementation that is triggered whenever the standard primitive failed.
+Finally the fast standard primitive provided by the VM.
+We run the three approaches by measuring the cumulative time over one million primitive activations averaged over 100 runs.
+The absolute numbers are less important than the relative factor between them.
+We present the results of this experiment in Table~\tabref{waterfall-performance}.
+%
+\begin{table}[!ht]
+    \centering
+    \begin{tabular}{rrr}
+					& Running Time 						& Relative Time \\\midrule
+		VM			& \ttt{  6.4}  $\pm$ \ttt{0.14} ms & $1.0\times$\\
+		Waterfall	& \ttt{ 22.8}  $\pm$ \ttt{0.17} ms & $\approx3.6\times$\\
+        Reflective	& \ttt{195.0}  $\pm$ \ttt{0.16} ms & $\approx30.0\times$
+    \end{tabular}
+    \caption{Comparing running time of different implementations of integer arithmetic primitive.}
+    \tablabel{waterfall-performance}
+\end{table}
+%
+As expected Waterfall's solution outperforms pure reflective one by factor $9$ to $10$.
+Waterfall clearly outperforms a purely reflective solution since all the meta programming overhead for the intercession mechanism is avoided. This results thus makes a whole new set of runtime extensions feasible that were previously limited by their strong performance penalty.
+Furthermore the performance penalty over a completely optimized VM solution that has extreme optimization techniques, such as inlining and register allocation, is less than a factor of $4$.
+Applying standard optimization techniques, not yet implemented in Waterfall, will almost sure improve these numbers even more.
+A more detailed analysis of Waterfall is available separately \cite{Char13a}.
+
 
 % -----------------------------------------------------------------------------
 \subsection{Problems}
 % -----------------------------------------------------------------------------
+\paragraph{Waterfall Future.}
+Currently Waterfall reimplements all Slang arithmetic essential operations statically as native code templates.
+The existing JIT of the Pharo VM does exactly the same for performance reasons.
+This is code duplication and should be avoided.
+With the language-side JIT compiler described on next section we can reuse the same code. Another plan for Waterfall is to use it for disconnecting most plugins defined at Slang side from the VM compilation process and dynamically nativize them on a lazy approach.
+Finally, adding stages to the compiler with different levels of intermediate representations and applying optimizations to each would bring its performance closer to completely low-level optimized primitives.
 
 
 % ===========================================================================

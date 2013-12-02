@@ -684,7 +684,7 @@ We do not argue here that callbacks should be implemented in native code but tha
 \section{\NBFFI Implementation Details}
 \seclabel{internals}
 % ===========================================================================
-% mostly recycle section 4.1 and 4.2 from the paper
+\todo{Check that we don't have too much overlap with the Benzo Chapter}
 
 The following subsections will first focus on the high-level, language-side aspects of \NB, such as native code generation and marshalling.
 As a second part we describe implementation details of the low-level extensions, such as the \NB primitives and the JIT interaction.
@@ -753,8 +753,7 @@ Pharo has a moving garbage collector which means that you can not refer directly
 \begin{figure}[h]
 	\centering
 	\includegraphics{externalRoots}
-	\caption{Pointers in a CompiledMethod to objects registered as external roots are pinpointed at fixed offset in global VM-level object. \todo{possibly remove}
-	}
+	\caption[\NBFFI External Roots]{Pointers in a \ttt{CompiledMethod} to objects registered as external roots are pinpointed at fixed offset in global VM-level object.}
 	\figlabel{externalRoots}
 \end{figure}
 
