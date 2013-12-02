@@ -24,6 +24,7 @@ ENTRY
     author
     booktitle
     chapter
+    doi
     edition
     editor
     howpublished
@@ -560,14 +561,26 @@ FUNCTION {format.incoll.inproc.crossref}
   " \cite{" * crossref * "}" *
 }
  
+FUNCTION {doilink}
+{ duplicate$ empty$
+  { pop$ "" }
+  { doi empty$
+    { skip$ }
+    { "\href{http://dx.doi.org/" doi * "}{" * swap$ * "}" * 
+  }
+  if$
+  }
+  if$
+}
+
 FUNCTION {article}
 { output.bibitem
   format.authors "author" output.check
   new.block
-  format.utitle "title" output.check
+  format.utitle doilink "title" output.check
   new.block
   crossref missing$
-    { journal "journal" output.check
+    { journal doilink "journal" output.check
       format.volume output
       format.number output 
       format.pages output
@@ -594,7 +607,7 @@ FUNCTION {book}
     }
   if$
   new.block
-  format.title "title" output.check
+  format.title doilink "title" output.check
   crossref missing$
     { format.bvolume output
       new.block
@@ -618,7 +631,7 @@ FUNCTION {booklet}
 { output.bibitem
   format.authors output
   new.block
-  format.title "title" output.check
+  format.title doilink "title" output.check
   howpublished address new.block.checkb
   howpublished output
   address output
@@ -627,7 +640,7 @@ FUNCTION {booklet}
   note output
   fin.entry
 }
- 
+
 FUNCTION {inbook}
 { output.bibitem
   author empty$
@@ -640,7 +653,7 @@ FUNCTION {inbook}
     }
   if$
   new.block
-  format.title "title" output.check
+  format.title doilink "title" output.check
   crossref missing$
     { format.bvolume output
       format.chapter.pages "chapter and pages" output.check
@@ -666,10 +679,10 @@ FUNCTION {incollection}
 { output.bibitem
   format.authors "author" output.check
   new.block
-  format.utitle "title" output.check
+  format.utitle doilink "title" output.check
   new.block
   crossref missing$
-    { format.in.ed.booktitle "booktitle" output.check
+    { format.in.ed.booktitle doilink "booktitle" output.check
       format.bvolume output
       format.number.series output
       format.chapter.pages output
@@ -692,10 +705,10 @@ FUNCTION {inproceedings}
 { output.bibitem
   format.authors "author" output.check
   new.block
-  format.utitle "title" output.check
+  format.utitle doilink "title" output.check
   new.block
   crossref missing$
-    { format.in.ed.booktitle "booktitle" output.check
+    { format.in.ed.booktitle doilink "booktitle" output.check
       format.bvolume output
       format.number.series output
       format.pages output
@@ -737,7 +750,7 @@ FUNCTION {manual}
     { format.authors output.nonnull }
   if$
   new.block
-  format.utitle "title" output.check
+  format.utitle doilink "title" output.check
   author empty$
     { organization empty$
 	{ address new.block.checka
@@ -762,7 +775,7 @@ FUNCTION {mastersthesis}
 { output.bibitem
   format.authors "author" output.check
   new.block
-  format.title "title" output.check
+  format.title doilink "title" output.check
   new.block
   "Master's thesis" format.thesis.type output.nonnull
   school "school" output.check
@@ -791,7 +804,7 @@ FUNCTION {phdthesis}
 { output.bibitem
   format.authors "author" output.check
   new.block
-  format.btitle "title" output.check
+  format.btitle doilink "title" output.check
   new.block
   "PhD thesis" format.thesis.type output.nonnull
   school "school" output.check
@@ -809,7 +822,7 @@ FUNCTION {proceedings}
     { format.editors output.nonnull }
   if$
   new.block
-  format.title "title" output.check
+  format.title doilink "title" output.check
   format.bvolume output
   format.number.series output
   address empty$
@@ -841,7 +854,7 @@ FUNCTION {techreport}
 { output.bibitem
   format.authors "author" output.check
   new.block
-  format.utitle "title" output.check
+  format.utitle doilink "title" output.check
   new.block
   format.tr.number output.nonnull
   institution "institution" output.check
