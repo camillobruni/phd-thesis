@@ -9,9 +9,14 @@
 
 % ===========================================================================
 \section{Introduction}
-\seclabel{introduction}
+\seclabel{benzo-introduction}
 % ===========================================================================
 \todo{Write thesis introduction, the current introduction is more background / motivation}
+
+% ===========================================================================
+\section{Background}
+\seclabel{benzo-background}
+% ===========================================================================
 High-level low-level programming \cite{Fram09a} encourages to use high-level languages such as Java to build low-level execution infrastructures or to do system programming. 
 It is successfully used in experimental high-level self-hosted virtual machines (VMs) such as Jikes~\cite{Alpe99a}.  
 Frampton et al. present a framework that is biased towards a statically typed high-level language, taking strict security aspects into account.
@@ -28,7 +33,7 @@ Hence throughout this paper we use the term language runtime to refer to the run
 %Yet for tasks, like the previously presented primitive instrumentation, if we want to tackle it with a high-level language, we need solid low-level interaction.
 %\cb{some more context missing here}
 
-\subsubsection{Requirements.}
+\subsection{Requirements.}
 Extending the VM is only one particular case of modifying or extending the complete language runtime.
 Language-side libraries, reflective capabilities, VM extensions or hybrid approaches are other possibilities which we discuss in detail in Section~\secref{related}.
 All these typical extension mechanisms are not sufficient if we want to modify the VM from language-side, or in our terminology, to reflectively modify the language runtime. Furthermore these mechanisms are based on the fact that there is a clear barrier between language and VM.
@@ -43,14 +48,14 @@ A solution that crosses these barriers requires the following properties:
 \end{enumerate}
 
 
-\subsubsection{\B a Framework for Reflective Low-level Programming.}
+\subsection{\B a Framework for Reflective Low-level Programming.}
 
 High-level low-level programming is a powerful technique for system programming without resorting to static low-level environments \cite{Fram09a,Wimm13a} that \ugh{almost} fulfills our requirements.
 However, in a reflective setup it fails to comply with the first requirement mentioned in the previous paragraph: it does not allow reflective changes at runtime.
 Our approach for overcoming this limtation consists of \B, a lightweight and reflective framework that dynamically generates native code from language-side and allows its execution on the fly.
 It relies only on a small set of generic VM extensions described in Section~\secref{vm-requirements}, whereas the vast majority of the framework is implemented as a language-side library.
 
-\subsubsection{\B Applications.}
+\subsection{\B Applications.}
 In Section \secref{usecase} we advocate the contribution of this approach by providing three different incremental examples that heavily use the framework.
 Unlike typical implementations that would focus on writing them as VM extensions, we implement them completely at language-side using \B:
 %\ugh{They rely on it} for extending or even improving language runtime capabilities.
@@ -102,7 +107,7 @@ Mainly our requirement is being able to generate executable code and activate it
 This is general and essential so it applies to any VM that wants to support dynamic code execution managed at language-side.
 
 %----------------------------------------------------------------------------
-\subsubsection{Executable Memory.}
+\paragraph{Executable Memory.}
 \seclabel{exeutable-memory}
  
 We use standard \ST objects to hold the generated native code.
@@ -114,7 +119,7 @@ Another approach would have been to harness the fixed sized executable region us
 However, the JIT space does not hold normal \ST objects but special low-level structures and uses its own special GC. 
 
 %----------------------------------------------------------------------------
-\subsubsection{VM Interaction.}
+\paragraph{VM Interaction.}
 \seclabel{vm-interaction}
 
 \todo{dig up the older versions of this section with the longer text}
@@ -170,7 +175,7 @@ interrupt3
 \end{stcode}
 
 %----------------------------------------------------------------------------
-\subsubsection{Native Code Platform Interaction.}
+\paragraph{Native Code Platform Interaction.}
 \seclabel{platform-interaction}
 
 To ensure that the code is compatible with the current platform a VM specific marker is expected at the beginning of the native code on the compiled method.
@@ -180,7 +185,7 @@ With this elegant approach \B regenerates native code lazily on new platforms.
 Moreover, it does not have to flush the native code when the application is restarted on the same platform.
 
 %----------------------------------------------------------------------------
-\subsubsection{Garbage Collector Interaction.}
+\paragraph{Garbage Collector Interaction.}
 \seclabel{gc-interaction}
 \todo{dig up the older versions of this section with the longer text}
 
@@ -214,7 +219,7 @@ This means that for native code, instead of a method-local literal array we shar
 %\revc{The external roots concept appears here first but the idea of "indirection" has been mentioned. The regular literal frame of compiled methods are discussed heavily; that would suggest that the generated native code could use relative offset from the code location and still be able to "pin-point" the literal slot in the literal frame. What is the downside of this approach? (And how slots in the external roots garbage collected?)}
 %\gc{I'm not very interested with the comment above. But perhaps here it is a good place to say that once the native code start executing our VM assures that a GC could not happen}
 %----------------------------------------------------------------------------
-\subsubsection{JIT Interaction.}
+\paragraph{JIT Interaction.}
 \seclabel{jit-interaction}
 
 When the Pharo VM starts the execution of dynamic generated code the execution environment changes slightly.
@@ -224,7 +229,7 @@ The \B prologue and epilogue used for managing the low-level stack are replaced 
 The performance boost of this optimization is further discussed in Section \secref{issues-performance}.
 
 %----------------------------------------------------------------------------
-\subsubsection{Error Handling.}
+\paragraph{Error Handling.}
 \seclabel{error-handling}
 
 \todo{extend with an explicit example}
@@ -245,7 +250,7 @@ As a key design decision, we determine to keep the interface to the low-level wo
 The following describes the features of \B at the high-level language-side.
 
 %----------------------------------------------------------------------------
-\subsubsection{Code Generation.}
+\paragraph{Code Generation.}
 \seclabel{code-generation}
 
 \B delegates native code generation to a full assembler written in \ST. The following example shows how to use the assembler to generate the native code for moving \ttt{1} into the 32-bit register \ttt{EAX}.
@@ -280,7 +285,7 @@ By default the value in the result register is returned back to the language-sid
 In section \secref{usecase} we introduce more substantial applications based on \B.
 
 %----------------------------------------------------------------------------
-\subsubsection{Code Activation.}
+\paragraph{Code Activation.}
 \seclabel{code-activation}
  
 A \B primitive is responsible for the native code activation which consists of three main steps:
@@ -386,6 +391,7 @@ Each language-side library can define its own highly efficient conversion routin
 \subsection{Reflective Primitives}
 \seclabel{waterfall}
 %----------------------------------------------------------------------------
+\todo{move most of this subsection to separate section in the validation chapter}
 The Pharo VM (Cog) is developed in a language that is a subset of \ST, known as Slang, which is transformed to C and then compiled using a standard C compiler.  
 Slang basically has the same syntax as \ST but is semantically constrained to expressions that can be resolved statically at compilation or code generation time and are compatible with C.
 Hence Slang's semantics are closer to C than to \ST. 
@@ -396,7 +402,6 @@ Waterfall~\cite{Char13a,Waterfall} is a tool that allows developers to change th
 This replaces the indirection via C that is used in the default compilation process.
 Given that Slang source code can be modified at runtime as any other \ST method, Waterfall fosters primitives to be dynamically adapted without imposing the common pure reflective techniques performance degradation.
 
-\subsubsection{Waterfall Summary.}
 From a high-level point of view Waterfall provides two services which work transparently: 
 %
 \begin{enumerate}
@@ -404,9 +409,10 @@ From a high-level point of view Waterfall provides two services which work trans
 	\item A clear interface for executing, at runtime and from language-side, the native code generated.
 \end{enumerate}
 %
-The first item allows to change the code of primitives at language-side and generate the corresponding native code when needed. %It also provides the possibility to write methods or functionalities with the same Smalltalk syntax but with a static semantic. 
-%It consists essentially of a transformation toolchain that uses the AST that is generated by the standard \PH compiler harnessing that Slang and \ST have the same syntax. 
-%Then this AST representation is translated to native code enforcing C-like Slang semantics. The current prototype has only three fully implemented stages: Slang to AST, AST to an IR (between TAC and SSA) and finally AST or IR to native. The design is open for future additions at any level. One typical enhancement missing is having different levels of intermediate representations with various techniques on code optimization and register allocation strategies as modern compilers propose \cite[Ch.\ 1]{Appe98a}. 
+The first item allows to change the code of primitives at language-side and generate the corresponding native code when needed. 
+It also provides the possibility to write methods or functionalities with the same Smalltalk syntax but with a static semantic. 
+It consists essentially of a transformation toolchain that uses the AST that is generated by the standard \PH compiler harnessing that Slang and \ST have the same syntax. 
+Then this AST representation is translated to native code enforcing C-like Slang semantics. The current prototype has only three fully implemented stages: Slang to AST, AST to an IR (between TAC and SSA) and finally AST or IR to native. The design is open for future additions at any level. One typical enhancement missing is having different levels of intermediate representations with various techniques on code optimization and register allocation strategies as modern compilers propose \cite[Ch.\ 1]{Appe98a}. 
 The second item enables the execution of the dynamically generated native code.
 This includes for instance the finding of addresses of VM internal symbols and all the effort to link the two worlds, \ST and native.
 Waterfall relies on \B for most of this low-level functionalities.
@@ -426,10 +432,9 @@ The loophole described there is exploited by Waterfall to enable dynamic modific
 
 
 %----------------------------------------------------------------------------
-\subsubsection{Benefits} 
+\paragraph{Benefits} 
 We identified two main benefits of changing VM primitives at runtime:
 
-%\begin{itemize}[noitemsep]
 \begin{enumerate}
 	\item Reducing VM complexity by implementing non-essential primitives reflectively at language-side.
 	\item Dynamic instrumentation of primitives.
@@ -443,8 +448,8 @@ This means that these primitives become first-class citizens of the high-level e
 
 \paragraph{Essential Primitives.}
 For essential primitives the previous argument does not hold since a static version is needed for a correct startup of the system.
-%These primitives can not be fully replace by a language-side implementation using Waterfall.
-%For instance, essential primitives are required for system startup.
+These primitives can not be fully replace by a language-side implementation using Waterfall.
+For instance, essential primitives are required for system startup.
 They would trigger an endless recursion when booting up the system and trying to generate them using Waterfall at the same time.
 However, nothing prevents from replacing essential primitives at runtime with customized versions, once the system startup is completed. 
 
@@ -457,33 +462,21 @@ Using reflective techniques it is possible to avoid this loop, however, with a c
 With Waterfall we can forget about these issues since the instrumentation code will be implemented at the lowest level.
 On section \secref{wf-performance} we show how Waterfall, the \B based approach for generating primitives on the fly, outperforms the reflective solutions for primitives instrumentation. 
 
-%
-%\revb{Here, you should also have explained for what purposes those primitives are instrumented. Giving a few examples that cannot be achieved without primitive instrumentation would be sufficient. 5.2.3 performance of instrumentation should also be justified through the performance of an instrumented program that is used in practice.}
-%\gc{I have been working in a wf paper more oriented to efficient code. for eg, dynamic and on demand plugins. So i'm more focused %to other direction now. Resuming this examples will not be easy. If you think it is %completely neccesary i can try benchmarking this but only one reviewer from 5 is asking for it.}
-%
-%Actually it is absolutely possible to do instrumentation completely at language-side for non-essential primitives without Waterfall by accepting the performance penalty, but for essential primitives doing it is a very fragile task.
-%The chances of accidentally invoking the same primitive in the language-side instrumentation code are high.
-%Without very careful design the instrumentation code will thus trigger an endless recursion. Also performance issues could be prohibitive for language-side solutions.
 
 %----------------------------------------------------------------------------
-\subsubsection{Waterfall Future.}
-\cb{filling the page with the future outlook, maybe mention that it might make sense to extend waterfall further down}
+\paragraph{Waterfall Future.}
+\todo{move to separate section in the validation chapter}
 Currently Waterfall reimplements all Slang arithmetic essential operations statically as native code templates.
 The existing JIT of the Pharo VM does exactly the same for performance reasons.
 This is code duplication and should be avoided.
 With the language-side JIT compiler described on next section we can reuse the same code. Another plan for Waterfall is to use it for disconnecting most plugins defined at Slang side from the VM compilation process and dynamically nativize them on a lazy approach.
 Finally, adding stages to the compiler with different levels of intermediate representations and applying optimizations to each would bring its performance closer to completely low-level optimized primitives.
 
-%\revc{It appears that Waterfall can only replace the definitions of functions that have entries in the primitive table. But one could imagine that it could be useful if the programmer can customize somewhat deeper level of implementation, such as the logic of method look up (to plug in a different method cache logic for example). Allowing this could be another future work.}
-
-%\cb{refer to the customized lookup paper for smalltalk/X with cache structures being passed to the user and the next section actually, since we customize the COMPLETE instruction generation with high-level code}
-
 
 %----------------------------------------------------------------------------
 \subsection{Nabujito JIT Compiler}
 \seclabel{nabujito}
 %----------------------------------------------------------------------------
-\cb{try to strip away some text to make it fit on 2 pages}
 In this section we present Nabujito, a \B-based approach for a language-side JIT compiler.
 Nabujito goes even further than Waterfall using almost the same techniques.
 However, instead of focusing on primitives, Nabujito generates native executable code for standard \ST methods.
@@ -491,7 +484,7 @@ Primitives tend to be more low-level, whereas Nabujito focuses on high-level \ST
 
 
 %----------------------------------------------------------------------------
-\subsubsection{The JIT of the Pharo VM.}
+\paragraph{The JIT of the Pharo VM.}
 The \PH VM (Cog) already comes with a JIT that translates bytecodes to native instructions.
 It transforms \ST methods into slightly optimized native code at runtime.
 The main speed improvement comes from avoiding bytecode dispatching and by inlining certain known operations and primitives \cite{Ayco03a}.
@@ -502,7 +495,7 @@ There exists more important stages as an additional register allocation pass to 
 The existing JIT infrastructure is implemented in Slang \cite[Ch.\ 5]{Blac09a} as the rest of the VM.
 
 %----------------------------------------------------------------------------
-\subsubsection{Limitations of VM-level JIT Compilers.}
+\paragraph{Limitations of VM-level JIT Compilers.}
 In the context of Nabujito we separate a JIT infrastructure into separate parts.
 The major part is to have a VM that uses stack-mapping.
 In the case of a bytecode-based interpreter, we assume that the VM provides routines to switch between a bytecode interpretation context and a low-level native execution context.
@@ -533,7 +526,7 @@ In Section \secref{waterfall} we describe how Waterfall suffers a similar constr
 Nabujito reuses the same optimized primitives so we rely on a single optimized definition which is shared amongst all native code libraries.
 
 %----------------------------------------------------------------------------
-\subsubsection{Implementing Nabujito.}
+\paragraph{Implementing Nabujito.}
 Nabujito is an experimental JIT implementation which replaces the bytecode to native code translation of the existing JIT infrastructure with a dynamic language-side implementation.
 Nabujito is implemented mainly with a visitor strategy over the existing intermediate bytecode representation. 
 Additionally we reimplemented vital native routines for the JIT which are not directly exported by the VM using \B. 
@@ -558,7 +551,8 @@ When the language-side jitted code is activated \B ensures that we do not have t
 %The benchmarks of section \secref{nabujito-performance} show the empirical results.
 
 %----------------------------------------------------------------------------
-\subsubsection{Outlook.}
+\paragraph{Outlook.}
+\todo{move to separate section in the validation chapter}
 One major performance optimization missing in both, the original \PH VM-level JIT and Nabujito, is inlining. 
 By inlining we are able to create methods that are potentially big enough for optimizations.
 However, inlining is a difficult task in a highly dynamic language such as \ST or Self \cite{Cham89a}. 
@@ -840,34 +834,34 @@ However, Klein is built on a completely new VM infrastructure, whereas \B requir
 \section{Problems of Benzo}
 \seclabel{problems}
 % ===========================================================================
-% most problems are related to the missing debugging facilities
+\todo{most problems are related to the missing debugging facilities}
 
 
 % -----------------------------------------------------------------------------
 \subsection{Robustness}
 % -----------------------------------------------------------------------------
-% show a problematic piece of code
-% sketch an outline for a safe benzo test by forking the main process
-% - image + code example
-% possible emulation of the code to highlight very common bugs?
+\todo{show a problematic piece of code}
+\todo{sketch an outline for a safe benzo test by forking the main process}
+\todo{image + code example}
+\todo{possible emulation of the code to highlight very common bugs?}
 
 
 % -----------------------------------------------------------------------------
 \subsection{Low-level Debugging}
 % -----------------------------------------------------------------------------
-% sketch a possible debugger with ptrace and Co based on the previously forked process
-% outlook to the FFI section (reeified structures)
-% hard to debug when only looking at the memory
-% - need full stack view
-% - need register view
-% - need possible view on references to ST objects
+\todo{sketch a possible debugger with ptrace and Co based on the previously forked process}
+\todo{outlook to the FFI section (reified structures)}
+\todo{hard to debug when only looking at the memory}
+\todo{- need full stack view}
+\todo{- need register view}
+\todo{- need possible view on references to ST objects}
 
 % -----------------------------------------------------------------------------
 \subsection{Platform Independence}
 % -----------------------------------------------------------------------------
-% missing abstraction on the assembler level
-% - outlook to the VirtualCPU
-% - image: mini architecture picture
+\todo{missing abstraction on the assembler level}
+\todo{- outlook to the VirtualCPU}
+\todo{- image: mini architecture picture}
 
 
 % ===========================================================================
