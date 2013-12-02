@@ -56,7 +56,7 @@ Our approach for overcoming this limitation consists of \B, a lightweight and re
 It relies only on a small set of generic VM extensions described in \secref{vm-requirements}, whereas the vast majority of the framework is implemented as a language-side library.
 
 \subsection{\B Applications.}
-In \secref{usecase} we advocate the contribution of this approach by providing three different incremental examples that heavily use the framework.
+In \secref{use case} we advocate the contribution of this approach by providing three different incremental examples that heavily use the framework.
 Unlike typical implementations that would focus on writing them as VM extensions, we implement them completely at language-side using \B:
 
 \begin{description}
@@ -273,7 +273,7 @@ The VM helper exposes a basic, low-level interface to access objects and its pro
 Additional methods cover the access to the external roots described in \secref{gc-interaction}.
 In this case the \ttt{\#instantiateClass:indexableSize:} will generate the proper native code to call to a VM function and make sure that the side-effects of a possible GC run are handled properly.
 By default the value in the result register is returned back to the language-side. On \textsc{x86} this defaults to \ttt{EAX}.
-In section \secref{usecase} we introduce more substantial applications based on \B.
+In section \secref{use case} we introduce more substantial applications based on \B.
 
 %----------------------------------------------------------------------------
 \paragraph{Code Activation.}
@@ -301,7 +301,7 @@ This mechanism is shown in \figref{nativeCodeActivation}.
 
 % ===========================================================================
 \section{\B in Practice}
-\seclabel{usecase}
+\seclabel{use case}
 % ===========================================================================
 \todo{keep this section as is and introduce forward pointers to the separate chapters}
 
@@ -549,15 +549,15 @@ The JIT lives on the same level as the information it needs relying on the alrea
 %----------------------------------------------------------------------------
 
 \todo{Shorten this section and put forward pointers to the real validation chapters yet to come}
-\B allows the generation of speficic and thus efficient native code.
+\B allows the generation of specific and thus efficient native code.
 In \secref{benzo} we explained how \B causes only a one-time overhead for native code generation. 
 Thereafter it is cached for later activations.
-The three usecase presented in \secref{usecase} heavily benefit from this fact.
+The three use case presented in \secref{use case} heavily benefit from this fact.
 Even though the code generation at language-side is generally slower than a C-level implementation, the overhead can mostly be neglected.
 Even better, for instance the \B-based FFI implementation presented in \secref{ffi} outperforms a VM-level FFI-plugin due to a more flexible language-side implementation. 
 These results are shown in the following \tabref{ffi-performance-simple}.
 
-The rest of this section discusses in more details the performance of our three \B-base usecases: an FFI, dynamic primitives and a language-side JIT compiler.
+The rest of this section discusses in more details the performance of our three \B-base use cases: an FFI, dynamic primitives and a language-side JIT compiler.
 %Unless stated otherwise, the performance evaluation is based on using SMark\, a benchmarking framework which measures 
 
 % ---------------------------------------------------------------------------
