@@ -59,7 +59,7 @@ Both these pitfalls are presented in more detail in \secref{evaluation}.
 % - too low-level (C-FFI) fast in simple examples, complex calls not possible
 % - too high-level (ALIEN) slow in simple examples, quite slow in complex ones
 % - missing specific code generation
-% - missing JIT interaction for speed (like LuaJIT, org.vmmagic)
+% - missing \JIT interaction for speed (like LuaJIT, org.vmmagic)
 
 % Alien and C-FFI run in the same \PH image as NativeBoost allowing a much closer comparison.
 % Alien \FFI is implemented almost completely at language-side, much like NativeBoost. However, as the following benchmarks will stress, it also suffers from performance loss.
@@ -509,7 +509,7 @@ In this section we compare \NB with other \FFI implementations.
 \begin{description}
 	\item[\Alien \FFI:] An \FFI implementation for Squeak/\PH that focuses on the language-side. All marshalling happens transparently at language-side.
 	\item[C-\FFI:] A C based \FFI implementation for Squeak/\PH that performs all marshalling operations at VM-side.
-	\item[\LuaJIT:] A fast \Lua implementation that has a close \FFI integration with JIT interaction.
+	\item[\LuaJIT:] A fast \Lua implementation that has a close \FFI integration with \JIT interaction.
 \end{description}
 
 \paragraph{Choice of \FFI Implementations.}
@@ -586,7 +586,7 @@ For measuring the calling overhead we chose the \ttt{abs} \FFI callout.
 This C function is completed in a couple of instructions which in comparison to the conversion and activation effort of the \FFI callout is negligible.
 In \tabref{performance-abs} we see that \NB is at least a factor two faster than the other \ST implementation.
 Yet LuaJIT outperform \NB by an impressive factor 30.
-LuaJIT has a really close integration with the JIT and this is what makes the impressive \FFI callout results possible.
+LuaJIT has a really close integration with the \JIT and this is what makes the impressive \FFI callout results possible.
 
 
 % ===========================================================================
@@ -695,7 +695,7 @@ We do not argue here that callbacks should be implemented in native code but tha
 \todo{Check that we don't have too much overlap with the Benzo Chapter}
 
 The following subsections will first focus on the high-level, language-side aspects of \NB, such as native code generation and marshalling.
-As a second part we describe implementation details of the low-level extensions, such as the \NB primitives and the JIT interaction.
+As a second part we describe implementation details of the low-level extensions, such as the \NB primitives and the \JIT interaction.
 
 % ===========================================================================
 \subsection{Generating Native Code}
@@ -823,35 +823,12 @@ The examples in \secref{nutshell}, especially \figref{nativeBoostSyntax} show th
 	However, this time there is native code (cf. \ding{186}) available and thus the primitive jumps to the native code instead.
 \end{itemize}
 
-% ---------------------------------------------------------------------------
-%\subsubsection{JIT Interaction}
-% - explain drawback of VM primitive approach for NB when using a JIT
-% - list overhead points (context switch, not able to jit)
-% - show how COG solves this for certain other primitives
-
-% ===========================================================================
-%\section{Challenges}
-%\seclabel{challenge}
-% ===========================================================================
-
-% - relocatable objects access overhead (almost never happens)
-% - jit interaction (solved?)
-% - callbacks
-% - multi threaded code (diffcult..)
-% - platform independence
-%   - at the user-level of NBFFI not a problem
-%   - plans to introduce abstract DSL for the low-level part of NB-FFI
-%   - introducing variants of ASMJit to handle the last step (generating platform specific code)
-
 % ===========================================================================
 \section{Related Work}
 \seclabel{relatedWork}
 % ===========================================================================
 \todo{only show \FFI related work here! all the abstract implementations are covered in the Benzo secrtion}
-% explain typical approaches (static and dynamic)
 
-% - need to go into detail with ALIEN
-% - C-FFI for Cog
 % other less related approaches: Python ctypes ? SWIG ?
 
 Typical \ST system are isolated from the low-level world and provide only limited interoperability with C libraries.
@@ -867,8 +844,8 @@ Unlike our approach, \textsc{Étoilé} aims at a complete new style of runtime e
 Compared to that, \NB is a very lightweight solution.
 
 
-Other dynamic high-level languages such as\ Lua leverage \FFI performance by using a close interaction with the JIT.
-\LuaJIT \cite{luaffi} for instance is an efficient \Lua implementation that inlines \FFI calls directly into the JIT compiled code.
+Other dynamic high-level languages such as\ Lua leverage \FFI performance by using a close interaction with the \JIT.
+\LuaJIT \cite{luaffi} for instance is an efficient \Lua implementation that inlines \FFI calls directly into the \JIT compiled code.
 Similar to \NB this allows one to minimize the constant overhead by generating custom-made native code.
 The \LuaJIT runtime is mainly written in C which has clearly different semantics than \Lua itself.
 
@@ -891,29 +868,29 @@ It uses the low-level DWARF debugging information present in the external librar
 \section{Problems}
 \seclabel{problems}
 % ===========================================================================
-% - most problems overlap with the problems mentioned in the Benzo chapter
-% - address problems on a more high-level view
+\todo{most problems overlap with the problems mentioned in the Benzo chapter}
+\todo{address problems on a more high-level view}
 
 
 \subsection{Difficult Debug Cycles}
-% - debugging facility (on a higher level than Benzo, see invisible VMs)
-% 	- resolve C symbols
-% 	- show C source code?
+\todo{debugging facility (on a higher level than Benzo, see invisible VMs)}
+\todo{resolve C symbols}
+\todo{show C source code?}
 
 
 \subsection{Platform Independence}
-% - general / direct dependence on assembler which is not good
-% - low-level platform independence solved by Benzo (link to future reference to VirtualCPU)
-% - platform independence on function level (see OSEnvironment as an Example)
-% 	- requires explicit subclasses
-% 	- manual maintenance + singletons
-% - missing support for multi-platform code definition in a single method
+\todo{general / direct dependence on assembler which is not good}
+\todo{low-level platform independence solved by Benzo (link to future reference to VirtualCPU)}
+\todo{platform independence on function level (see OSEnvironment as an Example)}
+\todo{	- requires explicit subclasses}
+\todo{	- manual maintenance + singletons}
+\todo{missing support for multi-platform code definition in a single method}
 
 
 \subsection{Limited Expressiveness}
-% - fork example is hard to achieve (vm is not directly forkable)
-% - current design makes it difficult to perform more C-like operations in one run
-% - adopt benzo-level abstractions on VirtualCPU
+\todo{fork example is hard to achieve (vm is not directly forkable)}
+\todo{current design makes it difficult to perform more C-like operations in one run}
+\todo{adopt benzo-level abstractions on VirtualCPU}
 
 
 
@@ -928,11 +905,11 @@ However, initially \NB kept the modifications to the VM at a minimum.
 We assume that we can reach the same performance as Alien relying on the same low-level implementation.
 
 As a second issue we would like to address the callout overhead by using an already existing \JIT integration of \NB.
-Currently the VM has to leave from JIT-mode to standard interpretation mode when it activates an \NB method.
+Currently the VM has to leave from \JIT-mode to standard interpretation mode when it activates an \NB method.
 This context switch introduces an unnecessary overhead for an \FFI callout.
 A current prototype directly inlines the native code of a \NB method in the \JIT.
 Hence the cost for the context switch plus the cost of activating the \NB callout primitive can be avoided.
-% \lf{This modification aims at better integrating \NB and the JIT such as it is done in LuaJIT.}
+% \lf{This modification aims at better integrating \NB and the \JIT such as it is done in LuaJIT.}
 
 
 
@@ -944,13 +921,13 @@ Hence the cost for the context switch plus the cost of activating the \NB callou
 In this paper we presented \NB a novel approach to foreign function interfaces.
 Our approach relies only on a very generic extension of the VM to allow for language-side code to directly call native instructions.
 
-Using a in depth evaluation of \NB comparing against two other \ST \FFI implementations and LuaJIT we showed in \secref{evaluation} that our language-side approach is competitive.
+Using a in depth evaluation of \NB comparing against two other \ST \FFI implementations and \LuaJIT we showed in \secref{evaluation} that our language-side approach is competitive.
 \NB reduces the callout overhead by more than a factor two compared to the two closest \ST solutions.
 
 Compared to \LuaJIT there is still space for improvements.
 We measured a factor 30 lower calling overhead due to a close \JIT integration.
 However for typical \FFI calls the absolute time difference between \NB and \Lua is roughly $30\%$.
-With a partial solution ready to integrate \NB closer with the \JIT we expect to come close to Lua's performance.
+With a partial solution ready to integrate \NB closer with the \JIT we expect to come close to \Lua's performance.
 
 Furthermore we showed that \NB essentially combines VM-level performance with language-side flexibility when it comes to marshal complex types.
 New structures are defined practically at language-side and conversion optimizations are added transparently.
