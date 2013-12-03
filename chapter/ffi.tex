@@ -111,12 +111,12 @@ to enable interactions with external libraries.
 \subsection{Simple Callout}
 % ---------------------------------------------------------------------------
 
-\lstref{clock} shows the code of a regular \ST method named \ttt{ticksSinceStart} that defines a callout to the \ttt{clock} function of the \ttt{libc}.
+\lstref{ffi-clock} shows the code of a regular \ST method named \ttt{ticksSinceStart} that defines a callout to the \ttt{clock} function of the \ttt{libc}.
 \NB imposes no constraint on the class in which such a binding should be defined.
 However, this method must be annotated with a specific pragma (such as \ttt{<primitive:module:>}) which specifies that a native call should be performed using the \NB plugin.
 
 \begin{stcode}[
-	label={lst:clock},
+	label={lst:ffi-clock},
 	caption={\NBFFI example of callout declaration to the \ttt{clock} function of the \ttt{libc}}]{0}
 ticksSinceStart
 	<primitive: #primitiveNativeCall
@@ -174,10 +174,10 @@ Finally, this \ttt{abs} function is looked up in the \ttt{libc} whose an handle 
 \subsection{Automatic Marshalling of Known Types}
 % ---------------------------------------------------------------------------
 
-\lstref{getenv} shows a callout declaration to the \ttt{getenv} function that takes one parameter.
+\lstref{ffi-getenv} shows a callout declaration to the \ttt{getenv} function that takes one parameter.
 %
 \begin{stcode}[
-	label={lst:getenv},
+	label={lst:ffi-getenv},
 	caption={Example of callout to \ttt{getenv}}]{0}
 getenv: name
 	<primitive: #primitiveNativeCall
@@ -213,13 +213,14 @@ This example shows that \NBFFI accepts literals, local and instance variable nam
     \caption[\NB Primitive Types]{Default \NBFFI mappings between C/primitive types and high-level types.Note that \ttt{oop} is not a real primitive type as no marshalling is applied and the raw pointer is directly exposed to \PH.}
     \tablabel{ffi-nbPrimitiveTypes}
 \end{table}
-\lstref{setenv} shows another example to callout the \ttt{setenv} function.
+%
+\lstref{ffi-setenv} shows another example to callout the \ttt{setenv} function.
 The return value will be converted to a \ST \ttt{Boolean}.
 The two first parameters are specified as \ttt{String} and will be automatically transformed in \ttt{char*} with an ending \cnull character.
 The last parameter is \ttt{1}, a \ST literal value without any type specification and \NB translates it as an \ttt{int} by default.
 
 \begin{stcode}[
-	label={lst:setenv},
+	label={lst:ffi-setenv},
 	caption={Example of callout to \ttt{setenv}}]{0}
 setenv: name value: value
 	<primitive: #primitiveNativeCall
@@ -262,12 +263,12 @@ The strength of language-side FFIs appears when it comes to do callouts with new
 
 \paragraph{Declaring structures.}
 For example, the Cairo library\footnote{\url{http://cairographics.org}} provides complex structures such as \ttt{cairo\_surface\_t} and functions to manipulate this data type. % which makes field access useless.
-\lstref{AthensCairoSurface} shows how to write a regular \ST class to wrap a C structure.
+\lstref{ffi-AthensCairoSurface} shows how to write a regular \ST class to wrap a C structure.
 \NB only requires a class-side method named \ttt{asNBExternalType:} that describes how to marshall this type back and forth from native code.
 In this example, we use existing marshalling mechanism defined in \ttt{NBExternalObjectType} that just copies the structure's pointer and stores it in an instance variable named \ttt{handle}.
 
 \begin{stcode}[
-	label={lst:AthensCairoSurface},
+	label={lst:ffi-AthensCairoSurface},
 	caption={Example of C structure wrapping in \NB}]{0}
 AthensSurface subclass: #AthensCairoSurface
 	instanceVariableNames: 'handle'.
@@ -278,12 +279,12 @@ AthensCairoSurface class>>asNBExternalType: gen
 \end{stcode}
 
 \paragraph{Callout with structures.}
-\lstref{calloutOpaqueStruct} shows a callout definition to the \ttt{cairo\_image\_surface\_create} function that returns a \ttt{cairo\_surface\_t*} data type.
+\lstref{ffi-calloutOpaqueStruct} shows a callout definition to the \ttt{cairo\_image\_surface\_create} function that returns a \ttt{cairo\_surface\_t*} data type.
 In this code example, the return type is \ttt{AthensCairoSurface} directly (not a pointer).
 When returning from this callout, \NB creates an instance of \ttt{AthensCairoSurface} and the marshalling mechanism  stores the returned address in the \ttt{handle} instance variable of this object.
 
 \begin{stcode}[
-	label={lst:calloutOpaqueStruct},
+	label={lst:ffi-calloutOpaqueStruct},
 	caption={Example of returning a structure by reference}]{0}
 primImage: aFormat width: aWidth height: aHeight
 	<primitive: #primitiveNativeCall
@@ -296,12 +297,12 @@ primImage: aFormat width: aWidth height: aHeight
 									int aHeight) )
 \end{stcode}
 
-Conversely, passing an \ttt{AthensCairoSurface} object as a parameter in a callout makes its pointer stored in its \ttt{handle} iv (cf. \lstref{calloutOpaqueStructParameter}) to be passed.
+Conversely, passing an \ttt{AthensCairoSurface} object as a parameter in a callout makes its pointer stored in its \ttt{handle} iv (cf. \lstref{ffi-calloutOpaqueStructParameter}) to be passed.
 Since the parameter type is \ttt{AthensCairoSurface} in the callout definition, \NB also ensures that the passed object is really an instance of this class.
 If it is not, the callout fails before executing the external function because passing it an address on a non-expected data could lead to unpredicted behavior.
 
 \begin{stcode}[
-	label={lst:calloutOpaqueStructParameter},
+	label={lst:ffi-calloutOpaqueStructParameter},
 	caption={Example of passing a structure by reference}]{0}
 primCreate: cairoSurface
 	<primitive: #primitiveNativeCall
@@ -316,10 +317,10 @@ primCreate: cairoSurface
 \paragraph{Accessing structure fields.}
 In \NB, one can directly access the fields of a structure if needed, even if it is not a good practice from the data encapsulation point of view.
 Nevertheless, it may be mandatory to interact with some native libraries that do not provide all the necessary functions to manipulate the structure.
-\lstref{cairo_c_definition} shows an example of a C struct type definition for \ttt{cairo\_matrix\_t}.
+\lstref{ffi-cairo_c_definition} shows an example of a C struct type definition for \ttt{cairo\_matrix\_t}.
 
 \begin{ccode}[
-	label={lst:cairo_c_definition},
+	label={lst:ffi-cairo_c_definition},
 	caption={Example external type to convert back and forth with the Cairo library}]{0}
 typedef struct {
     double xx; double yx;
@@ -328,12 +329,12 @@ typedef struct {
 } cairo_matrix_t;
 \end{ccode}
 
-\noindent \lstref{AthensCairoMatrix} shows that the \ttt{NBExternalStructure} of \NBFFI can be subclassed to define new types such as \ttt{AthensCairoMatrix}.
+\noindent \lstref{ffi-AthensCairoMatrix} shows that the \ttt{NBExternalStructure} of \NBFFI can be subclassed to define new types such as \ttt{AthensCairoMatrix}.
 The description of the fields (types and names) of this structure is provided by the \ttt{fieldsDesc} method on the class side.
 Given this description, \NB lazily generates field accessors on the instance side using the field names.
 
 \begin{stcode}[
-	label={lst:AthensCairoMatrix},
+	label={lst:ffi-AthensCairoMatrix},
 	caption={Example of \NBFFI definition of an \ttt{ExternalStructure}}]{0}
 NBExternalStructure
     variableByteSubclass: #AthensCairoMatrix.
@@ -344,13 +345,13 @@ AthensCairoMatrix class>>fieldsDesc
 		  double x; double y;  )
 \end{stcode}
 
-\noindent \lstref{cairoCallouts} shows a callout definition to the
+\noindent \lstref{ffi-cairoCallouts} shows a callout definition to the
  \ttt{cairo\_matrix\_multiply} function passing \ttt{self} as argument with the type \ttt{AthensCairoMatrix*}.
 \NB handles the marshalling of this object to a struct as defined in the \ttt{fieldsDesc}.
 % The interesting point is that the called function \ttt{cairo\_matrix\_multiply} stores its result in the first argument i.e. the receiver object.
 
 \begin{stcode}[
-	label={lst:cairoCallouts},
+	label={lst:ffi-cairoCallouts},
 	caption={Example of callouts using \ttt{cairo\_matrix\_t}}]{0}
 AthensCairoMatrix>>primMultiplyBy: m
 	<primitive: #primitiveNativeCall
@@ -391,7 +392,7 @@ We will use the simple \ttt{qsort} C-function to illustrate this use-case.
 Instead of using a C-function to compare the elements we will use a callback to invoke a \PH block which will compare the two arguments.
 %
 \begin{stcode}[
-	label={lst:calloutWithCallback},
+	label={lst:ffi-calloutWithCallback},
 	caption={Example of callout passing a callback for \ttt{qsort}}]{0}
 bytes := #[ 120 12 1 15 ].
 callback := QSortCallback on: [ :a :b |
@@ -402,13 +403,13 @@ self ffiQSort: bytes
 	 compareWith: callback
 \end{stcode}
 %
-Code \lstref{calloutWithCallback} shows the primary \PH method for invoking \ttt{qsort} with a \ttt{QSortCallback} instance for the compare function.
+Code \lstref{ffi-calloutWithCallback} shows the primary \PH method for invoking \ttt{qsort} with a \ttt{QSortCallback} instance for the compare function.
 In this example \ttt{qsort} will invoke run the \PH code inside the callback block to compare the elements in the \ttt{bytes} array.
 
 To define a callback in \NB we have to create a specific subclasses for each callback with different argument types.
 %
 \begin{stcode}[
-	label={lst:callbackDefinition},
+	label={lst:ffi-callbackDefinition},
 	caption={Example of callback definition}]{0}
 
 NBFFICallback
@@ -418,11 +419,11 @@ NBFFICallback class>>signature
 	^#(int (NBExternalAddress a, NBExternalAddress b))
 \end{stcode}
 %
-Code \lstref{callbackDefinition} shows \ttt{QSortCallback} which takes two generic external addresses as arguments.
-These are the argument types that are being passed to the sort block in Example \lstref{calloutWithCallback}.
+Code \lstref{ffi-callbackDefinition} shows \ttt{QSortCallback} which takes two generic external addresses as arguments.
+These are the argument types that are being passed to the sort block in Example \lstref{ffi-calloutWithCallback}.
 %
 \begin{stcode}[
-	label={lst:qsort},
+	label={lst:ffi-qsort},
 	caption={Example of callout passing a callback}]{0}
 ffiQSort: base len: size compare: qsortCallback
 	<primitive: #primitiveNativeCall
@@ -445,7 +446,7 @@ ffiQSort: base len: size compare: qsortCallback
 		module: NativeBoost CLibrary
 \end{stcode}
 %
-The last missing piece in this example is the callout definition shown in Code \lstref{qsort}.
+The last missing piece in this example is the callout definition shown in Code \lstref{ffi-qsort}.
 The \NB callout specifies the callback arguments by using \ttt{QSortCallback}.
 
 %\begin{enumerate}
@@ -755,7 +756,7 @@ Through reflective access to the execution context we can retrieve the method's 
 There are interfaces for \ttt{allocate} and \ttt{free} as well as for \ttt{memcopy}:
 %
 \begin{stcode}[
-	label={lst:externalHeap},
+	label={lst:ffi-externalHeap},
 	caption={Example of external heap management in \NB}]{0}
 memory := NativeBoost allocate: 4.
 bytes  := #[1 2 3 4].
@@ -772,7 +773,7 @@ NativeBoost free: memory.
 
 Using the external heap management it is possible to prepare binary blobs and structures for \FFI calls.
 
-In the previous example Code \lstref{externalHeap} the \ttt{memory} variable holds a wrapper for the static address of the allocated memory.
+In the previous example Code \lstref{ffi-externalHeap} the \ttt{memory} variable holds a wrapper for the static address of the allocated memory.
 Hence accessing it from low-level code is straight forward.
 However in certain situations it is required to access a high-level object from assembler.
 \PH has a moving garbage collector which means that you can not refer directly to a high-level object by a fixed address.
