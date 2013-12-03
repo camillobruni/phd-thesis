@@ -257,7 +257,7 @@ The second is to run the language-side implementation that is triggered whenever
 Finally the fast standard primitive provided by the VM.
 We run the three approaches by measuring the cumulative time over one million primitive activations averaged over 100 runs.
 The absolute numbers are less important than the relative factor between them.
-We present the results of this experiment in Table~\tabref{waterfall-performance}.
+We present the results of this experiment in ~\tabref{waterfall-performance}.
 %
 \begin{table}[!ht]
     \centering
@@ -276,7 +276,21 @@ Waterfall clearly outperforms a purely reflective solution since all the meta pr
 Furthermore the performance penalty over a completely optimized VM solution that has extreme optimization techniques, such as inlining and register allocation, is less than a factor of $4$.
 Applying standard optimization techniques, not yet implemented in Waterfall, will almost sure improve these numbers even more.
 A more detailed analysis of Waterfall is available separately \cite{Char13a}.
+%
+\begin{table*}[t]
+    \centering
+    \begin{tabular}{llr}
+                                           & Average Time                     & Relative Time \\\midrule
+        Unmodified                         & \ttt{ 0.28} $\pm$ \ttt{0.16} ms  & $1 \times$ \\
+        Unsafe reflective instrumentation  & \ttt{21.80} $\pm$ \ttt{0.33} ms  & $\approx 78\times$ \\
+        Secure reflective instrumentation  & \ttt{27.72} $\pm$ \ttt{0.40} ms  & $\approx 99\times$ \\
 
+        \WF-based instrumentation          & \ttt{ 7.72} $\pm$ \ttt{0.27} ms  & $\approx 28\times$ \\
+        \WF-based unmodified               & \ttt{ 7.08} $\pm$ \ttt{0.23} ms  & $\approx 25\times$ \\
+    \end{tabular}
+    \caption{Slowdown comparison for instrumentation of the  essential primitive \ttt{basicNew}.}
+    \tablabel{waterfall-basicnew}
+\end{table*}
 
 % -----------------------------------------------------------------------------
 \subsection{Problems}

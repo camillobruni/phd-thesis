@@ -1,7 +1,7 @@
 \input{chapter-header.tex}
 % =============================================================================
 
-\chapter{Validation: FFI}
+\chapter{Validation: \FFI}
 \chaplabel{ffi}
 \minitoc
 
@@ -19,7 +19,7 @@
 
 Currently, more and more code is produced and available through reusable libraries such as OpenGL\footnote{\url{http://www.opengl.org/}} or Cairo\footnote{\url{http://cairographics.org/}}.
 While working on your own projects using dynamic languages, it is crucial to be able to use such existing libraries with little effort.
-Multiple solutions exist to achieve access to an external library from dynamic languages that are executed on the top of a virtual machine (VM) such as Pharo\footnote{\url{http://pharo.org/}}, Lua\footnote{\url{http://lua.org/}} or Python\footnote{\url{http://python.org/}}.
+Multiple solutions exist to achieve access to an external library from dynamic languages that are executed on the top of a virtual machine (VM) such as \PH\footnote{\url{http://pharo.org/}}, Lua\footnote{\url{http://lua.org/}} or Python\footnote{\url{http://python.org/}}.
 \figref{extensionComparison} depicts four possibilities of dealing with new or external libraries in a high-level language.
 
 \paragraph{Language-side Library.}
@@ -38,18 +38,18 @@ Additionally we have to adapt the plugin for all platforms on which the VM is su
 
 \paragraph{FFI.}
 A higher-level solution is to define \emph{Foreign Function Interfaces} (FFIs) (cf. \figref{extensionComparison}.d).
-The main advantage of this approach is that once a VM is FFI-enabled, only a language extension (no VM-level code) is needed to provide access to new native libraries.
-From the portability point of view, only the generic FFI VM-plugin has to be implemented on all platforms.
+The main advantage of this approach is that once a VM is \FFI-enabled, only a language extension (no VM-level code) is needed to provide access to new native libraries.
+From the portability point of view, only the generic \FFI VM-plugin has to be implemented on all platforms.
 
 % Challenges & Goals
-Implementing an FFI library is a challenging task because of its antagonist goals:
+Implementing an \FFI library is a challenging task because of its antagonist goals:
 \begin{itemize}
     \item it must be flexible enough to easily bind to external libraries and also express complex foreign calls regarding the memory management or the type conversions (marshalling);
     \item it must be well integrated with the language (objects, reflection, garbage collector);
     \item it must be efficient.
 \end{itemize}
 %
-Existing FFI libraries of dynamic languages all have different designs and implementations because of the trade-offs they made regarding these goals and challenges.
+Existing \FFI libraries of dynamic languages all have different designs and implementations because of the trade-offs they made regarding these goals and challenges.
 Typical choices are resorting purely to the VM-level and thus sacrificing flexibility.
 The inverse of this approach exists as well: FFIs can be implemented almost completely at language-side but at a significant performance loss.
 Both these pitfalls are presented in more detail in \secref{evaluation}.
@@ -61,29 +61,35 @@ Both these pitfalls are presented in more detail in \secref{evaluation}.
 % - missing specific code generation
 % - missing JIT interaction for speed (like LuaJIT, org.vmmagic)
 
-% Alien and C-FFI run in the same Pharo image as NativeBoost allowing a much closer comparison.
-% Alien FFI is implemented almost completely at language-side, much like NativeBoost. However, as the following benchmarks will stress, it also suffers from performance loss.
+% Alien and C-FFI run in the same \PH image as NativeBoost allowing a much closer comparison.
+% Alien \FFI is implemented almost completely at language-side, much like NativeBoost. However, as the following benchmarks will stress, it also suffers from performance loss.
 % On the other end there is C-FFI which is faster than Alien but by far not as flexible. For instance only primitive types are handled directly.
 
 
-This paper presents \NBFFI\footnote{\url{http://code.google.com/p/nativeboost}} an FFI library at language-side for Pharo that supports callouts and callbacks, which we present in \secref{nutshell}.
-There are at least two other existing FFI libraries in Pharo worth mentioning: C-FFI and Alien.
+This paper presents \NBFFI\footnote{\url{http://code.google.com/p/nativeboost}} an \FFI library at language-side for \PH that supports callouts and callbacks, which we present in \secref{nutshell}.
+There are at least two other existing \FFI libraries in \PH worth mentioning: C-FFI and Alien.
 Nevertheless, they both present shortcomings.
 C-FFI is fast because it is mostly implemented at VM-level, however it is limited when it comes to do complex calls that involve non-primitive types or when we want to define new data types.
-On the opposite, Alien FFI is flexible enough to define any kind of data conversion or new types directly at language-side but it is slower than C-FFI because it is mostly implemented at language-side.
+On the opposite, \Alien \FFI is flexible enough to define any kind of data conversion or new types directly at language-side but it is slower than C-FFI because it is mostly implemented at language-side.
 In essence, \NBFFI combines the flexibility and extensibility of Alien that uses language-side definition for marshalling and the speed of C-FFI which is implemented at VM-level.
 The main originalities of \NBFFI are:
 
 \begin{description}
-	\item[Extensibility.] \NBFFI relies on as few VM primitives as possible (5 primitives), essentially to call native code.  Therefore, most of the implementation resides at language-side, even low-level mechanisms. That makes \NBFFI easily extensible because its implementation can be changed at any time, without needing to update the runtime (VM). It also presents a noticeable philosophical shift, how we want to extend our language in future. A traditional approach is to implement most low-level features at VM-side and provide interfaces to the language-side.
-But that comes at cost of less flexibility and longer development and release cycles. On the opposite, we argue that extending language features, even low-level ones, should be done at language-side instead. This results in higher flexibility and without incurring high runtime costs which usually happen when using high-level languages such as Smalltalk.
+	\item[Extensibility.] \NBFFI relies on as few VM primitives as possible (5 primitives), essentially to call native code. 
+	Therefore, most of the implementation resides at language-side, even low-level mechanisms.
+	That makes \NBFFI easily extensible because its implementation can be changed at any time, without needing to update the runtime (VM).
+	It also presents a noticeable philosophical shift, how we want to extend our language in future.
+	A traditional approach is to implement most low-level features at VM-side and provide interfaces to the language-side.
+	But that comes at cost of less flexibility and longer development and release cycles.
+	On the opposite, we argue that extending language features, even low-level ones, should be done at language-side instead.
+	This results in higher flexibility and without incurring high runtime costs which usually happen when using high-level languages such as \ST.
 	\item[Language-side extension.] Accessing a new external library using \NBFFI involves a reduced amount of work since it is only a matter of writing a language-side extension.
-	\item[Performance.] Despite the fact it is implemented mostly at language-side, \NBFFI achieves superior performance compared to other FFI implementations running Pharo.
+	\item[Performance.] Despite the fact it is implemented mostly at language-side, \NBFFI achieves superior performance compared to other \FFI implementations running \PH.
     This is essentially because it uses automatic and transparent native code generation at language-side for marshalling.
 \end{description}
 
 %In the following section we present the language-side code that one should write to achieve to interact with external libraries with \NBFFI.
-%We then compare performance of \NBFFI with three other FFI implementations in \secref{evaluation}.
+%We then compare performance of \NBFFI with three other \FFI implementations in \secref{evaluation}.
 %The following \secref{internals} gives more insights on the \NB.
 %After the related work presented in \secref{relatedWork} and we conclude this paper in \secref{conclusion}.
 
@@ -98,7 +104,7 @@ to enable interactions with external libraries.
 
 \subsection{Simple Callout}
 
-\lstref{clock} shows the code of a regular Smalltalk method named \ttt{ticksSinceStart} that defines a callout to the \ttt{clock} function of the \texttt{libc}.
+\lstref{clock} shows the code of a regular \ST method named \ttt{ticksSinceStart} that defines a callout to the \ttt{clock} function of the \texttt{libc}.
 \NB imposes no constraint on the class in which such a binding should be defined.
 However, this method must be annotated with a specific pragma (such as \ttt{<primitive:module:>}) which specifies that a native call should be performed using the \NB plugin.
 
@@ -127,11 +133,11 @@ This example uses a convenience method of \NB named \ttt{CLibrary} to obtain a h
 \figref{nativeBoostSyntax} presents the general syntax of \NBFFI through an example of a callout to the \ttt{abs} function of the \texttt{libc}.
 The \ttt{abs:} method has one argument named \ttt{anInteger} (cf. \ding{182}).
 This method uses the pragma \ttt{<primitive:module:error:>} which indicates that the \texttt{\#primitiveNativeCall} of the \texttt{\#NativeBoostPlugin} should be called when this method is executed (cf. \ding{183}).
-An \texttt{errorCode} is returned by this primitive if it fails and the regular Smalltalk code below is executed (cf. \ding{184}).
+An \texttt{errorCode} is returned by this primitive if it fails and the regular \ST code below is executed (cf. \ding{184}).
 The main difference with the previous example is that the \texttt{abs} function takes one integer parameter.
 In this example, the array \texttt{\#(uint abs(int anInteger))} passed as argument to \texttt{\#nbCall:} contains two important information (cf. \ding{185}).
 First, the types annotations such as the return type (\texttt{uint} in both examples) and arguments type (\texttt{int} in this example).
-These types annotations are then used by \NBFFI to automatically do the marshalling between C and Pharo values as illustrated by the next example.
+These types annotations are then used by \NBFFI to automatically do the marshalling between C and \PH values as illustrated by the next example.
 Second, the values to be passed when calling out.
 In this example, \texttt{anInteger} refers to the argument of the \ttt{abs} method, meaning that the value of this variable should be passed to the \texttt{abs} C function.
 Finally, this \texttt{abs} function is looked up in the \texttt{libc} whose an handle is passed in the \texttt{module:} parameter (cf. \ding{186}).
@@ -177,18 +183,18 @@ getenv: name
 
 In this example, the \NB type specified for the parameter is \texttt{String} instead of \texttt{char*} as specified by the standard \texttt{libc} documentation.
 This is on purpose because strings in C are sequences of characters (\ttt{char*}) but they must be terminated with the special character: \cnull.
-Specifying \texttt{String} in the \texttt{\#nbCall:} array will make \NB to automatically do the arguments conversion from Smalltalk strings to C strings (\cnull terminated \texttt{char*}).
+Specifying \texttt{String} in the \texttt{\#nbCall:} array will make \NB to automatically do the arguments conversion from \ST strings to C strings (\cnull terminated \texttt{char*}).
 It means that the string passed will be put in an external C \ttt{char} array and a \cnull character will be added to it at the end.
 This array will be automatically released after the call returned.
 This is an example of automatic memory management of \NB that can also be controlled if needed.
-Obviously, the opposite conversion happens for the returned value and the method returns a Smalltalk String.
+Obviously, the opposite conversion happens for the returned value and the method returns a \ST String.
 This example shows that \NBFFI accepts literals, local and instance variable names in callout declarations and it uses their type annotation to achieve the appropriate data conversion.
 \tabref{nbPrimitiveTypes} shows the default and automatic data conversions achieved by \NBFFI.
 
 \begin{table}[hbt]
     \centering
     \begin{tabular}{rll}
-        Primitive Type       & Smalltalk Type \\\midrule
+        Primitive Type       & \ST Type \\\midrule
         \ttt{uint}   & \ttt{Integer} \\
         \ttt{int}    & \ttt{Integer} \\
         \ttt{String} & \ttt{ByteString} \\
@@ -197,13 +203,13 @@ This example shows that \NBFFI accepts literals, local and instance variable nam
         \ttt{char}   & \ttt{Character} \\
         \ttt{oop}    & \ttt{Object}
     \end{tabular}
-    \caption{Default \NBFFI mappings between C/primitive types and high-level types. Note that \ttt{oop} is not a real primitive type as no marshalling is applied and the raw pointer is directly exposed to Pharo.}
+    \caption{Default \NBFFI mappings between C/primitive types and high-level types. Note that \ttt{oop} is not a real primitive type as no marshalling is applied and the raw pointer is directly exposed to \PH.}
     \tablabel{nbPrimitiveTypes}
 \end{table}
 \lstref{setenv} shows another example to callout the \texttt{setenv} function.
-The return value will be converted to a Smalltalk \texttt{Boolean}.
+The return value will be converted to a \ST \texttt{Boolean}.
 The two first parameters are specified as \texttt{String} and will be automatically transformed in \texttt{char*} with an ending \cnull character.
-The last parameter is \texttt{1}, a Smalltalk literal value without any type specification and \NB translates it as an \texttt{int} by default.
+The last parameter is \texttt{1}, a \ST literal value without any type specification and \NB translates it as an \texttt{int} by default.
 
 \begin{stcode}[
 	label={lst:setenv},
@@ -230,7 +236,7 @@ This list of mapping is not exhaustive and \NB also supports the definition of n
     \begin{tabular}{lcccc}
                     &  Memory 	& Address & Marshalling & Constraint  \\\midrule
 C-managed struct 	&  C heap  	& fixed & passed by reference & must be freed \\
-Pharo-managed struct & Object memory & variable & passed by reference & may move \\
+\PH-managed struct & Object memory & variable & passed by reference & may move \\
 & & & or passed by copy & costly\\
     \end{tabular}
     \caption{Wrapping structures possibilities in \NB}
@@ -245,7 +251,7 @@ The strength of language-side FFIs appears when it comes to do callouts with new
 
 \paragraph{Declaring structures.}
 For example, the Cairo library\footnote{\url{http://cairographics.org}} provides complex structures such as \texttt{cairo\_surface\_t} and functions to manipulate this data type. % which makes field access useless.
-\lstref{AthensCairoSurface} shows how to write a regular Smalltalk class to wrap a C structure.
+\lstref{AthensCairoSurface} shows how to write a regular \ST class to wrap a C structure.
 \NB only requires a class-side method named \texttt{asNBExternalType:} that describes how to marshall this type back and forth from native code.
 In this example, we use existing marshalling mechanism defined in \texttt{NBExternalObjectType} that just copies the structure's pointer and stores it in an instance variable named \ttt{handle}.
 
@@ -353,11 +359,11 @@ AthensCairoMatrix>>primMultiplyBy: m
 
 
 \paragraph{Memory management of structures.}
-\tabref{wrappingstruct} shows a comparison between C-managed and Pharo-managed structures.
+\tabref{wrappingstruct} shows a comparison between C-managed and \PH-managed structures.
 The first ones are allocated in the C heap.
 Their addresses are fixed and they are passed by reference during a callout.
 But the programmer must free them by hand when they are not needed.
-The second ones are allocated in the Pharo object-memory.
+The second ones are allocated in the \PH object-memory.
 Their addresses are variable since their enclosing object may be moved by the garbage collector.
 They can either passed by copy which is costly or by reference.
 Passing a reference may lead to problems is the C function stores the address and try to access it later on since the address may changed.
@@ -367,10 +373,10 @@ Passing a reference may lead to problems is the C function stores the address an
 \subsection{Callbacks}
 
 \NB supports callbacks from native code.
-This means it is possible for a C-function to call back into the Pharo runtime and activate code.
+This means it is possible for a C-function to call back into the \PH runtime and activate code.
 We will use the simple \ttt{qsort} C-function to illustrate this use-case.
 \ttt{qsort} sorts a given array according to the results of a compare function.
-Instead of using a C-function to compare the elements we will use a callback to invoke a Pharo block which will compare the two arguments.
+Instead of using a C-function to compare the elements we will use a callback to invoke a \PH block which will compare the two arguments.
 %
 \begin{stcode}[
 	label={lst:calloutWithCallback},
@@ -384,8 +390,8 @@ self ffiQSort: bytes
 	 compareWith: callback
 \end{stcode}
 %
-Code \lstref{calloutWithCallback} shows the primary Pharo method for invoking \ttt{qsort} with a \ttt{QSortCallback} instance for the compare function.
-In this example \ttt{qsort} will invoke run the Pharo code inside the callback block to compare the elements in the \ttt{bytes} array.
+Code \lstref{calloutWithCallback} shows the primary \PH method for invoking \ttt{qsort} with a \ttt{QSortCallback} instance for the compare function.
+In this example \ttt{qsort} will invoke run the \PH code inside the callback block to compare the elements in the \ttt{bytes} array.
 
 To define a callback in \NB we have to create a specific subclasses for each callback with different argument types.
 %
@@ -479,68 +485,70 @@ This native code is responsible of the marshalling and calling the external func
 	\figlabel{nbArchitecture}
 \end{figure}
 
-% General FFI overview and difference of NB
+% General \FFI overview and difference of NB
 \begin{figure*}[t]
 	\centering
 	\includegraphics[width=\textwidth]{ffiOverview}
-	\caption{Comparison of FFI calls propagation in \NBFFI and a typical VM plugin-based implementation. \NB resorts to VM-level only for the native-code activation, whereas typical implementations cross this barrier much earlier.}
+	\caption{Comparison of \FFI calls propagation in \NBFFI and a typical VM plugin-based implementation. \NB resorts to VM-level only for the native-code activation, whereas typical implementations cross this barrier much earlier.}
 	\figlabel{ffi}
 \end{figure*}
 
 \paragraph{Callout propagation.}
-\figref{ffi} shows a comparison of the resolution of a FFI call both in \NBFFI and a plugin-based FFI.
-At step 1, a FFI call is emitted.
+\figref{ffi} shows a comparison of the resolution of a \FFI call both in \NBFFI and a plugin-based \FFI.
+At step 1, a \FFI call is emitted.
 The \NBFFI call is mostly processed at language-side and it is only during step 4 that a primitive is called and the VM effectively does the external call by executing the native code.
-On the opposite, a plugin-based FFI call already crossed the low-level frontier in step 2 resulting that part of the type conversion process (marshalling) is already done in the VM code.
-In \NBFFI, doing most of the FFI call processing at language-side makes easier to keep control, redefine or adapt it if needed.
+On the opposite, a plugin-based \FFI call already crossed the low-level frontier in step 2 resulting that part of the type conversion process (marshalling) is already done in the VM code.
+In \NBFFI, doing most of the \FFI call processing at language-side makes easier to keep control, redefine or adapt it if needed.
 
 % ===========================================================================
 \section{\NBFFI Evaluation}
 \seclabel{evaluation}
 % ===========================================================================
 
-In this section we compare \NB with other FFI implementations.
+In this section we compare \NB with other \FFI implementations.
 \begin{description}
-	\item[Alien FFI:] An FFI implementation for Squeak/Pharo that focuses on the language-side. All marshalling happens transparently at language-side.
-	\item[C-FFI:] A C based FFI implementation for Squeak/Pharo that performs all marshalling operations at VM-side.
-	\item[LuaJIT:] A fast Lua implementation that has a close FFI integration with JIT interaction.
+	\item[\Alien \FFI:] An \FFI implementation for Squeak/\PH that focuses on the language-side. All marshalling happens transparently at language-side.
+	\item[C-\FFI:] A C based \FFI implementation for Squeak/\PH that performs all marshalling operations at VM-side.
+	\item[\LuaJIT:] A fast \Lua implementation that has a close \FFI integration with JIT interaction.
 \end{description}
 
-\paragraph{Choice of FFI Implementations.}
-To evaluate \NB we explicitly target FFI implementations running on the same platform, hence we can rule out additional performance differences.
-Alien and C-FFI run in the same Pharo image as \NB allowing a much closer comparison.
+\paragraph{Choice of \FFI Implementations.}
+To evaluate \NB we explicitly target \FFI implementations running on the same platform, hence we can rule out additional performance differences.
+Alien and C-FFI run in the same \PH image as \NB allowing a much closer comparison.
 
-Alien FFI is implemented almost completely at language-side, much like \NB.
+\Alien \FFI is implemented almost completely at language-side, much like \NB.
 However, as the following benchmarks will stress, it also suffers from performance loss.
 
-On the other end there is C-FFI which is faster than Alien but by far not as flexible. For instance only primitive types are handled directly.
+On the other end there is C-FFI which is faster than \Alien but by far not as flexible.
+For instance only primitive types are handled directly.
 
-As the third implementation we chose Lua. Lua is widely used as scripting language in game development.
-Hence much care has been taken to closely integrate Lua into C and C++ environments.
-LuaJIT integrates an FFI library that generates the native code for marshalling and directly inlines C functions callout in the JIT-compiled code.
+As the third implementation we chose \Lua.
+\Lua is widely used as scripting language in game development.
+Hence much care has been taken to closely integrate \Lua into C and C++ environments.
+\LuaJIT integrates an \FFI library that generates the native code for marshalling and directly inlines C functions callout in the \JIT-compiled code.
 
 \paragraph{Evaluation Procedure.}
-To compare the different FFI approaches we measure 100 times the accumulative time spent to perform $1'000'000$ callouts of the given function.
+To compare the different \FFI approaches we measure 100 times the accumulative time spent to perform $1'000'000$ callouts of the given function.
 From the 100 probes we show the average and the standard deviation for a $68\%$ confidence interval in a gaussian distribution.
-To exclude the calling and loop overhead we subtract from each evaluation the time spent in the same setup, but without the FFI call.
+To exclude the calling and loop overhead we subtract from each evaluation the time spent in the same setup, but without the \FFI call.
 The final deviation displayed is the arithmetic average of the measured deviation of the base and the callout measurement.
 
-The three Smalltalk FFI solutions (\NB, Alien, C-FFI) are evaluated on the very same Pharo 1.4 (version 14458) image on a Pharo VM (version of May 5. 2013).
-For the Lua benchmarks we use LuaJIT 2.0.1.
+The three \ST \FFI solutions (\NB, \Alien, C-\FFI) are evaluated on the very same \PH 1.4 (version 14458) image on a \PH VM (version of May 5. 2013).
+For the Lua benchmarks we use \LuaJIT 2.0.1.
 The benchmarks are performed under the constant conditions on a MacBook Pro.
 Even though a standalone machine could improve the performance we are only interested in the relative performance of each implementation.
 
 
 \paragraph{Choice of Callouts.}
-We chose a set of representative C functions to stress different aspects of an FFI implementation.
+We chose a set of representative C functions to stress different aspects of an \FFI implementation.
 We start with simple functions that require little marshalling efforts and thus mainly focus on the activation performance and callout overhead.
 Later we measure more complex C functions that return complex types and thus stress the marshalling infrastructure.
 
 % ===========================================================================
 \subsection{Callout Overhead}
-The first set of FFI callouts show mainly the overhead of the FFI infrastructure to perform the callout.
+The first set of \FFI callouts show mainly the overhead of the \FFI infrastructure to perform the callout.
 
-For the first FFI evaluation we measure the execution time for a \ttt{clock()} callout.
+For the first \FFI evaluation we measure the execution time for a \ttt{clock()} callout.
 The C function takes no argument and returns an integer thus guaranteeing a minimal overhead for marshalling and performing the callout.
 %
 \begin{table}[H]
@@ -552,7 +560,7 @@ The C function takes no argument and returns an integer thus guaranteeing a mini
         C-FFI       & \ttt{541.77} $\pm$ \ttt{0.88} ms  & $\approx 1.1\times$ \\
         LuaJIT      & \ttt{343.0 } $\pm$ \ttt{1.2 } ms  & $\approx 0.7\times$
     \end{tabular}
-    \caption{Speed comparison of an \ttt{uint clock(void)} FFI call (see Code~\lstref{clock}).}
+    \caption{Speed comparison of an \ttt{uint clock(void)} \FFI call (see Code~\lstref{clock}).}
     \tablabel{performance-clock}
 \end{table}
 %
@@ -568,17 +576,17 @@ The C function takes no argument and returns an integer thus guaranteeing a mini
         LuaJIT\tablefootnote{Downsampled from increased loop size by a factor $100$ to guarantee accuracy.}
                     & \ttt{  }\ttt{  2.035} $\pm$ \ttt{0.015} ms  & $\approx 0.03\times$
     \end{tabular}
-    \caption{Speed comparison of an \ttt{int abs(int i)} FFI call (see \figref{nativeBoostSyntax}).}
+    \caption{Speed comparison of an \ttt{int abs(int i)} \FFI call (see \figref{nativeBoostSyntax}).}
     \tablabel{performance-abs}
 \end{table}
 
 
 \paragraph{Evaluation.}
-For measuring the calling overhead we chose the \ttt{abs} FFI callout.
-This C function is completed in a couple of instructions which in comparison to the conversion and activation effort of the FFI callout is negligible.
+For measuring the calling overhead we chose the \ttt{abs} \FFI callout.
+This C function is completed in a couple of instructions which in comparison to the conversion and activation effort of the \FFI callout is negligible.
 In \tabref{performance-abs} we see that \NB is at least a factor two faster than the other \ST implementation.
 Yet LuaJIT outperform \NB by an impressive factor 30.
-LuaJIT has a really close integration with the JIT and this is what makes the impressive FFI callout results possible.
+LuaJIT has a really close integration with the JIT and this is what makes the impressive \FFI callout results possible.
 
 
 % ===========================================================================
@@ -596,14 +604,14 @@ Both argument and result have to be converted from high-level strings to C-level
         LuaJIT\tablefootnote{Downsampled from increased loop size by a factor $10$ to guarantee accuracy.}
                     & \ttt{ }\ttt{ 97.3 } $\pm$ \ttt{5.1 } ms  & $\approx 0.9\times$
     \end{tabular}
-    \caption{Speed comparison of an \ttt{char * getenv(char *name)} FFI call (see Code \lstref{getenv}).}
+    \caption{Speed comparison of an \ttt{char * getenv(char *name)} \FFI call (see Code \lstref{getenv}).}
     \tablabel{performance-getenv}
 \end{table}
 
 \noindent As a last evaluation of simple C functions with \NB, we call \ttt{printf} with a string and two integers as argument.
 The marshalling overhead is less than for the previous \ttt{getenv} example.
 However, \ttt{printf} is a more complex C function which requires more time to complete: it has to parse the format string, format the given arguments and pipe the results to standard out.
-Hence the relative overhead of an FFI call is reduced.
+Hence the relative overhead of an \FFI call is reduced.
 %
 \begin{table}[h!]
     \centering
@@ -614,7 +622,7 @@ Hence the relative overhead of an FFI call is reduced.
         C-FFI       & \ttt{ 605.02} $\pm$ \ttt{0.23} ms  & $\approx 1.6\times$ \\
         LuaJIT      & \ttt{ 202.4 } $\pm$ \ttt{2.1 } ms  & $\approx 0.6\times$
     \end{tabular}
-    \caption{Speed comparison of an \ttt{int printf(char *name, int num1, int num2)} FFI call}
+    \caption{Speed comparison of an \ttt{int printf(char *name, int num1, int num2)} \FFI call}
     \tablabel{performance-printf}
 \end{table}
 
@@ -641,12 +649,12 @@ In all cases, the allocation time of the structs is not included in the measurem
         C-FFI       & \ttt{380.8 } $\pm$ \ttt{2.7 } ms  & $\approx 3.6\times$ \\
         LuaJIT      & \ttt{ }\ttt{ 5.66} $\pm$ \ttt{0.15} ms  & $\approx 0.07\times$
     \end{tabular}
-    \caption{Speed comparison of an \ttt{cairo\_matrix\_multiply} FFI call (cf. \lstref{cairoCallouts})}
+    \caption{Speed comparison of an \ttt{cairo\_matrix\_multiply} \FFI call (cf. \lstref{cairoCallouts})}
  	\tablabel{performance-structs}
 \end{table}
 
 \paragraph{Evaluation.}
-In \tabref{performance-structs} shows that \NB outperforms the two other Smalltalk implementations.
+In \tabref{performance-structs} shows that \NB outperforms the two other \ST implementations.
 
 % ===========================================================================
 \subsection{Callbacks}
@@ -660,13 +668,13 @@ Callbacks are usually much more slower than callouts.
                     & Call Time                          & Rel. Time \\ \midrule
         \NB         & \ttt{2300.0 } $\pm$ \ttt{1.1 } ms  & $ 1.0 \times$ \\
         Alien       & \ttt{ 600.83} $\pm$ \ttt{0.35} ms  & $\approx 0.26 \times$ \\
-        C-FFI       & NA  & NA \\
+        C-\FFI       & NA  & NA \\
         LuaJIT      & \ttt{ }\ttt{ 46.13} $\pm$ \ttt{0.62} ms  & $\approx 0.02 \times$\\
 		\cmidrule(r){2-3}
 	\NB \small{with}\\
 	   \small{Native Callbacks}    & \ttt{ }\ttt{ }\ttt{ 4.98} $\pm$ \ttt{0.21} ms  & $\approx 0.002 \times$
     \end{tabular}
-    \caption{Speed comparison of a \ttt{qsort} FFI call (cf. \lstref{calloutWithCallback})}
+    \caption{Speed comparison of a \ttt{qsort} \FFI call (cf. \lstref{calloutWithCallback})}
  	\tablabel{performance-qsort}
 \end{table}
 
@@ -694,7 +702,7 @@ As a second part we describe implementation details of the low-level extensions,
 \seclabel{generating}
 
 In \NB all code generation happens transparently at language-side.
-The various examples shown in \secref{nutshell} show how an FFI callout is defined in a standard method.
+The various examples shown in \secref{nutshell} show how an \FFI callout is defined in a standard method.
 Upon first activation the \NB primitive will fail and by default continues to evaluate the following method body.
 This is the point where \NB generates native code and attaches it to the compiled method.
 \NB then reflectively resends the original message with the original arguments (for instance \ttt{abs:} in the example \figref{nativeBoostSyntax}).
@@ -707,15 +715,15 @@ On the second activation, the native code is present and thus the primitive will
 \figref{nbArchitecture} shows that \NB relies on AsmJit\footnote{\url{http://smalltalkhub.com/\#!/~Pharo/AsmJit}}, a language-side assembler.
 AsmJit emerged from an existing C++ implementation\footnote{\url{https://code.google.com/p/asmjit/}} and currently supports the x86 instruction set.
 
-In fact it is even possible to inline custom assembler instructions in Pharo when using \NB.
+In fact it is even possible to inline custom assembler instructions in \PH when using \NB.
 This way it is possible to meet critical performance requirements.
-Typically Smalltalk does not excel at algorithmic code since such code does not benefit from dynamic message sends.
+Typically \ST does not excel at algorithmic code since such code does not benefit from dynamic message sends.
 
 % ---------------------------------------------------------------------------
 \subsubsection{Reflective Symbiosis}
 
-\NB lives in symbiosis with the Pharo programming environment.
-As shown in the examples in \secref{nutshell} and in more detail in \figref{nativeBoostSyntax} \NB detects which method arguments correspond to which argument in the FFI callout.
+\NB lives in symbiosis with the \PH programming environment.
+As shown in the examples in \secref{nutshell} and in more detail in \figref{nativeBoostSyntax} \NB detects which method arguments correspond to which argument in the \FFI callout.
 To achieve this, \NB inspects the activation context when generating native code.
 Through reflective access to the execution context we can retrieve the method's source code and thus the argument names and positions.
 
@@ -743,12 +751,12 @@ NativeBoost memCopy: memory to: bytes size: 4.
 NativeBoost free: memory.
 \end{stcode}
 
-Using the external heap management it is possible to prepare binary blobs and structures for FFI calls.
+Using the external heap management it is possible to prepare binary blobs and structures for \FFI calls.
 
 In the previous example Code \lstref{externalHeap} the \ttt{memory} variable holds a wrapper for the static address of the allocated memory.
 Hence accessing it from low-level code is straight forward.
 However in certain situations it is required to access a high-level object from assembler.
-Pharo has a moving garbage collector which means that you can not refer directly to a high-level object by a fixed address.
+\PH has a moving garbage collector which means that you can not refer directly to a high-level object by a fixed address.
 
 \begin{figure}[h]
 	\centering
@@ -759,8 +767,8 @@ Pharo has a moving garbage collector which means that you can not refer directly
 
 To deal with this problem the VM has a special array at a known address that contains pointers to high-level objects.
 The garbage collector keeps this external roots array up to date.
-Hence it is possible to statically refer to a Pharo object using a double indirection over the external roots.
-\figref{externalRoots} visualizes how native code directly accesses Pharo objects through this indirection.
+Hence it is possible to statically refer to a \PH object using a double indirection over the external roots.
+\figref{externalRoots} visualizes how native code directly accesses \PH objects through this indirection.
 
 
 % ===========================================================================
@@ -790,10 +798,10 @@ Hence the heap has to be executable in order to jump to the native instructions.
 
 \todo{strip BENZO duplication: see how much overlaps, only put a small summary here and push detailed explanation to the benzo chapter}
 
-In \secref{generating} we explained how \NB creates FFI callouts at language-side.
+In \secref{generating} we explained how \NB creates \FFI callouts at language-side.
 However, so far we left out the part on how the generated native code is activated.
 
-The examples in \secref{nutshell}, especially \figref{nativeBoostSyntax} show that each \NB FFI callout requires a special primitive.
+The examples in \secref{nutshell}, especially \figref{nativeBoostSyntax} show that each \NBFFI callout requires a special primitive.
 \figref{nativeCodeActivation} shows how a \NB method is activated.
 
 
@@ -808,8 +816,8 @@ The examples in \secref{nutshell}, especially \figref{nativeBoostSyntax} show th
 \item In the first step (cf. \ding{182}) the \NB callout primitive is activated.
 	The primitive checks if the compiled method actually contains native code.
 \item On the first activation there is no native code available yet.
-	Hence the primitive will fail and the Smalltalk body (cf. \ding{183}) of the \NB method gets evaluated.
-	This is where \NB prepares the native code for the FFI callout.
+	Hence the primitive will fail and the \ST body (cf. \ding{183}) of the \NB method gets evaluated.
+	This is where \NB prepares the native code for the \FFI callout.
 \item After installing the native code in the method trailer, the \NB method is reactivated with the original arguments (cf. \ding{184}).
 \item Again we end up in the \NB activation primitive (cf. \ding{185}).
 	However, this time there is native code (cf. \ding{186}) available and thus the primitive jumps to the native code instead.
@@ -839,47 +847,40 @@ The examples in \secref{nutshell}, especially \figref{nativeBoostSyntax} show th
 \section{Related Work}
 \seclabel{relatedWork}
 % ===========================================================================
-\todo{only show FFI related work here! all the abstract implementations are covered in the Benzo secrtion}
+\todo{only show \FFI related work here! all the abstract implementations are covered in the Benzo secrtion}
 % explain typical approaches (static and dynamic)
 
 % - need to go into detail with ALIEN
 % - C-FFI for Cog
 % other less related approaches: Python ctypes ? SWIG ?
 
-Typical Smalltalk system are isolated from the low-level world and provide only limited interoperability with C libraries.
-However there are notable exceptions: Étoilé and Smalltalk/X.
+Typical \ST system are isolated from the low-level world and provide only limited interoperability with C libraries.
+However there are notable exceptions: \textsc{Étoilé} and \ST/X.
 
-Chisnall presents the Pragmatic Smalltalk Compiler \cite{Chis12a}, part of the Étoilé project, which focuses on close interaction with the C world.
+Chisnall presents the Pragmatic \ST Compiler \cite{Chis12a}, part of the \textsc{Étoilé} project, which focuses on close interaction with the C world.
 The main goal of this work is to reuse existing libraries and thus reduce duplicated effort.
-The author highlights the expressiveness of Smalltalk to support this goal.
-In this Smalltalk implementation multiple languages can be mixed efficiently.
-It is possible to mix Objective-C, Smalltalk code.
+The author highlights the expressiveness of \ST to support this goal.
+In this \ST implementation multiple languages can be mixed efficiently.
+It is possible to mix Objective-C, \ST code.
 All these operations can be performed dynamically at runtime.
-Unlike our approach, Étoilé aims at a complete new style of runtime environment without a VM. Compared to that, \NB is a very lightweight solution.
+Unlike our approach, \textsc{Étoilé} aims at a complete new style of runtime environment without a VM.
+Compared to that, \NB is a very lightweight solution.
 
 
-Other dynamic high-level languages such as Lua leverage FFI performance by using a close interaction with the JIT.
-LuaJIT \cite{luaffi} for instance is an efficient Lua implementation that inlines FFI calls directly into the JIT compiled code.
+Other dynamic high-level languages such as\ Lua leverage \FFI performance by using a close interaction with the JIT.
+\LuaJIT \cite{luaffi} for instance is an efficient \Lua implementation that inlines \FFI calls directly into the JIT compiled code.
 Similar to \NB this allows one to minimize the constant overhead by generating custom-made native code.
-The LuaJIT runtime is mainly written in C which has clearly different semantics than Lua itself.
+The \LuaJIT runtime is mainly written in C which has clearly different semantics than \Lua itself.
 
 
 On a more abstract level, high-level low-level programming \cite{Fram09a} encourage to use high-level languages for system programming.
-Frampton et al. present a low-level framework  which is used as system interface for Jikes, an experimental Java VM.
+Frampton et al. present a low-level framework  which is used as system interface for \Jikes, an experimental \Java VM.
 %Additionally their framework is successfully used in MMTK \cite{Blac04a} which is used independently in several other projects.
 %The \ttt{org.vmmagic} package is much more elaborate than \NB but it is tailored towards Java with static types.
 However their approach focuses on a static solution.
 Methods have to be annotated to use low-level functionality.
 Additionally the strong separation between low-level code and runtime does not allow for reflective extensions of the runtime.
 Finally, they do not support the execution and not even generation of custom assembly code on the fly.
-
-
-QUICKTALK \cite{Ball86a} follows a similar approach as \NB.
-However Ballard et al. focus mostly on the development of a complex compiler for a new \ST dialect.
-Using type annotations QUICKTALK allows for statically typing methods.
-By inlining methods and eliminating the bytecode dispatch overhead by generating native code QUICKTALK outperforms interpreted bytecode methods.
-%The principal goals of QUICKTALK are performance improvements on dynamic typing.
-Compared to Waterfall, QUICKTALK does not allow to leave the language-side environment and interact closely with the VM.
 
 
 Kell and Irwin \cite{Kell11a} take a different look at interacting with external libraries.
@@ -921,15 +922,15 @@ It uses the low-level DWARF debugging information present in the external librar
 \seclabel{futurework}
 % ===========================================================================
 Even though \NB shows good overall performance when it comes to callbacks it does not keep up with other \ST-based solutions.
-In the current development phase not much attention was payed to callback performance as it is not a common use case for FFI callouts.
+In the current development phase not much attention was payed to callback performance as it is not a common use case for \FFI callouts.
 Fast callbacks require close interaction and specific modifications at VM-level.
 However, initially \NB kept the modifications to the VM at a minimum.
 We assume that we can reach the same performance as Alien relying on the same low-level implementation.
 
-As a second issue we would like to address the callout overhead by using an already existing JIT integration of \NB.
+As a second issue we would like to address the callout overhead by using an already existing \JIT integration of \NB.
 Currently the VM has to leave from JIT-mode to standard interpretation mode when it activates an \NB method.
-This context switch introduces an unnecessary overhead for an FFI callout.
-A current prototype directly inlines the native code of a \NB method in the JIT.
+This context switch introduces an unnecessary overhead for an \FFI callout.
+A current prototype directly inlines the native code of a \NB method in the \JIT.
 Hence the cost for the context switch plus the cost of activating the \NB callout primitive can be avoided.
 % \lf{This modification aims at better integrating \NB and the JIT such as it is done in LuaJIT.}
 
@@ -943,13 +944,13 @@ Hence the cost for the context switch plus the cost of activating the \NB callou
 In this paper we presented \NB a novel approach to foreign function interfaces.
 Our approach relies only on a very generic extension of the VM to allow for language-side code to directly call native instructions.
 
-Using a in depth evaluation of \NB comparing against two other \ST FFI implementations and LuaJIT we showed in \secref{evaluation} that our language-side approach is competitive.
+Using a in depth evaluation of \NB comparing against two other \ST \FFI implementations and LuaJIT we showed in \secref{evaluation} that our language-side approach is competitive.
 \NB reduces the callout overhead by more than a factor two compared to the two closest \ST solutions.
 
-Compared to LuaJIT there is still space for improvements.
-We measured a factor 30 lower calling overhead due to a close JIT integration.
-However for typical FFI calls the absolute time difference between \NB and Lua is roughly $30\%$.
-With a partial solution ready to integrate \NB closer with the JIT we expect to come close to Lua's performance.
+Compared to \LuaJIT there is still space for improvements.
+We measured a factor 30 lower calling overhead due to a close \JIT integration.
+However for typical \FFI calls the absolute time difference between \NB and \Lua is roughly $30\%$.
+With a partial solution ready to integrate \NB closer with the \JIT we expect to come close to Lua's performance.
 
 Furthermore we showed that \NB essentially combines VM-level performance with language-side flexibility when it comes to marshal complex types.
 New structures are defined practically at language-side and conversion optimizations are added transparently.
