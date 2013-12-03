@@ -18,30 +18,30 @@
 		b) language using features from a VM extension,
 		c) language using features from a VM plugin,
 		d) language-side implementation of an extension.}
-	\figlabel{extensionComparison}
+	\figlabel{ffi-extensionComparison}
 \end{figure*}
 
 Currently, more and more code is produced and available through reusable libraries such as OpenGL\footnote{\url{http://www.opengl.org/}} or Cairo\footnote{\url{http://cairographics.org/}}.
 While working on your own projects using dynamic languages, it is crucial to be able to use such existing libraries with little effort.
 Multiple solutions exist to achieve access to an external library from dynamic languages that are executed on the top of a virtual machine (VM) such as \PH\footnote{\url{http://pharo.org/}}, \Lua\footnote{\url{http://lua.org/}} or \Python\footnote{\url{http://python.org/}}.
-\figref{extensionComparison} depicts four possibilities of dealing with new or external libraries in a high-level language.
+\figref{ffi-extensionComparison} depicts four possibilities of dealing with new or external libraries in a high-level language.
 
 \paragraph{Language-side Library.}
-One solution is to re-implement a library completely at language-side (cf. \figref{extensionComparison}.a).
+One solution is to re-implement a library completely at language-side (cf. \figref{ffi-extensionComparison}.a).
 Even though this is the most flexible solution, this is often not an option, neither from the technical point of view (performance penalty), nor from the economic point of view (development time and costs).
 
 \paragraph{VM Extension.}
-The second one (\figref{extensionComparison}.b) is to do a \emph{VM extension} providing new primitives that the high-level language uses to access the native external library.
+The second one (\figref{ffi-extensionComparison}.b) is to do a \emph{VM extension} providing new primitives that the high-level language uses to access the native external library.
 This solution is generally efficient since the external library may be statically compiled within the VM.
 However a tight integration into the VM also means more dependencies and a different development environment than the final product at language-side.
 
 \paragraph{VM Plugin.}
-The third solution (\figref{extensionComparison}.c) is similar to the previous one but the extension is factored out of the VM as a \emph{plugin}.
+The third solution (\figref{ffi-extensionComparison}.c) is similar to the previous one but the extension is factored out of the VM as a \emph{plugin}.
 This solution implies again a lot of low-level development at VM-level that must be done for each external library we want to use.
 Additionally we have to adapt the plugin for all platforms on which the VM is supposed to run on.
 
 \paragraph{FFI.}
-A higher-level solution is to define \emph{Foreign Function Interfaces} (FFIs) (cf. \figref{extensionComparison}.d).
+A higher-level solution is to define \emph{Foreign Function Interfaces} (FFIs) (cf. \figref{ffi-extensionComparison}.d).
 The main advantage of this approach is that once a VM is \FFI-enabled, only a language extension (no VM-level code) is needed to provide access to new native libraries.
 From the portability point of view, only the generic \FFI VM-plugin has to be implemented on all platforms.
 
@@ -59,15 +59,15 @@ The inverse of this approach exists as well: FFIs can be implemented almost comp
 Both these pitfalls are presented in more detail in \secref{ffi-evaluation}.
 
 
-% list shortcomings of typical implementations (C-FFI vs ALIEN)
-% - too low-level (C-FFI) fast in simple examples, complex calls not possible
+% list shortcomings of typical implementations (C-\FFI vs ALIEN)
+% - too low-level (C-\FFI) fast in simple examples, complex calls not possible
 % - too high-level (ALIEN) slow in simple examples, quite slow in complex ones
 % - missing specific code generation
 % - missing \JIT interaction for speed (like LuaJIT, org.vmmagic)
 
-% Alien and C-FFI run in the same \PH image as NativeBoost allowing a much closer comparison.
-% Alien \FFI is implemented almost completely at language-side, much like NativeBoost. However, as the following benchmarks will stress, it also suffers from performance loss.
-% On the other end there is C-FFI which is faster than Alien but by far not as flexible. For instance only primitive types are handled directly.
+% \Alien and C-\FFI run in the same \PH image as NativeBoost allowing a much closer comparison.
+% \Alien \FFI is implemented almost completely at language-side, much like NativeBoost. However, as the following benchmarks will stress, it also suffers from performance loss.
+% On the other end there is C-\FFI which is faster than \Alien but by far not as flexible. For instance only primitive types are handled directly.
 
 
 This paper presents \NBFFI\footnote{\url{http://code.google.com/p/nativeboost}} an \FFI library at language-side for \PH that supports callouts and callbacks, which we present in \secref{ffi-nutshell}.
@@ -111,13 +111,13 @@ to enable interactions with external libraries.
 \subsection{Simple Callout}
 % ---------------------------------------------------------------------------
 
-\lstref{clock} shows the code of a regular \ST method named \ttt{ticksSinceStart} that defines a callout to the \ttt{clock} function of the \texttt{libc}.
+\lstref{clock} shows the code of a regular \ST method named \ttt{ticksSinceStart} that defines a callout to the \ttt{clock} function of the \ttt{libc}.
 \NB imposes no constraint on the class in which such a binding should be defined.
 However, this method must be annotated with a specific pragma (such as \ttt{<primitive:module:>}) which specifies that a native call should be performed using the \NB plugin.
 
 \begin{stcode}[
 	label={lst:clock},
-	caption={\NBFFI example of callout declaration to the \ttt{clock} function of the \texttt{libc}}]{0}
+	caption={\NBFFI example of callout declaration to the \ttt{clock} function of the \ttt{libc}}]{0}
 ticksSinceStart
 	<primitive: #primitiveNativeCall
 	 module: #NativeBoostPlugin>
@@ -129,7 +129,7 @@ ticksSinceStart
 The external function call is then described using the \ttt{nbCall:module:} message.
 The first parameter (\ttt{\#nbCall:}) is an array that describes the signature of C function to callout.
 Basically, this array contains the description of a C function prototype, which is very close to normal C syntax.
-The return type is first described (\ttt{uint} in this example\footnote{The return type of the \texttt{clock} function is \ttt{clock\_t}, but we deliberately used \ttt{uint} in this first example for the sake of simplicity even if it is possible to define a constant type in \NB.}), then the name of the function (\ttt{clock}) and finally the list of parameters (an empty array in this example since \ttt{clock} does not have any).
+The return type is first described (\ttt{uint} in this example\footnote{The return type of the \ttt{clock} function is \ttt{clock\_t}, but we deliberately used \ttt{uint} in this first example for the sake of simplicity even if it is possible to define a constant type in \NB.}), then the name of the function (\ttt{clock}) and finally the list of parameters (an empty array in this example since \ttt{clock} does not have any).
 The second argument, \ttt{\#module:} is the module name, its full path or its handle if already loaded, where to look up the given function.
 This example uses a convenience method of \NB named \ttt{CLibrary} to obtain a handle to the standard C library.
 
@@ -138,17 +138,17 @@ This example uses a convenience method of \NB named \ttt{CLibrary} to obtain a h
 % ---------------------------------------------------------------------------
 
 % - explain argument detection (match var names)
-\figref{nativeBoostSyntax} presents the general syntax of \NBFFI through an example of a callout to the \ttt{abs} function of the \texttt{libc}.
+\figref{ffi-nativeBoostSyntax} presents the general syntax of \NBFFI through an example of a callout to the \ttt{abs} function of the \ttt{libc}.
 The \ttt{abs:} method has one argument named \ttt{anInteger} (cf. \ding{182}).
-This method uses the pragma \ttt{<primitive:module:error:>} which indicates that the \texttt{\#primitiveNativeCall} of the \texttt{\#NativeBoostPlugin} should be called when this method is executed (cf. \ding{183}).
-An \texttt{errorCode} is returned by this primitive if it fails and the regular \ST code below is executed (cf. \ding{184}).
-The main difference with the previous example is that the \texttt{abs} function takes one integer parameter.
-In this example, the array \texttt{\#(uint abs(int anInteger))} passed as argument to \texttt{\#nbCall:} contains two important information (cf. \ding{185}).
-First, the types annotations such as the return type (\texttt{uint} in both examples) and arguments type (\texttt{int} in this example).
+This method uses the pragma \ttt{<primitive:module:error:>} which indicates that the \ttt{\#primitiveNativeCall} of the \ttt{\#NativeBoostPlugin} should be called when this method is executed (cf. \ding{183}).
+An \ttt{errorCode} is returned by this primitive if it fails and the regular \ST code below is executed (cf. \ding{184}).
+The main difference with the previous example is that the \ttt{abs} function takes one integer parameter.
+In this example, the array \ttt{\#(uint abs(int anInteger))} passed as argument to \ttt{\#nbCall:} contains two important information (cf. \ding{185}).
+First, the types annotations such as the return type (\ttt{uint} in both examples) and arguments type (\ttt{int} in this example).
 These types annotations are then used by \NBFFI to automatically do the marshalling between C and \PH values as illustrated by the next example.
 Second, the values to be passed when calling out.
-In this example, \texttt{anInteger} refers to the argument of the \ttt{abs} method, meaning that the value of this variable should be passed to the \texttt{abs} C function.
-Finally, this \texttt{abs} function is looked up in the \texttt{libc} whose an handle is passed in the \texttt{module:} parameter (cf. \ding{186}).
+In this example, \ttt{anInteger} refers to the argument of the \ttt{abs} method, meaning that the value of this variable should be passed to the \ttt{abs} C function.
+Finally, this \ttt{abs} function is looked up in the \ttt{libc} whose an handle is passed in the \ttt{module:} parameter (cf. \ding{186}).
 % A library can be designated either by its file path on disk or its memory address.
 % \begin{stcode}[
 % 	label={lst:abs},
@@ -167,15 +167,15 @@ Finally, this \texttt{abs} function is looked up in the \texttt{libc} whose an h
 	\centering
 	\includegraphics{nativeBoostSyntax}
 	\caption[\NB Basic Method]{Example of the general \NBFFI callout syntax}
-	\figlabel{nativeBoostSyntax}
+	\figlabel{ffi-nativeBoostSyntax}
 \end{figure}
 
 % ---------------------------------------------------------------------------
 \subsection{Automatic Marshalling of Known Types}
 % ---------------------------------------------------------------------------
 
-\lstref{getenv} shows a callout declaration to the \texttt{getenv} function that takes one parameter.
-
+\lstref{getenv} shows a callout declaration to the \ttt{getenv} function that takes one parameter.
+%
 \begin{stcode}[
 	label={lst:getenv},
 	caption={Example of callout to \ttt{getenv}}]{0}
@@ -187,16 +187,16 @@ getenv: name
 		nbCall: #(String getenv(String name)
 		module: NativeBoost CLibrary
 \end{stcode}
-
-In this example, the \NB type specified for the parameter is \texttt{String} instead of \texttt{char*} as specified by the standard \texttt{libc} documentation.
+%
+In this example, the \NB type specified for the parameter is \ttt{String} instead of \ttt{char*} as specified by the standard \ttt{libc} documentation.
 This is on purpose because strings in C are sequences of characters (\ttt{char*}) but they must be terminated with the special character: \cnull.
-Specifying \texttt{String} in the \texttt{\#nbCall:} array will make \NB to automatically do the arguments conversion from \ST strings to C strings (\cnull terminated \texttt{char*}).
+Specifying \ttt{String} in the \ttt{\#nbCall:} array will make \NB to automatically do the arguments conversion from \ST strings to C strings (\cnull terminated \ttt{char*}).
 It means that the string passed will be put in an external C \ttt{char} array and a \cnull character will be added to it at the end.
 This array will be automatically released after the call returned.
 This is an example of automatic memory management of \NB that can also be controlled if needed.
 Obviously, the opposite conversion happens for the returned value and the method returns a \ST String.
 This example shows that \NBFFI accepts literals, local and instance variable names in callout declarations and it uses their type annotation to achieve the appropriate data conversion.
-\tabref{nbPrimitiveTypes} shows the default and automatic data conversions achieved by \NBFFI.
+\tabref{ffi-nbPrimitiveTypes} shows the default and automatic data conversions achieved by \NBFFI.
 
 \begin{table}[hbt]
     \centering
@@ -211,12 +211,12 @@ This example shows that \NBFFI accepts literals, local and instance variable nam
         \ttt{oop}    & \ttt{Object}
     \end{tabular}
     \caption[\NB Primitive Types]{Default \NBFFI mappings between C/primitive types and high-level types.Note that \ttt{oop} is not a real primitive type as no marshalling is applied and the raw pointer is directly exposed to \PH.}
-    \tablabel{nbPrimitiveTypes}
+    \tablabel{ffi-nbPrimitiveTypes}
 \end{table}
-\lstref{setenv} shows another example to callout the \texttt{setenv} function.
-The return value will be converted to a \ST \texttt{Boolean}.
-The two first parameters are specified as \texttt{String} and will be automatically transformed in \ttt{char*} with an ending \cnull character.
-The last parameter is \texttt{1}, a \ST literal value without any type specification and \NB translates it as an \ttt{int} by default.
+\lstref{setenv} shows another example to callout the \ttt{setenv} function.
+The return value will be converted to a \ST \ttt{Boolean}.
+The two first parameters are specified as \ttt{String} and will be automatically transformed in \ttt{char*} with an ending \cnull character.
+The last parameter is \ttt{1}, a \ST literal value without any type specification and \NB translates it as an \ttt{int} by default.
 
 \begin{stcode}[
 	label={lst:setenv},
@@ -232,8 +232,8 @@ setenv: name value: value
 		module: NativeBoost CLibrary
 \end{stcode}
 
-Another interesting example of automatic marshalling is to define the \ttt{abs} method (cf. \figref{nativeBoostSyntax}) in the \ttt{SmallInteger} class and passing \texttt{self} as argument in the callout.
-In such case, \NB automatically converts \texttt{self} (which is a \ttt{SmallInteger}) into an \texttt{int}.
+Another interesting example of automatic marshalling is to define the \ttt{abs} method (cf. \figref{ffi-nativeBoostSyntax}) in the \ttt{SmallInteger} class and passing \ttt{self} as argument in the callout.
+In such case, \NB automatically converts \ttt{self} (which is a \ttt{SmallInteger}) into an \ttt{int}.
 This list of mapping is not exhaustive and \NB also supports the definition of new data types and new conversions into more complex C types such as structures (cf. \secref{ffi-internals}).
 
 
@@ -248,7 +248,7 @@ C-managed struct 	&  C heap  	    & fixed    & passed by reference & must be fre
 & & & or passed by copy & costly\\
     \end{tabular}
     \caption{Wrapping structures possibilities in \NB}
-    \tablabel{wrappingstruct}
+    \tablabel{ffi-wrappingstruct}
 \end{table}
 
 
@@ -261,10 +261,10 @@ The strength of language-side FFIs appears when it comes to do callouts with new
 \NBFFI supports different possibilities to interact with new types.
 
 \paragraph{Declaring structures.}
-For example, the Cairo library\footnote{\url{http://cairographics.org}} provides complex structures such as \texttt{cairo\_surface\_t} and functions to manipulate this data type. % which makes field access useless.
+For example, the Cairo library\footnote{\url{http://cairographics.org}} provides complex structures such as \ttt{cairo\_surface\_t} and functions to manipulate this data type. % which makes field access useless.
 \lstref{AthensCairoSurface} shows how to write a regular \ST class to wrap a C structure.
-\NB only requires a class-side method named \texttt{asNBExternalType:} that describes how to marshall this type back and forth from native code.
-In this example, we use existing marshalling mechanism defined in \texttt{NBExternalObjectType} that just copies the structure's pointer and stores it in an instance variable named \ttt{handle}.
+\NB only requires a class-side method named \ttt{asNBExternalType:} that describes how to marshall this type back and forth from native code.
+In this example, we use existing marshalling mechanism defined in \ttt{NBExternalObjectType} that just copies the structure's pointer and stores it in an instance variable named \ttt{handle}.
 
 \begin{stcode}[
 	label={lst:AthensCairoSurface},
@@ -278,9 +278,9 @@ AthensCairoSurface class>>asNBExternalType: gen
 \end{stcode}
 
 \paragraph{Callout with structures.}
-\lstref{calloutOpaqueStruct} shows a callout definition to the \texttt{cairo\_image\_surface\_create} function that returns a \ttt{cairo\_surface\_t*} data type.
-In this code example, the return type is \texttt{AthensCairoSurface} directly (not a pointer).
-When returning from this callout, \NB creates an instance of \texttt{AthensCairoSurface} and the marshalling mechanism  stores the returned address in the \texttt{handle} instance variable of this object.
+\lstref{calloutOpaqueStruct} shows a callout definition to the \ttt{cairo\_image\_surface\_create} function that returns a \ttt{cairo\_surface\_t*} data type.
+In this code example, the return type is \ttt{AthensCairoSurface} directly (not a pointer).
+When returning from this callout, \NB creates an instance of \ttt{AthensCairoSurface} and the marshalling mechanism  stores the returned address in the \ttt{handle} instance variable of this object.
 
 \begin{stcode}[
 	label={lst:calloutOpaqueStruct},
@@ -296,7 +296,7 @@ primImage: aFormat width: aWidth height: aHeight
 									int aHeight) )
 \end{stcode}
 
-Conversely, passing an \texttt{AthensCairoSurface} object as a parameter in a callout makes its pointer stored in its \texttt{handle} iv (cf. \lstref{calloutOpaqueStructParameter}) to be passed.
+Conversely, passing an \ttt{AthensCairoSurface} object as a parameter in a callout makes its pointer stored in its \ttt{handle} iv (cf. \lstref{calloutOpaqueStructParameter}) to be passed.
 Since the parameter type is \ttt{AthensCairoSurface} in the callout definition, \NB also ensures that the passed object is really an instance of this class.
 If it is not, the callout fails before executing the external function because passing it an address on a non-expected data could lead to unpredicted behavior.
 
@@ -316,7 +316,7 @@ primCreate: cairoSurface
 \paragraph{Accessing structure fields.}
 In \NB, one can directly access the fields of a structure if needed, even if it is not a good practice from the data encapsulation point of view.
 Nevertheless, it may be mandatory to interact with some native libraries that do not provide all the necessary functions to manipulate the structure.
-\lstref{cairo_c_definition} shows an example of a C struct type definition for \texttt{cairo\_matrix\_t}.
+\lstref{cairo_c_definition} shows an example of a C struct type definition for \ttt{cairo\_matrix\_t}.
 
 \begin{ccode}[
 	label={lst:cairo_c_definition},
@@ -328,13 +328,13 @@ typedef struct {
 } cairo_matrix_t;
 \end{ccode}
 
-\lstref{AthensCairoMatrix} shows that the \texttt{NBExternalStructure} of \NBFFI can be subclassed to define new types such as \texttt{AthensCairoMatrix}.
-The description of the fields (types and names) of this structure is provided by the \texttt{fieldsDesc} method on the class side.
+\noindent \lstref{AthensCairoMatrix} shows that the \ttt{NBExternalStructure} of \NBFFI can be subclassed to define new types such as \ttt{AthensCairoMatrix}.
+The description of the fields (types and names) of this structure is provided by the \ttt{fieldsDesc} method on the class side.
 Given this description, \NB lazily generates field accessors on the instance side using the field names.
 
 \begin{stcode}[
 	label={lst:AthensCairoMatrix},
-	caption={Example of \NBFFI definition of an \texttt{ExternalStructure}}]{0}
+	caption={Example of \NBFFI definition of an \ttt{ExternalStructure}}]{0}
 NBExternalStructure
     variableByteSubclass: #AthensCairoMatrix.
 
@@ -344,9 +344,9 @@ AthensCairoMatrix class>>fieldsDesc
 		  double x; double y;  )
 \end{stcode}
 
-\lstref{cairoCallouts} shows a callout definition to the
- \texttt{cairo\_matrix\_multiply} function passing \texttt{self} as argument with the type \ttt{AthensCairoMatrix*}.
-\NB handles the marshalling of this object to a struct as defined in the \texttt{fieldsDesc}.
+\noindent \lstref{cairoCallouts} shows a callout definition to the
+ \ttt{cairo\_matrix\_multiply} function passing \ttt{self} as argument with the type \ttt{AthensCairoMatrix*}.
+\NB handles the marshalling of this object to a struct as defined in the \ttt{fieldsDesc}.
 % The interesting point is that the called function \ttt{cairo\_matrix\_multiply} stores its result in the first argument i.e. the receiver object.
 
 \begin{stcode}[
@@ -370,7 +370,7 @@ AthensCairoMatrix>>primMultiplyBy: m
 
 
 \paragraph{Memory management of structures.}
-\tabref{wrappingstruct} shows a comparison between C-managed and \PH-managed structures.
+\tabref{ffi-wrappingstruct} shows a comparison between C-managed and \PH-managed structures.
 The first ones are allocated in the C heap.
 Their addresses are fixed and they are passed by reference during a callout.
 But the programmer must free them by hand when they are not needed.
@@ -484,9 +484,9 @@ This is done automatically using object finalization hooks..
 This section provides an overview of the internal machinery of \NBFFI though it is not mandatory to know it in order to use it as demonstrated by previous examples.
 
 \paragraph{General Architecture.}
-\figref{nbArchitecture} describes the general architecture of \NB.
+\figref{ffi-nbArchitecture} describes the general architecture of \NB.
 Most code resides at language-side, nevertheless some generic extensions (primitives) to the VM are necessary to activate native code.
-At language-side, callouts are declared with \NBFFI which processes them and dynamically generates x86 native code using the \texttt{AsmJit} library.
+At language-side, callouts are declared with \NBFFI which processes them and dynamically generates x86 native code using the \ttt{AsmJit} library.
 This native code is responsible of the marshalling and calling the external function.
 \NB then uses a primitive to activate this native code.
 
@@ -494,7 +494,7 @@ This native code is responsible of the marshalling and calling the external func
 	\centering
 	\includegraphics[scale=1.1]{nbArchitecture}
 	\caption[\NB Components Layering]{\NB main components that major part of the code resides at language-side.}
-	\figlabel{nbArchitecture}
+	\figlabel{ffi-nbArchitecture}
 \end{figure}
 
 % General \FFI overview and difference of NB
@@ -502,11 +502,11 @@ This native code is responsible of the marshalling and calling the external func
 	\centering
 	\includegraphics[width=\textwidth]{ffiOverview}
 	\caption[\FFI Implementation Comparison]{Comparison of \FFI calls propagation in \NBFFI and a typical VM plugin-based implementation. \NB resorts to VM-level only for the native-code activation, whereas typical implementations cross this barrier much earlier.}
-	\figlabel{ffi}
+	\figlabel{ffi-ffi}
 \end{figure*}
 
 \paragraph{Callout propagation.}
-\figref{ffi} shows a comparison of the resolution of a \FFI call both in \NBFFI and a plugin-based \FFI.
+\figref{ffi-ffi} shows a comparison of the resolution of a \FFI call both in \NBFFI and a plugin-based \FFI.
 At step 1, a \FFI call is emitted.
 The \NBFFI call is mostly processed at language-side and it is only during step 4 that a primitive is called and the VM effectively does the external call by executing the native code.
 On the opposite, a plugin-based \FFI call already crossed the low-level frontier in step 2 resulting that part of the type conversion process (marshalling) is already done in the VM code.
@@ -526,12 +526,12 @@ In this section we compare \NB with other \FFI implementations.
 
 \paragraph{Choice of \FFI Implementations.}
 To evaluate \NB we explicitly target \FFI implementations running on the same platform, hence we can rule out additional performance differences.
-Alien and C-FFI run in the same \PH image as \NB allowing a much closer comparison.
+\Alien and C-\FFI run in the same \PH image as \NB allowing a much closer comparison.
 
 \Alien \FFI is implemented almost completely at language-side, much like \NB.
 However, as the following benchmarks will stress, it also suffers from performance loss.
 
-On the other end there is C-FFI which is faster than \Alien but by far not as flexible.
+On the other end there is C-\FFI which is faster than \Alien but by far not as flexible.
 For instance only primitive types are handled directly.
 
 As the third implementation we chose \Lua.
@@ -570,12 +570,12 @@ The C function takes no argument and returns an integer thus guaranteeing a mini
     \begin{tabular}{rlr}
                     & Call Time                         & Relative Time \\\midrule
         \NB         & \ttt{492.13} $\pm$ \ttt{0.73} ms  & $1.0 \times$ \\
-        Alien       & \ttt{606.6 } $\pm$ \ttt{1.9 } ms  & $\approx 1.2\times$ \\
-        C-FFI       & \ttt{541.77} $\pm$ \ttt{0.88} ms  & $\approx 1.1\times$ \\
-        LuaJIT      & \ttt{343.0 } $\pm$ \ttt{1.2 } ms  & $\approx 0.7\times$
+        \Alien       & \ttt{606.6 } $\pm$ \ttt{1.9 } ms  & $\approx 1.2\times$ \\
+        C-\FFI       & \ttt{541.77} $\pm$ \ttt{0.88} ms  & $\approx 1.1\times$ \\
+        \LuaJIT      & \ttt{343.0 } $\pm$ \ttt{1.2 } ms  & $\approx 0.7\times$
     \end{tabular}
     \caption{Speed comparison of an \ttt{uint clock(void)} \FFI call (see Code~\lstref{clock}).}
-    \tablabel{performance-clock}
+    \tablabel{ffi-performance-clock}
 \end{table}
 %
 \noindent \ttt{abs} is a about the same complexity as the \ttt{clock} function, however accepting a single integer as argument.
@@ -585,22 +585,22 @@ The C function takes no argument and returns an integer thus guaranteeing a mini
     \begin{tabular}{rlr}
                     & Call Time                           & Relative Time \\\midrule
         \NB         & \ttt{ 65.34 } $\pm$ \ttt{0.23 } ms  & $1.00 \times$ \\
-        Alien       & \ttt{175.77 } $\pm$ \ttt{0.31 } ms  & $\approx 2.69\times$ \\
-        C-FFI       & \ttt{148.77 } $\pm$ \ttt{0.21 } ms  & $\approx 2.27\times$ \\
-        LuaJIT\tablefootnote{Downsampled from increased loop size by a factor $100$ to guarantee accuracy.}
+        \Alien       & \ttt{175.77 } $\pm$ \ttt{0.31 } ms  & $\approx 2.69\times$ \\
+        C-\FFI       & \ttt{148.77 } $\pm$ \ttt{0.21 } ms  & $\approx 2.27\times$ \\
+        \LuaJIT\tablefootnote{Downsampled from increased loop size by a factor $100$ to guarantee accuracy.}
                     & \ttt{  }\ttt{  2.035} $\pm$ \ttt{0.015} ms  & $\approx 0.03\times$
     \end{tabular}
-    \caption{Speed comparison of an \ttt{int abs(int i)} \FFI call (see \figref{nativeBoostSyntax}).}
-    \tablabel{performance-abs}
+    \caption{Speed comparison of an \ttt{int abs(int i)} \FFI call (see \figref{ffi-nativeBoostSyntax}).}
+    \tablabel{ffi-performance-abs}
 \end{table}
 
 
 \paragraph{Evaluation.}
 For measuring the calling overhead we chose the \ttt{abs} \FFI callout.
 This C function is completed in a couple of instructions which in comparison to the conversion and activation effort of the \FFI callout is negligible.
-In \tabref{performance-abs} we see that \NB is at least a factor two faster than the other \ST implementation.
-Yet LuaJIT outperform \NB by an impressive factor 30.
-LuaJIT has a really close integration with the \JIT and this is what makes the impressive \FFI callout results possible.
+In \tabref{ffi-performance-abs} we see that \NB is at least a factor two faster than the other \ST implementation.
+Yet \LuaJIT outperform \NB by an impressive factor 30.
+\LuaJIT has a really close integration with the \JIT and this is what makes the impressive \FFI callout results possible.
 
 
 % ---------------------------------------------------------------------------
@@ -615,13 +615,13 @@ Both argument and result have to be converted from high-level strings to C-level
     \begin{tabular}{rlr}
                     & Call Time                          & Relative Time \\\midrule
         \NB         & \ttt{ 105.29} $\pm$ \ttt{0.24} ms  & $1.0 \times$ \\
-        Alien       & \ttt{1058.7 } $\pm$ \ttt{2.0 } ms  & $\approx 10.1\times$ \\
-        C-FFI       & \ttt{ 282.94} $\pm$ \ttt{0.24} ms  & $\approx 2.7\times$ \\
-        LuaJIT\tablefootnote{Downsampled from increased loop size by a factor $10$ to guarantee accuracy.}
+        \Alien      & \ttt{1058.7 } $\pm$ \ttt{2.0 } ms  & $\approx 10.1\times$ \\
+        C-\FFI      & \ttt{ 282.94} $\pm$ \ttt{0.24} ms  & $\approx 2.7\times$ \\
+        \LuaJIT\tablefootnote{Downsampled from increased loop size by a factor $10$ to guarantee accuracy.}
                     & \ttt{ }\ttt{ 97.3 } $\pm$ \ttt{5.1 } ms  & $\approx 0.9\times$
     \end{tabular}
     \caption{Speed comparison of an \ttt{char * getenv(char *name)} \FFI call (see Code \lstref{getenv}).}
-    \tablabel{performance-getenv}
+    \tablabel{ffi-performance-getenv}
 \end{table}
 
 \noindent As a last evaluation of simple C functions with \NB, we call \ttt{printf} with a string and two integers as argument.
@@ -634,19 +634,19 @@ Hence the relative overhead of an \FFI call is reduced.
     \begin{tabular}{rlr}
                     & Call Time                          & Relative Time \\\midrule
         \NB         & \ttt{ 371.03} $\pm$ \ttt{0.51} ms  & $1\times$ \\
-        Alien       & \ttt{1412.37} $\pm$ \ttt{0.79} ms  & $\approx 3.8\times$ \\
-        C-FFI       & \ttt{ 605.02} $\pm$ \ttt{0.23} ms  & $\approx 1.6\times$ \\
-        LuaJIT      & \ttt{ 202.4 } $\pm$ \ttt{2.1 } ms  & $\approx 0.6\times$
+        \Alien      & \ttt{1412.37} $\pm$ \ttt{0.79} ms  & $\approx 3.8\times$ \\
+        C-\FFI      & \ttt{ 605.02} $\pm$ \ttt{0.23} ms  & $\approx 1.6\times$ \\
+        \LuaJIT     & \ttt{ 202.4 } $\pm$ \ttt{2.1 } ms  & $\approx 0.6\times$
     \end{tabular}
     \caption{Speed comparison of an \ttt{int printf(char *name, int num1, int num2)} \FFI call}
-    \tablabel{performance-printf}
+    \tablabel{ffi-performance-printf}
 \end{table}
 
 \paragraph{Evaluation.}
-\tabref{performance-clock} and \tabref{performance-abs} call C functions that return integers for which the conversion overhead is comparably low.
-However we see that Alien compares worse in the case of more complex Strings.
-\tabref{performance-getenv} and \tabref{performance-printf} show this behavior.
-For the \ttt{getenv} a comparably long string is returned which causes a factor 10 conversion overhead for Alien.
+\tabref{ffi-performance-clock} and \tabref{ffi-performance-abs} call C functions that return integers for which the conversion overhead is comparably low.
+However we see that \Alien compares worse in the case of more complex Strings.
+\tabref{ffi-performance-getenv} and \tabref{ffi-performance-printf} show this behavior.
+For the \ttt{getenv} a comparably long string is returned which causes a factor 10 conversion overhead for \Alien.
 
 
 % ---------------------------------------------------------------------------
@@ -655,29 +655,29 @@ For the \ttt{getenv} a comparably long string is returned which causes a factor 
 
 To evaluate the impact of marshalling complex types, we measure the execution time for a callout to \ttt{cairo\_matrix\_multiply}.
 In all cases, the allocation time of the structs is not included in the measurement nor their field assignments.
-\tabref{performance-structs} shows the results.
+\tabref{ffi-performance-structs} shows the results.
 
 \begin{table}[h!]
     \centering
     \begin{tabular}{rlr}
                     & Call Time                         & Relative Time \\\midrule
         \NB         & \ttt{ 79.00} $\pm$ \ttt{0.27} ms  & $1.0\times$ \\
-        Alien       & \ttt{753.82} $\pm$ \ttt{0.51} ms  & $\approx 9.5\times$ \\
-        C-FFI       & \ttt{380.8 } $\pm$ \ttt{2.7 } ms  & $\approx 3.6\times$ \\
-        LuaJIT      & \ttt{ }\ttt{ 5.66} $\pm$ \ttt{0.15} ms  & $\approx 0.07\times$
+        \Alien      & \ttt{753.82} $\pm$ \ttt{0.51} ms  & $\approx 9.5\times$ \\
+        C-\FFI      & \ttt{380.8 } $\pm$ \ttt{2.7 } ms  & $\approx 3.6\times$ \\
+        \LuaJIT     & \ttt{ }\ttt{ 5.66} $\pm$ \ttt{0.15} ms  & $\approx 0.07\times$
     \end{tabular}
     \caption{Speed comparison of an \ttt{cairo\_matrix\_multiply} \FFI call (cf. \lstref{cairoCallouts})}
- 	\tablabel{performance-structs}
+ 	\tablabel{ffi-performance-structs}
 \end{table}
 
 \paragraph{Evaluation.}
-In \tabref{performance-structs} shows that \NB outperforms the two other \ST implementations.
+In \tabref{ffi-performance-structs} shows that \NB outperforms the two other \ST implementations.
 
 % ---------------------------------------------------------------------------
 \subsection{Callbacks}
 % ---------------------------------------------------------------------------
 
-\tabref{performance-qsort} shows a comparison of \texttt{qsort} callouts passing callbacks.
+\tabref{ffi-performance-qsort} shows a comparison of \ttt{qsort} callouts passing callbacks.
 Callbacks are usually much more slower than callouts.
 
 \begin{table}[H]
@@ -685,26 +685,26 @@ Callbacks are usually much more slower than callouts.
     \begin{tabular}{rlr}
                     & Call Time                          & Rel. Time \\ \midrule
         \NB         & \ttt{2300.0 } $\pm$ \ttt{1.1 } ms  & $ 1.0 \times$ \\
-        Alien       & \ttt{ 600.83} $\pm$ \ttt{0.35} ms  & $\approx 0.26 \times$ \\
-        C-\FFI       & NA  & NA \\
-        LuaJIT      & \ttt{ }\ttt{ 46.13} $\pm$ \ttt{0.62} ms  & $\approx 0.02 \times$\\
+        \Alien      & \ttt{ 600.83} $\pm$ \ttt{0.35} ms  & $\approx 0.26 \times$ \\
+        C-\FFI      & NA                                 & NA \\
+        \LuaJIT     & \ttt{ }\ttt{ 46.13} $\pm$ \ttt{0.62} ms  & $\approx 0.02 \times$\\
 		\cmidrule(r){2-3}
 	\NB \small{with}\\
 	   \small{Native Callbacks}    & \ttt{ }\ttt{ }\ttt{ 4.98} $\pm$ \ttt{0.21} ms  & $\approx 0.002 \times$
     \end{tabular}
     \caption{Speed comparison of a \ttt{qsort} \FFI call (cf. \lstref{calloutWithCallback})}
- 	\tablabel{performance-qsort}
+ 	\tablabel{ffi-performance-qsort}
 \end{table}
 
 
 \paragraph{Evaluation.}
-The results show that \NB callbacks are currently slower than Alien's ones.
-This is because Alien relies on specific VM support for callbacks making their activation faster (context creation and stack pages integration).
+The results show that \NB callbacks are currently slower than \Alien's ones.
+This is because \Alien relies on specific VM support for callbacks making their activation faster (context creation and stack pages integration).
 On the opposite, \NB currently uses small support from the VM side and even do part of the work at image side.
 This \ttt{qsort} demonstrates the worst case because it implies a lot of activations of the callback.
 For each of these calls, \NB creates a context and make the VM switch to it.
-To really demonstrate that these context switches are the bottleneck, \tabref{performance-qsort} also shows the result of doing the same benchmark in \NB but using a native callback i.e. containing native code.
-We do not argue here that callbacks should be implemented in native code but that \NB support for callback can be optimized to reach Alien's performance at least.
+To really demonstrate that these context switches are the bottleneck, \tabref{ffi-performance-qsort} also shows the result of doing the same benchmark in \NB but using a native callback i.e. containing native code.
+We do not argue here that callbacks should be implemented in native code but that \NB support for callback can be optimized to reach \Alien's performance at least.
 
 % ===========================================================================
 \section{\NBFFI Implementation Details}
@@ -724,14 +724,14 @@ In \NB all code generation happens transparently at language-side.
 The various examples shown in \secref{ffi-nutshell} show how an \FFI callout is defined in a standard method.
 Upon first activation the \NB primitive will fail and by default continues to evaluate the following method body.
 This is the point where \NB generates native code and attaches it to the compiled method.
-\NB then reflectively resends the original message with the original arguments (for instance \ttt{abs:} in the example \figref{nativeBoostSyntax}).
+\NB then reflectively resends the original message with the original arguments (for instance \ttt{abs:} in the example \figref{ffi-nativeBoostSyntax}).
 On the second activation, the native code is present and thus the primitive will no fail but run the native code.
 \secref{ffi-nbPrimitive} will give more internal details about the code activation and triggering of code generation.
 
 % ---------------------------------------------------------------------------
 \paragraph{Generating Assembler Instructions}
 
-\figref{nbArchitecture} shows that \NB relies on AsmJit\footnote{\url{http://smalltalkhub.com/\#!/~Pharo/AsmJit}}, a language-side assembler.
+\figref{ffi-nbArchitecture} shows that \NB relies on AsmJit\footnote{\url{http://smalltalkhub.com/\#!/~Pharo/AsmJit}}, a language-side assembler.
 AsmJit emerged from an existing C++ implementation\footnote{\url{https://code.google.com/p/asmjit/}} and currently supports the x86 instruction set.
 
 In fact it is even possible to inline custom assembler instructions in \PH when using \NB.
@@ -742,7 +742,7 @@ Typically \ST does not excel at algorithmic code since such code does not benefi
 \paragraph{Reflective Symbiosis}
 
 \NB lives in symbiosis with the \PH programming environment.
-As shown in the examples in \secref{ffi-nutshell} and in more detail in \figref{nativeBoostSyntax} \NB detects which method arguments correspond to which argument in the \FFI callout.
+As shown in the examples in \secref{ffi-nutshell} and in more detail in \figref{ffi-nativeBoostSyntax} \NB detects which method arguments correspond to which argument in the \FFI callout.
 To achieve this, \NB inspects the activation context when generating native code.
 Through reflective access to the execution context we can retrieve the method's source code and thus the argument names and positions.
 
@@ -781,13 +781,13 @@ However in certain situations it is required to access a high-level object from 
 	\centering
 	\includegraphics{externalRoots}
 	\caption[\NBFFI External Roots]{Pointers in a \ttt{CompiledMethod} to objects registered as external roots are pinpointed at fixed offset in global VM-level object.}
-	\figlabel{externalRoots}
+	\figlabel{ffi-externalRoots}
 \end{figure}
 
 To deal with this problem the VM has a special array at a known address that contains pointers to high-level objects.
 The garbage collector keeps this external roots array up to date.
 Hence it is possible to statically refer to a \PH object using a double indirection over the external roots.
-\figref{externalRoots} visualizes how native code directly accesses \PH objects through this indirection.
+\figref{ffi-externalRoots} visualizes how native code directly accesses \PH objects through this indirection.
 
 
 % ---------------------------------------------------------------------------
@@ -821,15 +821,15 @@ Hence the heap has to be executable in order to jump to the native instructions.
 In \secref{ffi-generating} we explained how \NB creates \FFI callouts at language-side.
 However, so far we left out the part on how the generated native code is activated.
 
-The examples in \secref{ffi-nutshell}, especially \figref{nativeBoostSyntax} show that each \NBFFI callout requires a special primitive.
-\figref{nativeCodeActivation} shows how a \NB method is activated.
+The examples in \secref{ffi-nutshell}, especially \figref{ffi-nativeBoostSyntax} show that each \NBFFI callout requires a special primitive.
+\figref{ffi-nativeCodeActivation} shows how a \NB method is activated.
 
 
 \begin{figure}[h]
 	\centering
 	\includegraphics[scale=1.1]{nativeCodeActivation}
 	\caption[\NB Native Code Activation]{\todo{Add Primitive Failure Arrow}Native code activation. The first call triggers the code generation. Then the method is restarted and the native code executed.}
-	\figlabel{nativeCodeActivation}
+	\figlabel{ffi-nativeCodeActivation}
 \end{figure}
 
 \begin{itemize}
@@ -922,7 +922,7 @@ Even though \NB shows good overall performance when it comes to callbacks it doe
 In the current development phase not much attention was payed to callback performance as it is not a common use case for \FFI callouts.
 Fast callbacks require close interaction and specific modifications at VM-level.
 However, initially \NB kept the modifications to the VM at a minimum.
-We assume that we can reach the same performance as Alien relying on the same low-level implementation.
+We assume that we can reach the same performance as \Alien relying on the same low-level implementation.
 
 As a second issue we would like to address the callout overhead by using an already existing \JIT integration of \NB.
 Currently the VM has to leave from \JIT-mode to standard interpretation mode when it activates an \NB method.
