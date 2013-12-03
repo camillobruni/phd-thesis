@@ -306,7 +306,7 @@
               \vss
              }%
          }\par
-    \newpage
+    %\newpage
     \if@twoside
        \thispagestyle{empty}
        \hbox{}
