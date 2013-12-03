@@ -347,11 +347,11 @@ Hence \Slang's semantics are closer to C than to \ST.
 
 The primitives of the VM are written in \Slang and that is why even in a highly reflective languages such as \ST, where almost every aspect of the language is available for inspection and modification \cite{Denk10a}, primitives can not be changed at runtime. They can only be intercepted with reflective techniques with considerable performance overheads.
 This is an important limitation since primitives are, in general, performance demanding components.
-Waterfall~\cite{Char13a}\footnote{\url{http://lafhis.dc.uba.ar/waterfall/}} is a tool that allows developers to change the code written in \Slang for primitives and translate it to native code at runtime.
+\WF~\cite{Char13a}\footnote{\url{http://lafhis.dc.uba.ar/waterfall/}} is a tool that allows developers to change the code written in \Slang for primitives and translate it to native code at runtime.
 This replaces the indirection via C that is used in the default compilation process.
-Given that \Slang source code can be modified at runtime as any other \ST method, Waterfall fosters primitives to be dynamically adapted without imposing the common pure reflective techniques performance degradation.
+Given that \Slang source code can be modified at runtime as any other \ST method, \WF fosters primitives to be dynamically adapted without imposing the common pure reflective techniques performance degradation.
 
-From a high-level point of view Waterfall provides two services which work transparently: 
+From a high-level point of view \WF provides two services which work transparently: 
 %
 \begin{enumerate}
 	\item Compilation of \Slang code on demand (lazily).
@@ -364,7 +364,7 @@ It consists essentially of a transformation toolchain that uses the AST that is 
 Then this AST representation is translated to native code enforcing C-like \Slang semantics. The current prototype has only three fully implemented stages: \Slang to AST, AST to an IR (between TAC and SSA) and finally AST or IR to native. The design is open for future additions at any level. One typical enhancement missing is having different levels of intermediate representations with various techniques on code optimization and register allocation strategies as modern compilers propose \cite[Ch.\ 1]{Appe98a}. 
 The second item enables the execution of the dynamically generated native code.
 This includes for instance the finding of addresses of VM internal symbols and all the effort to link the two worlds, \ST and native.
-Waterfall relies on \B for most of this low-level functionality.
+\WF relies on \B for most of this low-level functionality.
 In particular \NB, the \B-based FFI presented in \secref{benzo-ffi}, is used for interfacing with C libraries (\ttt{dlsym}). 
 
 \paragraph{Primitives in \ST.}
@@ -376,8 +376,8 @@ Essential primitives are required for the bootstrapping and the essential operat
 The second category of primitives are mainly used for optimization purposes.
 
 \paragraph{Dynamically Interchangeable Primitives.}
-Waterfall uses \B's mechanism for replacing primitive methods with customized versions that are nativized dynamically as described in \secref{benzo-benzo}.
-The loophole described there is exploited by Waterfall to enable dynamic modification of VM behavior and hence bring primitives to life at language-side.
+\WF uses \B's mechanism for replacing primitive methods with customized versions that are nativized dynamically as described in \secref{benzo-benzo}.
+The loophole described there is exploited by \WF to enable dynamic modification of VM behavior and hence bring primitives to life at language-side.
 
 
 %----------------------------------------------------------------------------
@@ -392,14 +392,14 @@ We identified two main benefits of changing VM primitives at runtime:
 \paragraph{Reducing VM Complexity.}
 VM extensions are only justified in the presence of strong performance requirements (see \secref{benzo-related}).
 All non-essential primitives fall into this category.
-Using Waterfall, these primitives can be implemented at language-side.
+Using \WF, these primitives can be implemented at language-side.
 This means that these primitives become first-class citizens of the high-level environment and thus evolve with less effort.
 
 \paragraph{Essential Primitives.}
 For essential primitives the previous argument does not hold since a static version is needed for a correct startup of the system.
-These primitives can not be fully replace by a language-side implementation using Waterfall.
+These primitives can not be fully replace by a language-side implementation using \WF.
 For instance, essential primitives are required for system startup.
-They would trigger an endless recursion when booting up the system and trying to generate them using Waterfall at the same time.
+They would trigger an endless recursion when booting up the system and trying to generate them using \WF at the same time.
 However, nothing prevents from replacing essential primitives at runtime with customized versions, once the system startup is completed. 
 
 \paragraph{Why do we need better instrumentation?}
@@ -408,17 +408,17 @@ An example of this behavior, can be observed when changing the essential \ttt{ba
 Even a very simple instrumentation task such as printing the address in memory of the created object is problematic.
 If during the printing process another object is created the very same instrumented \ttt{basicNew} primitive would be triggered.
 Using reflective techniques it is possible to avoid this loop, however, with a considerable overhead.
-With Waterfall we can forget about these issues since the instrumentation code will be implemented at the lowest level.
-On section \secref{benzo-wf-performance} we show how Waterfall, the \B based approach for generating primitives on the fly, outperforms the reflective solutions for primitives instrumentation. 
+With \WF we can forget about these issues since the instrumentation code will be implemented at the lowest level.
+On section \secref{benzo-wf-performance} we show how \WF, the \B based approach for generating primitives on the fly, outperforms the reflective solutions for primitives instrumentation. 
 
 
 %----------------------------------------------------------------------------
-\paragraph{Waterfall Future.}
+\paragraph{\WF Future.}
 \todo{move to separate section in the validation chapter}
-Currently Waterfall reimplements all \Slang arithmetic essential operations statically as native code templates.
+Currently \WF reimplements all \Slang arithmetic essential operations statically as native code templates.
 The existing JIT of the \PH VM does exactly the same for performance reasons.
 This is code duplication and should be avoided.
-With the language-side JIT compiler described on next section we can reuse the same code. Another plan for Waterfall is to use it for disconnecting most plugins defined at \Slang side from the VM compilation process and dynamically nativize them on a lazy approach.
+With the language-side JIT compiler described on next section we can reuse the same code. Another plan for \WF is to use it for disconnecting most plugins defined at \Slang side from the VM compilation process and dynamically nativize them on a lazy approach.
 Finally, adding stages to the compiler with different levels of intermediate representations and applying optimizations to each would bring its performance closer to completely low-level optimized primitives.
 
 
@@ -427,7 +427,7 @@ Finally, adding stages to the compiler with different levels of intermediate rep
 \seclabel{benzo-nabujito}
 %----------------------------------------------------------------------------
 In this section we present Nabujito, a \B-based approach for a language-side JIT compiler.
-Nabujito goes even further than Waterfall using almost the same techniques.
+Nabujito goes even further than \WF using almost the same techniques.
 However, instead of focusing on primitives, Nabujito generates native executable code for standard \ST methods.
 Primitives tend to be more low-level, whereas Nabujito focuses on high-level \ST code. 
 
@@ -471,7 +471,7 @@ Since in \PH, compiling a method to bytecode is handled completely with language
 The existing JIT reimplements the most used primitives at VM-level.
 This guarantees that the VM stays as long as possible in the JIT context (see \secref{benzo-jit-interaction}). Additionally this enables new performance optimizations that for instance are hard to achieve with standard compliant C code.
 A typical example is the integer addition which has to deal with overflow checks and conversion of tagged integers.
-In \secref{benzo-waterfall} we describe how Waterfall suffers a similar constraint. Waterfall manually defines such primitives in terms of native assembler instructions through the language-side \B interface.
+In \secref{benzo-waterfall} we describe how \WF suffers a similar constraint. \WF manually defines such primitives in terms of native assembler instructions through the language-side \B interface.
 Nabujito reuses the same optimized primitives so we rely on a single optimized definition which is shared amongst all native code libraries.
 
 %----------------------------------------------------------------------------
@@ -490,7 +490,7 @@ Nabujito relies on the following VM-level infrastructure to manage and run nativ
 
 \paragraph{Dynamic Code Generation.}
 %To simplify the implementation we decide to manually trigger JIT compilation.
-%For primitives known by Waterfall we rely on that infrastructure to generate the native code.
+%For primitives known by \WF we rely on that infrastructure to generate the native code.
 For standard methods Nabujito takes the bytecodes and transforms them to native code.
 It also applies optimizations such as creating low-level branches for \ST level branching operations like \ttt{ifTrue:}.
 Optimizations for additional methods are all implemented flexibly at language-side.
@@ -565,7 +565,7 @@ The JIT interaction described in \secref{benzo-jit-interaction} is also an impor
 \seclabel{benzo-wf-performance}
 
 For comparing performance we implement a very simple integer operation primitive (\ttt{$>$}) using three different approaches.
-The first approach is the implementation with Waterfall.
+The first approach is the implementation with \WF.
 The second is to run the language-side implementation that is triggered whenever the standard primitive failed.
 Finally the fast standard primitive provided by the VM.
 We run the three approaches by measuring the cumulative time over one million primitive activations averaged over 100 runs.
@@ -577,18 +577,18 @@ We present the results of this experiment in Table~\tabref{benzo-waterfall-perfo
     \begin{tabular}{rrr}
 					& Running Time 						& Relative Time \\\midrule
 		VM			& \ttt{  6.4}  $\pm$ \ttt{0.14} ms & $1.0\times$\\
-		Waterfall	& \ttt{ 22.8}  $\pm$ \ttt{0.17} ms & $\approx3.6\times$\\
+		\WF	& \ttt{ 22.8}  $\pm$ \ttt{0.17} ms & $\approx3.6\times$\\
         Reflective	& \ttt{195.0}  $\pm$ \ttt{0.16} ms & $\approx30.0\times$
     \end{tabular}
     \caption[Basic \B-based Dynamic Primitive Performance]{Comparing running time of different implementations of integer arithmetic primitive.}
     \tablabel{benzo-waterfall-performance}
 \end{table}
 %
-As expected Waterfall's solution outperforms pure reflective one by factor $9$ to $10$.
-Waterfall clearly outperforms a purely reflective solution since all the meta programming overhead for the intercession mechanism is avoided. This results thus makes a whole new set of runtime extensions feasible that were previously limited by their strong performance penalty.
+As expected \WF's solution outperforms pure reflective one by factor $9$ to $10$.
+\WF clearly outperforms a purely reflective solution since all the meta programming overhead for the intercession mechanism is avoided. This results thus makes a whole new set of runtime extensions feasible that were previously limited by their strong performance penalty.
 Furthermore the performance penalty over a completely optimized VM solution that has extreme optimization techniques, such as inlining and register allocation, is less than a factor of $4$.
-Applying standard optimization techniques, not yet implemented in Waterfall, will almost sure improve these numbers even more.
-A more detailed analysis of Waterfall is available separately \cite{Char13a}.
+Applying standard optimization techniques, not yet implemented in \WF, will almost sure improve these numbers even more.
+A more detailed analysis of \WF is available separately \cite{Char13a}.
 
 % ---------------------------------------------------------------------------
 \subsection{\B-based JIT compiler}
