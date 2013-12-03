@@ -12,7 +12,7 @@
 \seclabel{introduction}
 % ===========================================================================
 
-\todo{Introduction explaining why a different chapter for Nabujito + \WF}
+\todo{Introduction explaining why a different chapter for \NBJ + \WF}
 
 % ===========================================================================
 \section{Nabujito: Language-side JIT}
@@ -24,30 +24,30 @@
 \subsection{Background}
 \seclabel{nabujito-background}
 % ---------------------------------------------------------------------------
-In this section we present Nabujito, a \B-based approach for a language-side JIT compiler.
-Nabujito goes even further than \WF using almost the same techniques.
-However, instead of focusing on primitives, Nabujito generates native executable code for standard \ST methods.
-Primitives tend to be more low-level, whereas Nabujito focuses on high-level \ST code. 
+In this section we present \NBJ, a \B-based approach for a language-side \JIT compiler.
+\NBJ goes even further than \WF using almost the same techniques.
+However, instead of focusing on primitives, \NBJ generates native executable code for standard \ST methods.
+Primitives tend to be more low-level, whereas \NBJ focuses on high-level \ST code. 
 
 
 %----------------------------------------------------------------------------
-\paragraph{The JIT of the Pharo VM.}
-The \PH VM (Cog) already comes with a JIT that translates bytecodes to native instructions.
+\paragraph{The \JIT of the \PH VM.}
+The \PH VM (Cog) already comes with a \JIT that translates bytecodes to native instructions.
 It transforms \ST methods into slightly optimized native code at runtime.
 The main speed improvement comes from avoiding bytecode dispatching and by inlining certain known operations and primitives \cite{Ayco03a}.
-The most complex logic of the JIT infrastructure deals with the dynamic nature of the \ST environment.
-Methods and classes can be changed at runtime and that has to be addressed by the JIT infrastructure.
-The JIT compiler, by which we refer in this context to the transformation of bytecodes to native code, represents a small part of the whole infrastructure.
+The most complex logic of the \JIT infrastructure deals with the dynamic nature of the \ST environment.
+Methods and classes can be changed at runtime and that has to be addressed by the \JIT infrastructure.
+The \JIT compiler, by which we refer in this context to the transformation of bytecodes to native code, represents a small part of the whole infrastructure.
 There exists more important stages as an additional register allocation pass to reduce the number of stack operations \cite{Mira99a,Mira11a}.
-The existing JIT infrastructure is implemented in Slang \cite[Ch.\ 5]{Blac09a} as the rest of the VM.
+The existing \JIT infrastructure is implemented in Slang \cite[Ch.\ 5]{Blac09a} as the rest of the VM.
 
 %----------------------------------------------------------------------------
-\paragraph{Limitations of VM-level JIT Compilers.}
-In the context of Nabujito we separate a JIT infrastructure into separate parts.
+\paragraph{Limitations of VM-level \JIT Compilers.}
+In the context of \NBJ we separate a \JIT infrastructure into separate parts.
 The major part is to have a VM that uses stack-mapping.
 In the case of a bytecode-based interpreter, we assume that the VM provides routines to switch between a bytecode interpretation context and a low-level native execution context.
-With Nabujito we move the JIT compiler,the part that generates native code at runtime, from the VM to the image.%, the part that generates native code at runtime, typically from bytecodes.
- Since the JIT compiler is quite decoupled from the rest of the JIT infrastructure we believe that a hard-coded static and low-level implementation is not optimal for several reasons:
+With \NBJ we move the \JIT compiler,the part that generates native code at runtime, from the VM to the image.%, the part that generates native code at runtime, typically from bytecodes.
+ Since the \JIT compiler is quite decoupled from the rest of the \JIT infrastructure we believe that a hard-coded static and low-level implementation is not optimal for several reasons:
 
 \begin{itemize}
 	\item Optimizing \ST code requires strong interactions with the dynamic environment.
@@ -93,12 +93,12 @@ Nabujito relies on the following VM-level infrastructure to manage and run nativ
 \paragraph{Dynamic Code Generation.}
 To simplify the implementation we decide to manually trigger JIT compilation.
 For primitives known by \WF we rely on that infrastructure to generate the native code.
-For standard methods Nabujito takes the bytecodes and transforms them to native code.
+For standard methods \NBJ takes the bytecodes and transforms them to native code.
 It also applies optimizations such as creating low-level branches for \ST level branching operations like \ttt{ifTrue:}.
 Optimizations for additional methods are all implemented flexibly at language-side.
-Wherever possible, we reimplement the same behavior as the existing native JIT compiler.
+Wherever possible, we reimplement the same behavior as the existing native \JIT compiler.
 Eventually the native code is ready and \B attaches it to the existing compiled method.
-When the language-side jitted code is activated \B ensures that we do not have to leave the JIT execution mode, and thus we can call methods at the same speed as the existing JIT.
+When the language-side jitted code is activated \B ensures that we do not have to leave the \JIT execution mode, and thus we can call methods at the same speed as the existing \JIT.
 The benchmarks of section \secref{nabujito-performance} show the empirical results.
 
 % -----------------------------------------------------------------------------
@@ -106,13 +106,13 @@ The benchmarks of section \secref{nabujito-performance} show the empirical resul
 \seclabel{nabujito-performance}
 % -----------------------------------------------------------------------------
 
-The performance evaluation for our \B-based JIT compiler is focused on the language-side code-generation part.
-Nabujito essentially generates the same native code as the VM-level JIT, hence there is no performance difference at evaluation time.
-However, Nabujito is clearly slower during the warm-up phase.
+The performance evaluation for our \B-based \JIT compiler is focused on the language-side code-generation part.
+\NBJ essentially generates the same native code as the VM-level \JIT, hence there is no performance difference at evaluation time.
+However, \NBJ is clearly slower during the warm-up phase.
 Compilation of the native instructions will take considerably more time compared to the VM-level implementation of the same bytecode to assembler transformation.
 The cost of transforming the bytecodes to native code at VM-level can be measured in native instructions, whereas the unit at language-side is bytecodes.
 However, we point out again, that this is a one-time overhead.
-From the in-production experience of \NB, the \B-based FFI (see \secref{nb-performance}), we know that these costs amortized, especially for long-term applications.
+From the in-production experience of \NB, the \B-based \FFI (see \secref{nb-performance}), we know that these costs amortized, especially for long-term applications.
 Instead of focusing on the final performance of the generated code, we present the compilation time compared to the normal \PH bytecode compiler, which also resides at language-side.
 
 \begin{table}[!ht]
@@ -120,21 +120,21 @@ Instead of focusing on the final performance of the generated code, we present t
     \begin{tabular}{rll}
                       & Compilation Time \\\midrule
         \PH Compiler  & \ttt{71} $\pm$ \ttt{1} ms   \\
-        Nabujito      & \ttt{73} $\pm$ \ttt{1} ms
+        \NBJ      & \ttt{73} $\pm$ \ttt{1} ms
     \end{tabular}
-    \caption[\Nabujito Compilation Speed]{Compilation efforts of the standard \ST compiler in \PH and \Nabujito for the a simple method returning the constant \ttt{nil}.}
+    \caption[\NBJ Compilation Speed]{Compilation efforts of the standard \ST compiler in \PH and \NBJ for the a simple method returning the constant \ttt{nil}.}
     \tablabel{nabujito-performance-small}
 \end{table}
 
-In \tabref{nabujito-performance-small} we compare the compilation speed of the standard \PH compiler and \Nabujito.
+In \tabref{nabujito-performance-small} we compare the compilation speed of the standard \PH compiler and \NBJ.
 We measure the accumulated time spent to compile the method 1000 times.
 The average and deviation are taken over 100 runs. 
 The \PH compiler takes source code as input and outputs \ST bytecodes.
-Nabujito takes bytecodes as input and outputs native code.
+\NBJ takes bytecodes as input and outputs native code.
 
-We see that in the simple case displayed in \tabref{nabujito-performance-small} Nabujito's compilation speed lies within the same range as the standard \ST compiler.
-We expect that in the future we apply more low-level optimizations and thus increase the compilation time of Nabujito.
-However, we have shown in the performance evaluation for \NB, the \B-based FFI, in \secref{nb-performance} that even a rather high one-time overhead is quickly amortized.
+We see that in the simple case displayed in \tabref{nabujito-performance-small} \NBJ's compilation speed lies within the same range as the standard \ST compiler.
+We expect that in the future we apply more low-level optimizations and thus increase the compilation time of \NBJ.
+However, we have shown in the performance evaluation for \NB, the \B-based \FFI, in \secref{nb-performance} that even a rather high one-time overhead is quickly amortized.
 Furthermore with \ST's image approach the generated native code is persistent over several sessions.
 A subsequent restart of the same runtime will not cause the \JIT to nativize the same methods it did during the last launch.
 Hence our approach is even valid for short-timed script-like applications as most of the methods will already be available in optimized native code from a previous run.
@@ -148,7 +148,7 @@ Hence our approach is even valid for short-timed script-like applications as mos
 \paragraph{Debugging Cycle.}
 
 \paragraph{Outlook.}
-One major performance optimization missing in both, the original \PH VM-level \JIT and \Nabujito, is inlining. 
+One major performance optimization missing in both, the original \PH VM-level \JIT and \NBJ, is inlining. 
 By inlining we are able to create methods that are potentially big enough for optimizations.
 However, inlining is a difficult task in a highly dynamic language such as \ST or \Self \cite{Cham89a}. 
 Efficient inlining can only be performed with sufficient knowledge of the system. 
@@ -195,7 +195,7 @@ One typical enhancement missing is having different levels of intermediate repre
 The second item enables the execution of the dynamically generated native code.
 This includes for instance the finding of addresses of VM internal symbols and all the effort to link the two worlds, \ST and native.
 \WF relies on \B for most of this low-level functionality.
-In particular \NB, the \B-based FFI presented in \secref{ffi}, is used for interfacing with C libraries (\ttt{dlsym}). 
+In particular \NB, the \B-based \FFI presented in \secref{ffi}, is used for interfacing with C libraries (\ttt{dlsym}). 
 
 \paragraph{Primitives in \ST.}
 As already partially explained, whenever a method is compiled with the \ttt{primitive} pragma as shown in \secref{vm-interaction} a flag is set on the \ttt{CompiledMethod}. 
@@ -268,7 +268,7 @@ We present the results of this experiment in ~\tabref{waterfall-performance}.
     \begin{tabular}{rrr}
 					& Running Time 						& Relative Time \\\midrule
 		VM			& \ttt{  6.4}  $\pm$ \ttt{0.14} ms & $1.0\times$\\
-		\WF	& \ttt{ 22.8}  $\pm$ \ttt{0.17} ms & $\approx3.6\times$\\
+		\WF	        & \ttt{ 22.8}  $\pm$ \ttt{0.17} ms & $\approx3.6\times$\\
         Reflective	& \ttt{195.0}  $\pm$ \ttt{0.16} ms & $\approx30.0\times$
     \end{tabular}
     \caption[\WF Speed Comparison: Large Integer]{Comparing running time of different implementations of integer arithmetic primitive.}

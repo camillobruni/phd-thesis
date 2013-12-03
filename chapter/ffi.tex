@@ -71,9 +71,9 @@ Both these pitfalls are presented in more detail in \secref{evaluation}.
 
 
 This paper presents \NBFFI\footnote{\url{http://code.google.com/p/nativeboost}} an \FFI library at language-side for \PH that supports callouts and callbacks, which we present in \secref{nutshell}.
-There are at least two other existing \FFI libraries in \PH worth mentioning: C-FFI and Alien.
+There are at least two other existing \FFI libraries in \PH worth mentioning: C-\FFI and \Alien.
 Nevertheless, they both present shortcomings.
-C-FFI is fast because it is mostly implemented at VM-level, however it is limited when it comes to do complex calls that involve non-primitive types or when we want to define new data types.
+C-\sFFI is fast because it is mostly implemented at VM-level, however it is limited when it comes to do complex calls that involve non-primitive types or when we want to define new data types.
 On the opposite, \Alien \FFI is flexible enough to define any kind of data conversion or new types directly at language-side but it is slower than C-\FFI because it is mostly implemented at language-side.
 In essence, \NBFFI combines the flexibility and extensibility of \Alien that uses language-side definition for marshalling and the speed of C-\FFI which is implemented at VM-level.
 The main originalities of \NBFFI are:
@@ -205,7 +205,7 @@ This example shows that \NBFFI accepts literals, local and instance variable nam
         \ttt{char}   & \ttt{Character} \\
         \ttt{oop}    & \ttt{Object}
     \end{tabular}
-    \caption[\NB Primitive Types]{Default \NBFFI mappings between C/primitive types and high-level types. Note that \ttt{oop} is not a real primitive type as no marshalling is applied and the raw pointer is directly exposed to \PH.}
+    \caption[\NB Primitive Types]{Default \NBFFI mappings between C/primitive types and high-level types.Note that \ttt{oop} is not a real primitive type as no marshalling is applied and the raw pointer is directly exposed to \PH.}
     \tablabel{nbPrimitiveTypes}
 \end{table}
 \lstref{setenv} shows another example to callout the \texttt{setenv} function.
@@ -227,7 +227,8 @@ setenv: name value: value
 		module: NativeBoost CLibrary
 \end{stcode}
 
-Another interesting example of automatic marshalling is to define the \ttt{abs} method (cf. \figref{nativeBoostSyntax}) in the \ttt{SmallInteger} class and passing \texttt{self} as argument in the callout. In such case, \NB automatically converts \texttt{self} (which is a \ttt{SmallInteger}) into an \texttt{int}.
+Another interesting example of automatic marshalling is to define the \ttt{abs} method (cf. \figref{nativeBoostSyntax}) in the \ttt{SmallInteger} class and passing \texttt{self} as argument in the callout.
+In such case, \NB automatically converts \texttt{self} (which is a \ttt{SmallInteger}) into an \texttt{int}.
 This list of mapping is not exhaustive and \NB also supports the definition of new data types and new conversions into more complex C types such as structures (cf. \secref{internals}).
 
 
