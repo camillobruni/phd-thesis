@@ -13,13 +13,17 @@
 \begin{figure*}[ht]
 	\centering
 	\includegraphics[width=\textwidth]{extensionComparison}
-	\caption{Comparing different extension mechanisms: a) library implemented completely at language-side running on a standard VM, b) language using features from a VM extension, c) language using features from a VM plugin, d) language-side implementation of an extension.}
+	\caption{\todo{clearly duplicated}Comparing different extension mechanisms: 
+		a) library implemented completely at language-side running on a standard VM,
+		b) language using features from a VM extension,
+		c) language using features from a VM plugin,
+		d) language-side implementation of an extension.}
 	\figlabel{extensionComparison}
 \end{figure*}
 
 Currently, more and more code is produced and available through reusable libraries such as OpenGL\footnote{\url{http://www.opengl.org/}} or Cairo\footnote{\url{http://cairographics.org/}}.
 While working on your own projects using dynamic languages, it is crucial to be able to use such existing libraries with little effort.
-Multiple solutions exist to achieve access to an external library from dynamic languages that are executed on the top of a virtual machine (VM) such as \PH\footnote{\url{http://pharo.org/}}, Lua\footnote{\url{http://lua.org/}} or Python\footnote{\url{http://python.org/}}.
+Multiple solutions exist to achieve access to an external library from dynamic languages that are executed on the top of a virtual machine (VM) such as \PH\footnote{\url{http://pharo.org/}}, \Lua\footnote{\url{http://lua.org/}} or \Python\footnote{\url{http://python.org/}}.
 \figref{extensionComparison} depicts four possibilities of dealing with new or external libraries in a high-level language.
 
 \paragraph{Language-side Library.}
@@ -70,8 +74,8 @@ This paper presents \NBFFI\footnote{\url{http://code.google.com/p/nativeboost}} 
 There are at least two other existing \FFI libraries in \PH worth mentioning: C-FFI and Alien.
 Nevertheless, they both present shortcomings.
 C-FFI is fast because it is mostly implemented at VM-level, however it is limited when it comes to do complex calls that involve non-primitive types or when we want to define new data types.
-On the opposite, \Alien \FFI is flexible enough to define any kind of data conversion or new types directly at language-side but it is slower than C-FFI because it is mostly implemented at language-side.
-In essence, \NBFFI combines the flexibility and extensibility of Alien that uses language-side definition for marshalling and the speed of C-FFI which is implemented at VM-level.
+On the opposite, \Alien \FFI is flexible enough to define any kind of data conversion or new types directly at language-side but it is slower than C-\FFI because it is mostly implemented at language-side.
+In essence, \NBFFI combines the flexibility and extensibility of \Alien that uses language-side definition for marshalling and the speed of C-\FFI which is implemented at VM-level.
 The main originalities of \NBFFI are:
 
 \begin{description}
@@ -158,9 +162,7 @@ Finally, this \texttt{abs} function is looked up in the \texttt{libc} whose an h
 \begin{figure}[H]
 	\centering
 	\includegraphics{nativeBoostSyntax}
-	%\nocaptionrule
-	%\captionsetup{singlelinecheck=off}
-	\caption[\NB basic method]{Example of the general \NBFFI callout syntax}
+	\caption[\NB Basic Method]{Example of the general \NBFFI callout syntax}
 	\figlabel{nativeBoostSyntax}
 \end{figure}
 
@@ -203,13 +205,13 @@ This example shows that \NBFFI accepts literals, local and instance variable nam
         \ttt{char}   & \ttt{Character} \\
         \ttt{oop}    & \ttt{Object}
     \end{tabular}
-    \caption{Default \NBFFI mappings between C/primitive types and high-level types. Note that \ttt{oop} is not a real primitive type as no marshalling is applied and the raw pointer is directly exposed to \PH.}
+    \caption[\NB Primitive Types]{Default \NBFFI mappings between C/primitive types and high-level types. Note that \ttt{oop} is not a real primitive type as no marshalling is applied and the raw pointer is directly exposed to \PH.}
     \tablabel{nbPrimitiveTypes}
 \end{table}
 \lstref{setenv} shows another example to callout the \texttt{setenv} function.
 The return value will be converted to a \ST \texttt{Boolean}.
-The two first parameters are specified as \texttt{String} and will be automatically transformed in \texttt{char*} with an ending \cnull character.
-The last parameter is \texttt{1}, a \ST literal value without any type specification and \NB translates it as an \texttt{int} by default.
+The two first parameters are specified as \texttt{String} and will be automatically transformed in \ttt{char*} with an ending \cnull character.
+The last parameter is \texttt{1}, a \ST literal value without any type specification and \NB translates it as an \ttt{int} by default.
 
 \begin{stcode}[
 	label={lst:setenv},
@@ -225,7 +227,7 @@ setenv: name value: value
 		module: NativeBoost CLibrary
 \end{stcode}
 
-Another interesting example of automatic marshalling is to define the \ttt{abs} method (cf. \figref{nativeBoostSyntax}) in the \ttt{SmallInteger} class and passing \texttt{self} as argument in the callout. In such case, \NB automatically converts \texttt{self} (which is a SmallInteger) into an \texttt{int}.
+Another interesting example of automatic marshalling is to define the \ttt{abs} method (cf. \figref{nativeBoostSyntax}) in the \ttt{SmallInteger} class and passing \texttt{self} as argument in the callout. In such case, \NB automatically converts \texttt{self} (which is a \ttt{SmallInteger}) into an \texttt{int}.
 This list of mapping is not exhaustive and \NB also supports the definition of new data types and new conversions into more complex C types such as structures (cf. \secref{internals}).
 
 
@@ -234,9 +236,9 @@ This list of mapping is not exhaustive and \NB also supports the definition of n
 \begin{table}[t]
     \centering
     \begin{tabular}{lcccc}
-                    &  Memory 	& Address & Marshalling & Constraint  \\\midrule
-C-managed struct 	&  C heap  	& fixed & passed by reference & must be freed \\
-\PH-managed struct & Object memory & variable & passed by reference & may move \\
+                    &  Memory 	    & Address  & Marshalling         & Constraint  \\\midrule
+C-managed struct 	&  C heap  	    & fixed    & passed by reference & must be freed \\
+\PH-managed struct  & Object memory & variable & passed by reference & may move \\
 & & & or passed by copy & costly\\
     \end{tabular}
     \caption{Wrapping structures possibilities in \NB}
@@ -481,7 +483,7 @@ This native code is responsible of the marshalling and calling the external func
 \begin{figure}[h]
 	\centering
 	\includegraphics[scale=1.1]{nbArchitecture}
-	\caption{\NB main components that major part of the code resides at language-side.}
+	\caption[\NB Components Layering]{\NB main components that major part of the code resides at language-side.}
 	\figlabel{nbArchitecture}
 \end{figure}
 
@@ -489,7 +491,7 @@ This native code is responsible of the marshalling and calling the external func
 \begin{figure*}[t]
 	\centering
 	\includegraphics[width=\textwidth]{ffiOverview}
-	\caption{Comparison of \FFI calls propagation in \NBFFI and a typical VM plugin-based implementation. \NB resorts to VM-level only for the native-code activation, whereas typical implementations cross this barrier much earlier.}
+	\caption[\FFI Implementation Comparison]{Comparison of \FFI calls propagation in \NBFFI and a typical VM plugin-based implementation. \NB resorts to VM-level only for the native-code activation, whereas typical implementations cross this barrier much earlier.}
 	\figlabel{ffi}
 \end{figure*}
 
@@ -808,7 +810,7 @@ The examples in \secref{nutshell}, especially \figref{nativeBoostSyntax} show th
 \begin{figure}[h]
 	\centering
 	\includegraphics[scale=1.1]{nativeCodeActivation}
-	\caption{Native code activation. The first call triggers the code generation. Then the method is restarted and the native code executed.}
+	\caption[\NB Native Code Activation]{\todo{Add Primitive Failure Arrow}Native code activation. The first call triggers the code generation. Then the method is restarted and the native code executed.}
 	\figlabel{nativeCodeActivation}
 \end{figure}
 
