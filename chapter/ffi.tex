@@ -786,7 +786,7 @@ However in certain situations it is required to access a high-level object from 
 \begin{figure}[h]
 	\centering
 	\includegraphics{externalRoots}
-	\caption[\NBFFI External Roots]{Pointers in a \ttt{CompiledMethod} to objects registered as external roots are pinpointed at fixed offset in global \VM-level object.}
+	\caption[\NBFFI External Roots]{\todo{duplicate and minor importance here, refer to section in benzo chapter}Pointers in a \ttt{CompiledMethod} to objects registered as external roots are pinpointed at fixed offset in global \VM-level object.}
 	\figlabel{ffi-externalRoots}
 \end{figure}
 
@@ -834,7 +834,7 @@ The examples in \secref{ffi-nutshell}, especially \figref{ffi-nativeBoostSyntax}
 \begin{figure}[h]
 	\centering
 	\includegraphics[scale=1.1]{nativeCodeActivation}
-	\caption[\NB Native Code Activation]{\todo{Add Primitive Failure Arrow}Native code activation. The first call triggers the code generation. Then the method is restarted and the native code executed.}
+	\caption[\NB Native Code Activation]{\todo{Add Primitive Failure Arrow + link to NB code generation}Native code activation. The first call triggers the code generation. Then the method is restarted and the native code executed.}
 	\figlabel{ffi-nativeCodeActivation}
 \end{figure}
 
@@ -888,37 +888,41 @@ Finally, they do not support the execution and not even generation of custom ass
 
 Kell and Irwin \cite{Kell11a} take a different look at interacting with external libraries.
 They advocate a Python \VM that allows for dynamically shared objects with external libraries.
-It uses the low-level DWARF debugging information present in the external libraries to gather enough metadata to automatically generate \FFIs.
+It uses the low-level \textsc{dwarf} debugging information present in the external libraries to gather enough metadata to automatically generate \FFIs.
 
 % ===========================================================================
 \section{Problems}
 \seclabel{ffi-problems}
 % ===========================================================================
-\todo{most problems overlap with the problems mentioned in the Benzo chapter}
+\todo{most problems overlap with the problems mentioned in the Benzo chapter} \\
 \todo{address problems on a more high-level view}
 
 
 \subsection{Difficult Debug Cycles}
-\todo{debugging facility (on a higher level than Benzo, see invisible \VMs)}
-\todo{resolve C symbols}
-\todo{show C source code?}
+\todo{debugging facility (on a higher level than Benzo, see invisible \VMs)} \\
+\todo{resolve C symbols} \\
+\todo{show C source code?} \\
+\todo{Compare with luajit-ffi}
 
 
 \subsection{Platform Independence}
-\todo{general / direct dependence on assembler which is not good}
-\todo{low-level platform independence solved by Benzo (link to future reference to VirtualCPU)}
-\todo{platform independence on function level (see OSEnvironment as an Example)}
-\todo{	- requires explicit subclasses}
-\todo{	- manual maintenance + singletons}
+\todo{general / direct dependence on assembler which is not good} \\
+\todo{partial platform indepencen with platform-id is guaranteed}
+\todo{low-level platform independence solved by Benzo (link to future reference to VirtualCPU)} \\
+\todo{platform independence on function level (see OSEnvironment as an Example)} \\
+\todo{	- requires explicit subclasses} \\
+\todo{	- manual maintenance + singletons} \\
 \todo{missing support for multi-platform code definition in a single method}
 
 
 \subsection{Limited Expressiveness}
-\todo{fork example is hard to achieve (vm is not directly forkable)}
-\todo{current design makes it difficult to perform more C-like operations in one run}
+\todo{fork example is hard to achieve (vm is not directly forkable)} \\
+\todo{current design makes it difficult to perform more C-like operations in one run} \\
 \todo{adopt benzo-level abstractions on VirtualCPU}
 
 
+\subsection{Bootstrap Recursion}
+\todo{What happens when using \FFI in bootstrap critical applications?}
 
 % ===========================================================================
 \section{Future Work}
