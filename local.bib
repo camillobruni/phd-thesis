@@ -2,12 +2,36 @@
 %% http://bibdesk.sourceforge.net/
 
 
-%% Created for cami at 2013-12-04 18:12:10 +0100 
+%% Created for cami at 2013-12-04 18:34:13 +0100 
 
 
 %% Saved with string encoding Unicode (UTF-8) 
 
 
+
+@inproceedings{Verw10a,
+	Abstract = {To support development tools like debuggers, runtime systems need to provide a meta-programming interface to alter their semantics and access internal data. Reflective capabilities are typically fixed by the Virtual Machine ({VM}). Unanticipated reflective features must either be simulated by complex program transformations, or they require the development of a specially tailored {VM}. We propose a novel approach to behavioral reflection that eliminates the barrier between applications and the {VM} by manipulating an explicit tower of first-class interpreters. Pinocchio is a proof-of-concept implementation of our approach which enables radical changes to the interpretation of programs by explicitly instantiating subclasses of the base interpreter. We illustrate the design of Pinocchio through non-trivial examples that extend runtime semantics to support debugging, parallel debugging, and back-in-time object-flow debugging. Although performance is not yet addressed, we also discuss numerous opportunities for optimization, which we believe will lead to a practical approach to behavioral reflection.},
+	Address = {New York, NY, USA},
+	Author = {Verwaest, Toon and Bruni, Camillo and Gurtner, David and Lienhard, Adrian and Niestrasz, Oscar},
+	Booktitle = {Proceedings of the ACM International Conference on Object Oriented Programming Systems Languages and Applications},
+	Citeulike-Article-Id = {12819592},
+	Citeulike-Linkout-0 = {http://portal.acm.org/citation.cfm?id=1869522},
+	Citeulike-Linkout-1 = {http://dx.doi.org/10.1145/1869459.1869522},
+	Date-Added = {2013-12-04 17:33:21 +0000},
+	Date-Modified = {2013-12-04 17:33:21 +0000},
+	Doi = {10.1145/1869459.1869522},
+	Isbn = {978-1-4503-0203-6},
+	Location = {Reno/Tahoe, Nevada, USA},
+	Pages = {774--789},
+	Posted-At = {2013-12-04 17:32:31},
+	Priority = {2},
+	Publisher = {ACM},
+	Series = {OOPSLA '10},
+	Title = {Pinocchio: Bringing Reflection to Life with First-class Interpreters},
+	Url = {http://dx.doi.org/10.1145/1869459.1869522},
+	Year = {2010},
+	Bdsk-File-1 = {YnBsaXN0MDDUAQIDBAUGJCVYJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoKgHCBMUFRYaIVUkbnVsbNMJCgsMDxJXTlMua2V5c1pOUy5vYmplY3RzViRjbGFzc6INDoACgAOiEBGABIAFgAdccmVsYXRpdmVQYXRoWWFsaWFzRGF0YV8QXC4uLy4uL3BhcGVyL1ZlcncxMGFiIFBpbm9jY2hpbyBCcmluZ2luZyBSZWZsZWN0aW9uIHRvIExpZmUgd2l0aCBGaXJzdC1jbGFzcyBJbnRlcnByZXRlcnMucGRm0hcLGBlXTlMuZGF0YU8RAk4AAAAAAk4AAgAAA09TWAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMroJ/NIKwAAAA4/DB9WZXJ3MTBhYiBQaW5vY2NoaW8gQnIjRTQxNDUucGRmAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADkFFycTdrwAAAAAAAAAAAAIAAgAACSAAAAAAAAAAAAAAAAAAAAAFcGFwZXIAABAACAAAyugZ4wAAABEACAAAycTBjwAAAAEAEAAOPwwACxyKAAZRzQAC5owAAgBHT1NYOlVzZXJzOgBjYW1pLWRhdGE6AGVkdWNhdGlvbjoAcGFwZXI6AFZlcncxMGFiIFBpbm9jY2hpbyBCciNFNDE0NS5wZGYAAA4AogBQAFYAZQByAHcAMQAwAGEAYgAgAFAAaQBuAG8AYwBjAGgAaQBvACAAQgByAGkAbgBnAGkAbgBnACAAUgBlAGYAbABlAGMAdABpAG8AbgAgAHQAbwAgAEwAaQBmAGUAIAB3AGkAdABoACAARgBpAHIAcwB0AC0AYwBsAGEAcwBzACAASQBuAHQAZQByAHAAcgBlAHQAZQByAHMALgBwAGQAZgAPAAgAAwBPAFMAWAASAHBVc2Vycy9jYW1pLWRhdGEvZWR1Y2F0aW9uL3BhcGVyL1ZlcncxMGFiIFBpbm9jY2hpbyBCcmluZ2luZyBSZWZsZWN0aW9uIHRvIExpZmUgd2l0aCBGaXJzdC1jbGFzcyBJbnRlcnByZXRlcnMucGRmABMAAS8AABUAAgAL//8AAIAG0hscHR5aJGNsYXNzbmFtZVgkY2xhc3Nlc11OU011dGFibGVEYXRhox0fIFZOU0RhdGFYTlNPYmplY3TSGxwiI1xOU0RpY3Rpb25hcnmiIiBfEA9OU0tleWVkQXJjaGl2ZXLRJidUcm9vdIABAAgAEQAaACMALQAyADcAQABGAE0AVQBgAGcAagBsAG4AcQBzAHUAdwCEAI4A7QDyAPoDTANOA1MDXgNnA3UDeQOAA4kDjgObA54DsAOzA7gAAAAAAAACAQAAAAAAAAAoAAAAAAAAAAAAAAAAAAADug==},
+	Bdsk-Url-1 = {http://dx.doi.org/10.1145/1869459.1869522}}
 
 @inproceedings{Fish00a,
 	Abstract = {Practical implementations of high-level languages must provide access to libraries and system  services that have {APIs} specified in a low-level language (usually C). Our approach to  supporting foreign interfaces in the {MOBY} compiler is based on a mechanism for data-level  interoperability, which allows {MOBY} code to manipulate C data representations directly. Datalevel  interoperability is important when dealing with large external data sets or data that is in  a fixed format. It also serves as the foundation for a wide range of different foreign-interface  policies. We describe tools that implement three such policies: Charon, which embeds C types  directly into {MOBY}, moby-idl, which provides an {IDL}-based embedding, and an {API} miner,  which enables application-specific embeddings. The benefits of our approach stem from the  design of our compiler and do not rely on properties of the {MOBY} language.  1 Introduction  High-level languages, such as most functional and object-oriented langu...},
@@ -124,35 +148,6 @@
 	Url = {http://scg.unibe.ch/archive/masters/Brun11a.pdf},
 	Year = 2011,
 	Bdsk-Url-1 = {http://scg.unibe.ch/archive/masters/Brun11a.pdf}}
-
-@unpublished{Verw10a,
-	Abstract = {Virtual machines (VMs) emulating hardware devices
-                  are generally implemented in low-level languages for
-                  performance reasons. This results in unmaintainable
-                  systems that are difficult to understand. In this
-                  paper we report on our experience using the PyPy
-                  toolchain to improve the portability and reduce the
-                  complexity of whole-system VM implementations. As a
-                  case study we implement a VM prototype for a
-                  Nintendo Game Boy, called PyGirl, in which the
-                  high-level model is separated from low-level VM
-                  implementation issues. We shed light on the process
-                  of refactoring from a low-level VM implementation in
-                  Java to a high-level model in RPython. We show that
-                  our whole-system VM written with PyPy is
-                  significantly less complex than standard
-                  implementations, without substantial loss in
-                  performance.},
-	Annote = {internationalconference},
-	Author = {Toon Verwaest and Camillo Bruni and David Gurtner and Adrian Lienhard and Oscar Nierstrasz},
-	Booktitle = {Onward! 2010},
-	Date-Added = {2013-12-04 16:53:42 +0000},
-	Date-Modified = {2013-12-04 16:53:42 +0000},
-	Location = {{Reno/Tahoe, Nevada, USA}},
-	Publisher = {ACM},
-	Title = {{Pinocchio}: Bringing Reflection to Life with First-Class Interpreters},
-	Year = {2010},
-	Bdsk-File-1 = {YnBsaXN0MDDUAQIDBAUGJCVYJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoKgHCBMUFRYaIVUkbnVsbNMJCgsMDxJXTlMua2V5c1pOUy5vYmplY3RzViRjbGFzc6INDoACgAOiEBGABIAFgAdccmVsYXRpdmVQYXRoWWFsaWFzRGF0YV8QWy4uLy4uL3BhcGVyL1ZlcncxMGEgUElub2NjaGlvIEJyaW5naW5nIFJlZmxlY3Rpb24gdG8gTGlmZSB3aXRoIEZpcnN0LUNsYXNzIEludGVycHJldGVycy5wZGbSFwsYGVdOUy5kYXRhTxECTAAAAAACTAACAAADT1NYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAyugn80grAAAADj8MH1ZlcncxMGEgUElub2NjaGlvIEJyaSNFNDE0NS5wZGYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAOQUXJxN2vAAAAAAAAAAAAAgACAAAJIAAAAAAAAAAAAAAAAAAAAAVwYXBlcgAAEAAIAADK6BnjAAAAEQAIAADJxMGPAAAAAQAQAA4/DAALHIoABlHNAALmjAACAEdPU1g6VXNlcnM6AGNhbWktZGF0YToAZWR1Y2F0aW9uOgBwYXBlcjoAVmVydzEwYSBQSW5vY2NoaW8gQnJpI0U0MTQ1LnBkZgAADgCgAE8AVgBlAHIAdwAxADAAYQAgAFAASQBuAG8AYwBjAGgAaQBvACAAQgByAGkAbgBnAGkAbgBnACAAUgBlAGYAbABlAGMAdABpAG8AbgAgAHQAbwAgAEwAaQBmAGUAIAB3AGkAdABoACAARgBpAHIAcwB0AC0AQwBsAGEAcwBzACAASQBuAHQAZQByAHAAcgBlAHQAZQByAHMALgBwAGQAZgAPAAgAAwBPAFMAWAASAG9Vc2Vycy9jYW1pLWRhdGEvZWR1Y2F0aW9uL3BhcGVyL1ZlcncxMGEgUElub2NjaGlvIEJyaW5naW5nIFJlZmxlY3Rpb24gdG8gTGlmZSB3aXRoIEZpcnN0LUNsYXNzIEludGVycHJldGVycy5wZGYAABMAAS8AABUAAgAL//8AAIAG0hscHR5aJGNsYXNzbmFtZVgkY2xhc3Nlc11OU011dGFibGVEYXRhox0fIFZOU0RhdGFYTlNPYmplY3TSGxwiI1xOU0RpY3Rpb25hcnmiIiBfEA9OU0tleWVkQXJjaGl2ZXLRJidUcm9vdIABAAgAEQAaACMALQAyADcAQABGAE0AVQBgAGcAagBsAG4AcQBzAHUAdwCEAI4A7ADxAPkDSQNLA1ADWwNkA3IDdgN9A4YDiwOYA5sDrQOwA7UAAAAAAAACAQAAAAAAAAAoAAAAAAAAAAAAAAAAAAADtw==}}
 
 @article{Verw11a,
 	Abstract = {Programming idioms, design patterns and application libraries often introduce cumbersome and repetitive boilerplate code to a software system. Language extensions and external {DSLs} (domain specific languages) are sometimes introduced to reduce the need for boilerplate code, but they also complicate the system by introducing the need for language dialects and inter-language mediation. To address this, we propose to extend the structural reflective model of the language with object layouts, layout scopes and slots. Based on the new reflective language model we can 1) provide behavioral hooks to object layouts that are triggered when the fields of an object are accessed and 2) simplify the implementation of state-related language extensions such as stateful traits. By doing this we show how many idiomatic use cases that normally require boilerplate code can be more effectively supported. We present an implementation in Smalltalk, and illustrate its usage through a series of extended examples.},
@@ -340,7 +335,7 @@
 	Bdsk-File-1 = {YnBsaXN0MDDUAQIDBAUGJCVYJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoKgHCBMUFRYaIVUkbnVsbNMJCgsMDxJXTlMua2V5c1pOUy5vYmplY3RzViRjbGFzc6INDoACgAOiEBGABIAFgAdccmVsYXRpdmVQYXRoWWFsaWFzRGF0YV8QbS4uLy4uL3BhcGVyL1VuZ2EwNWEgQ29uc3RydWN0aW5nIGEgbWV0YWNpcmN1bGFyIFZpcnR1YWwgbWFjaGluZSBpbiBhbiBleHBsb3JhdG9yeSBwcm9ncmFtbWluZyBlbnZpcm9ubWVudC5wZGbSFwsYGVdOUy5kYXRhTxECggAAAAACggACAAADT1NYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAyugn80grAAAADj8MH1VuZ2EwNWEgQ29uc3RydWN0aW4jNUNENzRBMi5wZGYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAXNdKLLDmYwUERGIAAAAAAAAgACAAAJIAAAAAAAAAAAAAAAAAAAAAVwYXBlcgAAEAAIAADK6BnjAAAAEQAIAADLDlggAAAAAQAQAA4/DAALHIoABlHNAALmjAACAEdPU1g6VXNlcnM6AGNhbWktZGF0YToAZWR1Y2F0aW9uOgBwYXBlcjoAVW5nYTA1YSBDb25zdHJ1Y3RpbiM1Q0Q3NEEyLnBkZgAADgDEAGEAVQBuAGcAYQAwADUAYQAgAEMAbwBuAHMAdAByAHUAYwB0AGkAbgBnACAAYQAgAG0AZQB0AGEAYwBpAHIAYwB1AGwAYQByACAAVgBpAHIAdAB1AGEAbAAgAG0AYQBjAGgAaQBuAGUAIABpAG4AIABhAG4AIABlAHgAcABsAG8AcgBhAHQAbwByAHkAIABwAHIAbwBnAHIAYQBtAG0AaQBuAGcAIABlAG4AdgBpAHIAbwBuAG0AZQBuAHQALgBwAGQAZgAPAAgAAwBPAFMAWAASAIFVc2Vycy9jYW1pLWRhdGEvZWR1Y2F0aW9uL3BhcGVyL1VuZ2EwNWEgQ29uc3RydWN0aW5nIGEgbWV0YWNpcmN1bGFyIFZpcnR1YWwgbWFjaGluZSBpbiBhbiBleHBsb3JhdG9yeSBwcm9ncmFtbWluZyBlbnZpcm9ubWVudC5wZGYAABMAAS8AABUAAgAL//8AAIAG0hscHR5aJGNsYXNzbmFtZVgkY2xhc3Nlc11OU011dGFibGVEYXRhox0fIFZOU0RhdGFYTlNPYmplY3TSGxwiI1xOU0RpY3Rpb25hcnmiIiBfEA9OU0tleWVkQXJjaGl2ZXLRJidUcm9vdIABAAgAEQAaACMALQAyADcAQABGAE0AVQBgAGcAagBsAG4AcQBzAHUAdwCEAI4A/gEDAQsDkQOTA5gDowOsA7oDvgPFA84D0wPgA+MD9QP4A/0AAAAAAAACAQAAAAAAAAAoAAAAAAAAAAAAAAAAAAAD/w==},
 	Bdsk-Url-1 = {http://dx.doi.org/10.1145/1094855.1094865}}
 
-@unpublished{Male96a,
+@proceedings{Male96a,
 	Abstract = {The efficient implementation of behaviorally reflective languages imposes a formidable challenge. By definition, behavioral reflection allows a program to modify even at runtime, its own code as well as the semantics and the implementation of its own programming language. This late-binding of the language semantics favors interpretive techniques, but compilers are absolutely necessary to make reflective languages efficient and therefore of real interest. The goals of this tutorial are to give the picture of the state of the art in the efficient implementation of behavioral reflection, to review the main issues in going from interpreter-based to compiler-based implementations and to propose new avenues towards the realization of this objective. Our tutorial is aimed at a large audience of reflective language implementors, in either object-oriented, functional or even logic programming. To make our point widely applicable, we avoid fine grain technicalities. Rather we emphasize the common denominator of all reflective languages, we propose a clear and general problem statement, and we set up a wide-ranging research agenda},
 	Address = {Xerox Palo Alto Research Center, San Francisco, CA},
 	Annote = {Contains various definitions of terms related to reflection.
@@ -354,7 +349,7 @@
 	Booktitle = {Proceedings of the Reflection '96 Conference},
 	Citeulike-Article-Id = {6483507},
 	Date-Added = {2013-12-04 16:52:46 +0000},
-	Date-Modified = {2013-12-04 16:52:46 +0000},
+	Date-Modified = {2013-12-04 17:34:09 +0000},
 	Keywords = {jamoma},
 	Pages = {20},
 	Posted-At = {2010-01-04 16:04:52},
