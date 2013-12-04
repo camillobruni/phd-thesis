@@ -2,27 +2,27 @@
 % ===========================================================================
 
 \chapter{Prototype Validation: Dynamic Primitives and \JIT}
-\chaplabel{nabujito}
+\chaplabel{validation}
 \minitoc
 
 % ===========================================================================
 
 % ===========================================================================
 \section{Introduction}
-\seclabel{introduction}
+\seclabel{val-introduction}
 % ===========================================================================
 
 \todo{Introduction explaining why a different chapter for \NBJ + \WF}
 
 % ===========================================================================
-\section{Nabujito: Language-side \JIT}
-\seclabel{nabujito}
+\section{\NBJ: Language-side \JIT}
+\seclabel{val-nabujito}
 % ===========================================================================
 \todo{Introduction}
 
 % ---------------------------------------------------------------------------
 \subsection{Background}
-\seclabel{nabujito-background}
+\seclabel{val-nabujito-background}
 % ---------------------------------------------------------------------------
 In this section we present \NBJ, a \B-based approach for a language-side \JIT compiler.
 \NBJ goes even further than \WF using almost the same techniques.
@@ -66,20 +66,20 @@ Since in \PH, compiling a method to bytecode is handled completely with language
 
 \paragraph{Primitives in the Existing JIT.}
 The existing JIT reimplements the most used primitives at \VM-level.
-This guarantees that the \VM stays as long as possible in the JIT context (see \secref{jit-interaction}). Additionally this enables new performance optimizations that for instance are hard to achieve with standard compliant C code.
+This guarantees that the \VM stays as long as possible in the JIT context (see \secref{val-jit-interaction}). Additionally this enables new performance optimizations that for instance are hard to achieve with standard compliant C code.
 A typical example is the integer addition which has to deal with overflow checks and conversion of tagged integers.
-In \secref{waterfall} we describe how \WF suffers a similar constraint.
+In \secref{val-waterfall} we describe how \WF suffers a similar constraint.
 \WF manually defines such primitives in terms of native assembler instructions through the language-side \B interface.
-Nabujito reuses the same optimized primitives so we rely on a single optimized definition which is shared among all native code libraries.
+\NBJ reuses the same optimized primitives so we rely on a single optimized definition which is shared among all native code libraries.
 
 %----------------------------------------------------------------------------
 \subsection{Implementation}
-\seclabel{nabujito-implementation}
+\seclabel{val-nabujito-implementation}
 %----------------------------------------------------------------------------
 \todo{EXTEND: Show more internals}
 \todo{Add overview picture}
-Nabujito is an experimental JIT implementation which replaces the bytecode to native code translation of the existing JIT infrastructure with a dynamic language-side implementation.
-Nabujito is implemented mainly with a visitor strategy over the existing intermediate bytecode representation. 
+\NBJ is an experimental JIT implementation which replaces the bytecode to native code translation of the existing JIT infrastructure with a dynamic language-side implementation.
+\NBJ is implemented mainly with a visitor strategy over the existing intermediate bytecode representation. 
 Additionally we reimplemented vital native routines for the JIT which are not directly exported by the \VM using \B. 
 Nabujito relies on the following \VM-level infrastructure to manage and run native code for any \PH method:
 
@@ -99,11 +99,11 @@ Optimizations for additional methods are all implemented flexibly at language-si
 Wherever possible, we reimplement the same behavior as the existing native \JIT compiler.
 Eventually the native code is ready and \B attaches it to the existing compiled method.
 When the language-side jitted code is activated \B ensures that we do not have to leave the \JIT execution mode, and thus we can call methods at the same speed as the existing \JIT.
-The benchmarks of section \secref{nabujito-performance} show the empirical results.
+The benchmarks of section \secref{val-nabujito-performance} show the empirical results.
 
 % -----------------------------------------------------------------------------
 \subsection{Validation}
-\seclabel{nabujito-performance}
+\seclabel{val-nabujito-performance}
 % -----------------------------------------------------------------------------
 
 The performance evaluation for our \B-based \JIT compiler is focused on the language-side code-generation part.
@@ -112,7 +112,7 @@ However, \NBJ is clearly slower during the warm-up phase.
 Compilation of the native instructions will take considerably more time compared to the \VM-level implementation of the same bytecode to assembler transformation.
 The cost of transforming the bytecodes to native code at \VM-level can be measured in native instructions, whereas the unit at language-side is bytecodes.
 However, we point out again, that this is a one-time overhead.
-From the in-production experience of \NB, the \B-based \FFI (see \secref{nb-performance}), we know that these costs amortized, especially for long-term applications.
+From the in-production experience of \NB, the \B-based \FFI (see \secref{val-nb-performance}), we know that these costs amortized, especially for long-term applications.
 Instead of focusing on the final performance of the generated code, we present the compilation time compared to the normal \PH bytecode compiler, which also resides at language-side.
 
 \begin{table}[!ht]
@@ -123,25 +123,25 @@ Instead of focusing on the final performance of the generated code, we present t
         \NBJ      & \ttt{73} $\pm$ \ttt{1} ms
     \end{tabular}
     \caption[\NBJ Compilation Speed]{Compilation efforts of the standard \ST compiler in \PH and \NBJ for the a simple method returning the constant \ttt{nil}.}
-    \tablabel{nabujito-performance-small}
+    \tablabel{val-nabujito-performance-small}
 \end{table}
 
-In \tabref{nabujito-performance-small} we compare the compilation speed of the standard \PH compiler and \NBJ.
+In \tabref{val-nabujito-performance-small} we compare the compilation speed of the standard \PH compiler and \NBJ.
 We measure the accumulated time spent to compile the method 1000 times.
 The average and deviation are taken over 100 runs. 
 The \PH compiler takes source code as input and outputs \ST bytecodes.
 \NBJ takes bytecodes as input and outputs native code.
 
-We see that in the simple case displayed in \tabref{nabujito-performance-small} \NBJ's compilation speed lies within the same range as the standard \ST compiler.
+We see that in the simple case displayed in \tabref{val-nabujito-performance-small} \NBJ's compilation speed lies within the same range as the standard \ST compiler.
 We expect that in the future we apply more low-level optimizations and thus increase the compilation time of \NBJ.
-However, we have shown in the performance evaluation for \NB, the \B-based \FFI, in \secref{nb-performance} that even a rather high one-time overhead is quickly amortized.
+However, we have shown in the performance evaluation for \NB, the \B-based \FFI, in \secref{val-nb-performance} that even a rather high one-time overhead is quickly amortized.
 Furthermore with \ST's image approach the generated native code is persistent over several sessions.
 A subsequent restart of the same runtime will not cause the \JIT to nativize the same methods it did during the last launch.
 Hence our approach is even valid for short-timed script-like applications as most of the methods will already be available in optimized native code from a previous run.
 
 % -----------------------------------------------------------------------------
 \subsection{Problems}
-\seclabel{nabujito-problems}
+\seclabel{val-nabujito-problems}
 % -----------------------------------------------------------------------------
 \paragraph{Hidden \VM Internals.}
 
@@ -158,14 +158,14 @@ The \JIT lives on the same level as the information it needs relying on the alre
 
 % ===========================================================================
 \section{\WF: Dynamic Primitives}
-\seclabel{waterfall}
+\seclabel{val-waterfall}
 % ===========================================================================
 
 \todo{Introduction}
 
 % -----------------------------------------------------------------------------
 \subsection{Background}
-\seclabel{waterfall-background}
+\seclabel{val-waterfall-background}
 % -----------------------------------------------------------------------------
 
 The Pharo \VM (Cog) is developed in a language that is a subset of \ST, known as Slang, which is transformed to C and then compiled using a standard C compiler.  
@@ -195,10 +195,10 @@ One typical enhancement missing is having different levels of intermediate repre
 The second item enables the execution of the dynamically generated native code.
 This includes for instance the finding of addresses of \VM internal symbols and all the effort to link the two worlds, \ST and native.
 \WF relies on \B for most of this low-level functionality.
-In particular \NB, the \B-based \FFI presented in \secref{ffi}, is used for interfacing with C libraries (\ttt{dlsym}). 
+In particular \NB, the \B-based \FFI presented in \secref{val-ffi}, is used for interfacing with C libraries (\ttt{dlsym}). 
 
 \paragraph{Primitives in \ST.}
-As already partially explained, whenever a method is compiled with the \ttt{primitive} pragma as shown in \secref{vm-interaction} a flag is set on the \ttt{CompiledMethod}. 
+As already partially explained, whenever a method is compiled with the \ttt{primitive} pragma as shown in \secref{val-vm-interaction} a flag is set on the \ttt{CompiledMethod}. 
 If the \VM tries to activate such a method, instead of interpreting the bytecodes it calls the corresponding function at \VM-level~\cite{Gold83a}.
 %The binding between primitives and numbers is described in a table indexed by number.
 \ST distinguishes two types of primitives: essential and non-essential primitives.
@@ -206,7 +206,7 @@ Essential primitives are required for the bootstrapping and the essential operat
 The second category of primitives are mainly used for optimization purposes.
 
 \paragraph{Dynamically Interchangeable Primitives.}
-\WF uses \B's mechanism for replacing primitive methods with customized versions that are nativized dynamically as described in \secref{benzo}.
+\WF uses \B's mechanism for replacing primitive methods with customized versions that are nativized dynamically as described in \secref{val-benzo}.
 The loophole described there is exploited by \WF to enable dynamic modification of \VM behavior and hence bring primitives to life at language-side.
 
 
@@ -220,7 +220,7 @@ We identified two main benefits of changing \VM primitives at runtime:
 \end{enumerate}
 
 \paragraph{Reducing \VM Complexity.}
-\VM extensions are only justified in the presence of strong performance requirements (see \secref{related}).
+\VM extensions are only justified in the presence of strong performance requirements (see \secref{val-related}).
 All non-essential primitives fall into this category.
 Using \WF, these primitives can be implemented at language-side.
 This means that these primitives become first-class citizens of the high-level environment and thus evolve with less effort.
@@ -239,12 +239,12 @@ Even a very simple instrumentation task such as printing the address in memory o
 If during the printing process another object is created the very same instrumented \ttt{basicNew} primitive would be triggered.
 Using reflective techniques it is possible to avoid this loop, however, with a considerable overhead.
 With \WF we can forget about these issues since the instrumentation code will be implemented at the lowest level.
-In section \secref{wf-performance} we show how \WF, the \B based approach for generating primitives on the fly, outperforms the reflective solutions for primitives instrumentation. 
+In section \secref{val-wf-performance} we show how \WF, the \B based approach for generating primitives on the fly, outperforms the reflective solutions for primitives instrumentation. 
 
 
 % -----------------------------------------------------------------------------
 \subsection{Implementation}
-\seclabel{waterfall-implementation}
+\seclabel{val-waterfall-implementation}
 % -----------------------------------------------------------------------------
 \todo{Copy Over \WF Explanation from the Paper}
 \todo{Create overview Image}
@@ -252,7 +252,7 @@ In section \secref{wf-performance} we show how \WF, the \B based approach for ge
 
 % -----------------------------------------------------------------------------
 \subsection{Validation}
-\seclabel{waterfall-performance}
+\seclabel{val-waterfall-performance}
 % -----------------------------------------------------------------------------
 \todo{Copy Over Benchmarks from the WF Paper}
 For comparing performance we implement a very simple integer operation primitive (\ttt{$>$}) using three different approaches.
@@ -261,7 +261,7 @@ The second is to run the language-side implementation that is triggered whenever
 Finally the fast standard primitive provided by the \VM.
 We run the three approaches by measuring the cumulative time over one million primitive activations averaged over 100 runs.
 The absolute numbers are less important than the relative factor between them.
-We present the results of this experiment in ~\tabref{waterfall-performance}.
+We present the results of this experiment in ~\tabref{val-waterfall-performance}.
 %
 \begin{table}[!ht]
     \centering
@@ -272,7 +272,7 @@ We present the results of this experiment in ~\tabref{waterfall-performance}.
         Reflective	& \ttt{195.0}  $\pm$ \ttt{0.16} ms & $\approx30.0\times$
     \end{tabular}
     \caption[\WF Speed Comparison: Large Integer]{Comparing running time of different implementations of integer arithmetic primitive.}
-    \tablabel{waterfall-performance}
+    \tablabel{val-waterfall-performance}
 \end{table}
 %
 As expected \WF's solution outperforms pure reflective one by factor $9$ to $10$.
@@ -293,7 +293,7 @@ A more detailed analysis of \WF is available separately \cite{Char13a}.
         \WF-based unmodified               & \ttt{ 7.08} $\pm$ \ttt{0.23} ms  & $\approx 25\times$ \\
     \end{tabular}
     \caption[\WF Speed Comparison: \ttt{basicNew}]{Slowdown comparison for instrumentation of the  essential primitive \ttt{basicNew}.}
-    \tablabel{waterfall-basicnew}
+    \tablabel{val-waterfall-basicnew}
 \end{table*}
 
 % -----------------------------------------------------------------------------
