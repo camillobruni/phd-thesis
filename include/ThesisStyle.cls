@@ -391,15 +391,13 @@
     \begin{flushright}
       \ifnum \c@secnumdepth >\m@ne
         \if@mainmatter
-%          \huge\bfseries 
-          {\Large \scshape \@chapapp\space \thechapter}
+          {\fontsize{5cm}{1em}\color{gray}\selectfont \thechapter}
           \par\nobreak
-%        \vskip 0\p@
         \fi
       \fi
       \interlinepenalty\@M
       \Huge \bfseries #1\par\nobreak
-      \hrulefill
+%      \hrulefill
     \end{flushright}
     \vskip 20\p@
   }}

@@ -1,10 +1,8 @@
 \input{chapter-header.tex}
 % =============================================================================
-
 \chapter{Conclusion}
 \chaplabel{conclusion}
 \minitoc
-
 % =============================================================================
 
 % =============================================================================
@@ -53,11 +51,11 @@ We present an implementation in Smalltalk, and illustrate its usage through a se
 \todo{write a small intro to describe for which chapter the paper was used}
 \begin{description}
 	\item[Abstract:] \emph{
-Foreign-Function-Interfaces (\FFIs) are a prerequisite for close system integration of a high-level language.
-With \FFIs the high-level environment interacts with low-level functions allowing for a unique combination of features.
-This duality has a strong impact on the implementation of the \FFI: it has to be flexible and fast at the same time.
-We propose \NB a language-side approach to \FFIs that only requires minimal changes to the \VM.
-\NB directly creates specific native code at language-side and thus combines the flexibility of a language-side library with the performance of a native plugin.}
+		Foreign-Function-Interfaces (\FFIs) are a prerequisite for close system integration of a high-level language.
+		With \FFIs the high-level environment interacts with low-level functions allowing for a unique combination of features.
+		This duality has a strong impact on the implementation of the \FFI: it has to be flexible and fast at the same time.
+		We propose \NB a language-side approach to \FFIs that only requires minimal changes to the \VM.
+		\NB directly creates specific native code at language-side and thus combines the flexibility of a language-side library with the performance of a native plugin.}
 
 	\item[Authors:] Camillo Bruni, Luc Fabresse, Stéphane Ducasse and Igor Stasenko. 
 	\item[Revenue:] In International Workshop on Smalltalk Technologies, Annecy, France, 2013.
@@ -72,43 +70,43 @@ We propose \NB a language-side approach to \FFIs that only requires minimal chan
 \todo{make sure there is a proper link (arxiv.org... figshare) for each artifact}
 \begin{description}
 	\item[Collaboration on First-class Layouts and Slots:]
-In a collaboration with Toon Verwaest (\SCG, Switzerland) we built a first implementation of first-class layouts and slots in a \ST system \cite{Verw11a}.
-In Collaboration with Martin Días (\RMoD, \INRIA) this initial version was ported to \PH\footnote{\url{}}and is now used in the current release candidate \PH 3.0\footnote{\url{http://files.pharo.org/image/30}}.
+		In a collaboration with Toon Verwaest (\SCG, Switzerland) we built a first implementation of first-class layouts and slots in a \ST system \cite{Verw11a}.
+		In Collaboration with Martin Días (\RMoD, \INRIA) this initial version was ported to \PH\footnote{\url{}}and is now used in the current release candidate \PH 3.0\footnote{\url{http://files.pharo.org/image/30}}.
 
 	\item[\AsmJIT 64-bit Assembler:]
-To reuse the original research compilation pipeline built with \P \cite{Verw10a, Brun11a} a 64-bit extension was necessary to the initial \AsmJIT implementation for \PH\footnote{\url{http://smalltalkhub.com/\#!/~Pharo/AsmJit}}.
-The extension is included in the current stable \PH release 2.0\footnote{\url{http://files.pharo.org/image/20}}.
+		To reuse the original research compilation pipeline built with \P \cite{Verw10a, Brun11a} a 64-bit extension was necessary to the initial \AsmJIT implementation for \PH\footnote{\url{http://smalltalkhub.com/\#!/~Pharo/AsmJit}}.
+		The extension is included in the current stable \PH release 2.0\footnote{\url{http://files.pharo.org/image/20}}.
 
 	\item[Collaboration on the \WF Dynamic Primitives:]
-We collaborated on the \WF Dynamic Primitive compiler together with Guido Chari (\UBA, Argentina), which resulted in paper currently under submission\cite{Char13a}.
-The implementation is a prototype and is not used in production.
+		We collaborated on the \WF Dynamic Primitive compiler together with Guido Chari (\UBA, Argentina), which resulted in paper currently under submission\cite{Char13a}.
+		The implementation is a prototype and is not used in production.
 
 	\item[Collaboration on the Mate \VM Prototype:]
-In collaboration with Guido Chari (\UBA, Argentina), Javier Pímas (\UBA, Argentina) and Clement Bera (\RMoD, \INRIA) several stages of a prototype \VM were built.
-The implementation mainly follows the concept of an dynamic language runtime which controls every aspect at language-side.
-The current language runtime is in a early prototype phase that allows us to explore new \VM and language concepts, however it is not production ready.
-Guido Chari will further explore new concepts of Mate in his Ph.D.
-Clement Bera, after finishing his engineering contract at \RMoD, will continue to work as a Ph.D. on the same system.
+		In collaboration with Guido Chari (\UBA, Argentina), Javier Pímas (\UBA, Argentina) and Clement Bera (\RMoD, \INRIA) several stages of a prototype \VM were built.
+		The implementation mainly follows the concept of an dynamic language runtime which controls every aspect at language-side.
+		The current language runtime is in a early prototype phase that allows us to explore new \VM and language concepts, however it is not production ready.
+		Guido Chari will further explore new concepts of Mate in his Ph.D.
+		Clement Bera, after finishing his engineering contract at \RMoD, will continue to work as a Ph.D. on the same system.
 
 	\item[\VirtualCPU Compilation Toolchain:]
-In collaboration with Clement Bera (\RMoD, \INRIA) and Igor Stasenko (\RMoD, \INRIA) we built a prototype compilation toolchain based on the original work of Pinocchio.
-The current implementation is a working prototype.
-Plans exist to integrate a streamlined version into \PH to server as a platform independent backend to our \B-based \FFI implementation used in \PH.
+		In collaboration with Clement Bera (\RMoD, \INRIA) and Igor Stasenko (\RMoD, \INRIA) we built a prototype compilation toolchain based on the original work of Pinocchio.
+		The current implementation is a working prototype.
+		Plans exist to integrate a streamlined version into \PH to server as a platform independent backend to our \B-based \FFI implementation used in \PH.
 
 	\item[\NBJ Language-side \JIT Compiler:]
-As a third case study for the \B framework we implemented a language-side \JIT compiler. 
-The current implementation is a prototype that is capable of directly transforming simple methods to executable code.
-Unlike its \VM-level counterpart it is based as a simple visitor over the intermediate bytecode format already present at language-side.
+		As a third case study for the \B framework we implemented a language-side \JIT compiler. 
+		The current implementation is a prototype that is capable of directly transforming simple methods to executable code.
+		Unlike its \VM-level counterpart it is based as a simple visitor over the intermediate bytecode format already present at language-side.
 
 	\item[Inspector Framework for \PH:] 
-An important part of reifying concepts is the possibility to inspect and manipulate these objects.
-We wrote a new inspector framework which is used in the latest \PH release.
-It allows to quickly define new views on domain objects, an indispensable requirement for interacting with complex data objects.
-Next to the everyday usage in \PH it is actively used for the Mate \VM prototype where we need transparent access to internal structures of the \VM.
+		An important part of reifying concepts is the possibility to inspect and manipulate these objects.
+		We wrote a new inspector framework which is used in the latest \PH release.
+		It allows to quickly define new views on domain objects, an indispensable requirement for interacting with complex data objects.
+		Next to the everyday usage in \PH it is actively used for the Mate \VM prototype where we need transparent access to internal structures of the \VM.
 
 	\item[Command Line Test Interface for \PH:]
-In order to perform continuous integration in a maintainable fashion we developed a new modular command line interface for \PH. 
-It is used in production on the \PH build server\footnote{\url{http://ci.inria.fr/pharo/}} alongside with simple installer scripts\footnote{\url{http://get.pharo.org/}}.
+		In order to perform continuous integration in a maintainable fashion we developed a new modular command line interface for \PH. 
+		It is used in production on the \PH build server\footnote{\url{http://ci.inria.fr/pharo/}} alongside with simple installer scripts\footnote{\url{http://get.pharo.org/}}.
 \end{description}
 
 
