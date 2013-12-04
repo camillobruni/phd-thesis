@@ -396,7 +396,8 @@
         \fi
       \fi
       \interlinepenalty\@M
-      \Huge \bfseries #1\par\nobreak
+      {\fontsize{1.5cm}{5em}\selectfont #1}
+      \par\nobreak
 %      \hrulefill
     \end{flushright}
     \vskip 20\p@
