@@ -17,8 +17,8 @@
 \section{Background}
 \seclabel{benzo-background}
 % ===========================================================================
-High-level low-level programming \cite{Fram09a} encourages to use high-level languages such as Java to build low-level execution infrastructures or to do system programming. 
-It is successfully used in experimental high-level self-hosted virtual machines (\VMs) such as Jikes~\cite{Alpe99a}.  
+High-level low-level programming \cite{Fram09a} encourages to use high-level languages such as \Java to build low-level execution infrastructures or to do system programming. 
+It is successfully used in experimental high-level self-hosted virtual machines (\VMs) such as \Jikes~\cite{Alpe99a}.  
 Frampton et al. present a framework that is biased towards a statically typed high-level language, taking strict security aspects into account.
 Their approach promotes to address low-level system programming tasks with the tools and abstractions of high-level languages.
 However, their solution has reduced applicability in a dynamic and reflective context.
@@ -48,7 +48,7 @@ A solution that crosses these barriers requires the following properties:
 \subsection{\B a Framework for Reflective Low-level Programming.}
 % ---------------------------------------------------------------------------
 
-High-level low-level programming is a powerful technique for system programming without resorting to static low-level environments \cite{Fram09a,Wimm13a} that \ugh{almost} fulfills our requirements.
+High-level low-level programming is a powerful technique for system programming without resorting to static low-level environments \cite{Fram09a,Wimm13a} that almost fulfills our requirements.
 However, in a reflective setup it fails to comply with the first requirement mentioned in the previous paragraph: it does not allow reflective changes at runtime.
 Our approach for overcoming this limitation consists of \B, a lightweight and reflective framework that dynamically generates native code from language-side and allows its execution on the fly.
 It relies only on a small set of generic \VM extensions described in \secref{benzo-vm-requirements}, whereas the vast majority of the framework is implemented as a language-side library.
@@ -124,7 +124,7 @@ However, the \JIT space does not hold normal \ST objects but special low-level s
 
 The standard way in \ST to execute low-level code is to use a tag in the method definition. The following example shows such a method on the \ttt{Float} class.
 %
-\begin{stcode}[label={lst:basic-primitive}]{5}
+\begin{stcode}[label={lst:benzo-basic-primitive}]{5}
 * aNumber 
 	<primitive: 49>
 	^ aNumber adaptToFloat: self andSend: #*
@@ -162,9 +162,9 @@ A marker at the end of the compiled method called trailer type is used to flag m
 Since compiled methods are first-class objects it is possible to modify them at runtime and append the native code.
 The primitive \ttt{primitiveNativeCall}, which is implemented by \B, is the responsible of running the native instructions in a \ST method.
 The code example \ttt{interrupt3} shows a very basic application of our infrastructure.
-In \secref{benzo-benzo-language-side}, through more detailed examples, we describe how \B uses \ST code to generate the native instructions.
+In \secref{benzo-language-side}, through more detailed examples, we describe how \B uses \ST code to generate the native instructions.
 %
-\begin{stcode}[label={lst:basic-native-code}, caption={\ST method using \B for very basic low-level debugging.}, escapeinside={@}{@}]{5}
+\begin{stcode}[label={lst:benzo-basic-native-code}, caption={\ST method using \B for very basic low-level debugging.}, escapeinside={@}{@}]{5}
 interrupt3
 	<primitive: 'primitiveNativeCall' 
 	 module: 'BenzoPlugin' >
@@ -332,7 +332,7 @@ The most important aspect about this example is that it is written with standard
 \NB, additionally to the native code activation, relies on two simple primitives provided by \B to retrieve addresses of external functions (\ttt{dlsym}) and to load external libraries (\ttt{dlopen}).
 
 \NB generates the glue code to call external functions dynamically at run time.
-It relies on \B's features presented in \secref{benzo-benzo-language-side} to generate and activate native code at runtime.
+It relies on \B's features presented in \secref{benzo-language-side} to generate and activate native code at runtime.
 This gives \NB a significant advantage over static approaches: the generated native code is specific to the callout.
 For instance in the \ttt{getenv} example, the marshalling code for converting from the internal \PH strings to C strings is written a small assembler routine.
 In this specific context, the assembler code is faster than any language-side code.
@@ -365,7 +365,8 @@ From a high-level point of view \WF provides two services which work transparent
 The first item allows to change the code of primitives at language-side and generate the corresponding native code when needed. 
 It also provides the possibility to write methods or functionality with the same \ST syntax but with a static semantic. 
 It consists essentially of a transformation toolchain that uses the \AST that is generated by the standard \PH compiler harnessing that \Slang and \ST have the same syntax. 
-Then this \AST representation is translated to native code enforcing C-like \Slang semantics. The current prototype has only three fully implemented stages: \Slang to \AST, \AST to an \IR (between \TAC and \SSA) and finally \AST or \IR to native. The design is open for future additions at any level. One typical enhancement missing is having different levels of intermediate representations with various techniques on code optimization and register allocation strategies as modern compilers propose \cite[Ch.\ 1]{Appe98a}. 
+Then this \AST representation is translated to native code enforcing C-like \Slang semantics. The current prototype has only three fully implemented stages: \Slang to \AST, \AST to an \IR (between \TAC and \SSA) and finally \AST or \IR to native. The design is open for future additions at any level.
+One typical enhancement missing is having different levels of intermediate representations with various techniques on code optimization and register allocation strategies as modern compilers propose \cite[Ch.\ 1]{Appe98a}. 
 The second item enables the execution of the dynamically generated native code.
 This includes for instance the finding of addresses of \VM internal symbols and all the effort to link the two worlds, \ST and native.
 \WF relies on \B for most of this low-level functionality.
@@ -728,15 +729,15 @@ After reduced development resources parts of the complex but efficient compiler 
 High-level low-level programming \cite{Fram09a} encourage to use high-level languages for system programming.
 Frampton et al. present a low-level framework packaged as \textsc{org.vmmagic}, which is used as system interface for Jikes, an experimental \Java \VM.
 Additionally their framework is successfully used in \textsc{mmtk} \cite{Blac04a} which is used independently in several other projects.
-The \textsc{org.vmmagic} package is much more elaborate than \B but it is tailored towards Java with static types.
+The \textsc{org.vmmagic} package is much more elaborate than \B but it is tailored towards \Java with static types.
 Methods have to be annotated to use low-level functionality.
 Additionally the strong separation between low-level code and language-side application does not allow for reflective extensions of the language runtime.
 Finally, they do not support the execution nor generation of custom assembly code in the fly.
 
 Other related approaches are \VM generation frameworks in general.
 They try to abstract away the complexity of the \VM and use high-level languages as compiler infrastructure.
-A very successful research project is \textsc{Jikes} Research \VM \cite{Jikes}.
-It uses \textsc{Java} to metacircularly define a Java environment which then generates the final \VM.
+A very successful research project is \textsc{Jikes} Research \VM\footnote{\url{http://jikesrvm.org/}} (former \textsc{Jalapeño})~\cite{Alpe99a}.
+It uses \Java to metacircularly define a \Java environment which then generates the final \VM.
 A similar framework is \PyPy \cite{Rigo06a} a \VM framework including an efficient \JIT. 
 \PyPy uses a restricted subset of the  \textsc{Python} language named \textsc{RPython} which is then translated to various low-level backends such as C or \textsc{Llvm} code.
 There exist several different high-level language \VM implementations on top of \PyPy such as \ST \cite{Bolz08a} or \textsc{Prolog}.
@@ -762,7 +763,7 @@ This is due to marshalling arguments and types between both languages \cite{Fish
 
 
 Other high-level languages such as \Lua leverage \FFI performance by using a close interaction with the \JIT.
-\Luajit \cite{luaffi} for instance is an efficient \Lua implementation that inlines \FFI calls directly into the \JIT compiled code.
+\textsc{LuaFfi}\footnote{\url{https://github.com/jmckaskill/luaffi}} for instance is an efficient \Lua implementation that inlines \FFI calls directly into the \JIT compiled code.
 Similar to \B this allows to minimize the constant overhead by generating custom-made native code.
 \Luajit is mainly written in C which has clearly different semantics than \Lua itself.
 Compared to \ugh{our} approach the efficient \VM implementation suffers from the shortcomings described in \secref{benzo-vm-extensions}. 

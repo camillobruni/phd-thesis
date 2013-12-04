@@ -535,8 +535,7 @@ However, as the following benchmarks will stress, it also suffers from performan
 On the other end there is C-\FFI which is faster than \Alien but by far not as flexible.
 For instance only primitive types are handled directly.
 
-As the third implementation we chose \Lua.
-\Lua is widely used as scripting language in game development.
+As the third implementation we chose \Lua which is widely used as scripting language in game development.
 Hence much care has been taken to closely integrate \Lua into C and C++ environments.
 \LuaJIT integrates an \FFI library that generates the native code for marshalling and directly inlines C functions callout in the \JIT-compiled code.
 
@@ -575,7 +574,7 @@ The C function takes no argument and returns an integer thus guaranteeing a mini
         C-\FFI       & \ttt{541.77} $\pm$ \ttt{0.88} ms  & $\approx 1.1\times$ \\
         \LuaJIT      & \ttt{343.0 } $\pm$ \ttt{1.2 } ms  & $\approx 0.7\times$
     \end{tabular}
-    \caption{Speed comparison of an \ttt{uint clock(void)} \FFI call (see Code~\lstref{clock}).}
+    \caption{Speed comparison of an \ttt{uint clock(void)} \FFI call (see Code~\lstref{ffi-clock}).}
     \tablabel{ffi-performance-clock}
 \end{table}
 %
@@ -621,7 +620,7 @@ Both argument and result have to be converted from high-level strings to C-level
         \LuaJIT\tablefootnote{Downsampled from increased loop size by a factor $10$ to guarantee accuracy.}
                     & \ttt{ }\ttt{ 97.3 } $\pm$ \ttt{5.1 } ms  & $\approx 0.9\times$
     \end{tabular}
-    \caption{Speed comparison of an \ttt{char * getenv(char *name)} \FFI call (see Code \lstref{getenv}).}
+    \caption{Speed comparison of an \ttt{char * getenv(char *name)} \FFI call (see Code \lstref{ffi-getenv}).}
     \tablabel{ffi-performance-getenv}
 \end{table}
 
@@ -667,7 +666,7 @@ In all cases, the allocation time of the structs is not included in the measurem
         C-\FFI      & \ttt{380.8 } $\pm$ \ttt{2.7 } ms  & $\approx 3.6\times$ \\
         \LuaJIT     & \ttt{ }\ttt{ 5.66} $\pm$ \ttt{0.15} ms  & $\approx 0.07\times$
     \end{tabular}
-    \caption{Speed comparison of an \ttt{cairo\_matrix\_multiply} \FFI call (cf. \lstref{cairoCallouts})}
+    \caption{Speed comparison of an \ttt{cairo\_matrix\_multiply} \FFI call (cf. \lstref{ffi-cairoCallouts})}
  	\tablabel{ffi-performance-structs}
 \end{table}
 
@@ -693,7 +692,7 @@ Callbacks are usually much more slower than callouts.
 	\NB \small{with}
 	   \small{Native Callbacks}    & \ttt{ }\ttt{ }\ttt{ 4.98} $\pm$ \ttt{0.21} ms  & $\approx 0.002 \times$
     \end{tabular}
-    \caption{Speed comparison of a \ttt{qsort} \FFI call (cf. \lstref{calloutWithCallback})}
+    \caption{Speed comparison of a \ttt{qsort} \FFI call (cf. \lstref{ffi-calloutWithCallback})}
  	\tablabel{ffi-performance-qsort}
 \end{table}
 
@@ -709,7 +708,7 @@ We do not argue here that callbacks should be implemented in native code but tha
 
 % ===========================================================================
 \section{\NBFFI Implementation Details}
-\seclabel{internals}
+\seclabel{ffi-internals}
 % ===========================================================================
 \todo{Check that we don't have too much overlap with the Benzo Chapter}
 
@@ -865,8 +864,8 @@ Unlike our approach, \textsc{Étoilé} aims at a complete new style of runtime e
 Compared to that, \NB is a very lightweight solution.
 
 
-Other dynamic high-level languages such as\ Lua leverage \FFI performance by using a close interaction with the \JIT.
-\LuaJIT \cite{luaffi} for instance is an efficient \Lua implementation that inlines \FFI calls directly into the \JIT compiled code.
+Other dynamic high-level languages such as \Lua leverage \FFI performance by using a close interaction with the \JIT.
+\LuaJIT\footnote{\url{https://github.com/jmckaskill/luaffi}} for instance is an efficient \Lua implementation that inlines \FFI calls directly into the \JIT compiled code.
 Similar to \NB this allows one to minimize the constant overhead by generating custom-made native code.
 The \LuaJIT runtime is mainly written in C which has clearly different semantics than \Lua itself.
 

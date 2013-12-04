@@ -66,7 +66,8 @@ Since in \PH, compiling a method to bytecode is handled completely with language
 
 \paragraph{Primitives in the Existing JIT.}
 The existing JIT reimplements the most used primitives at \VM-level.
-This guarantees that the \VM stays as long as possible in the JIT context (see \secref{val-jit-interaction}). Additionally this enables new performance optimizations that for instance are hard to achieve with standard compliant C code.
+This guarantees that the \VM stays as long as possible in the \JIT context (see \secref{benzo-jit-interaction} on page~\pageref{sec:benzo-jit-interaction}).
+Additionally this enables new performance optimizations that for instance are hard to achieve with standard compliant C code.
 A typical example is the integer addition which has to deal with overflow checks and conversion of tagged integers.
 In \secref{val-waterfall} we describe how \WF suffers a similar constraint.
 \WF manually defines such primitives in terms of native assembler instructions through the language-side \B interface.
@@ -112,7 +113,7 @@ However, \NBJ is clearly slower during the warm-up phase.
 Compilation of the native instructions will take considerably more time compared to the \VM-level implementation of the same bytecode to assembler transformation.
 The cost of transforming the bytecodes to native code at \VM-level can be measured in native instructions, whereas the unit at language-side is bytecodes.
 However, we point out again, that this is a one-time overhead.
-From the in-production experience of \NB, the \B-based \FFI (see \secref{val-nb-performance}), we know that these costs amortized, especially for long-term applications.
+From the in-production experience of \NB, the \B-based \FFI (see \secref{ffi-evaluation}), we know that these costs amortized, especially for long-term applications.
 Instead of focusing on the final performance of the generated code, we present the compilation time compared to the normal \PH bytecode compiler, which also resides at language-side.
 
 \begin{table}[!ht]
@@ -134,7 +135,7 @@ The \PH compiler takes source code as input and outputs \ST bytecodes.
 
 We see that in the simple case displayed in \tabref{val-nabujito-performance-small} \NBJ's compilation speed lies within the same range as the standard \ST compiler.
 We expect that in the future we apply more low-level optimizations and thus increase the compilation time of \NBJ.
-However, we have shown in the performance evaluation for \NB, the \B-based \FFI, in \secref{val-nb-performance} that even a rather high one-time overhead is quickly amortized.
+However, we have shown in the performance evaluation for \NB, the \B-based \FFI, in \secref{ffi-evaluation} that even a rather high one-time overhead is quickly amortized.
 Furthermore with \ST's image approach the generated native code is persistent over several sessions.
 A subsequent restart of the same runtime will not cause the \JIT to nativize the same methods it did during the last launch.
 Hence our approach is even valid for short-timed script-like applications as most of the methods will already be available in optimized native code from a previous run.
@@ -175,7 +176,7 @@ Hence Slang's semantics are closer to C than to \ST.
 The primitives of the \VM are written in Slang and that is why even in a highly reflective languages such as \ST, where almost every aspect of the language is available for inspection and modification \cite{Denk10a}, primitives can not be changed at runtime.
 They can only be intercepted with reflective techniques with considerable performance overheads.
 This is an important limitation since primitives are, in general, performance demanding components.
-\WF~\cite{Char13a,Waterfall} is a tool that allows developers to change the code written in \Slang for primitives and translate it to native code at runtime.
+\WF~\cite{Char13a} is a tool that allows developers to change the code written in \Slang for primitives and translate it to native code at runtime.
 This replaces the indirection via C that is used in the default compilation process.
 Given that \Slang source code can be modified at runtime as any other \ST method, \WF fosters primitives to be dynamically adapted without imposing the common pure reflective techniques performance degradation.
 
@@ -195,10 +196,10 @@ One typical enhancement missing is having different levels of intermediate repre
 The second item enables the execution of the dynamically generated native code.
 This includes for instance the finding of addresses of \VM internal symbols and all the effort to link the two worlds, \ST and native.
 \WF relies on \B for most of this low-level functionality.
-In particular \NB, the \B-based \FFI presented in \secref{val-ffi}, is used for interfacing with C libraries (\ttt{dlsym}). 
+In particular \NB, the \B-based \FFI presented in \chapref{ffi}, is used for interfacing with C libraries (\ttt{dlsym}). 
 
 \paragraph{Primitives in \ST.}
-As already partially explained, whenever a method is compiled with the \ttt{primitive} pragma as shown in \secref{val-vm-interaction} a flag is set on the \ttt{CompiledMethod}. 
+As already partially explained, whenever a method is compiled with the \ttt{primitive} pragma as shown in \secref{benzo-vm-interaction} a flag is set on the \ttt{CompiledMethod}. 
 If the \VM tries to activate such a method, instead of interpreting the bytecodes it calls the corresponding function at \VM-level~\cite{Gold83a}.
 %The binding between primitives and numbers is described in a table indexed by number.
 \ST distinguishes two types of primitives: essential and non-essential primitives.
@@ -206,7 +207,7 @@ Essential primitives are required for the bootstrapping and the essential operat
 The second category of primitives are mainly used for optimization purposes.
 
 \paragraph{Dynamically Interchangeable Primitives.}
-\WF uses \B's mechanism for replacing primitive methods with customized versions that are nativized dynamically as described in \secref{val-benzo}.
+\WF uses \B's mechanism for replacing primitive methods with customized versions that are nativized dynamically as described in \chapref{benzo}.
 The loophole described there is exploited by \WF to enable dynamic modification of \VM behavior and hence bring primitives to life at language-side.
 
 
@@ -220,7 +221,7 @@ We identified two main benefits of changing \VM primitives at runtime:
 \end{enumerate}
 
 \paragraph{Reducing \VM Complexity.}
-\VM extensions are only justified in the presence of strong performance requirements (see \secref{val-related}).
+\VM extensions are only justified in the presence of strong performance requirements (see \secref{benzo-related}).
 All non-essential primitives fall into this category.
 Using \WF, these primitives can be implemented at language-side.
 This means that these primitives become first-class citizens of the high-level environment and thus evolve with less effort.
@@ -239,7 +240,7 @@ Even a very simple instrumentation task such as printing the address in memory o
 If during the printing process another object is created the very same instrumented \ttt{basicNew} primitive would be triggered.
 Using reflective techniques it is possible to avoid this loop, however, with a considerable overhead.
 With \WF we can forget about these issues since the instrumentation code will be implemented at the lowest level.
-In section \secref{val-wf-performance} we show how \WF, the \B based approach for generating primitives on the fly, outperforms the reflective solutions for primitives instrumentation. 
+In section \secref{val-waterfall-performance} we show how \WF, the \B based approach for generating primitives on the fly, outperforms the reflective solutions for primitives instrumentation. 
 
 
 % -----------------------------------------------------------------------------
