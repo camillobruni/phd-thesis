@@ -50,6 +50,9 @@
 \usepackage[nottoc, notlof, notlot]{tocbibind}
 \usepackage{minitoc}
 \setcounter{minitocdepth}{1}
+\renewcommand{\mtcfont}{\small\normalfont} 
+\renewcommand{\mtcSfont}{\mtcfont} 
+\nomtcrule
 \mtcindent=15pt
 
 \setcounter{secnumdepth}{3}
@@ -333,6 +336,7 @@
 \newcommand{\Nabujito}	{\NBJ\xspace}
 \newcommand{\PH}	{\textsc{Pharo}\xspace}
 \newcommand{\Pinocchio}		{\textsc{Pinocchio}\xspace}
+\renewcommand{\P}	{\Pinocchio}
 \newcommand{\PyPy}	{\textsc{PyPy}\xspace}
 \newcommand{\Python}{\textsc{Python}\xspace}
 \newcommand{\RMoD}	{\textsc{rmod}\xspace}
