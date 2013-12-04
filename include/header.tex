@@ -48,11 +48,12 @@
 
 % Table of contents for each chapter
 \usepackage[nottoc, notlof, notlot]{tocbibind}
-\usepackage{minitoc}
+\usepackage[tight]{minitoc}
 \setcounter{minitocdepth}{1}
+% change the minitoc fonts
 \renewcommand{\mtcfont}{\small\normalfont} 
 \renewcommand{\mtcSfont}{\mtcfont} 
-\nomtcrule
+\nomtcrule % no minito rule
 \mtcindent=15pt
 
 \setcounter{secnumdepth}{3}
