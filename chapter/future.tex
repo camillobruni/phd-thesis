@@ -14,44 +14,63 @@
 \section{Language-side Improvements}
 % =============================================================================
 
-% BENZO
-% VCPU? Might go here
+% -----------------------------------------------------------------------------
+\subsection{Domain Specific Inspectors}
+% -----------------------------------------------------------------------------
+\todo{More specific Inspectors (Also for VM development)} \\
+\todo{Restate the original VM Simulator to provide a smooth VM dev experience}
 
+
+% -----------------------------------------------------------------------------
+\subsection{Barrier Free Low-level Interaction}
+% -----------------------------------------------------------------------------
+\todo{Provide nice infrastructure for multi-platform low-level interaction} \\
+\todo{Provide debugging infrastructure for Benzo}
 
 % -----------------------------------------------------------------------------
 \subsection{Virtual CPU an Assembler DSL}
 % -----------------------------------------------------------------------------
-
+\todo{small summary of the current shortcomings} \\
+\todo{Current State of the Implementation} \\
+\todo{Support new Platforms} \\
+\todo{Indirect support for simluation and thus better debugging}
 
 
 % =============================================================================
 \section{VM-level Improvements}
 \seclabel{mate}
 % =============================================================================
-
-% MATE
+\todo{Introduction: Lanugage-side is not enough} \\
+\todo{Need to get a onstacle-free VM} \\
+\todo{List of requirements for a new VM Infrastructure} \\ 
+\todo{Small comparison against the current solution we have with COG}
 
 % -----------------------------------------------------------------------------
 \subsection{Introduction}
 % -----------------------------------------------------------------------------
-
-% -----------------------------------------------------------------------------
-\subsection{Mate Object Model and Runtime MOP}
-% -----------------------------------------------------------------------------
+\todo{List the current state of the MATE infrastructure}
 
 % -----------------------------------------------------------------------------
 \subsection{VM-level Reification}
 % -----------------------------------------------------------------------------
+\todo{Resulting from the first law of Inspectors, all VM-level objects are reified}
+\todo{List of typical objects that don't have a reification in COG}
+\todo{List advantages}
 
+% -----------------------------------------------------------------------------
+\subsection{Mate Object Model and Runtime MOP}
+% -----------------------------------------------------------------------------
+\todo{Rough Overview of all the Objects currently present in Mate (UMLish)}
 
 % -----------------------------------------------------------------------------
 \subsection{Dual Objects}
 % -----------------------------------------------------------------------------
-
+\todo{Reuse the same objects for the bootstrap and at runtime inspectors/mirrors}
 
 % -----------------------------------------------------------------------------
 \subsection{Mate Compiler Outline}
 % -----------------------------------------------------------------------------
+\todo{Small Intro: Reuse the bootstrap infrastrucutre at runtime (FFI, JIT...)}
 
 \begin{figure}[H]
 \centering
@@ -60,19 +79,22 @@
 
 % -----------------------------------------------------------------------------
 \subsubsection{Mate Bootstrap Outline}
-
+\todo{Small Intro: Why Bootstrap and how to use the reified objects} \\
+\todo{Compare to Pinocchio (manual approach)} \\
+\todo{Work in Progress: Envision the trace-based Bootstrap}
 
 
 % -----------------------------------------------------------------------------
 \subsubsection{Mate Towards Complete Reflection}
-
+\cb{not sure about this section}
 
 % -----------------------------------------------------------------------------
 \subsection{Related Work}
 % -----------------------------------------------------------------------------
-
-% Pinocchio!
-
+\todo{Squeak VM} \\
+\todo{Cog} \\
+\todo{Pinocchio} \\
+\todo{MIST}
 
 
 % =============================================================================
@@ -85,26 +107,26 @@
 % -----------------------------------------------------------------------------
 \subsection{Accessible VM Components}
 % -----------------------------------------------------------------------------
-\todo{Access GC Statistics}
+\todo{Access GC Statistics} \\
 \todo{Access JIT Statistics for Type Annotations / Tooling}
 
 % -----------------------------------------------------------------------------
 \subsection{Interchangeable VM Components}
 % -----------------------------------------------------------------------------
-\todo{Change GC strategy}
+\todo{Change GC strategy} \\
 \todo{Change JIT Strategy}
 
 % -----------------------------------------------------------------------------
 \subsection{Interchangeable Language Semantics}
 % -----------------------------------------------------------------------------
-\todo{Up to which extent can this be supported?}
+\todo{Up to which extent can this be supported?} \\
 \todo{Related to VM MOP: How much should be changeable? When?}
 
 
 % -----------------------------------------------------------------------------
 \subsection{Efficient Reflection}
 % -----------------------------------------------------------------------------
-\todo{Reflectivity at VM-level}
+\todo{Reflectivity at VM-level} \\
 \todo{Flatten but don't freeze Reflection/Abstraction}
 
 

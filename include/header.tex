@@ -14,6 +14,7 @@
 \usepackage{amsfonts}
 \usepackage{amsmath}
 \usepackage{amssymb}
+\usepackage{bold-extra} % bold support for small caps 
 \usepackage[hypcap]{caption} % with hyperref point to the head of the pic
 \usepackage{cite}
 \usepackage{color}
@@ -23,7 +24,7 @@
 \usepackage{fancyhdr} % Fancy Header and Footer
 \usepackage{float}      % for the strong here [H] of figures
 \usepackage{graphicx} % extended arguments for \in­clude­graph­ics
-\usepackage[htt]{hyphenat} % enable hyphenation of \textt
+\usepackage[htt]{hyphenat} % enable hyphenation of \textt + custom hypenation rules for words
 % hyperref see at the end of the header.tex
 \usepackage{ifthen}
 \usepackage{tgtermes} % tex gyre thermes font
@@ -40,7 +41,8 @@
 
 % Font choices (we need real smallcaps!)
 %\usepackage{libertine}
-\usepackage[osf]{mathpazo} % palatino with real small caps and oldstyle numbers
+%\usepackage[osf]{mathpazo} % palatino with real small caps and oldstyle numbers
+\usepackage{tgpagella} % Use TeX Gyre Pagella with real small caps (normal + bold)
 
 % =============================================================================
 
@@ -304,13 +306,18 @@
 \renewenvironment{quote}
 	{\oldquote\itshape}
 	{\oldendquote}
+	
+% =============================================================================
+\hyphenation{tool-chain}
 
 % =============================================================================
 \newcommand{\AST}	{\textsc{ast}\xspace}
+\newcommand{\AsmJIT}{\textsc{AsmJit}\xspace}
 \newcommand{\Alien}	{\textsc{Alien}\xspace}
 \newcommand{\B}		{\textsc{Benzo}\xspace}
 \newcommand{\FFIs}	{\textsc{ffi}s\xspace}
 \newcommand{\FFI}	{\textsc{ffi}\xspace}
+\newcommand{\INRIA}	{\textsc{inria}\xspace}
 \newcommand{\IR}	{\textsc{ir}\xspace}
 \newcommand{\JIT}	{\textsc{jit}\xspace}
 \newcommand{\Java}	{\textsc{Java}\xspace}
@@ -320,7 +327,7 @@
 \newcommand{\Luajit}{\textsc{Luajit}\xspace}
 \newcommand{\Lua}	{\textsc{Lua}\xspace}
 \newcommand{\MOP}	{\textsc{mop}\xspace}
-\newcommand{\NBFFI}	{\textsc{Native\-Boost-Ffi}\xspace}
+\newcommand{\NBFFI}	{\textsc{Native\-Boost-ffi}\xspace}
 \newcommand{\NBJ}	{\textsc{Nabujito}\xspace}
 \newcommand{\NB}	{\textsc{Native\-Boost}\xspace}
 \newcommand{\Nabujito}	{\NBJ\xspace}
@@ -328,11 +335,15 @@
 \newcommand{\Pinocchio}		{\textsc{Pinocchio}\xspace}
 \newcommand{\PyPy}	{\textsc{PyPy}\xspace}
 \newcommand{\Python}{\textsc{Python}\xspace}
+\newcommand{\RMoD}	{\textsc{rmod}\xspace}
+\newcommand{\SCG}	{\textsc{scg}\xspace}
 \newcommand{\SSA}	{\textsc{ssa}\xspace}
 \newcommand{\ST}	{\textsc{Small\-talk}\xspace}
 \newcommand{\Self}	{\textsc{Self}\xspace}
 \newcommand{\Slang} {\textsc{Slang}\xspace}
 \newcommand{\TAC}	{\textsc{tac}\xspace}
+\newcommand{\UBA}	{\textsc{uba}\xspace}
+\newcommand{\VirtualCPU}	{\textsc{VirtualCpu}\xspace}
 \newcommand{\VMs}	{\textsc{vm}s\xspace}
 \newcommand{\VM}	{\textsc{vm}\xspace}
 \newcommand{\WF}	{\textsc{Waterfall}\xspace}

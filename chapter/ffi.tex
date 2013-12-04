@@ -14,36 +14,36 @@
 	\centering
 	\includegraphics[width=\textwidth]{extensionComparison}
 	\caption{\todo{clearly duplicated}Comparing different extension mechanisms: 
-		a) library implemented completely at language-side running on a standard VM,
-		b) language using features from a VM extension,
-		c) language using features from a VM plugin,
+		a) library implemented completely at language-side running on a standard \VM,
+		b) language using features from a \VM extension,
+		c) language using features from a \VM plugin,
 		d) language-side implementation of an extension.}
 	\figlabel{ffi-extensionComparison}
 \end{figure*}
 
 Currently, more and more code is produced and available through reusable libraries such as OpenGL\footnote{\url{http://www.opengl.org/}} or Cairo\footnote{\url{http://cairographics.org/}}.
 While working on your own projects using dynamic languages, it is crucial to be able to use such existing libraries with little effort.
-Multiple solutions exist to achieve access to an external library from dynamic languages that are executed on the top of a virtual machine (VM) such as \PH\footnote{\url{http://pharo.org/}}, \Lua\footnote{\url{http://lua.org/}} or \Python\footnote{\url{http://python.org/}}.
+Multiple solutions exist to achieve access to an external library from dynamic languages that are executed on the top of a virtual machine (\VM) such as \PH\footnote{\url{http://pharo.org/}}, \Lua\footnote{\url{http://lua.org/}} or \Python\footnote{\url{http://python.org/}}.
 \figref{ffi-extensionComparison} depicts four possibilities of dealing with new or external libraries in a high-level language.
 
 \paragraph{Language-side Library.}
 One solution is to re-implement a library completely at language-side (cf. \figref{ffi-extensionComparison}.a).
 Even though this is the most flexible solution, this is often not an option, neither from the technical point of view (performance penalty), nor from the economic point of view (development time and costs).
 
-\paragraph{VM Extension.}
-The second one (\figref{ffi-extensionComparison}.b) is to do a \emph{VM extension} providing new primitives that the high-level language uses to access the native external library.
-This solution is generally efficient since the external library may be statically compiled within the VM.
-However a tight integration into the VM also means more dependencies and a different development environment than the final product at language-side.
+\paragraph{\VM Extension.}
+The second one (\figref{ffi-extensionComparison}.b) is to do a \emph{\VM extension} providing new primitives that the high-level language uses to access the native external library.
+This solution is generally efficient since the external library may be statically compiled within the \VM.
+However a tight integration into the \VM also means more dependencies and a different development environment than the final product at language-side.
 
-\paragraph{VM Plugin.}
-The third solution (\figref{ffi-extensionComparison}.c) is similar to the previous one but the extension is factored out of the VM as a \emph{plugin}.
-This solution implies again a lot of low-level development at VM-level that must be done for each external library we want to use.
-Additionally we have to adapt the plugin for all platforms on which the VM is supposed to run on.
+\paragraph{\VM Plugin.}
+The third solution (\figref{ffi-extensionComparison}.c) is similar to the previous one but the extension is factored out of the \VM as a \emph{plugin}.
+This solution implies again a lot of low-level development at \VM-level that must be done for each external library we want to use.
+Additionally we have to adapt the plugin for all platforms on which the \VM is supposed to run on.
 
 \paragraph{FFI.}
-A higher-level solution is to define \emph{Foreign Function Interfaces} (FFIs) (cf. \figref{ffi-extensionComparison}.d).
-The main advantage of this approach is that once a VM is \FFI-enabled, only a language extension (no VM-level code) is needed to provide access to new native libraries.
-From the portability point of view, only the generic \FFI VM-plugin has to be implemented on all platforms.
+A higher-level solution is to define \emph{Foreign Function Interfaces} (\FFIs) (cf. \figref{ffi-extensionComparison}.d).
+The main advantage of this approach is that once a \VM is \FFI-enabled, only a language extension (no \VM-level code) is needed to provide access to new native libraries.
+From the portability point of view, only the generic \FFI \VM-plugin has to be implemented on all platforms.
 
 % Challenges & Goals
 Implementing an \FFI library is a challenging task because of its antagonist goals:
@@ -54,8 +54,8 @@ Implementing an \FFI library is a challenging task because of its antagonist goa
 \end{itemize}
 %
 Existing \FFI libraries of dynamic languages all have different designs and implementations because of the trade-offs they made regarding these goals and challenges.
-Typical choices are resorting purely to the VM-level and thus sacrificing flexibility.
-The inverse of this approach exists as well: FFIs can be implemented almost completely at language-side but at a significant performance loss.
+Typical choices are resorting purely to the \VM-level and thus sacrificing flexibility.
+The inverse of this approach exists as well: \FFIs can be implemented almost completely at language-side but at a significant performance loss.
 Both these pitfalls are presented in more detail in \secref{ffi-evaluation}.
 
 
@@ -65,25 +65,25 @@ Both these pitfalls are presented in more detail in \secref{ffi-evaluation}.
 % - missing specific code generation
 % - missing \JIT interaction for speed (like LuaJIT, org.vmmagic)
 
-% \Alien and C-\FFI run in the same \PH image as NativeBoost allowing a much closer comparison.
-% \Alien \FFI is implemented almost completely at language-side, much like NativeBoost. However, as the following benchmarks will stress, it also suffers from performance loss.
+% \Alien and C-\FFI run in the same \PH image as \NB allowing a much closer comparison.
+% \Alien \FFI is implemented almost completely at language-side, much like \NB. However, as the following benchmarks will stress, it also suffers from performance loss.
 % On the other end there is C-\FFI which is faster than \Alien but by far not as flexible. For instance only primitive types are handled directly.
 
 
 This paper presents \NBFFI\footnote{\url{http://code.google.com/p/nativeboost}} an \FFI library at language-side for \PH that supports callouts and callbacks, which we present in \secref{ffi-nutshell}.
 There are at least two other existing \FFI libraries in \PH worth mentioning: C-\FFI and \Alien.
 Nevertheless, they both present shortcomings.
-C-\FFI is fast because it is mostly implemented at VM-level, however it is limited when it comes to do complex calls that involve non-primitive types or when we want to define new data types.
+C-\FFI is fast because it is mostly implemented at \VM-level, however it is limited when it comes to do complex calls that involve non-primitive types or when we want to define new data types.
 On the opposite, \Alien \FFI is flexible enough to define any kind of data conversion or new types directly at language-side but it is slower than C-\FFI because it is mostly implemented at language-side.
-In essence, \NBFFI combines the flexibility and extensibility of \Alien that uses language-side definition for marshalling and the speed of C-\FFI which is implemented at VM-level.
-The main originalities of \NBFFI are:
+In essence, \NBFFI combines the flexibility and extensibility of \Alien that uses language-side definition for marshalling and the speed of C-\FFI which is implemented at \VM-level.
+The main contributions of \NBFFI are:
 
 \begin{description}
-	\item[Extensibility.] \NBFFI relies on as few VM primitives as possible (5 primitives), essentially to call native code. 
+	\item[Extensibility.] \NBFFI relies on as few \VM primitives as possible (5 primitives), essentially to call native code. 
 	Therefore, most of the implementation resides at language-side, even low-level mechanisms.
-	That makes \NBFFI easily extensible because its implementation can be changed at any time, without needing to update the runtime (VM).
+	That makes \NBFFI easily extensible because its implementation can be changed at any time, without needing to update the runtime (\VM).
 	It also presents a noticeable philosophical shift, how we want to extend our language in future.
-	A traditional approach is to implement most low-level features at VM-side and provide interfaces to the language-side.
+	A traditional approach is to implement most low-level features at \VM-side and provide interfaces to the language-side.
 	But that comes at cost of less flexibility and longer development and release cycles.
 	On the opposite, we argue that extending language features, even low-level ones, should be done at language-side instead.
 	This results in higher flexibility and without incurring high runtime costs which usually happen when using high-level languages such as \ST.
@@ -258,7 +258,7 @@ C-managed struct 	&  C heap  	    & fixed    & passed by reference & must be fre
 \seclabel{ffi-newtypes}
 % ---------------------------------------------------------------------------
 
-The strength of language-side FFIs appears when it comes to do callouts with new data types involved.
+The strength of language-side \FFIs appears when it comes to do callouts with new data types involved.
 \NBFFI supports different possibilities to interact with new types.
 
 \paragraph{Declaring structures.}
@@ -486,7 +486,7 @@ This section provides an overview of the internal machinery of \NBFFI though it 
 
 \paragraph{General Architecture.}
 \figref{ffi-nbArchitecture} describes the general architecture of \NB.
-Most code resides at language-side, nevertheless some generic extensions (primitives) to the VM are necessary to activate native code.
+Most code resides at language-side, nevertheless some generic extensions (primitives) to the \VM are necessary to activate native code.
 At language-side, callouts are declared with \NBFFI which processes them and dynamically generates x86 native code using the \ttt{AsmJit} library.
 This native code is responsible of the marshalling and calling the external function.
 \NB then uses a primitive to activate this native code.
@@ -502,15 +502,15 @@ This native code is responsible of the marshalling and calling the external func
 \begin{figure*}[t]
 	\centering
 	\includegraphics[width=\textwidth]{ffiOverview}
-	\caption[\FFI Implementation Comparison]{Comparison of \FFI calls propagation in \NBFFI and a typical VM plugin-based implementation. \NB resorts to VM-level only for the native-code activation, whereas typical implementations cross this barrier much earlier.}
+	\caption[\FFI Implementation Comparison]{Comparison of \FFI calls propagation in \NBFFI and a typical \VM plugin-based implementation. \NB resorts to \VM-level only for the native-code activation, whereas typical implementations cross this barrier much earlier.}
 	\figlabel{ffi-ffi}
 \end{figure*}
 
 \paragraph{Callout propagation.}
 \figref{ffi-ffi} shows a comparison of the resolution of a \FFI call both in \NBFFI and a plugin-based \FFI.
 At step 1, a \FFI call is emitted.
-The \NBFFI call is mostly processed at language-side and it is only during step 4 that a primitive is called and the VM effectively does the external call by executing the native code.
-On the opposite, a plugin-based \FFI call already crossed the low-level frontier in step 2 resulting that part of the type conversion process (marshalling) is already done in the VM code.
+The \NBFFI call is mostly processed at language-side and it is only during step 4 that a primitive is called and the \VM effectively does the external call by executing the native code.
+On the opposite, a plugin-based \FFI call already crossed the low-level frontier in step 2 resulting that part of the type conversion process (marshalling) is already done in the \VM code.
 In \NBFFI, doing most of the \FFI call processing at language-side makes easier to keep control, redefine or adapt it if needed.
 
 % ===========================================================================
@@ -521,7 +521,7 @@ In \NBFFI, doing most of the \FFI call processing at language-side makes easier 
 In this section we compare \NB with other \FFI implementations.
 \begin{description}
 	\item[\Alien \FFI:] An \FFI implementation for Squeak/\PH that focuses on the language-side. All marshalling happens transparently at language-side.
-	\item[C-\FFI:] A C based \FFI implementation for Squeak/\PH that performs all marshalling operations at VM-side.
+	\item[C-\FFI:] A C based \FFI implementation for Squeak/\PH that performs all marshalling operations at \VM-side.
 	\item[\LuaJIT:] A fast \Lua implementation that has a close \FFI integration with \JIT interaction.
 \end{description}
 
@@ -546,8 +546,8 @@ From the 100 probes we show the average and the standard deviation for a $68\%$ 
 To exclude the calling and loop overhead we subtract from each evaluation the time spent in the same setup, but without the \FFI call.
 The final deviation displayed is the arithmetic average of the measured deviation of the base and the callout measurement.
 
-The three \ST \FFI solutions (\NB, \Alien, C-\FFI) are evaluated on the very same \PH 1.4 (version 14458) image on a \PH VM (version of May 5. 2013).
-For the Lua benchmarks we use \LuaJIT 2.0.1.
+The three \ST \FFI solutions (\NB, \Alien, C-\FFI) are evaluated on the very same \PH 1.4 (version 14458) image on a \PH \VM (version of May 5. 2013).
+For the \Lua benchmarks we use \LuaJIT 2.0.1.
 The benchmarks are performed under the constant conditions on a MacBook Pro.
 Even though a standalone machine could improve the performance we are only interested in the relative performance of each implementation.
 
@@ -690,7 +690,7 @@ Callbacks are usually much more slower than callouts.
         C-\FFI      & NA                                 & NA \\
         \LuaJIT     & \ttt{ }\ttt{ 46.13} $\pm$ \ttt{0.62} ms  & $\approx 0.02 \times$\\
 		\cmidrule(r){2-3}
-	\NB \small{with}\\
+	\NB \small{with}
 	   \small{Native Callbacks}    & \ttt{ }\ttt{ }\ttt{ 4.98} $\pm$ \ttt{0.21} ms  & $\approx 0.002 \times$
     \end{tabular}
     \caption{Speed comparison of a \ttt{qsort} \FFI call (cf. \lstref{calloutWithCallback})}
@@ -700,10 +700,10 @@ Callbacks are usually much more slower than callouts.
 
 \paragraph{Evaluation.}
 The results show that \NB callbacks are currently slower than \Alien's ones.
-This is because \Alien relies on specific VM support for callbacks making their activation faster (context creation and stack pages integration).
-On the opposite, \NB currently uses small support from the VM side and even do part of the work at image side.
+This is because \Alien relies on specific \VM support for callbacks making their activation faster (context creation and stack pages integration).
+On the opposite, \NB currently uses small support from the \VM side and even do part of the work at image side.
 This \ttt{qsort} demonstrates the worst case because it implies a lot of activations of the callback.
-For each of these calls, \NB creates a context and make the VM switch to it.
+For each of these calls, \NB creates a context and make the \VM switch to it.
 To really demonstrate that these context switches are the bottleneck, \tabref{ffi-performance-qsort} also shows the result of doing the same benchmark in \NB but using a native callback i.e. containing native code.
 We do not argue here that callbacks should be implemented in native code but that \NB support for callback can be optimized to reach \Alien's performance at least.
 
@@ -781,11 +781,11 @@ However in certain situations it is required to access a high-level object from 
 \begin{figure}[h]
 	\centering
 	\includegraphics{externalRoots}
-	\caption[\NBFFI External Roots]{Pointers in a \ttt{CompiledMethod} to objects registered as external roots are pinpointed at fixed offset in global VM-level object.}
+	\caption[\NBFFI External Roots]{Pointers in a \ttt{CompiledMethod} to objects registered as external roots are pinpointed at fixed offset in global \VM-level object.}
 	\figlabel{ffi-externalRoots}
 \end{figure}
 
-To deal with this problem the VM has a special array at a known address that contains pointers to high-level objects.
+To deal with this problem the \VM has a special array at a known address that contains pointers to high-level objects.
 The garbage collector keeps this external roots array up to date.
 Hence it is possible to statically refer to a \PH object using a double indirection over the external roots.
 \figref{ffi-externalRoots} visualizes how native code directly accesses \PH objects through this indirection.
@@ -795,8 +795,8 @@ Hence it is possible to statically refer to a \PH object using a double indirect
 \subsection{Activating Native Code}
 % ---------------------------------------------------------------------------
 
-In this section we present the VM-level interaction of \NB.
-Even though \NB handles most tasks directly at language-side it requires certain changes on VM level:
+In this section we present the \VM-level interaction of \NB.
+Even though \NB handles most tasks directly at language-side it requires certain changes on \VM level:
 \begin{itemize}
 	\item executable memory,
 	\item activation primitives for native code.
@@ -815,7 +815,7 @@ Hence the heap has to be executable in order to jump to the native instructions.
 %   2. running NB code generation
 %   3. attach the native code to the compiled method
 %   4. restart method and reenter primitive, this time running the native code
-% - check for the VM identifier => mismatch triggers code regeneration
+% - check for the \VM identifier => mismatch triggers code regeneration
 
 \todo{strip BENZO duplication: see how much overlaps, only put a small summary here and push detailed explanation to the benzo chapter}
 
@@ -861,7 +861,7 @@ The author highlights the expressiveness of \ST to support this goal.
 In this \ST implementation multiple languages can be mixed efficiently.
 It is possible to mix Objective-C, \ST code.
 All these operations can be performed dynamically at runtime.
-Unlike our approach, \textsc{Étoilé} aims at a complete new style of runtime environment without a VM.
+Unlike our approach, \textsc{Étoilé} aims at a complete new style of runtime environment without a \VM.
 Compared to that, \NB is a very lightweight solution.
 
 
@@ -872,7 +872,7 @@ The \LuaJIT runtime is mainly written in C which has clearly different semantics
 
 
 On a more abstract level, high-level low-level programming \cite{Fram09a} encourage to use high-level languages for system programming.
-Frampton et al. present a low-level framework  which is used as system interface for \Jikes, an experimental \Java VM.
+Frampton et al. present a low-level framework  which is used as system interface for \Jikes, an experimental \Java \VM.
 %Additionally their framework is successfully used in MMTK \cite{Blac04a} which is used independently in several other projects.
 %The \ttt{org.vmmagic} package is much more elaborate than \NB but it is tailored towards Java with static types.
 However their approach focuses on a static solution.
@@ -882,8 +882,8 @@ Finally, they do not support the execution and not even generation of custom ass
 
 
 Kell and Irwin \cite{Kell11a} take a different look at interacting with external libraries.
-They advocate a Python VM that allows for dynamically shared objects with external libraries.
-It uses the low-level DWARF debugging information present in the external libraries to gather enough metadata to automatically generate FFIs.
+They advocate a Python \VM that allows for dynamically shared objects with external libraries.
+It uses the low-level DWARF debugging information present in the external libraries to gather enough metadata to automatically generate \FFIs.
 
 % ===========================================================================
 \section{Problems}
@@ -894,7 +894,7 @@ It uses the low-level DWARF debugging information present in the external librar
 
 
 \subsection{Difficult Debug Cycles}
-\todo{debugging facility (on a higher level than Benzo, see invisible VMs)}
+\todo{debugging facility (on a higher level than Benzo, see invisible \VMs)}
 \todo{resolve C symbols}
 \todo{show C source code?}
 
@@ -921,12 +921,12 @@ It uses the low-level DWARF debugging information present in the external librar
 % ===========================================================================
 Even though \NB shows good overall performance when it comes to callbacks it does not keep up with other \ST-based solutions.
 In the current development phase not much attention was payed to callback performance as it is not a common use case for \FFI callouts.
-Fast callbacks require close interaction and specific modifications at VM-level.
-However, initially \NB kept the modifications to the VM at a minimum.
+Fast callbacks require close interaction and specific modifications at \VM-level.
+However, initially \NB kept the modifications to the \VM at a minimum.
 We assume that we can reach the same performance as \Alien relying on the same low-level implementation.
 
 As a second issue we would like to address the callout overhead by using an already existing \JIT integration of \NB.
-Currently the VM has to leave from \JIT-mode to standard interpretation mode when it activates an \NB method.
+Currently the \VM has to leave from \JIT-mode to standard interpretation mode when it activates an \NB method.
 This context switch introduces an unnecessary overhead for an \FFI callout.
 A current prototype directly inlines the native code of a \NB method in the \JIT.
 Hence the cost for the context switch plus the cost of activating the \NB callout primitive can be avoided.
@@ -940,7 +940,7 @@ Hence the cost for the context switch plus the cost of activating the \NB callou
 % ===========================================================================
 \todo{make proper summary}
 In this paper we presented \NB a novel approach to foreign function interfaces.
-Our approach relies only on a very generic extension of the VM to allow for language-side code to directly call native instructions.
+Our approach relies only on a very generic extension of the \VM to allow for language-side code to directly call native instructions.
 
 Using a in depth evaluation of \NB comparing against two other \ST \FFI implementations and \LuaJIT we showed in \secref{ffi-evaluation} that our language-side approach is competitive.
 \NB reduces the callout overhead by more than a factor two compared to the two closest \ST solutions.
@@ -950,7 +950,7 @@ We measured a factor 30 lower calling overhead due to a close \JIT integration.
 However for typical \FFI calls the absolute time difference between \NB and \Lua is roughly $30\%$.
 With a partial solution ready to integrate \NB closer with the \JIT we expect to come close to \Lua's performance.
 
-Furthermore we showed that \NB essentially combines VM-level performance with language-side flexibility when it comes to marshal complex types.
+Furthermore we showed that \NB essentially combines \VM-level performance with language-side flexibility when it comes to marshal complex types.
 New structures are defined practically at language-side and conversion optimizations are added transparently.
 
 % =============================================================================

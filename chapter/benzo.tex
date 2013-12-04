@@ -29,11 +29,10 @@ If we are able to modify the \VM from language-side we blur the line between the
 Hence throughout this paper we use the term language runtime to refer to the running \VM combined with the language-side application.
 
 
-%Extending high-level language \VM is difficult due to their static low-level construction which usually shares little resemblance with the language-side.
-%Yet for tasks, like the previously presented primitive instrumentation, if we want to tackle it with a high-level language, we need solid low-level interaction.
-%\cb{some more context missing here}
-
+% ---------------------------------------------------------------------------
 \subsection{Requirements.}
+% ---------------------------------------------------------------------------
+
 Extending the \VM is only one particular case of modifying or extending the complete language runtime.
 Language-side libraries, reflective capabilities, \VM extensions or hybrid approaches are other possibilities which we discuss in detail in \secref{benzo-related}.
 All these typical extension mechanisms are not sufficient if we want to modify the \VM from language-side, or in our terminology, to reflectively modify the language runtime. Furthermore these mechanisms are based on the fact that there is a clear barrier between language and \VM.
@@ -45,14 +44,18 @@ A solution that crosses these barriers requires the following properties:
 \end{enumerate}
 
 
+% ---------------------------------------------------------------------------
 \subsection{\B a Framework for Reflective Low-level Programming.}
+% ---------------------------------------------------------------------------
 
 High-level low-level programming is a powerful technique for system programming without resorting to static low-level environments \cite{Fram09a,Wimm13a} that \ugh{almost} fulfills our requirements.
 However, in a reflective setup it fails to comply with the first requirement mentioned in the previous paragraph: it does not allow reflective changes at runtime.
 Our approach for overcoming this limitation consists of \B, a lightweight and reflective framework that dynamically generates native code from language-side and allows its execution on the fly.
 It relies only on a small set of generic \VM extensions described in \secref{benzo-vm-requirements}, whereas the vast majority of the framework is implemented as a language-side library.
 
+% ---------------------------------------------------------------------------
 \subsection{\B Applications.}
+% ---------------------------------------------------------------------------
 In \secref{benzo-use case} we advocate the contribution of this approach by providing three different incremental examples that heavily use the framework.
 Unlike typical implementations that would focus on writing them as \VM extensions, we implement them completely at language-side using \B:
 
@@ -511,10 +514,10 @@ Accessing this high-level information from within the \VM is cumbersome and requ
 The \JIT lives on the same level as the information it needs relying on the already present reflective features of \ST.
 
 
-%----------------------------------------------------------------------------
+%============================================================================
 \section{Performance}
 \seclabel{benzo-issues-performance}
-%----------------------------------------------------------------------------
+%============================================================================
 \todo{Collapse with previous usecase section}
 \todo{Shorten this section and put forward pointers to the real validation chapters yet to come (copied contents, feel free to distroy...)}
 \B allows the generation of specific and thus efficient native code.
@@ -529,8 +532,8 @@ The rest of this section discusses in more details the performance of our three 
 
 % ---------------------------------------------------------------------------
 \subsection{\B-based \FFI}
-% ---------------------------------------------------------------------------
 \seclabel{benzo-nb-performance}
+% ---------------------------------------------------------------------------
 
 Compared to a static plugin-based \FFI implementation \NB has only a one-time startup overhead with its numbers shown in \secref{benzo-issues-performance}.
 Generating the native code at language-side is substantially slower than directly setting up all the conversions and calling the external functions from C code. 
@@ -562,8 +565,8 @@ The \JIT interaction described in \secref{benzo-jit-interaction} is also an impo
 
 % ---------------------------------------------------------------------------
 \subsection{\B-based Dynamic Primitives}
-% ---------------------------------------------------------------------------
 \seclabel{benzo-wf-performance}
+% ---------------------------------------------------------------------------
 
 For comparing performance we implement a very simple integer operation primitive (\ttt{$>$}) using three different approaches.
 The first approach is the implementation with \WF.
@@ -593,8 +596,8 @@ A more detailed analysis of \WF is available separately \cite{Char13a}.
 
 % ---------------------------------------------------------------------------
 \subsection{\B-based \JIT compiler}
-% ---------------------------------------------------------------------------
 \seclabel{benzo-nabujito-performance}
+% ---------------------------------------------------------------------------
 
 The performance evaluation for our \B-based \JIT compiler is focused on the language-side code-generation part.
 Nabujito essentially generates the same native code as the \VM-level \JIT, hence there is no performance difference at evaluation time.
