@@ -386,7 +386,7 @@
                     \fi}
 
 \def\@makechapterhead#1{%
-%  \vspace*{10\p@}%
+  \vspace*{-2cm}%
   {\parindent \z@ \raggedright \normalfont
     \begin{flushright}
       \ifnum \c@secnumdepth >\m@ne
@@ -400,7 +400,7 @@
       \par\nobreak
 %      \hrulefill
     \end{flushright}
-    \vskip 20\p@
+%    \vskip 20\p@
   }}
 \def\@schapter#1{\if@twocolumn
                    \@topnewpage[\@makeschapterhead{#1}]%
