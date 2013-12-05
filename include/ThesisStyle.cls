@@ -386,7 +386,7 @@
                     \fi}
 
 \def\@makechapterhead#1{
-  \vspace*{-2.5cm}
+  \vspace*{-3cm}
   {\parindent \z@ \raggedright \normalfont
     \begin{flushright}
       \ifnum \c@secnumdepth >\m@ne

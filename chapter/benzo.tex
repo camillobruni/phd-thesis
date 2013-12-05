@@ -9,7 +9,27 @@
 \section{Introduction}
 \seclabel{benzo-introduction}
 % ===========================================================================
-\todo{Write thesis introduction, the current introduction is more background / motivation}
+In this chapter we present \B a framework that connects the low-level / \VM work with a reflective and dynamic language-side library.
+Unlike more classical approaches \B does not resort to vast set of customized \VM primitives or plugins.
+Instead it relies on a generic primitive to activated native code that is generated at language-side.
+
+\B provides a unique experience of being extremely low-level yet using high-level concepts at the same time.
+This is possible since the framework is implemented at language-side and tightly integrated into the \PH development environment.
+In this chapter we present in detail how \B interacts with \PH and what the difficulties are.
+The key components of \B are:
+\begin{itemize}[noitemsep]
+\item A generic primitive to activate native code
+\item \AsmJIT A language-side assembler
+\item A language-side library for installing and activating native code
+\end{itemize}
+
+\noindent Based on \B we outline 3 unique applications in \secref{benzo-usecase}:
+\begin{itemize}[noitemsep]
+\item Foreign Function Interfaces (in more detail in \chapref{ffi})
+\item Dynamic Primitives (in more detail in  \chapref{validation})
+\item Language-side \JIT (in more detail in  \chapref{validation})
+\end{itemize}
+
 
 % ===========================================================================
 \newpage
@@ -29,7 +49,7 @@ Hence throughout this chapter we use the term language runtime to refer to the r
 
 
 % ---------------------------------------------------------------------------
-\subsection{Requirements.}
+\subsection{Requirements}
 % ---------------------------------------------------------------------------
 
 Extending the \VM is only one particular case of modifying or extending the complete language runtime.
@@ -44,7 +64,7 @@ A solution that crosses these barriers requires the following properties:
 
 
 % ---------------------------------------------------------------------------
-\subsection{\B a Framework for Reflective Low-level Programming.}
+\subsection{\B a Framework for Reflective Low-level Programming}
 % ---------------------------------------------------------------------------
 
 High-level low-level programming is a powerful technique for system programming without resorting to static low-level environments \cite{Fram09a,Wimm13a} that almost fulfills our requirements.
@@ -53,13 +73,13 @@ Our approach for overcoming this limitation consists of \B, a lightweight and re
 It relies only on a small set of generic \VM extensions described in \secref{benzo-vm-requirements}, whereas the vast majority of the framework is implemented as a language-side library.
 
 % ---------------------------------------------------------------------------
-\subsection{\B Applications.}
+\subsection{\B Applications}
 % ---------------------------------------------------------------------------
-In \secref{benzo-use case} we advocate the contribution of this approach by providing three different incremental examples that heavily use the framework.
+In \secref{benzo-usecase} we advocate the contribution of \B by providing three different incremental examples that heavily use the framework.
 Unlike typical implementations that would focus on writing them as \VM extensions, we implement them completely at language-side using \B:
 
 \begin{description}
-	\item[Langauge-side \FFI] A complete language-side Foreign Function Interface (\FFI) implementation, described in \secref{benzo-ffi} and in more detail in \chapref{ffi}.
+	\item[Language-side \FFI] A complete language-side Foreign Function Interface (\FFI) implementation, described in \secref{benzo-ffi} and in more detail in \chapref{ffi}.
 	\item[Dynamic Primitives] A language-side compilation toolchain that replaces system primitives at runtime with customized code, described in \secref{benzo-waterfall} and in more detail in \secref{val-waterfall}. 
 	\item[Language-side \JIT Compiler] A \JIT compiler that works at language-side and interacts with the \VM for code synchronization, described in \secref{benzo-nabujito} and in more detail in \secref{val-nabujito}.
 \end{description}
@@ -76,7 +96,7 @@ Unlike typical implementations that would focus on writing them as \VM extension
 \section{The \B Framework}
 \seclabel{benzo-benzo}
 % ===========================================================================
-\B is implemented in \PH\footnote{\url{http://pharo.org}}, a \ST inspired language.
+\B is implemented in \PH\footnote{\url{http://pharo.org/}}, a \ST inspired language.
 \PH comes with all the reflective capabilities known from \ST where most language-side components can be altered dynamically.
 \B is implemented at language-side and only requires the help of two simple and generic primitives to activate native code and resolve the entry point address position of referenced C functions.
 
@@ -289,7 +309,7 @@ This mechanism is shown in \figref{benzo-nativeCodeActivation}.
 
 % ===========================================================================
 \section{\B in Practice}
-\seclabel{benzo-use case}
+\seclabel{benzo-usecase}
 % ===========================================================================
 \todo{keep this section as is and introduce forward pointers to the separate chapters}
 
