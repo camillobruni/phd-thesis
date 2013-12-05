@@ -77,6 +77,7 @@
 % change the minitoc fonts
 \renewcommand{\mtcfont}{\small\normalfont} 
 \renewcommand{\mtcSfont}{\mtcfont} 
+\renewcommand{\mtifont}{\Large\bf} % use the same font as for the section font for the title of the contents
 \nomtcrule % no minito rule
 \mtcindent=15pt
 
@@ -138,11 +139,6 @@
 	\vspace*{0.5cm}%
 	\end{minipage}
 }
-
-\let\minitocORIG\minitoc
-\renewcommand{\minitoc}{\minitocORIG \vspace{1.5em}}
-
-\renewcommand{\epsilon}{\varepsilon}
 
 % centered page environment
 \newenvironment{vcenterpage}
@@ -307,6 +303,8 @@
 
 \newcommand{\commented}[1]{}
 
+\newcommand{\introduction}{\section*{\hspace{-1pt}Introduction}}
+
 \newcommand{\bs}    {\symbol{'134}} % backslash
 \newcommand{\us}    {\symbol{'137}} % underscore
 \newcommand{\ttt}[1]{\texttt{#1}}
@@ -315,6 +313,7 @@
 \newcommand{\etal}  {\emph{et al.}\xspace}
 \newcommand{\ns}    {\!\!\!\!} %big negative space
 \newcommand{\cnull} {\textbackslash0\xspace}
+\renewcommand{\epsilon}{\varepsilon}
 
 
 \newcommand{\nb}[2]{\nbc{#1}{#2}{orange}}
@@ -345,6 +344,7 @@
 \newcommand{\B}		{\textsc{Benzo}\xspace}
 \newcommand{\FFIs}	{\textsc{ffi}s\xspace}
 \newcommand{\FFI}	{\textsc{ffi}\xspace}
+\newcommand{\GCC}	{\textsc{gcc}\xspace}
 \newcommand{\INRIA}	{\textsc{inria}\xspace}
 \newcommand{\IR}	{\textsc{ir}\xspace}
 \newcommand{\JIT}	{\textsc{jit}\xspace}

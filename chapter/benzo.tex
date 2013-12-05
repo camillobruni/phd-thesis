@@ -1,14 +1,12 @@
 \input{chapter-header.tex}
-% =============================================================================
+% ===========================================================================
 \chapter{\B: Low-level Glue in \PH}
 \chaplabel{benzo}
 \minitoc
-% =============================================================================
+% ===========================================================================
+\introduction
+% ===========================================================================
 
-% ===========================================================================
-\section{Introduction}
-\seclabel{benzo-introduction}
-% ===========================================================================
 In this chapter we present \B a framework that connects the low-level / \VM work with a reflective and dynamic language-side library.
 Unlike more classical approaches \B does not resort to vast set of customized \VM primitives or plugins.
 Instead it relies on a generic primitive to activated native code that is generated at language-side.
@@ -313,8 +311,13 @@ This mechanism is shown in \figref{benzo-nativeCodeActivation}.
 % ===========================================================================
 \todo{keep this section as is and introduce forward pointers to the separate chapters}
 
-In this Section, for illustrating better the contribution of the solution proposed, we will present different dynamic language-side applications and tools based on \B.
-These implementations, a \FFI, dynamic primitives and a language-side \JIT, are typically done at \VM-level.
+In this section we present the outline 3 distinct solutions built on top of \B: A \FFI, dynamic primitives and a \JIT (\chapref{ffi} and \chapref{validation} provide more detailed insight).
+Typically these implementations would require a custom-tailored \VM or specialized plugins.
+However, we show that it is possible to implement them using the generic functionality provided by \B.
+
+The chosen application, starting with the \FFI, are increasingly more \VM bound.
+Whereas the typical \FFI implementation is based on an separate plugin, dynamic primitives or a \JIT require persistent changes in the underlying \VM.
+
 
 %----------------------------------------------------------------------------
 \subsection{\NB: \B-based Foreign Function Interface}
@@ -322,7 +325,8 @@ These implementations, a \FFI, dynamic primitives and a language-side \JIT, are 
 %----------------------------------------------------------------------------
 
 \FFIs enable a programmer to call external functions without the need to implement additional \VM extensions.
-\NB \cite{Brun13a} is a production-ready \FFI for \PH, developed on top of \B.
+\NB \cite{Brun13a} is a production-ready \FFI for \PH, developed on top of \B. 
+For a detailed discussion of the implementation of \NB see \chapref{ffi}.
 An \FFI implementation consists of two main parts: calling external functions and converting data between the two environments.
 Typically a big percentage of these two parts are implemented at \VM-level with statically defined bindings.
 Relying on \B's capability to dynamically generate and execute native code we developed a complete \FFI at language-side.
@@ -353,98 +357,36 @@ Each language-side library can define its own highly efficient conversion routin
 \subsection{Reflective Primitives}
 \seclabel{benzo-waterfall}
 %----------------------------------------------------------------------------
-\todo{1-page summary of the reflective primitives example}
-%\subsection{Use Case: Dynamic Primitive Instrumentation}
-%\md{Remove use-case here and inline in 1.2 Bridging abstraction layers}
-%\noindent To illustrate this limitation we take the example of dynamically intercepting \VM primitives. In most managed language runtimes, \VM primitives are used for essential tasks such as object creation or provide fundamental functionality that can not be obtained otherwise at language-side~\cite[page 52]{Gold83a}. Already the simple example of measuring the time spent in an essential primitive while executing a performance critical task is difficult to do efficiently.
+
+The second \B-based application we present takes the concept of our \FFI solution further.
+\NB allows us to call external functions by generating the callout code at language-side.
+From an abstract point of view we replace language-side methods with native routines.
+\NB does not directly synthesize new features but only makes external functionality available to the language itself.
 
 
-%Reflective solutions at language-side could take advantage of the intercession capabilities that allow changing or augmenting almost any behavior at runtime. In practice, this does not work for primitives. In addition, reflectively measuring the duration of the time primitive itself will easily cause meta-recursion. Hence in general reflective instrumentation will not work on primitives used for the instrumentation itself. Thus efficiently instrumenting \VM primitives in a dynamic and reflective environment is not feasible in many cases.
+As explained previously in \secref{benzo-vm-interaction} \B uses \PH's primitives to activate native code.
+Since \PH is an open system we can extend this behavior to existing methods.
+Instead of simply adding new methods which call native code we present \WF, a solution that modifies existing primitive methods and replaces them with \B-based native code.
+Instead of manually generating the sources for the primitives we reuse existing code.
+The \VM used for \PH is metacircular, the \VM sources are written in the same language, or in our case in a simplified subset called \Slang.
+Hence, the complete definition of the \VM primitives can be made accessible at language-side.
+\WF takes the primitive definition written in \Slang and compiles it to native-code.
 
-%Naturally, if we leave the high-level realm there are efficient tools at hand for instrumentation. Existing solutions for efficient low-level instrumentation such as DTrace~\cite{Coop12a} work by installing static hooks. Though in a reflective language assumptions can change at runtime and thus static solutions are not appropriate. At the same time we clearly see that such instrumentation is not a typical high-level application. To combine these two worlds we need a different approach.
+\begin{figure}[h]
+	\centering
+	\includegraphics[scale=1.1]{waterfall-overview}
+	\caption[\WF Overview]{\WF reuses the definitions of \VM primtives written in \Slang and compiles them dynamically. The same primitive definition is used for generating the static primitive at \VM compilation time.}
+	\figlabel{benzo-waterfall-overview}
+\end{figure}
 
+As \figref{benzo-waterfall-overview} illustrates, \WF extends the lifetime of the metacircular \VM definition to the actual language runtime.
+By default the primitive definitions written in \Slang are only used to generate the \VM source in an intermediate step.
+A C-compiler such as \GCC generates the final binary.
+By doing so the high-level primitive definition are absorbed by the intermediate compiler infrastructure.
+From within \PH we can only activate primitives but the internal definition is no longer accessible.
 
-\todo{move most of this subsection to separate section in the validation chapter}
-The \PH \VM (Cog) is developed in a language that is a subset of \ST, known as \Slang, which is transformed to C and then compiled using a standard C compiler.  
-\Slang basically has the same syntax as \ST but is semantically constrained to expressions that can be resolved statically at compilation or code generation time and are compatible with C.
-Hence \Slang's semantics are closer to C than to \ST. 
+\todo{more about \WF specific application}
 
-The primitives of the \VM are written in \Slang and that is why even in a highly reflective languages such as \ST, where almost every aspect of the language is available for inspection and modification \cite{Denk10a}, primitives can not be changed at runtime. They can only be intercepted with reflective techniques with considerable performance overheads.
-This is an important limitation since primitives are, in general, performance demanding components.
-\WF~\cite{Char13a}\footnote{\url{http://lafhis.dc.uba.ar/waterfall/}} is a tool that allows developers to change the code written in \Slang for primitives and translate it to native code at runtime.
-This replaces the indirection via C that is used in the default compilation process.
-Given that \Slang source code can be modified at runtime as any other \ST method, \WF fosters primitives to be dynamically adapted without imposing the common pure reflective techniques performance degradation.
-
-From a high-level point of view \WF provides two services which work transparently: 
-%
-\begin{enumerate}
-	\item Compilation of \Slang code on demand (lazily).
-	\item A clear interface for executing, at runtime and from language-side, the native code generated.
-\end{enumerate}
-%
-The first item allows to change the code of primitives at language-side and generate the corresponding native code when needed. 
-It also provides the possibility to write methods or functionality with the same \ST syntax but with a static semantic. 
-It consists essentially of a transformation toolchain that uses the \AST that is generated by the standard \PH compiler harnessing that \Slang and \ST have the same syntax. 
-Then this \AST representation is translated to native code enforcing C-like \Slang semantics. The current prototype has only three fully implemented stages: \Slang to \AST, \AST to an \IR (between \TAC and \SSA) and finally \AST or \IR to native. The design is open for future additions at any level.
-One typical enhancement missing is having different levels of intermediate representations with various techniques on code optimization and register allocation strategies as modern compilers propose \cite[Ch.\ 1]{Appe98a}. 
-The second item enables the execution of the dynamically generated native code.
-This includes for instance the finding of addresses of \VM internal symbols and all the effort to link the two worlds, \ST and native.
-\WF relies on \B for most of this low-level functionality.
-In particular \NB, the \B-based \FFI presented in \secref{benzo-ffi}, is used for interfacing with C libraries (\ttt{dlsym}). 
-
-\paragraph{Primitives in \ST.}
-As already partially explained, whenever a method is compiled with the \ttt{primitive} pragma as shown in \secref{benzo-vm-interaction} a flag is set on the \ttt{CompiledMethod}. 
-If the \VM tries to activate such a method, instead of interpreting the bytecodes it calls the corresponding function at \VM-level~\cite{Gold83a}.
-%The binding between primitives and numbers is described in a table indexed by number.
-\ST distinguishes two types of primitives: essential and non-essential primitives.
-Essential primitives are required for the bootstrapping and the essential operations of the language, such as creating a new object or activating a block.
-The second category of primitives are mainly used for optimization purposes.
-
-\paragraph{Dynamically Interchangeable Primitives.}
-\WF uses \B's mechanism for replacing primitive methods with customized versions that are nativized dynamically as described in \secref{benzo-benzo}.
-The loophole described there is exploited by \WF to enable dynamic modification of \VM behavior and hence bring primitives to life at language-side.
-
-
-%----------------------------------------------------------------------------
-\paragraph{Benefits} 
-We identified two main benefits of changing \VM primitives at runtime:
-
-\begin{enumerate}
-	\item Reducing \VM complexity by implementing non-essential primitives reflectively at language-side.
-	\item Dynamic instrumentation of primitives.
-\end{enumerate}
-
-\paragraph{Reducing \VM Complexity.}
-\VM extensions are only justified in the presence of strong performance requirements (see \secref{benzo-related}).
-All non-essential primitives fall into this category.
-Using \WF, these primitives can be implemented at language-side.
-This means that these primitives become first-class citizens of the high-level environment and thus evolve with less effort.
-
-\paragraph{Essential Primitives.}
-For essential primitives the previous argument does not hold since a static version is needed for a correct startup of the system.
-These primitives can not be fully replace by a language-side implementation using \WF.
-For instance, essential primitives are required for system startup.
-They would trigger an endless recursion when booting up the system and trying to generate them using \WF at the same time.
-However, nothing prevents from replacing essential primitives at runtime with customized versions, once the system startup is completed. 
-
-\paragraph{Why do we need better instrumentation?}
-Instrumentation of essential primitives from language side is an error-prone task falling in many cases in non-termination due to recursive loops. 
-An example of this behavior, can be observed when changing the essential \ttt{basicNew} primitive, which is responsible for instantiating new objects.
-Even a very simple instrumentation task such as printing the address in memory of the created object is problematic.
-If during the printing process another object is created the very same instrumented \ttt{basicNew} primitive would be triggered.
-Using reflective techniques it is possible to avoid this loop, however, with a considerable overhead.
-With \WF we can forget about these issues since the instrumentation code will be implemented at the lowest level.
-On section \secref{benzo-wf-performance} we show how \WF, the \B based approach for generating primitives on the fly, outperforms the reflective solutions for primitives instrumentation. 
-
-
-%----------------------------------------------------------------------------
-\paragraph{\WF Future.}
-\todo{move to separate section in the validation chapter}
-Currently \WF reimplements all \Slang arithmetic essential operations statically as native code templates.
-The existing \JIT of the \PH \VM does exactly the same for performance reasons.
-This is code duplication and should be avoided.
-With the language-side \JIT compiler described on next section we can reuse the same code. Another plan for \WF is to use it for disconnecting most plugins defined at \Slang side from the \VM compilation process and dynamically nativize them on a lazy approach.
-Finally, adding stages to the compiler with different levels of intermediate representations and applying optimizations to each would bring its performance closer to completely low-level optimized primitives.
 
 
 %----------------------------------------------------------------------------
@@ -456,9 +398,6 @@ In this section we present \NBJ, a \B-based approach for a language-side \JIT co
 However, instead of focusing on primitives, \NBJ generates native executable code for standard \ST methods.
 Primitives tend to be more low-level, whereas \NBJ focuses on high-level \ST code. 
 
-
-%----------------------------------------------------------------------------
-\paragraph{The \JIT of the \PH \VM.}
 The \PH \VM (Cog) already comes with a \JIT that translates bytecodes to native instructions.
 It transforms \ST methods into slightly optimized native code at runtime.
 The main speed improvement comes from avoiding bytecode dispatching and by inlining certain known operations and primitives \cite{Ayco03a}.
@@ -468,9 +407,7 @@ The \JIT compiler, by which we refer in this context to the transformation of by
 There exists more important stages as an additional register allocation pass to reduce the number of stack operations \cite{Mira99a,Mira11a}.
 The existing \JIT infrastructure is implemented in \Slang \cite[Ch.\ 5]{Blac09a} as the rest of the \VM.
 
-%----------------------------------------------------------------------------
-\paragraph{Limitations of \VM-level \JIT Compilers.}
-In the context of \NBJ we separate a \JIT infrastructure into separate parts.
+In the context of \NBJ we separate a \JIT infrastructure into the following parts.
 The major part is to have a \VM that uses stack-mapping.
 In the case of a bytecode-based interpreter, we assume that the \VM provides routines to switch between a bytecode interpretation context and a low-level native execution context.
 With \NBJ we move the \JIT compiler,the part that generates native code at runtime, from the \VM to the image.%, the part that generates native code at runtime, typically from bytecodes.
@@ -483,21 +420,6 @@ With \NBJ we move the \JIT compiler,the part that generates native code at runti
 	\item Changing the \JIT compiler requires changes at \VM-level.
 	\item The \JIT reimplements primitives for optimization reasons resulting in code duplication.
 \end{itemize}
-
-\paragraph{Optimization Limitations for \PH.}
-In \ST methods tend to be very small and it is considered good practice to delegate behavior to other objects.
-This implies that several common optimization techniques for static languages do not work well.
-Dynamic method activation does not provide enough context for a static compiler to optimize methods.
-Hence after inline caches and register allocation the next optimization technique is inlining.
-However, inlining in a dynamic context is difficult and requires hooks at \VM-level to invalidate native code when the language-side changes.
-Since in \PH, compiling a method to bytecode is handled completely with language-side code most of the infrastructure to get notified about method changes is already present.
-
-\paragraph{Primitives in the Existing \JIT.}
-The existing \JIT reimplements the most used primitives at \VM-level.
-This guarantees that the \VM stays as long as possible in the \JIT context (see \secref{benzo-jit-interaction}). Additionally this enables new performance optimizations that for instance are hard to achieve with standard compliant C code.
-A typical example is the integer addition which has to deal with overflow checks and conversion of tagged integers.
-In \secref{benzo-waterfall} we describe how \WF suffers a similar constraint. \WF manually defines such primitives in terms of native assembler instructions through the language-side \B interface.
-\NBJ reuses the same optimized primitives so we rely on a single optimized definition which is shared amongst all native code libraries.
 
 %----------------------------------------------------------------------------
 \paragraph{Implementing \NBJ.}
@@ -513,25 +435,13 @@ Additionally we reimplemented vital native routines for the \JIT which are not d
 \end{itemize}
 
 \paragraph{Dynamic Code Generation.}
-%To simplify the implementation we decide to manually trigger \JIT compilation.
-%For primitives known by \WF we rely on that infrastructure to generate the native code.
 For standard methods \Nabujito takes the bytecodes and transforms them to native code.
 It also applies optimizations such as creating low-level branches for \ST level branching operations like \ttt{ifTrue:}.
 Optimizations for additional methods are all implemented flexibly at language-side.
 Wherever possible, we reimplement the same behavior as the existing native \JIT compiler.
 Eventually the native code is ready and \B attaches it to the existing compiled method.
 When the language-side jitted code is activated \B ensures that we do not have to leave the \JIT execution mode, and thus we can call methods at the same speed as the existing \JIT.
-%The benchmarks of section \secref{benzo-nabujito-performance} show the empirical results.
-
-%----------------------------------------------------------------------------
-\paragraph{Outlook.}
-\todo{move to separate section in the validation chapter}
-One major performance optimization missing in both, the original \PH \VM-level \JIT and \Nabujito, is inlining. 
-By inlining we are able to create methods that are potentially big enough for optimizations.
-However, inlining is a difficult task in a highly dynamic language such as \ST or Self \cite{Cham89a}. 
-Efficient inlining can only be performed with sufficient knowledge of the system. 
-Accessing this high-level information from within the \VM is cumbersome and requires duplication of language-side reflective features.
-The \JIT lives on the same level as the information it needs relying on the already present reflective features of \ST.
+The benchmarks of section \secref{benzo-nabujito-performance} show the empirical results.
 
 
 %============================================================================
