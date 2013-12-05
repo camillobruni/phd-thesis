@@ -385,13 +385,17 @@
                       \@afterheading
                     \fi}
 
-\def\@makechapterhead#1{%
-  \vspace*{-2cm}%
+\def\@makechapterhead#1{
+  \vspace*{-2.5cm}
   {\parindent \z@ \raggedright \normalfont
     \begin{flushright}
       \ifnum \c@secnumdepth >\m@ne
         \if@mainmatter
-          {\fontsize{5cm}{1em}\color{gray}\selectfont \thechapter}
+          \mbox{
+          	\hspace*{-1.8cm}
+          	\fontsize{3.5cm}{1em}\color{black!4}\selectfont Chapter
+          	\fontsize{10cm}{1em}\color{black!4}\selectfont \thechapter}
+          \vspace*{-4cm}
           \par\nobreak
         \fi
       \fi
