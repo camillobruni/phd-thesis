@@ -25,7 +25,7 @@ By reflective, we refer to the combined capabilities to inspect (introspection) 
 
 From a reflective point of view it seems natural to dynamically modify the \VM at runtime and not just at compile-time.
 If we are able to modify the \VM from language-side we blur the line between these two distinct worlds, becoming indistinguishable to talk about the \VM or the language-side.
-Hence throughout this paper we use the term language runtime to refer to the running \VM combined with the language-side application.
+Hence throughout this chapter we use the term language runtime to refer to the running \VM combined with the language-side application.
 
 
 % ---------------------------------------------------------------------------
@@ -59,27 +59,17 @@ In \secref{benzo-use case} we advocate the contribution of this approach by prov
 Unlike typical implementations that would focus on writing them as \VM extensions, we implement them completely at language-side using \B:
 
 \begin{description}
-	\item[\FFI] A complete language-side Foreign Function Interface (\FFI) implementation, described in \secref{benzo-ffi}.
-	\item[Dynamic Primitives] A language-side compilation toolchain that replaces system primitives at runtime with customized code, described in \secref{benzo-waterfall}. 
-	\item[Language-side \JIT Compiler] A \JIT compiler that works at language-side and interacts with the \VM for code synchronization, described in \secref{benzo-nabujito}
+	\item[Langauge-side \FFI] A complete language-side Foreign Function Interface (\FFI) implementation, described in \secref{benzo-ffi} and in more detail in \chapref{ffi}.
+	\item[Dynamic Primitives] A language-side compilation toolchain that replaces system primitives at runtime with customized code, described in \secref{benzo-waterfall} and in more detail in \secref{val-waterfall}. 
+	\item[Language-side \JIT Compiler] A \JIT compiler that works at language-side and interacts with the \VM for code synchronization, described in \secref{benzo-nabujito} and in more detail in \secref{val-nabujito}.
 \end{description}
 
 
-\noindent Illustrated by these three distinct examples, the contributions of this paper are:
+\noindent Illustrated by these three distinct examples, the contributions of this chapter are:
 \begin{enumerate} 
 	\item A \emph{reflective} high-level low-level programming framework that encourages the extension of high-level language runtimes on the fly without the overheads imposed by pure high-level solutions. 
 	\item A proof of concept of the proposal with the implementation and description of three different tools that heavily use reflective low-level programming and covers distinct scenarios.
 \end{enumerate}
-
-
-%\subsection{Use Case: Dynamic Primitive Instrumentation}
-%\md{Remove use-case here and inline in 1.2 Bridging abstraction layers}
-%\noindent To illustrate this limitation we take the example of dynamically intercepting \VM primitives. In most managed language runtimes, \VM primitives are used for essential tasks such as object creation or provide fundamental functionality that can not be obtained otherwise at language-side~\cite[page 52]{Gold83a}. Already the simple example of measuring the time spent in an essential primitive while executing a performance critical task is difficult to do efficiently.
-
-
-%Reflective solutions at language-side could take advantage of the intercession capabilities that allow changing or augmenting almost any behavior at runtime. In practice, this does not work for primitives. In addition, reflectively measuring the duration of the time primitive itself will easily cause meta-recursion. Hence in general reflective instrumentation will not work on primitives used for the instrumentation itself. Thus efficiently instrumenting \VM primitives in a dynamic and reflective environment is not feasible in many cases.
-
-%Naturally, if we leave the high-level realm there are efficient tools at hand for instrumentation. Existing solutions for efficient low-level instrumentation such as DTrace~\cite{Coop12a} work by installing static hooks. Though in a reflective language assumptions can change at runtime and thus static solutions are not appropriate. At the same time we clearly see that such instrumentation is not a typical high-level application. To combine these two worlds we need a different approach.
 
 
 % ===========================================================================
@@ -88,7 +78,7 @@ Unlike typical implementations that would focus on writing them as \VM extension
 % ===========================================================================
 \B is implemented in \PH\footnote{\url{http://pharo.org}}, a \ST inspired language.
 \PH comes with all the reflective capabilities known from \ST where most language-side components can be altered dynamically.
-\B is implemented at language-side and only requires the help of two simple and generic primitives to activate \cb{ad-hoc has a negative conotation} native code and resolve the entry point address position of referenced C functions.
+\B is implemented at language-side and only requires the help of two simple and generic primitives to activate native code and resolve the entry point address position of referenced C functions.
 
 %----------------------------------------------------------------------------
 \subsection{\VM Context}
@@ -343,6 +333,17 @@ Each language-side library can define its own highly efficient conversion routin
 \subsection{Reflective Primitives}
 \seclabel{benzo-waterfall}
 %----------------------------------------------------------------------------
+\todo{1-page summary of the reflective primitives example}
+%\subsection{Use Case: Dynamic Primitive Instrumentation}
+%\md{Remove use-case here and inline in 1.2 Bridging abstraction layers}
+%\noindent To illustrate this limitation we take the example of dynamically intercepting \VM primitives. In most managed language runtimes, \VM primitives are used for essential tasks such as object creation or provide fundamental functionality that can not be obtained otherwise at language-side~\cite[page 52]{Gold83a}. Already the simple example of measuring the time spent in an essential primitive while executing a performance critical task is difficult to do efficiently.
+
+
+%Reflective solutions at language-side could take advantage of the intercession capabilities that allow changing or augmenting almost any behavior at runtime. In practice, this does not work for primitives. In addition, reflectively measuring the duration of the time primitive itself will easily cause meta-recursion. Hence in general reflective instrumentation will not work on primitives used for the instrumentation itself. Thus efficiently instrumenting \VM primitives in a dynamic and reflective environment is not feasible in many cases.
+
+%Naturally, if we leave the high-level realm there are efficient tools at hand for instrumentation. Existing solutions for efficient low-level instrumentation such as DTrace~\cite{Coop12a} work by installing static hooks. Though in a reflective language assumptions can change at runtime and thus static solutions are not appropriate. At the same time we clearly see that such instrumentation is not a typical high-level application. To combine these two worlds we need a different approach.
+
+
 \todo{move most of this subsection to separate section in the validation chapter}
 The \PH \VM (Cog) is developed in a language that is a subset of \ST, known as \Slang, which is transformed to C and then compiled using a standard C compiler.  
 \Slang basically has the same syntax as \ST but is semantically constrained to expressions that can be resolved statically at compilation or code generation time and are compatible with C.
@@ -539,7 +540,7 @@ Compared to a static plugin-based \FFI implementation \NB has only a one-time st
 Generating the native code at language-side is substantially slower than directly setting up all the conversions and calling the external functions from C code. 
 In some cases the penalty for some compilation effort on \NB is as high as a factor of 100 compared to classic approaches.
 Under the assumption that the method is called several times this overhead may be considered negligible.
-An in-depth evaluation of \NB comparing against other solutions, is presented in a separate paper~\cite{Brun13a}.
+An in-depth evaluation of \NB comparing against other solutions, is presented in \chapref{ffi}.
 The following table contains a performance comparison of three different \FFI implementations for \PH that represents the typical showcase.
 
 \begin{table}[!ht]
@@ -548,7 +549,7 @@ The following table contains a performance comparison of three different \FFI im
                     & Call Time                        & Relative Time \\\midrule
         \NB         & \ttt{10.53} $\pm$ \ttt{0.35} ms  &  $1.0\times$ \\
         Alien       & \ttt{31.09} $\pm$ \ttt{0.94} ms  & $\approx 3.0\times$ \\
-        \FFI         & \ttt{19.55} $\pm$ \ttt{0.64} ms  & $\approx 1.9\times$
+        \FFI        & \ttt{19.55} $\pm$ \ttt{0.64} ms  & $\approx 1.9\times$
     \end{tabular}
     \caption[Basic \B-based \FFI Performance]{Different \FFI implementations in \PH evaluating 
     \ttt{abs(int)}. Alien does marshalling at language-side while \FFI does everything in C.}

@@ -393,8 +393,8 @@
         \if@mainmatter
           \mbox{
           	\hspace*{-1.8cm}
-          	\fontsize{3.5cm}{1em}\color{black!4}\selectfont Chapter
-          	\fontsize{10cm}{1em}\color{black!4}\selectfont \thechapter}
+          	\fontsize{3.5cm}{1em}\color{black!6}\selectfont Chapter
+          	\fontsize{10cm}{1em}\color{black!6}\selectfont \thechapter}
           \vspace*{-4cm}
           \par\nobreak
         \fi
