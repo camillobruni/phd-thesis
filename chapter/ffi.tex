@@ -46,7 +46,7 @@ The third solution (\figref{ffi-extensionComparison}.c) is similar to the previo
 This solution implies again a lot of low-level development at \VM-level that must be done for each external library we want to use.
 Additionally we have to adapt the plugin for all platforms on which the \VM is supposed to run on.
 
-\paragraph{FFI.}
+\paragraph{\FFI.}
 A higher-level solution is to define \emph{Foreign Function Interfaces} (\FFIs) (cf. \figref{ffi-extensionComparison}.d).
 The main advantage of this approach is that once a \VM is \FFI-enabled, only a language extension (no \VM-level code) is needed to provide access to new native libraries.
 From the portability point of view, only the generic \FFI \VM-plugin has to be implemented on all platforms.
