@@ -386,24 +386,29 @@
                     \fi}
 
 \def\@makechapterhead#1{
-  \vspace*{-3cm}
+  \vspace*{-3.3cm}
   {\parindent \z@ \raggedright \normalfont
     \begin{flushright}
       \ifnum \c@secnumdepth >\m@ne
         \if@mainmatter
           \mbox{
-          	\hspace*{-1.8cm}
-          	\fontsize{3.5cm}{1em}\color{black!6}\selectfont Chapter
-          	\fontsize{10cm}{1em}\color{black!6}\selectfont \thechapter}
+          	\hspace*{-2.2cm}
+          	\fontsize{3.5cm}{1em}\color{black!5}\selectfont Chapter
+          	\fontsize{10cm}{1em}\color{black!5}\selectfont \thechapter}
           \vspace*{-4cm}
           \par\nobreak
         \fi
       \fi
+    \end{flushright}
+    \begin{flushleft}
+      \vspace*{-2cm}
       \interlinepenalty\@M
-      {\fontsize{1.5cm}{5em}\selectfont #1}
+      \hspace*{-2mm}
+      {\fontsize{1.5cm}{10em}\selectfont \textsc{#1}}
+      \vspace*{0.5cm}
       \par\nobreak
 %      \hrulefill
-    \end{flushright}
+    \end{flushleft}
 %    \vskip 20\p@
   }}
 \def\@schapter#1{\if@twocolumn

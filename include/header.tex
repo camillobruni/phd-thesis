@@ -1,7 +1,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 
-\usepackage[left=1.5in,right=1.3in,top=2cm,bottom=2cm,includefoot,includehead,headheight=13.6pt]{geometry}
+\usepackage[left=1.7in,right=1.5in,top=2cm,bottom=2cm,includefoot,includehead,headheight=13.6pt]{geometry}
 \renewcommand{\baselinestretch}{1.2}\normalsize
 
 
@@ -43,6 +43,30 @@
 %\usepackage{libertine}
 %\usepackage[osf]{mathpazo} % palatino with real small caps and oldstyle numbers
 \usepackage{tgpagella} % Use TeX Gyre Pagella with real small caps (normal + bold)
+
+
+% =============================================================================
+ % environment hooks and patching:
+\usepackage{etoolbox}
+
+\makeatletter
+% uncomment the following if you don't want \clubpenalty\@M ...
+% \let\nearly@afterheading\@afterheading
+% \patchcmd\nearly@afterheading
+%   {\@M}% original temporary setting for \clubpenalty replaced by ...
+%   {\@clubpenalty}% ... or whichever value you deem right
+%   {}{}
+% ... and use \nearly@afterheading instead of \@afterheading here:
+\newcommand*\NoIndentAfterEnv[1]{%
+  \AfterEndEnvironment{#1}{\par\@afterindentfalse\@afterheading}}
+\makeatother
+
+% Disable indentation after a certain environment: \NoIndentAfterEnv{itemize}
+\NoIndentAfterEnv{itemize}
+\NoIndentAfterEnv{enumerate}
+\NoIndentAfterEnv{description}
+\NoIndentAfterEnv{table}
+\NoIndentAfterEnv{figure}
 
 % =============================================================================
 
