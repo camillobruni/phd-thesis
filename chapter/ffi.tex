@@ -15,9 +15,9 @@
 % ===========================================================================
 
 
-Currently, more and more code is produced and available through reusable libraries such as OpenGL\footnote{\url{http://www.opengl.org/}} or Cairo\footnote{\url{http://cairographics.org/}}.
+Currently, more and more code is produced and available through reusable libraries such as \urlfootnote{OpenGL}{http://www.opengl.org/} or \urlfootnote{Cairo}{http://cairographics.org/}.
 While working on your own projects using dynamic languages, it is crucial to be able to use such existing libraries with little effort.
-Multiple solutions exist to achieve access to an external library from dynamic languages that are executed on the top of a virtual machine (\VM) such as \PH\footnote{\url{http://pharo.org/}}, \Lua\footnote{\url{http://lua.org/}} or \Python\footnote{\url{http://python.org/}}.
+Multiple solutions exist to achieve access to an external library from dynamic languages that are executed on the top of a virtual machine (\VM) such as \urlfootnote{\PH}{http://pharo.org/}, \urlfootnote{\Lua}{http://lua.org/} or \urlfootnote{\Python}{http://python.org/}.
 \figref{benzo-extensionComparison} depicts four possibilities of dealing with new or external libraries in a high-level language.
 
 \paragraph{Language-side Library.}
@@ -64,7 +64,7 @@ Both these pitfalls are presented in more detail in \secref{ffi-evaluation}.
 % On the other end there is C-\FFI which is faster than \Alien but by far not as flexible. For instance only primitive types are handled directly.
 
 
-This paper presents \NBFFI\footnote{\url{http://code.google.com/p/nativeboost}} an \FFI library at language-side for \PH that supports callouts and callbacks, which we present in \secref{ffi-nutshell}.
+This paper presents \urlfootnote{\NBFFI}{http://code.google.com/p/nativeboost} an \FFI library at language-side for \PH that supports callouts and callbacks, which we present in \secref{ffi-nutshell}.
 There are at least two other existing \FFI libraries in \PH worth mentioning: C-\FFI and \Alien.
 Nevertheless, they both present shortcomings.
 C-\FFI is fast because it is mostly implemented at \VM-level, however it is limited when it comes to do complex calls that involve non-primitive types or when we want to define new data types.
@@ -258,7 +258,7 @@ The strength of language-side \FFIs appears when it comes to do callouts with ne
 \NBFFI supports different possibilities to interact with new types.
 
 \paragraph{Declaring structures.}
-For example, the Cairo library\footnote{\url{http://cairographics.org}} provides complex structures such as \ttt{cairo\_surface\_t} and functions to manipulate this data type. % which makes field access useless.
+For example, the \urlfootnote{Cairo library}{http://cairographics.org} provides complex structures such as \ttt{cairo\_surface\_t} and functions to manipulate this data type. % which makes field access useless.
 \lstref{ffi-AthensCairoSurface} shows how to write a regular \ST class to wrap a C structure.
 \NB only requires a class-side method named \ttt{asNBExternalType:} that describes how to marshall this type back and forth from native code.
 In this example, we use existing marshalling mechanism defined in \ttt{NBExternalObjectType} that just copies the structure's pointer and stores it in an instance variable named \ttt{handle}.
@@ -729,8 +729,8 @@ On the second activation, the native code is present and thus the primitive will
 % ---------------------------------------------------------------------------
 \paragraph{Generating Assembler Instructions}
 
-\figref{ffi-nbArchitecture} shows that \NB relies on AsmJit\footnote{\url{http://smalltalkhub.com/\#!/~Pharo/AsmJit}}, a language-side assembler.
-AsmJit emerged from an existing C++ implementation\footnote{\url{https://code.google.com/p/asmjit/}} and currently supports the x86 instruction set.
+\figref{ffi-nbArchitecture} shows that \NB relies on \urlfootnote{AsmJit}{http://smalltalkhub.com/\#!/~Pharo/AsmJit}, a language-side assembler.
+AsmJit emerged from an existing \urlfootnote{C++ implementation}{https://code.google.com/p/asmjit/} and currently supports the x86 instruction set.
 
 In fact it is even possible to inline custom assembler instructions in \PH when using \NB.
 This way it is possible to meet critical performance requirements.
@@ -857,7 +857,7 @@ Compared to that, \NB is a very lightweight solution.
 
 
 Other dynamic high-level languages such as \Lua leverage \FFI performance by using a close interaction with the \JIT.
-\LuaJIT\footnote{\url{https://github.com/jmckaskill/luaffi}} for instance is an efficient \Lua implementation that inlines \FFI calls directly into the \JIT compiled code.
+\urlfootnote{\LuaJIT}{https://github.com/jmckaskill/luaffi} for instance is an efficient \Lua implementation that inlines \FFI calls directly into the \JIT compiled code.
 Similar to \NB this allows one to minimize the constant overhead by generating custom-made native code.
 The \LuaJIT runtime is mainly written in C which has clearly different semantics than \Lua itself.
 
