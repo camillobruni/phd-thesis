@@ -621,12 +621,30 @@ To address extensions in this context there exist some known approaches:
 The relation between the side concerning the abstraction and implementation levels (\VM vs. Language) of these extensions is illustrated in \figref{benzo-extensionComparison}.
 
 \begin{figure}[h]
-	\includegraphics[width=\linewidth]{extensionComparison}
-	\caption[Language Extension Mechanisms]{\todo{Use 2x2 Subfigure}Comparing different extension mechanisms: 
-		a) language running on a standard \VM, 
-		b) language-side implementation of an extension
-		c) language using features from a \VM extension, 
-		d) language using features from a separate \VM plugin.}
+	\centering
+	\begin{subfigure}[t]{0.45\textwidth}
+		\centering
+		\includegraphics[scale=1.1]{extension-language}
+		\caption{Language running on a standard \VM.}
+	\end{subfigure}\hspace{0.09\textwidth}
+	\begin{subfigure}[t]{0.45\textwidth}
+		\centering
+		\includegraphics[scale=1.1]{extension-language-library}
+		\caption{Language-side implementation of an extension.}
+	\end{subfigure} \\
+	\vspace{\baselineskip}
+	\begin{subfigure}[b]{0.45\textwidth}
+		\centering
+		\includegraphics[scale=1.1]{extension-vm}
+		\caption{Language using features from a \VM extension.}
+	\end{subfigure}\hspace{0.09\textwidth}
+	\begin{subfigure}[b]{0.45\textwidth}
+		\centering
+		\includegraphics[scale=1.1]{extension-plugin}
+		\caption{Language using features from a separate \VM plugin.}
+	\end{subfigure}
+	
+	\caption[Language Extension Mechanisms]{Comparison of different extension mechanisms}
 	\figlabel{benzo-extensionComparison}
 \end{figure}
 
