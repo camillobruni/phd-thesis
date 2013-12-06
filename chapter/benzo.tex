@@ -624,7 +624,7 @@ If all language-side optimization opportunities have been exhausted it is exposi
 This is a subcase of the previous approach but in the context of reflective environments that expose particular characteristics.
 For instance, Meta Object Protocols (\MOP) \cite{Kicz91a} based on reflection \cite{Maes87a} are used to define certain control points in the system to change the language.
 By composing meta objects it is possible to even modify the semantics of the language. 
-Several languages such as \ST, Python, Ruby\footnote{\url{http://www.ruby-lang.org}}, and others provide reflective capabilities with different depths \cite{Ande98a,Van10a}.
+Several languages such as \ST, Python, \urlfootnote{Ruby}{http://www.ruby-lang.org/}, and others provide reflective capabilities with different depths \cite{Ande98a,Van10a}.
 However, most modern programming languages only have very limited support for intercession.
 Hence the possibilities for dynamically changing language semantics or features are limited. 
 Furthermore reflective capabilities are hard to implement efficiently.
@@ -665,9 +665,10 @@ Finally, they do not support the execution nor generation of custom assembly cod
 
 Other related approaches are \VM generation frameworks in general.
 They try to abstract away the complexity of the \VM and use high-level languages as compiler infrastructure.
-A very successful research project is \textsc{Jikes} Research \VM\footnote{\url{http://jikesrvm.org/}} (former \textsc{Jalapeño})~\cite{Alpe99a}.
+A very successful research project is \urlfootnote{\textsc{Jikes} Research \VM}{http://jikesrvm.org/} (former \textsc{Jalapeño})~\cite{Alpe99a}.
 It uses \Java to metacircularly define a \Java environment which then generates the final \VM.
-A similar framework is \PyPy \cite{Rigo06a} a \VM framework including an efficient \JIT. 
+
+A similar framework is \urlfootnote{\PyPy}{http://pypy.org/} \cite{Rigo06a} a \VM framework including an efficient \JIT. 
 \PyPy uses a restricted subset of the  \textsc{Python} language named \textsc{RPython} which is then translated to various low-level backends such as C or \textsc{Llvm} code.
 There exist several different high-level language \VM implementations on top of \PyPy such as \ST \cite{Bolz08a} or \textsc{Prolog}.
 However, its main focus lies on an efficient \JIT generator mainly for a Python interpreter, and not on a direct, language-side assembler interface.
@@ -702,6 +703,7 @@ They advocate a Python \VM that allows for dynamically shared objects with exter
 It uses the low-level \textsc{Dwarf} debugging information present in the external libraries to gather enough metadata to automatically generate \FFI\ugh{s}.
 However, they do not focus on the reflective interaction with low-level code and the resulting benefits. 
 
+\todo{reduce the quicktalk paragraph here and move most of this discussion to the waterfall validation}
 \textsc{Quicktalk} \cite{Ball86a} follows a similar approach as \WF.
 However, Ballard et al. focus mostly on the development of a complex compiler for a new \ST dialect.
 Using type annotations \textsc{Quicktalk} allows for statically typing methods.
@@ -726,27 +728,27 @@ However, \textsc{Klein} is built on a completely new \VM infrastructure, whereas
 % -----------------------------------------------------------------------------
 \subsection{Robustness}
 % -----------------------------------------------------------------------------
-\todo{show a problematic piece of code}
-\todo{sketch an outline for a safe benzo test by forking the main process}
-\todo{image + code example}
+\todo{show a problematic piece of code} \\
+\todo{sketch an outline for a safe benzo test by forking the main process} \\
+\todo{image + code example} \\
 \todo{possible emulation of the code to highlight very common bugs?}
 
 
 % -----------------------------------------------------------------------------
 \subsection{Low-level Debugging}
 % -----------------------------------------------------------------------------
-\todo{sketch a possible debugger with ptrace and Co based on the previously forked process}
-\todo{outlook to the \FFI section (reified structures)}
-\todo{hard to debug when only looking at the memory}
-\todo{- need full stack view}
-\todo{- need register view}
+\todo{sketch a possible debugger with ptrace and Co based on the previously forked process} \\
+\todo{outlook to the \FFI section (reified structures)} \\
+\todo{hard to debug when only looking at the memory} \\
+\todo{- need full stack view} \\
+\todo{- need register view} \\
 \todo{- need possible view on references to ST objects}
 
 % -----------------------------------------------------------------------------
 \subsection{Platform Independence}
 % -----------------------------------------------------------------------------
-\todo{missing abstraction on the assembler level}
-\todo{- outlook to the VirtualCPU}
+\todo{missing abstraction on the assembler level} \\
+\todo{- outlook to the VirtualCPU} \\
 \todo{- image: mini architecture picture}
 
 
