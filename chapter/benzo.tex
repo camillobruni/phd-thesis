@@ -242,7 +242,7 @@ For this reason we extend the \VM to support inlining of native code in the \JIT
 %
 \begin{figure}[ht]
 	\centering
-	\includegraphics{nabujitoInline}
+	\includegraphics[scale=1.1]{nabujitoInline}
 	\caption[\B \JIT Interaction]{\B inlining language-side native code into jitted mode.}
 	\figlabel{benzo-nabujitoInline}
 \end{figure}
@@ -393,7 +393,7 @@ Each language-side library can define its own highly efficient conversion routin
 	\figlabel{benzo-waterfall-overview}
 \end{figure}
 
-The second \B-based application we present takes the concept of our \FFI solution further.
+\noindent The second \B-based application we present takes the concept of our \FFI solution further.
 \NB allows us to call external functions by generating the callout code at language-side.
 From an abstract point of view we replace language-side methods with native routines.
 \NB does not directly synthesize new features but only makes external functionality available to the language itself.
@@ -618,7 +618,7 @@ To address extensions in this context there exist some known approaches:
 \end{description}
 %
 
-The relation between the side concerning the abstraction and implementation levels (\VM vs. Language) of these extensions is illustrated in \figref{benzo-extensionComparison}.
+The relation between the side concerning the abstraction and implementation levels (\VM vs. language) of these extensions is illustrated in \figref{benzo-extensionComparison}.
 
 \begin{figure}[h]
 	\centering
