@@ -392,7 +392,7 @@
       %\interlinepenalty\@M
       \hspace*{-2mm}
       {\fontsize{1.5cm}{10cm}  \selectfont \textsc{#1}}
-      \vspace*{0.5cm}
+      \vspace*{0.3cm}
       \par
 %      \hrulefill
     \end{flushleft}
@@ -405,7 +405,7 @@
           	\hspace*{-2.2cm}
           	\fontsize{3.5cm}{1em}\color{black!5}\selectfont Chapter
           	\fontsize{10cm}{1em}\color{black!5}\selectfont \thechapter}
-          \vspace*{-3.5cm}
+          \vspace*{-3.2cm}
           \par\nobreak
         \fi
       \fi

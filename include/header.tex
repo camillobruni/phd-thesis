@@ -1,14 +1,10 @@
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 
+% modify the default page geometry
 \usepackage[left=1.7in,right=1.5in,top=2cm,bottom=2cm,includefoot,includehead,headheight=13.6pt]{geometry}
-\renewcommand{\baselinestretch}{1.2}\normalsize
-
 
 % =============================================================================
-%\usepackage[sectionbib]{chapterbib}	% Cross-reference package (Natural BiB)
-%\usepackage{bibunits}
-%\usepackage{natbib}	% Put References at the end of each chapter
 \usepackage{algorithm}
 \usepackage{alltt} % math support in verbatim text
 \usepackage{amsfonts}
@@ -17,18 +13,18 @@
 \usepackage{bold-extra} % bold support for small caps 
 \usepackage[hypcap]{caption} % with hyperref point to the head of the pic
 \usepackage{cite}
-\usepackage{color}
-\usepackage{enumerate}
+\usepackage{color} % custom colors for text
+\usepackage{enumerate} % enable enumerated lists
 \usepackage{enumitem} % enables [noitemsep,nolistsep] for more compact lists
 \usepackage{booktabs} % used for \midrule
 \usepackage{fancyhdr} % Fancy Header and Footer
 \usepackage{float}      % for the strong here [H] of figures
 \usepackage{graphicx} % extended arguments for \in­clude­graph­ics
 \usepackage[htt]{hyphenat} % enable hyphenation of \textt + custom hypenation rules for words
-% hyperref see at the end of the header.tex
-\usepackage{ifthen}
+% \usepackage{hyperref} see at the end of the header.tex
+\usepackage{ifthen} % support boolean "branches" => enables conditional macros
 \usepackage{tgtermes} % tex gyre thermes font
-\usepackage{multirow}
+\usepackage{multirow} % fancy stuff for tables: multirow, bigdelim, bigstrut
 \usepackage{rotating} % Sideways of figures & tables
 \usepackage{stmaryrd} % St Mary Road symbols for theoretical computer science
 \usepackage{subfigure}
@@ -72,14 +68,14 @@
 
 % Table of contents for each chapter
 \usepackage[nottoc, notlof, notlot]{tocbibind}
-\usepackage[tight]{minitoc}
+\usepackage[tight]{minitoc} % tight=single line spacing
 \setcounter{minitocdepth}{1}
 % change the minitoc fonts
 \renewcommand{\mtcfont}{\small\normalfont} 
 \renewcommand{\mtcSfont}{\mtcfont} 
 \renewcommand{\mtifont}{\Large\bf} % use the same font as for the section font for the title of the contents
 \nomtcrule % no minito rule
-\mtcindent=15pt
+\mtcindent=2pt % indent just enough to make it visually look aligned
 
 \setcounter{secnumdepth}{3}
 \setcounter{tocdepth}{2}
@@ -125,20 +121,6 @@
   \if@twocolumn\hbox{}\newpage\fi\fi\fi}
 
 \makeatother
-
-\newenvironment{maxime}[1]{
-	\vspace*{0cm}
-	\hfill
-	\begin{minipage}{0.5\textwidth}%
-	%\rule[0.5ex]{\textwidth}{0.1mm}\\%
-	\hrulefill $\:$ {\bf #1}\\
-	%\vspace*{-0.25cm}
-	\it 
-}{
-	\hrulefill
-	\vspace*{0.5cm}%
-	\end{minipage}
-}
 
 % centered page environment
 \newenvironment{vcenterpage}
@@ -244,7 +226,9 @@
 \newboolean{showcomments}
 \setboolean{showcomments}{true}
 
+% define review shortcuts, once...
 \ifthenelse{\boolean{showcomments}} {
+	%... enabled (showcomments == true) ...
 	\newcommand{\ugh}[1] {\textcolor{red}{\uwave{#1}}}	% please rephrase
 	\newcommand{\ins}[1] {\textcolor{blue}{\uline{#1}}}	% please insert
 	\newcommand{\del}[1] {\textcolor{red}{\sout{#1}}}	% please delete
@@ -256,6 +240,7 @@
 		{\textcolor{#3}{\sf\small$\blacktriangleright$\textit{#2}$\blacktriangleleft$}}}
 
 }{
+	%... and once disbled (showcomments == false)
 	\newcommand{\ugh}[1]{#1}							% please rephrase
 	\newcommand{\ins}[1]{#1}							% please insert
 	\newcommand{\del}[1]{}								% please delete
@@ -265,7 +250,6 @@
 
 % =============================================================================
 \usepackage[pagebackref,hyperindex=true]{hyperref}
-
 
 % Links in pdf
 \definecolor{linkcol}{rgb}{0.0, 0.0, 0.0} 
@@ -295,15 +279,16 @@
 \newcommand{\tablabel}[1] {\label{tab:#1}}
 \newcommand{\lstlabel}[1] {\label{lst:#1}}
 
-\newcommand{\figref}[1] {Figure~\ref{fig:#1}}
-\newcommand{\chapref}[1]{Chapter~\ref{chap:#1}}
-\newcommand{\secref}[1] {Section~\ref{sec:#1}}
-\newcommand{\tabref}[1] {Table~\ref{tab:#1}}
-\newcommand{\lstref}[1] {Listing~\ref{lst:#1}}
+\newcommand{\figref}[1] {\hyperref[fig:#1]{Figure}~\ref{fig:#1}}
+\newcommand{\chapref}[1]{\hyperref[chap:#1]{Chapter}~\ref{chap:#1}}
+\newcommand{\secref}[1] {\hyperref[sec:#1]{Section}~\ref{sec:#1}}
+\newcommand{\tabref}[1] {\hyperref[tab:#1]{Table}~\ref{tab:#1}}
+\newcommand{\lstref}[1] {\hyperref[lst:#1]{Listing}~\ref{lst:#1}}
 
 \newcommand{\commented}[1]{}
 
-\newcommand{\introduction}{\section*{\hspace{-1pt}Introduction}}
+% custom Introduction section, slightly pushed left to visually align with the following paragraph
+\newcommand{\introduction}{\section*{\hspace{-1pt}Introduction}} 
 
 \newcommand{\bs}    {\symbol{'134}} % backslash
 \newcommand{\us}    {\symbol{'137}} % underscore
