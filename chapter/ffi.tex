@@ -21,21 +21,21 @@ Multiple solutions exist to achieve access to an external library from dynamic l
 \figref{benzo-extensionComparison} depicts four possibilities of dealing with new or external libraries in a high-level language.
 
 \paragraph{Language-side Library.}
-One solution is to re-implement a library completely at language-side (cf. \figref{ffi-extensionComparison}.a).
+One solution is to re-implement a library completely at language-side (cf. \figref{benzo-extensionComparison}.a).
 Even though this is the most flexible solution, this is often not an option, neither from the technical point of view (performance penalty), nor from the economic point of view (development time and costs).
 
 \paragraph{\VM Extension.}
-The second one (\figref{ffi-extensionComparison}.b) is to do a \emph{\VM extension} providing new primitives that the high-level language uses to access the native external library.
+The second one (\figref{benzo-extensionComparison}.b) is to do a \emph{\VM extension} providing new primitives that the high-level language uses to access the native external library.
 This solution is generally efficient since the external library may be statically compiled within the \VM.
 However a tight integration into the \VM also means more dependencies and a different development environment than the final product at language-side.
 
 \paragraph{\VM Plugin.}
-The third solution (\figref{ffi-extensionComparison}.c) is similar to the previous one but the extension is factored out of the \VM as a \emph{plugin}.
+The third solution (\figref{benzo-extensionComparison}.c) is similar to the previous one but the extension is factored out of the \VM as a \emph{plugin}.
 This solution implies again a lot of low-level development at \VM-level that must be done for each external library we want to use.
 Additionally we have to adapt the plugin for all platforms on which the \VM is supposed to run on.
 
 \paragraph{\FFI.}
-A higher-level solution is to define \emph{Foreign Function Interfaces} (\FFIs) (cf. \figref{ffi-extensionComparison}.d).
+A higher-level solution is to define \emph{Foreign Function Interfaces} (\FFIs) (cf. \figref{benzo-extensionComparison}.d).
 The main advantage of this approach is that once a \VM is \FFI-enabled, only a language extension (no \VM-level code) is needed to provide access to new native libraries.
 From the portability point of view, only the generic \FFI \VM-plugin has to be implemented on all platforms.
 

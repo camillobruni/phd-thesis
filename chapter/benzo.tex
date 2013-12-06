@@ -82,13 +82,11 @@ Unlike typical implementations that would focus on writing them as \VM extension
 	\item[Language-side \JIT Compiler] A \JIT compiler that works at language-side and interacts with the \VM for code synchronization, described in \secref{benzo-nabujito} and in more detail in \secref{val-nabujito}.
 \end{description}
 
-
 \noindent Illustrated by these three distinct examples, the contributions of this chapter are:
 \begin{enumerate} 
 	\item A \emph{reflective} high-level low-level programming framework that encourages the extension of high-level language runtimes on the fly without the overheads imposed by pure high-level solutions. 
 	\item A proof of concept of the proposal with the implementation and description of three different tools that heavily use reflective low-level programming and covers distinct scenarios.
 \end{enumerate}
-
 
 % ===========================================================================
 \section{The \B Framework}
@@ -169,14 +167,25 @@ A marker at the end of the compiled method called trailer type is used to flag m
 Since compiled methods are first-class objects it is possible to modify them at runtime and append the native code.
 The primitive \ttt{primitiveNativeCall}, which is implemented by \B, is the responsible of running the native instructions in a \ST method.
 The code example \ttt{interrupt3} shows a very basic application of our infrastructure.
-In \secref{benzo-language-side}, through more detailed examples, we describe how \B uses \ST code to generate the native instructions.
-
+%
 \begin{stcode}[label={lst:benzo-basic-native-code}, caption={\ST method using \B for very basic low-level debugging.}, escapeinside={@}{@}]{5}
 interrupt3
 	<primitive: 'primitiveNativeCall' 
 	 module: 'BenzoPlugin' >
 	Benzo generate: [ :asm | asm int3 ]
 \end{stcode}
+%
+The primitive named \ttt{primitiveNativeCall} on the first line tries to run the native instructions appended to the compiled method.
+When there is no native code yet the primitive fails and on return it evaluate the rest of the \ST code in the method.
+In \secref{benzo-language-side}, through more detailed examples, we describe how \B uses \ST code to generate the native instructions
+Figure \figref{nativeCodeMethodDetail} shows the resulting compiled method in full detail..
+%
+\begin{figure}[ht]
+    \centering
+    \includegraphics{nativeCodeMethodDetail}
+    \caption[\ttt{CompiledMethod} With \B Code]{Example of \ST method with native code which calls the low-level debug exception handler \ttt{INT3}. The bytecode references objects indirectly via the literal frame residing at the beginning of the method.}
+    \figlabel{nativeCodeMethodDetail}
+\end{figure}
 
 %----------------------------------------------------------------------------
 \paragraph{Native Code Platform Interaction.}
@@ -225,11 +234,23 @@ This means that for native code, instead of a method-local literal array we shar
 \paragraph{\JIT Interaction.}
 \seclabel{benzo-jit-interaction}
 
+A special case worth being mentioned is the interaction of \B and the JIT.
 When the \PH \VM starts the execution of dynamic generated code the execution environment changes slightly.
-Similarly, when entering primitives or plugin code, the managed execution mode is left and a normal C-level execution environment is reestablished until the primitive finishes and the \VM jumps back to the jitted code. 
-To avoid these context changes that imply a considerable performance overhead, we extend the \VM to support inlining of native code in the \JIT phase following the same strategy as other existing primitives which are inlined at \JIT-level.
-The \B prologue and epilogue used for managing the low-level stack are replaced by an adapted version for the \JIT.
+Similarly, when entering primitives or plugin code, the managed execution mode is left and a normal C-level execution environment is reestablished until the primitive finishes and the \VM jumps back to the jitted code.
+These context switches impose an overhead and can be avoided in the case of calling native code.
+For this reason we extend the \VM to support inlining of native code in the \JIT phase following the same strategy as other existing primitives which are inlined at \JIT-level.
+%
+\begin{figure}[ht]
+	\centering
+	\includegraphics{nabujitoInline}
+	\caption[\B \JIT Interaction]{\B inlining language-side native code into jitted mode.}
+	\figlabel{benzo-nabujitoInline}
+\end{figure}
+%
+\figref{benzo-nabujitoInline} shows how the native code from a \B enabled method is inlined into the JIT infrastructure.
+The \B prologue and epilogue used for managing the low-level stack are replaced by an adapted version for the JIT.
 The performance boost of this optimization is further discussed in \secref{benzo-issues-performance}.
+
 
 %----------------------------------------------------------------------------
 \paragraph{Error Handling.}
@@ -328,7 +349,7 @@ Whereas the typical \FFI implementation is based on an separate plugin, dynamic 
 	\centering
 	\includegraphics[scale=1.1]{nativeboost-overview}
 	\caption[\NB Overview]{\NB generates generates native code at language-side with \B to perform an \FFI callout to an external function.}
-	\figlabel{benzo-waterfall-overview}
+	\figlabel{benzo-ffi-overview}
 \end{figure}
 
 \FFIs enable a programmer to call external functions without the need to implement additional \VM extensions.
