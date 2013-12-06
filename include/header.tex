@@ -67,6 +67,14 @@
 
 %\renewcommand*\arraystretch{1.2} % modify the line spacing in tables
 
+% globally reduce the space between list items
+\newlength{\wideitemsep}
+\setlength{\wideitemsep}{.5\itemsep}
+\addtolength{\wideitemsep}{-3pt}
+\let\olditem\item
+\renewcommand{\item}{\setlength{\itemsep}{\wideitemsep}\olditem}
+
+
 % =============================================================================
 
 % Table of contents for each chapter
@@ -223,7 +231,7 @@
 	}
 }{}
 
-%\renewcommand{\lstlistingname}{Code Example}
+\renewcommand{\lstlistingname}{Code Example}
 
 % =============================================================================
 \newboolean{showcomments}
