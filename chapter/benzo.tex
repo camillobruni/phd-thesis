@@ -324,6 +324,13 @@ Whereas the typical \FFI implementation is based on an separate plugin, dynamic 
 \seclabel{benzo-ffi}
 %----------------------------------------------------------------------------
 
+\begin{figure}[h]
+	\centering
+	\includegraphics[scale=1.1]{nativeboost-overview}
+	\caption[\NB Overview]{\NB generates generates native code at language-side with \B to perform an \FFI callout to an external function.}
+	\figlabel{benzo-waterfall-overview}
+\end{figure}
+
 \FFIs enable a programmer to call external functions without the need to implement additional \VM extensions.
 \NB \cite{Brun13a} is a production-ready \FFI for \PH, developed on top of \B. 
 For a detailed discussion of the implementation of \NB see \chapref{ffi}.
@@ -358,6 +365,13 @@ Each language-side library can define its own highly efficient conversion routin
 \seclabel{benzo-waterfall}
 %----------------------------------------------------------------------------
 
+\begin{figure}[h]
+	\centering
+	\includegraphics[scale=1.1]{waterfall-overview}
+	\caption[\WF Overview]{\WF reuses the definitions of \VM primtives written in \Slang and compiles them dynamically. The same primitive definition is used for generating the static primitive at \VM compilation time.}
+	\figlabel{benzo-waterfall-overview}
+\end{figure}
+
 The second \B-based application we present takes the concept of our \FFI solution further.
 \NB allows us to call external functions by generating the callout code at language-side.
 From an abstract point of view we replace language-side methods with native routines.
@@ -372,12 +386,6 @@ The \VM used for \PH is metacircular, the \VM sources are written in the same la
 Hence, the complete definition of the \VM primitives can be made accessible at language-side.
 \WF takes the primitive definition written in \Slang and compiles it to native-code.
 
-\begin{figure}[h]
-	\centering
-	\includegraphics[scale=1.1]{waterfall-overview}
-	\caption[\WF Overview]{\WF reuses the definitions of \VM primtives written in \Slang and compiles them dynamically. The same primitive definition is used for generating the static primitive at \VM compilation time.}
-	\figlabel{benzo-waterfall-overview}
-\end{figure}
 
 As \figref{benzo-waterfall-overview} illustrates, \WF extends the lifetime of the metacircular \VM definition to the actual language runtime.
 By default the primitive definitions written in \Slang are only used to generate the \VM source in an intermediate step.
