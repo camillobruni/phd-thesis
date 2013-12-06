@@ -104,7 +104,7 @@ Unlike typical implementations that would focus on writing them as \VM extension
 %----------------------------------------------------------------------------
 \PH emerged from the Squeak project \cite{Inga97a}.
 The \PH \VM (Cog) implementation \cite{Mira11a} also evolved from the original Squeak bytecode interpreter.
-The current \VM uses a moving Garbage  Collector (GC) with two generations\gc{ref?} and uses a \JIT that applies basic register allocation to reduce stack load. 
+The current \VM uses a moving Garbage  Collector (\GC) with two generations\gc{ref?} and uses a \JIT that applies basic register allocation to reduce stack load. 
 This situation is not a direct requirement for \B but it is assumed as given and thus not further discussed in detail.
 However, \B requires certain features that were not supported in the existing \VM implementation.
 Mainly our requirement is being able to generate executable code and activate it at runtime.
@@ -119,9 +119,9 @@ However, by default the object memory is not executable.
 This leaves two choices: mark the whole object memory executable or only move the objects with the native code to a special executable memory region.
 We took the path of least resistance and marked the whole object memory as executable.
 The other solution requires substantial changes for memory management. 
-As the \VM has a moving GC we only access high-level \ST objects via an indirection from low-level code.
+As the \VM has a moving \GC we only access high-level \ST objects via an indirection from low-level code.
 Another approach would have been to harness the fixed sized executable region used by the existing \JIT.
-However, the \JIT space does not hold normal \ST objects but special low-level structures and uses its own special GC. 
+However, the \JIT space does not hold normal \ST objects but special low-level structures and uses its own special \GC. 
 
 %----------------------------------------------------------------------------
 \paragraph{\VM Interaction.}
@@ -196,15 +196,15 @@ Moreover, it does not have to flush the native code when the application is rest
 Compiled methods in \PH have a special section, the literal frame, which stores objects referenced in the bytecodes.
 Bytecodes then only have indirect access to these objects by indexing into the literal frame.
 This simplifies the implementation of the garbage collector as it only has to scan the beginning of each method for possible references to objects. 
-So the GC only tracks \ST objects when they are in the method literal frame. 
-The moving GC of the \VM used for \PH has a significant impact on the low-level code we can generate using \B.
+So the \GC only tracks \ST objects when they are in the method literal frame. 
+The moving \GC of the \VM used for \PH has a significant impact on the low-level code we can generate using \B.
 For instance it is not possible to statically refer to language-side objects from native code as object addresses change after each garbage collection.
-Modifying the GC to support regions of non-moving objects would solve this problem.
+Modifying the \GC to support regions of non-moving objects would solve this problem.
 However, we chose to minimize the number of low-level \VM modification necessary to run our experiments and opted for a simpler solution.
 \B accesses language-side objects through an indirection.
 For indirectly accessing objects the \PH \VM already features a special structure, named \emph{external roots}.
 This array has a fixed-location in memory which can be used to access moving language-side objects.
-The GC updates the addresses in this \VM structure after each run.
+The \GC updates the addresses in this \VM structure after each run.
 Hence we have the static address of the external roots object as an entry point to statically access \ST objects.
 %
 \begin{figure}[ht]
@@ -220,7 +220,7 @@ This means that for native code, instead of a method-local literal array we shar
 \B only adds an \ttt{Array} to the external root objects which is managed from language-side and administers all references.
 
 %\revc{The external roots concept appears here first but the idea of "indirection" has been mentioned. The regular literal frame of compiled methods are discussed heavily; that would suggest that the generated native code could use relative offset from the code location and still be able to "pin-point" the literal slot in the literal frame. What is the downside of this approach? (And how slots in the external roots garbage collected?)}
-%\gc{I'm not very interested with the comment above. But perhaps here it is a good place to say that once the native code start executing our \VM assures that a GC could not happen}
+%\gc{I'm not very interested with the comment above. But perhaps here it is a good place to say that once the native code start executing our \VM assures that a \GC could not happen}
 %----------------------------------------------------------------------------
 \paragraph{\JIT Interaction.}
 \seclabel{benzo-jit-interaction}
@@ -277,7 +277,7 @@ Benzo x86 generate: [ :asm :helper | | register |
 %
 The \VM helper exposes a basic, low-level interface to access objects and its properties.
 Additional methods cover the access to the external roots described in \secref{benzo-gc-interaction}.
-In this case the \ttt{\#instantiateClass:indexableSize:} will generate the proper native code to call to a \VM function and make sure that the side-effects of a possible GC run are handled properly.
+In this case the \ttt{\#instantiateClass:indexableSize:} will generate the proper native code to call to a \VM function and make sure that the side-effects of a possible \GC run are handled properly.
 By default the value in the result register is returned back to the language-side. On \textsc{x86} this defaults to \ttt{EAX}.
 In section \secref{benzo-usecase} we introduce more substantial applications based on \B.
 
@@ -583,7 +583,7 @@ To address extensions in this context there exist some known approaches:
 
 \begin{description}[noitemsep]
 	\item[Language-side Library] based on implementing a new or existing library. 
-	\item[Language-side Reflective Extension] relying on reflective features of the language. 
+	\item[Reflective Extension] relying on reflective features of the language. 
 	\item[\VM Extension] by writing plugins or changing the core of the \VM.
 	\item[Hybrid Extension] by accessing external libraries using \FFI.  
 \end{description}
@@ -593,7 +593,7 @@ The relation between the side concerning the abstraction and implementation leve
 
 \begin{figure}[h]
 	\includegraphics[width=\linewidth]{extensionComparison}
-	\caption[Language Extension Mechanisms]{Comparing different extension mechanisms: 
+	\caption[Language Extension Mechanisms]{\todo{Use 2x2 Subfigure}Comparing different extension mechanisms: 
 		a) language running on a standard \VM, 
 		b) language-side implementation of an extension
 		c) language using features from a \VM extension, 

@@ -12,6 +12,7 @@
 \usepackage{amssymb}
 \usepackage{bold-extra} % bold support for small caps 
 \usepackage[hypcap]{caption} % with hyperref point to the head of the pic
+\usepackage{chngpage} % allows for temporary adjustment of side margins
 \usepackage{cite}
 \usepackage{color} % custom colors for text
 \usepackage{enumerate} % enable enumerated lists
@@ -63,6 +64,8 @@
 \NoIndentAfterEnv{description}
 \NoIndentAfterEnv{table}
 \NoIndentAfterEnv{figure}
+
+%\renewcommand*\arraystretch{1.2} % modify the line spacing in tables
 
 % =============================================================================
 
@@ -329,6 +332,7 @@
 \newcommand{\B}		{\textsc{Benzo}\xspace}
 \newcommand{\FFIs}	{\textsc{ffi}s\xspace}
 \newcommand{\FFI}	{\textsc{ffi}\xspace}
+\newcommand{\GC}	{\textsc{gc}\xspace}
 \newcommand{\GCC}	{\textsc{gcc}\xspace}
 \newcommand{\INRIA}	{\textsc{inria}\xspace}
 \newcommand{\IR}	{\textsc{ir}\xspace}
