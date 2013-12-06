@@ -279,7 +279,7 @@ The \VM helper exposes a basic, low-level interface to access objects and its pr
 Additional methods cover the access to the external roots described in \secref{benzo-gc-interaction}.
 In this case the \ttt{\#instantiateClass:indexableSize:} will generate the proper native code to call to a \VM function and make sure that the side-effects of a possible \GC run are handled properly.
 By default the value in the result register is returned back to the language-side. On \textsc{x86} this defaults to \ttt{EAX}.
-In section \secref{benzo-usecase} we introduce more substantial applications based on \B.
+In \secref{benzo-usecase} we introduce more substantial applications based on \B.
 
 %----------------------------------------------------------------------------
 \paragraph{Code Activation.}
@@ -441,7 +441,7 @@ Optimizations for additional methods are all implemented flexibly at language-si
 Wherever possible, we reimplement the same behavior as the existing native \JIT compiler.
 Eventually the native code is ready and \B attaches it to the existing compiled method.
 When the language-side jitted code is activated \B ensures that we do not have to leave the \JIT execution mode, and thus we can call methods at the same speed as the existing \JIT.
-The benchmarks of section \secref{benzo-nabujito-performance} show the empirical results.
+The benchmarks of \secref{benzo-nabujito-performance} show the empirical results.
 
 
 %============================================================================

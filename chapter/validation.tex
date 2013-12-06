@@ -96,7 +96,7 @@ Even a very simple instrumentation task such as printing the address in memory o
 If during the printing process another object is created the very same instrumented \ttt{basicNew} primitive would be triggered.
 Using reflective techniques it is possible to avoid this loop, however, with a considerable overhead.
 With \WF we can forget about these issues since the instrumentation code will be implemented at the lowest level.
-In section \secref{val-waterfall-performance} we show how \WF, the \B based approach for generating primitives on the fly, outperforms the reflective solutions for primitives instrumentation. 
+In \secref{val-waterfall-performance} we show how \WF, the \B based approach for generating primitives on the fly, outperforms the reflective solutions for primitives instrumentation. 
 
 
 % -----------------------------------------------------------------------------
@@ -249,7 +249,7 @@ Optimizations for additional methods are all implemented flexibly at language-si
 Wherever possible, we reimplement the same behavior as the existing native \JIT compiler.
 Eventually the native code is ready and \B attaches it to the existing compiled method.
 When the language-side jitted code is activated \B ensures that we do not have to leave the \JIT execution mode, and thus we can call methods at the same speed as the existing \JIT.
-The benchmarks of section \secref{val-nabujito-performance} show the empirical results.
+The benchmarks of \secref{val-nabujito-performance} show the empirical results.
 
 % -----------------------------------------------------------------------------
 \subsection{Validation}
