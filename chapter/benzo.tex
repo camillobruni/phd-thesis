@@ -352,7 +352,7 @@ Whereas the typical \FFI implementation is based on an separate plugin, dynamic 
 	\figlabel{benzo-ffi-overview}
 \end{figure}
 
-\FFIs enable a programmer to call external functions without the need to implement additional \VM extensions.
+\noindent \FFIs enable a programmer to call external functions without the need to implement additional \VM extensions.
 \NB \cite{Brun13a} is a production-ready \FFI for \PH, developed on top of \B. 
 For a detailed discussion of the implementation of \NB see \chapref{ffi}.
 An \FFI implementation consists of two main parts: calling external functions and converting data between the two environments.
@@ -671,7 +671,7 @@ If all language-side optimization opportunities have been exhausted it is exposi
 This is a subcase of the previous approach but in the context of reflective environments that expose particular characteristics.
 For instance, Meta Object Protocols (\MOP) \cite{Kicz91a} based on reflection \cite{Maes87a} are used to define certain control points in the system to change the language.
 By composing meta objects it is possible to even modify the semantics of the language. 
-Several languages such as \ST, Python, \urlfootnote{Ruby}{http://www.ruby-lang.org/}, and others provide reflective capabilities with different depths \cite{Ande98a,Van10a}.
+Several languages such as \ST, \urlfootnote{\Python}{http://python.org/}, \urlfootnote{Ruby}{http://www.ruby-lang.org/}, and others provide reflective capabilities with different depths \cite{Ande98a,Van10a}.
 However, most modern programming languages only have very limited support for intercession.
 Hence the possibilities for dynamically changing language semantics or features are limited. 
 Furthermore reflective capabilities are hard to implement efficiently.
