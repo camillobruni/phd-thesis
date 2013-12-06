@@ -487,15 +487,22 @@ At language-side, callouts are declared with \NBFFI which processes them and dyn
 This native code is responsible of the marshalling and calling the external function.
 \NB then uses a primitive to activate this native code.
 
-\begin{figure}[h]
+\begin{figure}[ht]
 	\centering
 	\includegraphics[scale=1.1]{nbArchitecture}
 	\caption[\NB Components Layering]{\NB main components that major part of the code resides at language-side.}
 	\figlabel{ffi-nbArchitecture}
 \end{figure}
 
-% General \FFI overview and difference of NB
-\begin{figure*}[t]
+\paragraph{Callout propagation.}
+\todo{ugly separation}
+\figref{ffi-ffi} shows a comparison of the resolution of a \FFI call both in \NBFFI and a plugin-based \FFI.
+At step 1, a \FFI call is emitted.
+The \NBFFI call is mostly processed at language-side and it is only during step 4 that a primitive is called and the \VM effectively does the external call by executing the native code.
+On the opposite, a plugin-based \FFI call already crossed the low-level frontier in step 2 resulting that part of the type conversion process (marshalling) is already done in the \VM code.
+In \NBFFI, doing most of the \FFI call processing at language-side makes easier to keep control, redefine or adapt it if needed.
+
+\begin{figure*}[h]
 	\begin{adjustwidth}{-2.0in}{-2.0in}
 		\centering
 		\includegraphics[scale=1.1]{ffiOverview}
@@ -503,14 +510,6 @@ This native code is responsible of the marshalling and calling the external func
 	\caption[\FFI Implementation Comparison]{Comparison of \FFI calls propagation in \NBFFI and a typical \VM plugin-based implementation. \NB resorts to \VM-level only for the native-code activation, whereas typical implementations cross this barrier much earlier.}
 	\figlabel{ffi-ffi}
 \end{figure*}
-
-\paragraph{Callout propagation.}
-\figref{ffi-ffi} shows a comparison of the resolution of a \FFI call both in \NBFFI and a plugin-based \FFI.
-At step 1, a \FFI call is emitted.
-The \NBFFI call is mostly processed at language-side and it is only during step 4 that a primitive is called and the \VM effectively does the external call by executing the native code.
-On the opposite, a plugin-based \FFI call already crossed the low-level frontier in step 2 resulting that part of the type conversion process (marshalling) is already done in the \VM code.
-In \NBFFI, doing most of the \FFI call processing at language-side makes easier to keep control, redefine or adapt it if needed.
-
 % ===========================================================================
 \section{\NBFFI Evaluation}
 \seclabel{ffi-evaluation}
