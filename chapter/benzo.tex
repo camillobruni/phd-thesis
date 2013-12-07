@@ -113,8 +113,8 @@ This is general and essential so it applies to any \VM that wants to support dyn
 \seclabel{benzo-exeutable-memory}
  
 We chose to follow a very lightweight approach to dynamically execute native code at runtime. 
-Since we use \ST as our host language it is a natural choice to manage the native code at language-side and use as little VM features as possible.
-Hence we use normal \ST objects to hold the generated native code.
+Since we use \PH as our host language it is a natural choice to manage the native code at language-side and use as little VM features as possible.
+Hence we use normal \PH objects to hold the generated native code.
 
 However, by default the object memory is not executable.
 This leaves two choices, either mark the whole object memory executable or move the objects with the native code to a special executable memory region.
@@ -124,13 +124,13 @@ The other solution requires substantial changes for memory management.
 The \GC of the \PH \VM uses a moving semi-space approach with two generations.
 Additionally there is a fixed sized executable region used for the \JIT as a buffer for runtime generated native code.
 The \JIT space uses its own small garbage collection strategy which is decoupled from the rest of the object memory.
-This also means that the \JIT space does not hold normal \ST objects but special low-level structures.
+This also means that the \JIT space does not hold normal \PH objects but special low-level structures.
 As mentioned before, the \JIT space is limited in size and eventually fills up, causing the \JIT to spill older code structures from there. 
 
-All in all the \JIT-space does not seem to be the right place for storing persistent \ST objects holding native code.
-Instead we opt for the completely executable object memory option and store all the executable code in standard \ST objects.
+All in all the \JIT-space does not seem to be the right place for storing persistent \PH objects holding native code.
+Instead we opt for the completely executable object memory option and store all the executable code in standard \PH objects.
 As the \VM has a moving \GC, it gives us certain restrictions on what kind of native code we can run directly from the language-side. 
-As we will describe in \secref{benzo-platform-interaction}, we can access high-level \ST objects only via an indirection from low-level code.
+As we will describe in \secref{benzo-platform-interaction}, we can access high-level \PH objects only via an indirection from low-level code.
 
 %----------------------------------------------------------------------------
 \paragraph{\VM Interaction.}
@@ -138,7 +138,7 @@ As we will describe in \secref{benzo-platform-interaction}, we can access high-l
 
 \todo{dig up the older versions of this section with the longer text}
 
-The standard way in \ST to execute low-level code is to use a tag in the method definition. The following example shows such a method on the \ttt{Float} class.
+The standard way in \PH to execute low-level code is to use a tag in the method definition. The following example shows such a method on the \ttt{Float} class.
 %
 \begin{stcode}[label={lst:benzo-basic-primitive}]{5}
 * aNumber 
@@ -148,7 +148,7 @@ The standard way in \ST to execute low-level code is to use a tag in the method 
 %
 Here we use the primitive 49 to call a \VM function which efficiently multiplies two floats. 
 \figref{benzo-smalltalkPrimitive}-a describes the case where the primitive is successfully executed.
-However, if the primitive is unable to do the operation, for instance if the argument \ttt{aNumber} is not a float, it will signal a failure which causes the \VM to execute the fallback \ST code in the method body.  
+However, if the primitive is unable to do the operation, for instance if the argument \ttt{aNumber} is not a float, it will signal a failure which causes the \VM to execute the fallback \PH code in the method body.  
 \figref{benzo-smalltalkPrimitive}-b describes it. 
 In the floating point multiplication example the fallback code uses a slow conversion method to polymorphically convert other objects to floats and defer the multiplication.
 
@@ -164,9 +164,9 @@ In the floating point multiplication example the fallback code uses a slow conve
 Our custom primitive then executes the generated native code and returns to language-side. 
 This code is appended inside the compiled method object.
 When the primitive is activated, it  accesses the currently executed compiled method via a \VM function. 
-\figref{benzo-nativeCodeMethod} shows the structure of a \ST compiled method that has native code attached to it.
+\figref{benzo-nativeCodeMethod} shows the structure of a \PH compiled method that has native code attached to it.
 We see the primitive tag on top, followed by the literal frame which holds references to symbols and classes used in the method.
-The subsequent \ST bytecode is the fallback code executed only if the primitive fails. Only then appears the native instructions.
+The subsequent \PH bytecode is the fallback code executed only if the primitive fails. Only then appears the native instructions.
 A marker at the end of the compiled method called trailer type is used to flag methods that actually have native code attached to them.
 %
 \begin{figure}[ht]
@@ -177,10 +177,10 @@ A marker at the end of the compiled method called trailer type is used to flag m
 \end{figure}
 
 \noindent Since compiled methods are first-class objects it is possible to modify them at runtime and append the native code.
-The primitive \ttt{primitiveNativeCall}, which is implemented by \B, is the responsible of running the native instructions in a \ST method.
+The primitive \ttt{primitiveNativeCall}, which is implemented by \B, is the responsible of running the native instructions in a \PH method.
 The code example \ttt{interrupt3} shows a very basic application of our infrastructure.
 %
-\begin{stcode}[label={lst:benzo-basic-native-code}, caption={\ST method using \B for very basic low-level debugging.}, escapeinside={@}{@}]{5}
+\begin{stcode}[label={lst:benzo-basic-native-code}, caption={\PH method using \B for very basic low-level debugging.}, escapeinside={@}{@}]{5}
 interrupt3
 	<primitive: 'primitiveNativeCall' 
 	 module: 'Benzo' >
@@ -188,14 +188,14 @@ interrupt3
 \end{stcode}
 %
 The primitive named \ttt{primitiveNativeCall} on the first line tries to run the native instructions appended to the compiled method.
-When there is no native code yet the primitive fails and on return it evaluate the rest of the \ST code in the method.
-In \secref{benzo-language-side}, through more detailed examples, we describe how \B uses \ST code to generate the native instructions
+When there is no native code yet the primitive fails and on return it evaluate the rest of the \PH code in the method.
+In \secref{benzo-language-side}, through more detailed examples, we describe how \B uses \PH code to generate the native instructions
 Figure \figref{nativeCodeMethodDetail} shows the resulting compiled method in full detail..
 %
 \begin{figure}[ht]
     \centering
     \includegraphics[scale=1.1]{nativeCodeMethodDetail}
-    \caption[\ttt{CompiledMethod} With \B Code]{Example of \ST method with native code which calls the low-level debug exception handler \ttt{INT3}. The bytecode references objects indirectly via the literal frame residing at the beginning of the method.}
+    \caption[\ttt{CompiledMethod} With \B Code]{Example of \PH method with native code which calls the low-level debug exception handler \ttt{INT3}. The bytecode references objects indirectly via the literal frame residing at the beginning of the method.}
     \figlabel{nativeCodeMethodDetail}
 \end{figure}
 
@@ -205,7 +205,7 @@ Figure \figref{nativeCodeMethodDetail} shows the resulting compiled method in fu
 
 To ensure that the code is compatible with the current platform a \VM specific marker is expected at the beginning of the native code on the compiled method.
 Upon activation \B compares this marker with the one from the current \VM.
-If they don't match, \B signals a failure that causes the \VM to evaluate the fallback \ST code.
+If they don't match, \B signals a failure that causes the \VM to evaluate the fallback \PH code.
 With this elegant approach \B regenerates native code lazily on new platforms.
 Moreover, it does not have to flush the native code when the application is restarted on the same platform.
 
@@ -216,7 +216,7 @@ Moreover, it does not have to flush the native code when the application is rest
 Compiled methods in \PH have a special section, the literal frame, which stores objects referenced in the bytecodes.
 Bytecodes then only have indirect access to these objects by indexing into the literal frame.
 This simplifies the implementation of the garbage collector as it only has to scan the beginning of each method for possible references to objects. 
-So the \GC only tracks \ST objects when they are in the method literal frame. 
+So the \GC only tracks \PH objects when they are in the method literal frame. 
 The moving \GC of the \VM used for \PH has a significant impact on the low-level code we can generate using \B.
 For instance it is not possible to statically refer to language-side objects from native code as object addresses change after each garbage collection.
 Modifying the \GC to support regions of non-moving objects would solve this problem.
@@ -234,8 +234,8 @@ However, we chose to minimize the number of low-level \VM modification necessary
 For indirectly accessing objects the \PH \VM already features a special structure, named \emph{external roots}.
 This array has a fixed-location in memory which can be used to access moving language-side objects.
 The \GC updates the addresses in this \VM structure after each run.
-Hence we have the static address of the external roots object as an entry point to statically access \ST objects.
-Summarizing, for accessing \ST objects within native code we first register it as an external root object and access it only indirectly.
+Hence we have the static address of the external roots object as an entry point to statically access \PH objects.
+Summarizing, for accessing \PH objects within native code we first register it as an external root object and access it only indirectly.
 This means that for native code, instead of a method-local literal array we share a global literal array as shown in \figref{benzo-externalRoots}. 
 \B only adds an \ttt{Array} to the external root objects which is managed from language-side and administers all references.
 
@@ -295,7 +295,7 @@ The following describes the features of \B at the high-level language-side.
 \paragraph{Code Generation.}
 \seclabel{benzo-code-generation}
 
-\B delegates native code generation to a full assembler written in \ST. The following example shows how to use the assembler to generate the native code for moving \ttt{1} into the 32-bit register \ttt{EAX}.
+\B delegates native code generation to a full assembler written in \PH. The following example shows how to use the assembler to generate the native code for moving \ttt{1} into the 32-bit register \ttt{EAX}.
 %
 \begin{stcode}{4}
 Benzo x86 generate: [ :asm |
@@ -404,7 +404,7 @@ getenv: name
 \end{stcode}
 %
 In this example \NB automatically detects, using reflection, that the argument for the \PH method corresponds to the one of the low-level C function.
-The most important aspect about this example is that it is written with standard \ST code, a property that extends to almost the complete implementation.
+The most important aspect about this example is that it is written with standard \PH code, a property that extends to almost the complete implementation.
 \NB, additionally to the native code activation, relies on two simple primitives provided by \B to retrieve addresses of external functions (\ttt{dlsym}) and to load external libraries (\ttt{dlopen}).
 
 \NB generates the glue code to call external functions dynamically at run time.
@@ -460,8 +460,8 @@ From within \PH we can only activate primitives but the internal definition is n
 \todo{do a pass on reducing this section a bit}
 In this section we present \NBJ, a \B-based approach for a language-side \JIT compiler.
 \NBJ goes even further than \WF using almost the same techniques.
-However, instead of focusing on primitives, \NBJ generates native executable code for standard \ST methods.
-Primitives tend to be more low-level, whereas \NBJ focuses on high-level \ST code. 
+However, instead of focusing on primitives, \NBJ generates native executable code for standard \PH methods.
+Primitives tend to be more low-level, whereas \NBJ focuses on high-level \PH code. 
 
 
 \begin{figure}[h]
@@ -472,9 +472,9 @@ Primitives tend to be more low-level, whereas \NBJ focuses on high-level \ST cod
 \end{figure}
 
 \noindent The \PH \VM (originally \urlfootnote{\textsc{Cog vm}}{http://www.mirandabanda.org/cog/}) already comes with a \JIT that translates bytecodes to native instructions.
-It transforms \ST methods into slightly optimized native code at runtime.
+It transforms \PH methods into slightly optimized native code at runtime.
 The main speed improvement comes from avoiding bytecode dispatching and by inlining certain known operations and primitives \cite{Ayco03a}.
-The most complex logic of the \JIT infrastructure deals with the dynamic nature of the \ST environment.
+The most complex logic of the \JIT infrastructure deals with the dynamic nature of the \PH environment.
 Methods and classes can be changed at runtime and that has to be addressed by the \JIT infrastructure.
 The \JIT compiler, by which we refer in this context to the transformation of bytecodes to native code, represents a small part of the whole infrastructure.
 There exists more important stages as an additional register allocation pass to reduce the number of stack operations \cite{Mira99a,Mira11a}.
@@ -488,7 +488,7 @@ With \NBJ we move the \JIT compiler,the part that generates native code at runti
 
 %\begin{itemize}[noitemsep]
 \begin{itemize}
-	\item Optimizing \ST code requires strong interactions with the dynamic environment.
+	\item Optimizing \PH code requires strong interactions with the dynamic environment.
 	\item Accessing language-side properties from the \VM-side is hard.
 	\item Changing the \JIT compiler requires changes at \VM-level.
 	\item The \JIT reimplements primitives for optimization reasons resulting in code duplication.
@@ -509,7 +509,7 @@ Additionally we reimplemented vital native routines for the \JIT which are not d
 
 \paragraph{Dynamic Code Generation.}
 For standard methods \Nabujito takes the bytecodes and transforms them to native code.
-It also applies optimizations such as creating low-level branches for \ST level branching operations like \ttt{ifTrue:}.
+It also applies optimizations such as creating low-level branches for \PH level branching operations like \ttt{ifTrue:}.
 Optimizations for additional methods are all implemented flexibly at language-side.
 Wherever possible, we reimplement the same behavior as the existing native \JIT compiler.
 Eventually the native code is ready and \B attaches it to the existing compiled method.
@@ -559,7 +559,7 @@ The following table contains a performance comparison of three different \FFI im
 \end{table}
 
 \tabref{benzo-ffi-performance-simple} measures the accumulative time of 100'000 \FFI calls.
-Included in these numbers is at least one additional \ST message send to activate the \NB method containing the actual call to the C function.
+Included in these numbers is at least one additional \PH message send to activate the \NB method containing the actual call to the C function.
 Each benchmark itself is run 1000 times and the average and standard deviation is taken.
 We also measured calls with more complex type conversions where the performance boost against Alien pronounced even more because \NB's language-side marshalling is nativized.
 The \JIT interaction described in \secref{benzo-jit-interaction} is also an important optimization factor especially when calling out small helper routines where the context switch from jitted mode is not negligible.
@@ -618,20 +618,20 @@ Instead of focusing on the final performance of the generated code, we present t
         \PH Compiler  & \ttt{71} $\pm$ \ttt{1} ms   \\
         \NBJ      & \ttt{73} $\pm$ \ttt{1} ms
     \end{tabular}
-    \caption[Basic \B-based \JIT Performance]{Compilation efforts of the standard \ST compiler in \PH and \NBJ for the a simple method returning the constant \ttt{nil}.}
+    \caption[Basic \B-based \JIT Performance]{Compilation efforts of the standard \PH compiler in \PH and \NBJ for the a simple method returning the constant \ttt{nil}.}
     \tablabel{benzo-nabujito-performance-small}
 \end{table}
 
 In \tabref{benzo-nabujito-performance-small} we compare the compilation speed of the standard \PH compiler and \NBJ.
 We measure the accumulated time spent to compile the method 1000 times.
 The average and deviation are taken over 100 runs. 
-The \PH compiler takes source code as input and outputs \ST bytecodes.
+The \PH compiler takes source code as input and outputs \PH bytecodes.
 \NBJ takes bytecodes as input and outputs native code.
 
-We see that in the simple case displayed in \tabref{benzo-nabujito-performance-small} \NBJ's compilation speed lies within the same range as the standard \ST compiler.
+We see that in the simple case displayed in \tabref{benzo-nabujito-performance-small} \NBJ's compilation speed lies within the same range as the standard \PH compiler.
 We expect that in the future we apply more low-level optimizations and thus increase the compilation time of \NBJ.
 However, we have shown in the performance evaluation for \NB, the \B-based \FFI, in \secref{benzo-nb-performance} that even a rather high one-time overhead is quickly amortized.
-Furthermore with \ST's image approach the generated native code is persistent over several sessions.
+Furthermore with \PH's image approach the generated native code is persistent over several sessions.
 A subsequent restart of the same runtime will not cause the \JIT to nativize the same methods it did during the last launch.
 Hence our approach is even valid for short-timed script-like applications as most of the methods will already be available in optimized native code from a previous run.
 
@@ -713,7 +713,7 @@ Additionally not all performance bottlenecks can be addressed at language-side.
 This is a subcase of the previous approach but in the context of reflective environments that expose particular characteristics.
 For instance, Meta Object Protocols (\MOP) \cite{Kicz91a} based on reflection \cite{Maes87a} are used to define certain control points in the system to change the language.
 By composing meta objects it is possible to even modify the semantics of the language. 
-Several languages such as \ST, \urlfootnote{\Python}{http://python.org/}, \urlfootnote{Ruby}{http://www.ruby-lang.org/}, and others provide reflective capabilities with different depths \cite{Ande98a,Van10a}.
+Several languages such as \PH, \ST, \urlfootnote{\Python}{http://python.org/}, \urlfootnote{Ruby}{http://www.ruby-lang.org/}, and others provide reflective capabilities with different depths \cite{Ande98a,Van10a}.
 However, most modern programming languages only have very limited support for intercession.
 Hence the possibilities for dynamically changing language semantics or features are limited. 
 Furthermore reflective capabilities are hard to implement efficiently.
@@ -845,7 +845,7 @@ However, most existing solutions target only specific use cases and can not be r
 \todo{hard to debug when only looking at the memory} \\
 \todo{- need full stack view} \\
 \todo{- need register view} \\
-\todo{- need possible view on references to ST objects}
+\todo{- need possible view on references to PH objects}
 
 % -----------------------------------------------------------------------------
 \subsection{Platform Independence}
