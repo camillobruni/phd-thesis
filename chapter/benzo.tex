@@ -160,8 +160,7 @@ In the floating point multiplication example the fallback code uses a slow conve
 	\figlabel{benzo-smalltalkPrimitive}
 \end{figure}
 
-
-\B uses the primitives as a gate to enter the low-level world from the language-side.
+\noindent \B uses the primitives as a gate to enter the low-level world from the language-side.
 Our custom primitive then executes the generated native code and returns to language-side. 
 This code is appended inside the compiled method object.
 When the primitive is activated, it  accesses the currently executed compiled method via a \VM function. 
@@ -352,7 +351,7 @@ Behind the scenes \B adds some more information to the code as the previously me
 	\figlabel{benzo-nativeCodeActivation}
 \end{figure}
 
-Now we completed the first the left half of the activation process shown in \figref{benzo-nativeCodeActivation}.
+\noindent Now we completed the first the left half of the activation process shown in \figref{benzo-nativeCodeActivation}.
 What is left is the third step, the actual activation of the native code.
 After we the native code is installed in the compiled method, we still run \PH code to restart the same \B-enabled method again, this corresponds to the arrow in \figref{benzo-nativeCodeActivation} connecting both sides.
 For activation \B uses reflective features to restart the method.
@@ -641,9 +640,6 @@ Hence our approach is even valid for short-timed script-like applications as mos
 \section{Related Work}
 \seclabel{benzo-related}
 % ===========================================================================
-\todo{find older versions with more related work}
-\todo{ensure that the \FFI related work is not that much}
-
 In the context of \B we have to respect a variety of related work spawning different abstraction levels.
 On a more abstract scale \B allows for a new way of extending the complete language runtime, hence we classify the related work according the following categories show in \figref{benzo-extensionComparison}: general language-side extensions, extensions using reflection, \VM-level extensions, and hybrid approaches.
 
@@ -776,6 +772,8 @@ Moreover this approach implies resorting to pure low-level development where too
 %----------------------------------------------------------------------------
 \subsection{Hybrid Extensions}
 %----------------------------------------------------------------------------
+\todo{ensure that the \FFI related work is not that much}
+
 The last approach is to reuse an existing library usually implemented in a foreign language.
 The languages interact through a well-defined Foreign Function Interface (\FFI).
 \FFI-based extensions are a hybrid approach between pure language-side extensions and \VM-side ones.
