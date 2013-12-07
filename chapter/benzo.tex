@@ -182,7 +182,7 @@ Figure \figref{nativeCodeMethodDetail} shows the resulting compiled method in fu
 %
 \begin{figure}[ht]
     \centering
-    \includegraphics{nativeCodeMethodDetail}
+    \includegraphics[scale=1.1]{nativeCodeMethodDetail}
     \caption[\ttt{CompiledMethod} With \B Code]{Example of \ST method with native code which calls the low-level debug exception handler \ttt{INT3}. The bytecode references objects indirectly via the literal frame residing at the beginning of the method.}
     \figlabel{nativeCodeMethodDetail}
 \end{figure}
@@ -422,6 +422,11 @@ From within \PH we can only activate primitives but the internal definition is n
 \subsection{\NBJ \JIT Compiler}
 \seclabel{benzo-nabujito}
 %----------------------------------------------------------------------------
+In this section we present \NBJ, a \B-based approach for a language-side \JIT compiler.
+\NBJ goes even further than \WF using almost the same techniques.
+However, instead of focusing on primitives, \NBJ generates native executable code for standard \ST methods.
+Primitives tend to be more low-level, whereas \NBJ focuses on high-level \ST code. 
+
 
 \begin{figure}[h]
 	\centering
@@ -430,12 +435,7 @@ From within \PH we can only activate primitives but the internal definition is n
 	\figlabel{benzo-nabujito-overview}
 \end{figure}
 
-\noindent In this section we present \NBJ, a \B-based approach for a language-side \JIT compiler.
-\NBJ goes even further than \WF using almost the same techniques.
-However, instead of focusing on primitives, \NBJ generates native executable code for standard \ST methods.
-Primitives tend to be more low-level, whereas \NBJ focuses on high-level \ST code. 
-
-The \PH \VM (\urlfootnote{\textsc{Cog vm}}{http://www.mirandabanda.org/cog/}) already comes with a \JIT that translates bytecodes to native instructions.
+\noindent The \PH \VM (\urlfootnote{\textsc{Cog vm}}{http://www.mirandabanda.org/cog/}) already comes with a \JIT that translates bytecodes to native instructions.
 It transforms \ST methods into slightly optimized native code at runtime.
 The main speed improvement comes from avoiding bytecode dispatching and by inlining certain known operations and primitives \cite{Ayco03a}.
 The most complex logic of the \JIT infrastructure deals with the dynamic nature of the \ST environment.
@@ -546,10 +546,10 @@ We present the results of this experiment in Table~\tabref{benzo-waterfall-perfo
 \begin{table}[!ht]
     \centering
     \begin{tabular}{rrr}
-					& Running Time 						& Relative Time \\\midrule
-		\VM			& \ttt{  6.4}  $\pm$ \ttt{0.14} ms & $1.0\times$\\
-		\WF	& \ttt{ 22.8}  $\pm$ \ttt{0.17} ms & $\approx3.6\times$\\
-        Reflective	& \ttt{195.0}  $\pm$ \ttt{0.16} ms & $\approx30.0\times$
+		Primitive Type  & Running Time                     & Relative Time \\\midrule
+		\VM			    & \ttt{  6.4}  $\pm$ \ttt{0.14} ms & $1.0\times$\\
+		\WF             & \ttt{ 22.8}  $\pm$ \ttt{0.17} ms & $\approx3.6\times$\\
+        Reflective	    & \ttt{195.0}  $\pm$ \ttt{0.16} ms & $\approx30.0\times$
     \end{tabular}
     \caption[Basic \B-based Dynamic Primitive Performance]{Comparing running time of different implementations of integer arithmetic primitive.}
     \tablabel{benzo-waterfall-performance}
@@ -724,9 +724,9 @@ A very successful research project is \urlfootnote{\textsc{Jikes} Research \VM}{
 It uses \Java to metacircularly define a \Java environment which then generates the final \VM.
 
 A similar framework is \urlfootnote{\PyPy}{http://pypy.org/} \cite{Rigo06a} a \VM framework including an efficient \JIT. 
-\PyPy uses a restricted subset of the  \textsc{Python} language named \textsc{RPython} which is then translated to various low-level backends such as C or \textsc{Llvm} code.
+\PyPy uses a restricted subset of the  \textsc{Python} language named \textsc{RPython} which is then translated to various low-level backends such as C or \textsc{llvm} code.
 There exist several different high-level language \VM implementations on top of \PyPy such as \ST \cite{Bolz08a} or \textsc{Prolog}.
-However, its main focus lies on an efficient \JIT generator mainly for a Python interpreter, and not on a direct, language-side assembler interface.
+However, its main focus lies on an efficient \JIT generator mainly for a \Python interpreter, and not on a direct, language-side assembler interface.
 
 
 %----------------------------------------------------------------------------
@@ -748,13 +748,13 @@ This is due to marshalling arguments and types between both languages \cite{Fish
 
 
 Other high-level languages such as \Lua leverage \FFI performance by using a close interaction with the \JIT.
-\textsc{LuaFfi}\footnote{\url{https://github.com/jmckaskill/luaffi}} for instance is an efficient \Lua implementation that inlines \FFI calls directly into the \JIT compiled code.
+\textsc{Luaffi}\footnote{\url{https://github.com/jmckaskill/luaffi/}} for instance is an efficient \Lua implementation that inlines \FFI calls directly into the \JIT compiled code.
 Similar to \B this allows to minimize the constant overhead by generating custom-made native code.
 \Luajit is mainly written in C which has clearly different semantics than \Lua itself.
-Compared to \ugh{our} approach the efficient \VM implementation suffers from the shortcomings described in \secref{benzo-vm-extensions}. 
+Compared to our approach the efficient \VM implementation suffers from the shortcomings described in \secref{benzo-vm-extensions}. 
 
 Kell and Irwin \cite{Kell11a} take a different look at interacting with external libraries.
-They advocate a Python \VM that allows for dynamically shared objects with external libraries.
+They advocate a \Python \VM that allows for dynamically shared objects with external libraries.
 It uses the low-level \textsc{Dwarf} debugging information present in the external libraries to gather enough metadata to automatically generate \FFI\ugh{s}.
 However, they do not focus on the reflective interaction with low-level code and the resulting benefits. 
 
