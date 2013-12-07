@@ -431,23 +431,28 @@ Each language-side library can define its own highly efficient conversion routin
 From an abstract point of view we replace language-side methods with native routines.
 \NB does not directly synthesize new features but only makes external functionality available to the language itself.
 
-
 As explained previously in \secref{benzo-vm-interaction} \B uses \PH's primitives to activate native code.
 Since \PH is an open system we can extend this behavior to existing methods.
 Instead of simply adding new methods which call native code we present \WF, a solution that modifies existing primitive methods and replaces them with \B-based native code.
 Instead of manually generating the sources for the primitives we reuse existing code.
-The \VM used for \PH is metacircular, the \VM sources are written in the same language, or in our case in a simplified subset called \Slang.
-Hence, the complete definition of the \VM primitives can be made accessible at language-side.
-\WF takes the primitive definition written in \Slang and compiles it to native-code.
-
+The \VM used for \PH is metacircular, the \VM sources are written in the same language, in our case in a simplified subset of \PH called \Slang.
+Hence, the complete definition of the \VM including the primitives can be made accessible at language-side by loading the \VM sources.
+\WF then takes the primitive definition written in \Slang and compiles it to native-code.
 
 As \figref{benzo-waterfall-overview} illustrates, \WF extends the lifetime of the metacircular \VM definition to the actual language runtime.
 By default the primitive definitions written in \Slang are only used to generate the \VM source in an intermediate step.
 A C-compiler such as \GCC generates the final binary.
 By doing so the high-level primitive definition are absorbed by the intermediate compiler infrastructure.
-From within \PH we can only activate primitives but the internal definition is no longer accessible.
+The final binary has no reflective capabilities anymore.
+From within \PH we can only activate primitives but the abstract definition is no longer accessible.
+Hence, we can not directly modify primitives directly without the original \VM sources loaded.
 
-\todo{more about \WF specific application}
+\WF provides a complete metacircular infrastructure for primitives.
+We use \WF to modify primitives on the fly.
+For instance it becomes possible to instrument the crucial \ttt{basicNew} primitive, something that is almost impossible to achieve with pure language-side reflection.
+Since this primitive is used for object creation, each attempt to monitor this primitive is doomed.
+If the monitoring code itself would create a new object, infinite recursion would be inevitable.
+In \secref{val-waterfall} we explain in more detail the difficulty of such a task along with promising performance evaluations.
 
 
 
