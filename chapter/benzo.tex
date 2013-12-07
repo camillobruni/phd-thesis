@@ -368,8 +368,6 @@ This is depicted in the right half of \figref{benzo-nativeCodeActivation}.
 \section{\B in Practice}
 \seclabel{benzo-usecase}
 % ===========================================================================
-\todo{keep this section as is and introduce forward pointers to the separate chapters}
-
 In this section we present the outline 3 distinct solutions built on top of \B: A \FFI, dynamic primitives and a \JIT (\chapref{ffi} and \chapref{validation} provide more detailed insight).
 Typically these implementations would require a custom-tailored \VM or specialized plugins.
 However, we show that it is possible to implement them using the generic functionality provided by \B.
@@ -403,7 +401,7 @@ A very simple example to illustrate the functionality of \NB is to access the cu
 %
 \begin{stcode}{4}
 getenv: name
-    ^ FFI call: 'String getenv(String name)'
+    ^ NativeBoost call: 'String getenv(String name)'
 \end{stcode}
 %
 In this example \NB automatically detects, using reflection, that the argument for the \PH method corresponds to the one of the low-level C function.
@@ -460,6 +458,7 @@ From within \PH we can only activate primitives but the internal definition is n
 \subsection{\NBJ \JIT Compiler}
 \seclabel{benzo-nabujito}
 %----------------------------------------------------------------------------
+\todo{do a pass on reducing this section a bit}
 In this section we present \NBJ, a \B-based approach for a language-side \JIT compiler.
 \NBJ goes even further than \WF using almost the same techniques.
 However, instead of focusing on primitives, \NBJ generates native executable code for standard \ST methods.
@@ -473,7 +472,7 @@ Primitives tend to be more low-level, whereas \NBJ focuses on high-level \ST cod
 	\figlabel{benzo-nabujito-overview}
 \end{figure}
 
-\noindent The \PH \VM (\urlfootnote{\textsc{Cog vm}}{http://www.mirandabanda.org/cog/}) already comes with a \JIT that translates bytecodes to native instructions.
+\noindent The \PH \VM (originally \urlfootnote{\textsc{Cog vm}}{http://www.mirandabanda.org/cog/}) already comes with a \JIT that translates bytecodes to native instructions.
 It transforms \ST methods into slightly optimized native code at runtime.
 The main speed improvement comes from avoiding bytecode dispatching and by inlining certain known operations and primitives \cite{Ayco03a}.
 The most complex logic of the \JIT infrastructure deals with the dynamic nature of the \ST environment.
@@ -663,7 +662,6 @@ To address extensions in this context there exist some known approaches:
 	\item[Hybrid Extension] by accessing external libraries using \FFI.  
 \end{description}
 %
-
 The relation between the side concerning the abstraction and implementation levels (\VM vs. language) of these extensions is illustrated in \figref{benzo-extensionComparison}.
 
 \begin{figure}[h]
@@ -706,9 +704,11 @@ As a consequence language-side libraries are not feasible for all feature requir
 For instance the previously mentioned example of instrumenting the language runtime is not possible as a standard language-side extension without a considerable performance loss.
 So, even though we prefer extensions and optimizations at language-side, there are certain limitations of a managed language runtime that can not be circumvented.
 If all language-side optimization opportunities have been exhausted it is exposing the need to resort to lower level approaches.
-%\\
 
-\noindent\emph{Language-side libraries are constrained to the capabilities of the underlying \VM and thus not general enough. Additionally not all performance bottlenecks can be addressed at language-side.}
+\begin{quote}
+Language-side libraries are constrained to the capabilities of the underlying \VM and thus not general enough. 
+Additionally not all performance bottlenecks can be addressed at language-side.
+\end{quote}
 
 %----------------------------------------------------------------------------
 \subsection{Language-side Reflective Extensions}
@@ -726,9 +726,10 @@ Nevertheless, there are exceptions for a subset of reflective behavior which are
 Though these approaches remain as a few exceptions.
 In the typical low-level \VM it is difficult to gain reflective access to language-side objects.
 Similar to the previous case, our goal is to extend language features in a general way and it was shown that this is only partially possible by reflective extensions. 
-%\\
 
-\noindent\emph{Reflective capabilities are not enough for general extensions. Even when suitable, they usually pose a significant performance overhead up to the point where they become unfeasible.}
+\begin{quote}
+Reflective capabilities are not enough for general extensions. Even when suitable, they usually pose a significant performance overhead up to the point where they become unfeasible.
+\end{quote}
 
 %----------------------------------------------------------------------------
 \subsection{\VM Extensions.}
@@ -766,6 +767,11 @@ A similar framework is \urlfootnote{\PyPy}{http://pypy.org/} \cite{Rigo06a} a \V
 There exist several different high-level language \VM implementations on top of \PyPy such as \ST \cite{Bolz08a} or \textsc{Prolog}.
 However, its main focus lies on an efficient \JIT generator mainly for a \Python interpreter, and not on a direct, language-side assembler interface.
 
+
+\begin{quote}
+VM extensions provide good performance at the cost of maintainability. 
+Moreover this approach implies resorting to pure low-level development where tools and abstraction advantages from high-level languages are restricted.
+\end{quote}
 
 %----------------------------------------------------------------------------
 \subsection{Hybrid Extensions}
@@ -809,6 +815,12 @@ Unlike typical other metacircular approaches it does not strictly separate compi
 The reified \VM concepts are available at runtime, which is a result from implementing the typical \VM pieces at language-side.
 Compared to our approach, \textsc{Klein}'s bridging efforts are much more complete.
 However, \textsc{Klein} is built on a completely new \VM infrastructure, whereas \B requires only few changes to achieve its functionality.
+
+\begin{quote}
+Hybrid extension are the most promising.
+They allow for a seamless interaction from high-level language-side to low-level functionality.
+However, most existing solutions target only specific use cases and can not be reused for other applications.
+\end{quote}
 
 
 % ===========================================================================
