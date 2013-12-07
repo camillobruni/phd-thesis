@@ -520,8 +520,11 @@ When the language-side jitted code is activated \B ensures that we do not have t
 \section{Performance}
 \seclabel{benzo-issues-performance}
 %============================================================================
-\todo{Collapse with previous usecase section}
 \todo{Shorten this section and put forward pointers to the real validation chapters yet to come (copied contents, feel free to distroy...)}
+In this section we discuss the general performance characteristics of \B for the three example applications outlined in the previous section.
+A more detailed validation is presented later in \secref{ffi-performance} (\FFI), \secref{val-waterfall-performance} (\WF) and \secref{val-nabujito-performance} respectively.
+
+\paragraph{One-time Code Generation Overhead.} 
 \B allows the generation of specific and thus efficient native code.
 In \secref{benzo-benzo} we explained how \B causes only a one-time overhead for native code generation. 
 Thereafter it is cached for later activations.
@@ -530,27 +533,26 @@ Even though the code generation at language-side is generally slower than a C-le
 Even better, for instance the \B-based \FFI implementation presented in \secref{benzo-ffi} outperforms a \VM-level \FFI-plugin due to a more flexible language-side implementation. 
 These results are shown in the following \tabref{benzo-ffi-performance-simple}.
 
-The rest of this section discusses in more details the performance of our three \B-base use cases: an \FFI, dynamic primitives and a language-side \JIT compiler.
-
 % ---------------------------------------------------------------------------
 \subsection{\B-based \FFI}
 \seclabel{benzo-nb-performance}
 % ---------------------------------------------------------------------------
 
+The first mini performance evaluation we present is for \NB the \B-based \FFI.
 Compared to a static plugin-based \FFI implementation \NB has only a one-time startup overhead with its numbers shown in \secref{benzo-issues-performance}.
 Generating the native code at language-side is substantially slower than directly setting up all the conversions and calling the external functions from C code. 
 In some cases the penalty for some compilation effort on \NB is as high as a factor of 100 compared to classic approaches.
 Under the assumption that the method is called several times this overhead may be considered negligible.
-An in-depth evaluation of \NB comparing against other solutions, is presented in \chapref{ffi}.
+An in-depth evaluation of \NB comparing against other solutions is presented later in \chapref{ffi}.
 The following table contains a performance comparison of three different \FFI implementations for \PH that represents the typical showcase.
 
 \begin{table}[!ht]
     \centering
     \begin{tabular}{rlr}
-                    & Call Time                        & Relative Time \\\midrule
-        \NB         & \ttt{10.53} $\pm$ \ttt{0.35} ms  &  $1.0\times$ \\
-        Alien       & \ttt{31.09} $\pm$ \ttt{0.94} ms  & $\approx 3.0\times$ \\
-        \FFI        & \ttt{19.55} $\pm$ \ttt{0.64} ms  & $\approx 1.9\times$
+                   					& Call Time                        & Relative Time \\\midrule
+        \NB         				& \ttt{10.53} $\pm$ \ttt{0.35} ms  &  $1.0\times$ \\
+        \Alien, language-side \FFI  & \ttt{31.09} $\pm$ \ttt{0.94} ms  & $\approx 3.0\times$ \\
+        C-\FFI, plugin-based \FFI   & \ttt{19.55} $\pm$ \ttt{0.64} ms  & $\approx 1.9\times$
     \end{tabular}
     \caption[Basic \B-based \FFI Performance]{Different \FFI implementations in \PH evaluating 
     \ttt{abs(int)}. Alien does marshalling at language-side while \FFI does everything in C.}
@@ -559,24 +561,33 @@ The following table contains a performance comparison of three different \FFI im
 
 \tabref{benzo-ffi-performance-simple} measures the accumulative time of 100'000 \FFI calls.
 Included in these numbers is at least one additional \PH message send to activate the \NB method containing the actual call to the C function.
-Each benchmark itself is run 1000 times and the average and standard deviation is taken.
-We also measured calls with more complex type conversions where the performance boost against Alien pronounced even more because \NB's language-side marshalling is nativized.
-The \JIT interaction described in \secref{benzo-jit-interaction} is also an important optimization factor especially when calling out small helper routines where the context switch from jitted mode is not negligible.
+\NB outperforms the existing language-side \FFI (\Alien) and the implementation (C-\FFI).
 
+The existing language-side \FFI has a generic plugin to call C-functions and performs type-conversions at language-side.
+However, converting \PH objects from and into low-level data is comparably expensive.
+In \NB this happens directly in custom generated native code and is thus significantly faster.
 
+The plugin-based \FFI is also slower than \NB since it still has generic conversion function for \PH objects, albeit written in C and thus faster than in \Alien.
+However, \NB custom tailored \ASM code is still faster than the hard-coded C counterpart.
+
+This simple \FFI evaluation already highlights the core benefit of \B to generate very customized native code when needed.
+Yet we have to emphasize that \NB is based on the \B infrastructure whereas the other solutions require both a \VM plugin whose sole purpose is to enable the \FFI functionality.
+Furthermore \NB benefits from the the \JIT interaction described in \secref{benzo-jit-interaction}.
+This optimization is especially an important optimization factor when calling out small helper routines where the context switch from jitted mode is no longer negligible.
 
 % ---------------------------------------------------------------------------
 \subsection{\B-based Dynamic Primitives}
 \seclabel{benzo-wf-performance}
 % ---------------------------------------------------------------------------
 
+As the second mini performance evaluation of \B we present a simple use case of dynamically implementing a primitive with \WF.
 For comparing performance we implement a very simple integer operation primitive (\ttt{$>$}) using three different approaches.
 The first approach is the implementation with \WF.
 The second is to run the language-side implementation that is triggered whenever the standard primitive failed.
 Finally the fast standard primitive provided by the \VM.
 We run the three approaches by measuring the cumulative time over one million primitive activations averaged over 100 runs.
 The absolute numbers are less important than the relative factor between them.
-We present the results of this experiment in Table~\tabref{benzo-waterfall-performance}.
+We present the results of this experiment in \tabref{benzo-waterfall-performance}.
 %
 \begin{table}[!ht]
     \centering
@@ -590,11 +601,19 @@ We present the results of this experiment in Table~\tabref{benzo-waterfall-perfo
     \tablabel{benzo-waterfall-performance}
 \end{table}
 %
-As expected \WF's solution outperforms pure reflective one by factor $9$ to $10$.
-\WF clearly outperforms a purely reflective solution since all the meta programming overhead for the intercession mechanism is avoided. This results thus makes a whole new set of runtime extensions feasible that were previously limited by their strong performance penalty.
+\WF clearly outperforms a purely reflective solution.
+As explained in \secref{benzo-waterfall}, replacing a crucial primitive with simple language-side is not straight forward.
+If the replacement code triggers the very same primitive again we are trapped in so called meta-recursion.
+To avoid this, the \PH code for the replacement of \ttt{$>$} checks that the current activation of the primitive is not recursive.
+This comes at a substantial cost and is the main overhead factor.
+
+\WF is a factor $3.6$ slower than the standard implementation.
+First we have to state that \WF uses a very simplistic compilation strategy with many optimizations opportunities left out.
+Second, the optimized \VM primitive is also reimplemented in the \JIT to avoid the overhead of switching execution context (see \secref{benzo-vm-interaction}).
+
+This results thus makes a whole new set of runtime extensions feasible that were previously limited by their strong performance penalty.
 Furthermore the performance penalty over a completely optimized \VM solution that has extreme optimization techniques, such as inlining and register allocation, is less than a factor of $4$.
-Applying standard optimization techniques, not yet implemented in \WF, will almost sure improve these numbers even more.
-A more detailed analysis of \WF is available separately \cite{Char13a}.
+A more detailed analysis of \WF is available later in \secref{val-waterfall-performance}.
 
 % ---------------------------------------------------------------------------
 \subsection{\B-based \JIT compiler}
