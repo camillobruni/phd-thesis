@@ -460,12 +460,10 @@ In \secref{val-waterfall} we explain in more detail the difficulty of such a tas
 \subsection{\NBJ \JIT Compiler}
 \seclabel{benzo-nabujito}
 %----------------------------------------------------------------------------
-\todo{do a pass on reducing this section a bit}
 In this section we present \NBJ, a \B-based approach for a language-side \JIT compiler.
 \NBJ goes even further than \WF using almost the same techniques.
 However, instead of focusing on primitives, \NBJ generates native executable code for standard \PH methods.
 Primitives tend to be more low-level, whereas \NBJ focuses on high-level \PH code. 
-
 
 \begin{figure}[h]
 	\centering
@@ -476,20 +474,18 @@ Primitives tend to be more low-level, whereas \NBJ focuses on high-level \PH cod
 
 \noindent The \PH \VM (originally \urlfootnote{\textsc{Cog vm}}{http://www.mirandabanda.org/cog/}) already comes with a \JIT that translates bytecodes to native instructions.
 It transforms \PH methods into slightly optimized native code at runtime.
-The main speed improvement comes from avoiding bytecode dispatching and by inlining certain known operations and primitives \cite{Ayco03a}.
 The most complex logic of the \JIT infrastructure deals with the dynamic nature of the \PH environment.
 Methods and classes can be changed at runtime and that has to be addressed by the \JIT infrastructure.
-The \JIT compiler, by which we refer in this context to the transformation of bytecodes to native code, represents a small part of the whole infrastructure.
+This implies that an efficient \JIT infrastructure needs substantial access to language-side structures; in our case classes, methods.
+This information is readily accessible in \PH through the standard reflective \API.
+However, at \VM-level this requires more effort, and thus imposes strong requirements on the design of classes and methods at language-side.
+The \JIT infrastructure is a hybrid between \VM logic and language-side reflection.
+
+The \JIT compiler, by which we refer in this context to the transformation of bytecodes to native code, represents a small part of the whole \JIT infrastructure.
 There exists more important stages as an additional register allocation pass to reduce the number of stack operations \cite{Mira99a,Mira11a}.
 The existing \JIT infrastructure is implemented in \Slang \cite[Ch.\ 5]{Blac09a} as the rest of the \VM.
+We believe that a hard-coded static and low-level implementation is not optimal for several reasons:
 
-In the context of \NBJ we separate a \JIT infrastructure into the following parts.
-The major part is to have a \VM that uses stack-mapping.
-In the case of a bytecode-based interpreter, we assume that the \VM provides routines to switch between a bytecode interpretation context and a low-level native execution context.
-With \NBJ we move the \JIT compiler,the part that generates native code at runtime, from the \VM to the image.%, the part that generates native code at runtime, typically from bytecodes.
- Since the \JIT compiler is quite decoupled from the rest of the \JIT infrastructure we believe that a hard-coded static and low-level implementation is not optimal for several reasons:
-
-%\begin{itemize}[noitemsep]
 \begin{itemize}
 	\item Optimizing \PH code requires strong interactions with the dynamic environment.
 	\item Accessing language-side properties from the \VM-side is hard.
@@ -497,10 +493,10 @@ With \NBJ we move the \JIT compiler,the part that generates native code at runti
 	\item The \JIT reimplements primitives for optimization reasons resulting in code duplication.
 \end{itemize}
 
-%----------------------------------------------------------------------------
-\paragraph{Implementing \NBJ.}
+\paragraph{Implementing \NBJ with \B.}
+Motivated by the aforementioned implications of a \VM-level \JIT we conceived \NB a prototype \JIT compiler based on \B.
 \NBJ is an experimental \JIT implementation which replaces the bytecode to native code translation of the existing \JIT infrastructure with a dynamic language-side implementation.
-\NBJ is implemented mainly with a visitor strategy over the existing intermediate bytecode representation. 
+\NBJ is implemented as a visitor over the existing intermediate bytecode representation. 
 Additionally we reimplemented vital native routines for the \JIT which are not directly exported by the \VM using \B. 
 \NBJ relies on the following \VM-level infrastructure to manage and run native code for any \PH method:
 
@@ -517,7 +513,7 @@ Optimizations for additional methods are all implemented flexibly at language-si
 Wherever possible, we reimplement the same behavior as the existing native \JIT compiler.
 Eventually the native code is ready and \B attaches it to the existing compiled method.
 When the language-side jitted code is activated \B ensures that we do not have to leave the \JIT execution mode, and thus we can call methods at the same speed as the existing \JIT.
-The benchmarks of \secref{benzo-nabujito-performance} show the empirical results.
+\secref{val-nabujito} gives a more detailed insight of the design and performance of \NBJ.
 
 
 %============================================================================
