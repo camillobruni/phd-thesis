@@ -41,7 +41,7 @@
 %\usepackage{libertine}
 %\usepackage[osf]{mathpazo} % palatino with real small caps and oldstyle numbers
 \usepackage{tgpagella} % Use TeX Gyre Pagella with real small caps (normal + bold)
-
+\usepackage{tgcursor} % fixed wifth font TeX Gyre Cursor (Courrier Style)
 
 % =============================================================================
  % environment hooks and patching:
@@ -144,25 +144,30 @@
 %=============================================================================
 
 \usepackage{needspace}
+% \needlines{3} ensures that the followin 3 lines will be on the same page
 \newcommand{\needlines}[1]{\Needspace{#1\baselineskip}}
 
 \usepackage{xcolor}
 \definecolor{source}{gray}{0.95}
 % source code formatting
 \usepackage{listings}
-    % global settings for source code listing package
+% global settings for source code listing package
 \lstset{
-    basicstyle=\ttfamily\small,
+    basicstyle=\ttfamily,
     showspaces=false,
     showstringspaces=false,
-    captionpos=b, 
+    lineskip=-0.1pt,
+    stepnumber=2,
+    numberfirstline=true,
+    captionpos=b,
+    emphstyle=\bf\ttfamily,
     columns=fullflexible}
 
 \lstdefinelanguage{ST}{
     keywordsprefix=\#,
     morekeywords=[0]{true,false,nil},
     morekeywords=[1]{self,super,thisContext},
-    morekeywords=[2]{ifTrue:,ifFalse:,whileTrue:,whileFalse:,and:,or:,xor:,not:,by:,timesRepeat:},
+    morekeywords=[2]{ifTrue:,ifFalse:,whileTrue:,whileFalse:,and:,or:,xor:,not:,by:,timesRepeat:,Benzo},
     sensitive=true,
     morecomment=[s]{"}{"},
     morestring=[d]',
@@ -181,17 +186,17 @@
 \lstdefinestyle{STStyle}{
     tabsize=4,
     %frame=leftline,
-    % frame=bl,
+    %frame=bl,
     %framerule=2pt,
     %rulecolor=\color{gray},
-    % backgroundcolor=\color{white},
+    %backgroundcolor=\color{white},
     %backgroundcolor=\usebeamercolor[bg]{listing},
-    basicstyle=\ttfamily\small,
-    keywordstyle=\bf\ttfamily,
-    % stringstyle=\color{orange},
+    basicstyle=\ttfamily,
+    keywordstyle=\bfseries\ttfamily,
+    %stringstyle=\color{orange},
     stringstyle=\mdseries\slshape,
-    commentstyle=\it\rmfamily\color{darkgray}, 
-    commentstyle=\mdseries\slshape\color{gray},
+    %commentstyle=\it\rmfamily\color{darkgray}, 
+    commentstyle=\mdseries\slshape\color{darkgray},
     %commentstyle=\mdseries\slshape,
     emphstyle=\bf\ttfamily,
     escapeinside={!}{!},
@@ -208,18 +213,14 @@
 \lstnewenvironment{ccode}     [2][]
     {\lstset{language=C,numbers=left,escapechar=\$,numberstyle=\tiny,#1}\needlines{#2}}{}
 
-% ON: I tried to pass the line number options in as arg #1 but it does not work for me
-% I also could net get the line numbers to consistently increase
+% code environment with line numbers
 \lstnewenvironment{numstcode} [2][]
-    {\lstset{language=ST,numbers=left,numberstyle=\tiny,numbersep=2pt,#1}\needlines{#2}}{}
+    {\lstset{language=ST,numbers=left,numberstyle=\tiny,numbersep=5pt,#1}\needlines{#2}}{}
 \lstnewenvironment{numstcodecont} [2][]
-    {\lstset{language=ST,numbers=left,numberstyle=\tiny,numbersep=2pt,firstnumber=last#1}\needlines{#2}}{}
+    {\lstset{language=ST,numbers=left,numberstyle=\tiny,numbersep=5pt,firstnumber=last#1}\needlines{#2}}{}
 
 \newcommand{\lst}[1]{{\tt #1}}
 
-% In-line code (literal)
-
-% In-line code (latex enabled)
 % Use this only in special situations where \ct does not work
 % (within Section headings ...):
 \newcommand{\lct}[1]{{\textsf{\textup{#1}}}}
@@ -371,6 +372,7 @@
 \newcommand{\ST}	{\textsc{Small\-talk}\xspace}
 \newcommand{\Self}	{\textsc{Self}\xspace}
 \newcommand{\Slang} {\textsc{Slang}\xspace}
+\newcommand{\Squeak} {\textsc{Squeak}\xspace}
 \newcommand{\TAC}	{\textsc{tac}\xspace}
 \newcommand{\UBA}	{\textsc{uba}\xspace}
 \newcommand{\VirtualCPU}	{\textsc{VirtualCpu}\xspace}

@@ -112,14 +112,25 @@ This is general and essential so it applies to any \VM that wants to support dyn
 \paragraph{Executable Memory.}
 \seclabel{benzo-exeutable-memory}
  
-We use standard \ST objects to hold the generated native code.
+We chose to follow a very lightweight approach to dynamically execute native code at runtime. 
+Since we use \ST as our host language it is a natural choice to manage the native code at language-side and use as little VM features as possible.
+Hence we use normal \ST objects to hold the generated native code.
+
 However, by default the object memory is not executable.
-This leaves two choices: mark the whole object memory executable or only move the objects with the native code to a special executable memory region.
+This leaves two choices, either mark the whole object memory executable or move the objects with the native code to a special executable memory region.
 We took the path of least resistance and marked the whole object memory as executable.
 The other solution requires substantial changes for memory management. 
-As the \VM has a moving \GC we only access high-level \ST objects via an indirection from low-level code.
-Another approach would have been to harness the fixed sized executable region used by the existing \JIT.
-However, the \JIT space does not hold normal \ST objects but special low-level structures and uses its own special \GC. 
+
+The \GC of the \PH \VM uses a moving semi-space approach with two generations.
+Additionally there is a fixed sized executable region used for the \JIT as a buffer for runtime generated native code.
+The \JIT space uses its own small garbage collection strategy which is decoupled from the rest of the object memory.
+This also means that the \JIT space does not hold normal \ST objects but special low-level structures.
+As mentioned before, the \JIT space is limited in size and eventually fills up, causing the \JIT to spill older code structures from there. 
+
+All in all the \JIT-space does not seem to be the right place for storing persistent \ST objects holding native code.
+Instead we opt for the completely executable object memory option and store all the executable code in standard \ST objects.
+As the \VM has a moving \GC, it gives us certain restrictions on what kind of native code we can run directly from the language-side. 
+As we will describe in \secref{benzo-platform-interaction}, we can access high-level \ST objects only via an indirection from low-level code.
 
 %----------------------------------------------------------------------------
 \paragraph{\VM Interaction.}
@@ -139,6 +150,8 @@ Here we use the primitive 49 to call a \VM function which efficiently multiplies
 \figref{benzo-smalltalkPrimitive}-a describes the case where the primitive is successfully executed.
 However, if the primitive is unable to do the operation, for instance if the argument \ttt{aNumber} is not a float, it will signal a failure which causes the \VM to execute the fallback \ST code in the method body.  
 \figref{benzo-smalltalkPrimitive}-b describes it. 
+In the floating point multiplication example the fallback code uses a slow conversion method to polymorphically convert other objects to floats and defer the multiplication.
+
 
 \begin{figure}[ht]
 	\centering
@@ -164,14 +177,14 @@ A marker at the end of the compiled method called trailer type is used to flag m
 	\figlabel{benzo-nativeCodeMethod}
 \end{figure}
 
-Since compiled methods are first-class objects it is possible to modify them at runtime and append the native code.
+\noindent Since compiled methods are first-class objects it is possible to modify them at runtime and append the native code.
 The primitive \ttt{primitiveNativeCall}, which is implemented by \B, is the responsible of running the native instructions in a \ST method.
 The code example \ttt{interrupt3} shows a very basic application of our infrastructure.
 %
 \begin{stcode}[label={lst:benzo-basic-native-code}, caption={\ST method using \B for very basic low-level debugging.}, escapeinside={@}{@}]{5}
 interrupt3
 	<primitive: 'primitiveNativeCall' 
-	 module: 'BenzoPlugin' >
+	 module: 'Benzo' >
 	Benzo generate: [ :asm | asm int3 ]
 \end{stcode}
 %
@@ -200,7 +213,6 @@ Moreover, it does not have to flush the native code when the application is rest
 %----------------------------------------------------------------------------
 \paragraph{Garbage Collector Interaction.}
 \seclabel{benzo-gc-interaction}
-\todo{dig up the older versions of this section with the longer text}
 
 Compiled methods in \PH have a special section, the literal frame, which stores objects referenced in the bytecodes.
 Bytecodes then only have indirect access to these objects by indexing into the literal frame.
@@ -210,12 +222,7 @@ The moving \GC of the \VM used for \PH has a significant impact on the low-level
 For instance it is not possible to statically refer to language-side objects from native code as object addresses change after each garbage collection.
 Modifying the \GC to support regions of non-moving objects would solve this problem.
 However, we chose to minimize the number of low-level \VM modification necessary to run our experiments and opted for a simpler solution.
-\B accesses language-side objects through an indirection.
-For indirectly accessing objects the \PH \VM already features a special structure, named \emph{external roots}.
-This array has a fixed-location in memory which can be used to access moving language-side objects.
-The \GC updates the addresses in this \VM structure after each run.
-Hence we have the static address of the external roots object as an entry point to statically access \ST objects.
-%
+
 \begin{figure}[ht]
 	\centering
 	\includegraphics[scale=1.1]{externalRoots}
@@ -223,7 +230,12 @@ Hence we have the static address of the external roots object as an entry point 
 	}
 	\figlabel{benzo-externalRoots}
 \end{figure}
-%
+
+\noindent \B accesses language-side objects through an indirection.
+For indirectly accessing objects the \PH \VM already features a special structure, named \emph{external roots}.
+This array has a fixed-location in memory which can be used to access moving language-side objects.
+The \GC updates the addresses in this \VM structure after each run.
+Hence we have the static address of the external roots object as an entry point to statically access \ST objects.
 Summarizing, for accessing \ST objects within native code we first register it as an external root object and access it only indirectly.
 This means that for native code, instead of a method-local literal array we share a global literal array as shown in \figref{benzo-externalRoots}. 
 \B only adds an \ttt{Array} to the external root objects which is managed from language-side and administers all references.
@@ -256,12 +268,22 @@ The performance boost of this optimization is further discussed in \secref{benzo
 \paragraph{Error Handling.}
 \seclabel{benzo-error-handling}
 
-\todo{extend with an explicit example}
-
-\B provides an error handling facility that allows to return high-level error messages from the low-level code. 
-The native code builder provides a helper method called \ttt{failWithMessage:} 
-that generates the proper assembler instructions to return a full error message.
-This allows plugins to return clear and meaningful error codes, improving the debugging tasks and enabling a better interaction with users.
+\B provides an error handling facility that allows to return high-level error messages from the low-level code.
+The native code builder provides a helper method called \ttt{failWithMessage:} that generates the proper assembler instructions to return a full error message. The following code shows an example application of this behavior.
+%
+\begin{stcode}[emph={asm}]{5}
+failWithErrorMessage
+	<primitive: 'primitiveNativeCall' 
+	 module: 'Benzo' >
+	 Benzo x86 generate: [ :asm :helper |
+		helper failWithMessage: 'Value is not 0'.].
+\end{stcode}
+%
+Under the hood, \B reuses the existing built-in error mechanism of \PH primitives.
+However, primitives only allow for error number to be returned which limits the expressiveness of the error messages.
+To circumvent this limitation \B assigns a unique error number for each error message pass to \ttt{failWithMessage:}.
+The mapping between the two error message representation, its error number and the message string itself, happens at language-side.
+\B simply reuses the existing infrastructure to improve the debugging tasks and promote a better interaction with developers.
 
 %----------------------------------------------------------------------------
 \subsection{\B's Language-Side Implementation}
@@ -306,25 +328,41 @@ In \secref{benzo-usecase} we introduce more substantial applications based on \B
 \paragraph{Code Activation.}
 \seclabel{benzo-code-activation}
  
-A \B primitive is responsible for the native code activation which consists of three main steps:
+So far we only broadly described how \B activates the native code.
+In a nutshell, we generate native code using our own language-side assembler and then we attach the native instructions to compiled methods as shown in figure \figref{nativeCodeMethodDetail}.
+Additionally we mark the method to use a primitive defined \B plugin.
+The \B primitive is responsible for the native code activation which consists of three main steps:
 %
-\begin{enumerate}
+\begin{enumerate}[noitemsep]
 	\item Check if there is native code in the actual compiled method and if it is compatible with the current platform.
 	\item Generate native code if necessary.
 	\item Activate the native code for execution.
 \end{enumerate}
-%
-The example in \lstref{benzo-basic-native-code} uses \B's generator to create and install the native code which would trigger a low-level interrupt. Behind the scenes \B adds some more information to the code as the already mentioned platform marker. 
-For activation \B uses reflective features to restart the method containing the native code.
-Upon the second activation, after already generating the native code, \B moves the native code to the end of the compiled method and activates it.
-This mechanism is shown in \figref{benzo-nativeCodeActivation}.
+
+\noindent The first time a method with \B-based native code is activated the linked \B primitive will fail and run the normal \PH code in this method (see \secref{benzo-vm-interaction}).
+This is where the actual native code generation happens.
+As shown in previous examples, the native code is expressed in standard \PH code using our language-side assembler.
+Once the whole code is generated, it is appended to the compiled method body leaving the existing \PH bytecodes intact.
+Behind the scenes \B adds some more information to the code as the previously mentioned platform marker. 
 
 \begin{figure}[ht]
 	\centering
 	\includegraphics[scale=1.1]{nativeCodeActivation}
-	\caption[\B Native Code Acivation]{\todo{Add Primitive Failure Link}Native code activation with \B: The first call triggers the code generation. Then the method is restarted and the native code executed.}
+	\caption[\B Native Code Acivation]{Native code activation with \B: The first call triggers the code generation. Then the method is restarted and the native code executed.}
 	\figlabel{benzo-nativeCodeActivation}
 \end{figure}
+
+Now we completed the first the left half of the activation process shown in \figref{benzo-nativeCodeActivation}.
+What is left is the third step, the actual activation of the native code.
+After we the native code is installed in the compiled method, we still run \PH code to restart the same \B-enabled method again, this corresponds to the arrow in \figref{benzo-nativeCodeActivation} connecting both sides.
+For activation \B uses reflective features to restart the method.
+Imagine that the method takes some arguments.
+These arguments have to be preserved during the code-generation phase and reused for the second activation.
+\B will simply use \PH's reflective \ttt{#perform:withArguments:} method on the original receiver to restart/activate the same method with the same arguments again.
+
+When running the \B-enabled method again the \B primitive is activated once more.
+However, this time native code is present and thus the \B jumps to code attached to the compiled method and returns the generated result.
+This is depicted in the right half of \figref{benzo-nativeCodeActivation}.
 
 % ===========================================================================
 \section{\B in Practice}

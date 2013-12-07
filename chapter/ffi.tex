@@ -159,7 +159,7 @@ Finally, this \ttt{abs} function is looked up in the \ttt{libc} whose an handle 
 % - explain syntax in picture (line plus arrows)
 \begin{figure}[H]
 	\centering
-	\includegraphics{nativeBoostSyntax}
+	\includegraphics[scale=1.2]{nativeBoostSyntax}
 	\caption[\NB Basic Method]{Example of the general \NBFFI callout syntax}
 	\figlabel{ffi-nativeBoostSyntax}
 \end{figure}
@@ -284,7 +284,7 @@ When returning from this callout, \NB creates an instance of \ttt{AthensCairoSur
 	caption={Example of returning a structure by reference}]{0}
 primImage: aFormat width: aWidth height: aHeight
 	<primitive: #primitiveNativeCall
-	 module: #NativeBoostPlugin
+	 module: #Benzo
      error: errorCode>
 
 	^self nbCall: #(AthensCairoSurface
@@ -301,8 +301,7 @@ If it is not, the callout fails before executing the external function because p
 	label={lst:ffi-calloutOpaqueStructParameter},
 	caption={Example of passing a structure by reference}]{0}
 primCreate: cairoSurface
-	<primitive: #primitiveNativeCall
-	 module: #NativeBoostPlugin>
+	<primitive: #primitiveNativeCall module: #Benzo >
 
 	^self nbCall: #(
         AthensCairoCanvas cairo_create (
@@ -315,7 +314,7 @@ In \NB, one can directly access the fields of a structure if needed, even if it 
 Nevertheless, it may be mandatory to interact with some native libraries that do not provide all the necessary functions to manipulate the structure.
 \lstref{ffi-cairo_c_definition} shows an example of a C struct type definition for \ttt{cairo\_matrix\_t}.
 
-\begin{ccode}[
+\begin{numstcode}[
 	label={lst:ffi-cairo_c_definition},
 	caption={Example external type to convert back and forth with the Cairo library}]{0}
 typedef struct {
@@ -323,13 +322,13 @@ typedef struct {
     double xy; double yy;
     double x0; double y0;
 } cairo_matrix_t;
-\end{ccode}
+\end{numstcode}
 
 \noindent \lstref{ffi-AthensCairoMatrix} shows that the \ttt{NBExternalStructure} of \NBFFI can be subclassed to define new types such as \ttt{AthensCairoMatrix}.
 The description of the fields (types and names) of this structure is provided by the \ttt{fieldsDesc} method on the class side.
 Given this description, \NB lazily generates field accessors on the instance side using the field names.
 
-\begin{stcode}[
+\begin{numstcode}[
 	label={lst:ffi-AthensCairoMatrix},
 	caption={Example of \NBFFI definition of an \ttt{ExternalStructure}}]{0}
 NBExternalStructure
@@ -339,19 +338,19 @@ AthensCairoMatrix class>>fieldsDesc
 	^ #(  double sx; double shx;
 		  double shy; double sy;
 		  double x; double y;  )
-\end{stcode}
+\end{numstcode}
 
 \noindent \lstref{ffi-cairoCallouts} shows a callout definition to the
  \ttt{cairo\_matrix\_multiply} function passing \ttt{self} as argument with the type \ttt{AthensCairoMatrix*}.
 \NB handles the marshalling of this object to a struct as defined in the \ttt{fieldsDesc}.
 % The interesting point is that the called function \ttt{cairo\_matrix\_multiply} stores its result in the first argument i.e. the receiver object.
 
-\begin{stcode}[
+\begin{numstcode}[
 	label={lst:ffi-cairoCallouts},
 	caption={Example of callouts using \ttt{cairo\_matrix\_t}}]{0}
 AthensCairoMatrix>>primMultiplyBy: m
 	<primitive: #primitiveNativeCall
-	 module: #NativeBoostPlugin
+	 module: #Benzo
      error: errorCode>
 
 "C signature"
@@ -363,7 +362,7 @@ AthensCairoMatrix>>primMultiplyBy: m
 		(AthensCairoMatrix * self,
 		AthensCairoMatrix * m ,
 		AthensCairoMatrix * self ) )
-\end{stcode}
+\end{numstcode}
 
 
 \paragraph{Memory management of structures.}
@@ -422,8 +421,7 @@ These are the argument types that are being passed to the sort block in Example 
 	label={lst:ffi-qsort},
 	caption={Example of callout passing a callback}]{0}
 ffiQSort: base len: size compare: qsortCallback
-	<primitive: #primitiveNativeCall
-	 module: #NativeBoostPlugin>
+	<primitive: #primitiveNativeCall module: #Benzo>
 
 	"C qsort signature"
 	"void qsort(
@@ -517,8 +515,8 @@ In \NBFFI, doing most of the \FFI call processing at language-side makes easier 
 
 In this section we compare \NB with other \FFI implementations.
 \begin{description}
-	\item[\Alien \FFI:] An \FFI implementation for Squeak/\PH that focuses on the language-side. All marshalling happens transparently at language-side.
-	\item[C-\FFI:] A C based \FFI implementation for Squeak/\PH that performs all marshalling operations at \VM-side.
+	\item[\Alien \FFI:] An \FFI implementation for \Squeak/\PH that focuses on the language-side. All marshalling happens transparently at language-side.
+	\item[C-\FFI:] A C based \FFI implementation for \Squeak/\PH that performs all marshalling operations at \VM-side.
 	\item[\LuaJIT:] A fast \Lua implementation that has a close \FFI integration with \JIT interaction.
 \end{description}
 
