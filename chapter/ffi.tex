@@ -258,7 +258,7 @@ The strength of language-side \FFIs appears when it comes to do callouts with ne
 \NBFFI supports different possibilities to interact with new types.
 
 \paragraph{Declaring structures.}
-For example, the \urlfootnote{Cairo library}{http://cairographics.org} provides complex structures such as \ttt{cairo\_surface\_t} and functions to manipulate this data type. % which makes field access useless.
+For example, the \urlfootnote{Cairo library}{http://cairographics.org/} provides complex structures such as \ttt{cairo\_surface\_t} and functions to manipulate this data type. % which makes field access useless.
 \lstref{ffi-AthensCairoSurface} shows how to write a regular \ST class to wrap a C structure.
 \NB only requires a class-side method named \ttt{asNBExternalType:} that describes how to marshall this type back and forth from native code.
 In this example, we use existing marshalling mechanism defined in \ttt{NBExternalObjectType} that just copies the structure's pointer and stores it in an instance variable named \ttt{handle}.
@@ -726,8 +726,8 @@ On the second activation, the native code is present and thus the primitive will
 % ---------------------------------------------------------------------------
 \paragraph{Generating Assembler Instructions}
 
-\figref{ffi-nbArchitecture} shows that \NB relies on \urlfootnote{AsmJit}{http://smalltalkhub.com/\#!/~Pharo/AsmJit}, a language-side assembler.
-AsmJit emerged from an existing \urlfootnote{C++ implementation}{https://code.google.com/p/asmjit/} and currently supports the x86 instruction set.
+\figref{ffi-nbArchitecture} shows that \NB relies on \urlfootnote{AsmJit}{http://smalltalkhub.com/\#!/~Pharo/AsmJit/}, a language-side assembler.
+AsmJit emerged from an existing \urlfootnote{C++ implementation}{http://code.google.com/p/asmjit/} and currently supports the x86 instruction set.
 
 In fact it is even possible to inline custom assembler instructions in \PH when using \NB.
 This way it is possible to meet critical performance requirements.

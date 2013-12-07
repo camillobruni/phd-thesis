@@ -102,7 +102,7 @@ Unlike typical implementations that would focus on writing them as \VM extension
 %----------------------------------------------------------------------------
 \PH emerged from the Squeak project \cite{Inga97a}.
 The \PH \VM (Cog) implementation \cite{Mira11a} also evolved from the original Squeak bytecode interpreter.
-The current \VM uses a moving Garbage  Collector (\GC) with two generations\gc{ref?} and uses a \JIT that applies basic register allocation to reduce stack load. 
+The current \VM uses a moving Garbage Collector (\GC) with two generations\gc{ref?} and uses a \JIT that applies basic register allocation to reduce stack load. 
 This situation is not a direct requirement for \B but it is assumed as given and thus not further discussed in detail.
 However, \B requires certain features that were not supported in the existing \VM implementation.
 Mainly our requirement is being able to generate executable code and activate it at runtime.
@@ -135,8 +135,6 @@ As we will describe in \secref{benzo-platform-interaction}, we can access high-l
 %----------------------------------------------------------------------------
 \paragraph{\VM Interaction.}
 \seclabel{benzo-vm-interaction}
-
-\todo{dig up the older versions of this section with the longer text}
 
 The standard way in \PH to execute low-level code is to use a tag in the method definition. The following example shows such a method on the \ttt{Float} class.
 %
