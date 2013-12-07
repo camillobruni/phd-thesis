@@ -422,12 +422,20 @@ From within \PH we can only activate primitives but the internal definition is n
 \subsection{\NBJ \JIT Compiler}
 \seclabel{benzo-nabujito}
 %----------------------------------------------------------------------------
-In this section we present \NBJ, a \B-based approach for a language-side \JIT compiler.
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[scale=1.1]{nabujito-overview}
+	\caption[\NBJ Overview]{\NBJ compiles standard \PH methods with the help of \B to the same format the \VM \JIT uses.}
+	\figlabel{benzo-nabujito-overview}
+\end{figure}
+
+\noindent In this section we present \NBJ, a \B-based approach for a language-side \JIT compiler.
 \NBJ goes even further than \WF using almost the same techniques.
 However, instead of focusing on primitives, \NBJ generates native executable code for standard \ST methods.
 Primitives tend to be more low-level, whereas \NBJ focuses on high-level \ST code. 
 
-The \PH \VM (Cog) already comes with a \JIT that translates bytecodes to native instructions.
+The \PH \VM (\urlfootnote{\textsc{Cog vm}}{http://www.mirandabanda.org/cog/}) already comes with a \JIT that translates bytecodes to native instructions.
 It transforms \ST methods into slightly optimized native code at runtime.
 The main speed improvement comes from avoiding bytecode dispatching and by inlining certain known operations and primitives \cite{Ayco03a}.
 The most complex logic of the \JIT infrastructure deals with the dynamic nature of the \ST environment.
