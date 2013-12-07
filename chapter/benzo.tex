@@ -358,7 +358,7 @@ After we the native code is installed in the compiled method, we still run \PH c
 For activation \B uses reflective features to restart the method.
 Imagine that the method takes some arguments.
 These arguments have to be preserved during the code-generation phase and reused for the second activation.
-\B will simply use \PH's reflective \ttt{#perform:withArguments:} method on the original receiver to restart/activate the same method with the same arguments again.
+\B will simply use \PH's reflective \ttt{\#perform:withArguments:} method on the original receiver to restart/activate the same method with the same arguments again.
 
 When running the \B-enabled method again the \B primitive is activated once more.
 However, this time native code is present and thus the \B jumps to code attached to the compiled method and returns the generated result.
