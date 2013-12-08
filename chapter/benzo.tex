@@ -518,7 +518,7 @@ Additionally we reimplemented vital native routines for the \JIT which are not d
 	\item Native stack management.
 \end{itemize}
 
-\paragraph{Dynamic Code Generation.}
+\paragraph{Dynamic Code Generation}
 For standard methods \Nabujito takes the bytecodes and transforms them to native code.
 It also applies optimizations such as creating low-level branches for \PH level branching operations like \ttt{ifTrue:}.
 Optimizations for additional methods are all implemented flexibly at language-side.
@@ -537,7 +537,7 @@ When the language-side jitted code is activated \B ensures that we do not have t
 In this section we discuss the general performance characteristics of \B for the three example applications outlined in the previous section.
 A more detailed validation is presented later in \secref{ffi-performance} (\FFI), \secref{val-waterfall-performance} (\WF) and \secref{val-nabujito-performance} respectively.
 
-\paragraph{One-time Code Generation Overhead.} 
+\paragraph{One-time Code Generation Overhead} 
 \B allows the generation of specific and thus efficient native code.
 In \secref{benzo-benzo} we explained how \B causes only a one-time overhead for native code generation. 
 Thereafter it is cached for later activations.

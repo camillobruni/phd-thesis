@@ -102,7 +102,6 @@
 
 
 % =============================================================================
-
 % Table of contents for each chapter
 \usepackage[nottoc, notlof, notlot]{tocbibind}
 \usepackage[tight]{minitoc} % tight=single line spacing
@@ -162,9 +161,14 @@
 	{\newpage\vspace*{\fill}\thispagestyle{empty}\renewcommand{\headrulewidth}{0pt}}
 	{\vspace*{\fill}}
 	
+% automatically insert a period at the end of a paragraph title.
+\let\originalparagraph\paragraph
+\renewcommand{\paragraph}[2][.]{\originalparagraph{#2#1\!\!\!\!}}
+
+% enable french spacing: 1 space after a dot instead of the 2 in english
+\frenchspacing
 
 %=============================================================================
-
 \usepackage{needspace}
 % \needlines{3} ensures that the followin 3 lines will be on the same page
 \newcommand{\needlines}[1]{\Needspace{#1\baselineskip}}
