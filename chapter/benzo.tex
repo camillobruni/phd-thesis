@@ -852,10 +852,6 @@ We will now discuss the following three main issues in more detail: robustness, 
 % -----------------------------------------------------------------------------
 \subsection{Robustness}
 % -----------------------------------------------------------------------------
-\todo{show a problematic piece of code} \\
-\todo{sketch an outline for a safe benzo test by forking the main process} \\
-\todo{image + code example} \\
-\todo{possible emulation of the code to highlight very common bugs?}
 
 The first immediately visible flaw of \B is that there is currently no support for running the native code in a protected environment.
 \B directly transfer the execution context to the generated native code without protection.
@@ -870,17 +866,23 @@ thisContext instVarNamed: #closureOrNil put: 1.
 %
 However, it is not very common to directly modify the current context in \PH and it requires rather deep knowledge of the system to break the stack explicitly.
 
-
 In \B the standard developer will most probably be more familiar with \PH than with C or even Assembler, which will easily lead to the aforementioned errors.
 Which means that we have to be prepared for these common errors.
 Currently the active operating system process will be killed when the misaligned stack eventually lead to an invalid memory access.
 From a \PH point of view this is unacceptable behavior.
 Typically every error is revealed in \PH by opening a debugger, giving the programmer a chance to figure out the problem at hand.
+Enabling debugging support for the low-level \B code is not that easy as we will show in the following \secref{benzo-problems-debugging}.
 
+As a first step we should provided a debug mode for \B where the low-level errors do not terminate the main process.
+The most simple way to achieve this is by forking the whole \VM process at the moment the native \B code is activated.
+However, the current implementation of the \PH \VM does not support clean forking, even so close implementations such as \Squeak supports forking with a specific \urlfootnote{\VM plugin}{http://wiki.squeak.org/squeak/708/}.
+Implementing a second version of the \B plugin to activate native code would solve this issue, though at the cost of an additional primitive.
 
+\todo{possible emulation of the code to highlight very common bugs?}
 
 % -----------------------------------------------------------------------------
 \subsection{Low-level Debugging}
+\secref{benzo-problems-debugging}
 % -----------------------------------------------------------------------------
 \todo{sketch a possible debugger with ptrace and Co based on the previously forked process} \\
 \todo{outlook to the \FFI section (reified structures)} \\
