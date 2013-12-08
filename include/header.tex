@@ -45,6 +45,29 @@
 \usepackage{tgcursor} % fixed wifth font TeX Gyre Cursor (Courrier Style)
 
 % =============================================================================
+% enable decimal columns in tables
+\usepackage{dcolumn}
+% define a new columntype "d" for decimal aligned numbers which takes as argument
+% the number of decimal places to be displayed
+\newcolumntype{d}[1]{D{.}{.}{#1} }
+
+%the argument for d specifies the maximum number of decimal places
+%\begin{tabular}{l r c d{1} }
+%Left&Right&Center&\mathrm{Decimal}\\
+%1&2&3&4\\
+%11&22&33&44\\
+%1.1&2.2&3.3&4.4\\
+%\end{tabular}
+% =============================================================================
+% support proper SI units in latex: for instance \num{0.235+-0.005} is properly formatted as 0.235(5)
+\usepackage{siunitx} 
+% setup the si units package globally
+\sisetup{
+	separate-uncertainty = true % show the +/- for uncertainty, computer scienticts have no clue about the 0.2352(66) notion
+}
+
+
+% =============================================================================
  % environment hooks and patching:
 \usepackage{etoolbox}
 
@@ -123,8 +146,6 @@
   \renewcommand{\headrulewidth}{0pt}
 }
 
-
-% =============================================================================
 % Clear Header Style on the Last Empty Odd pages
 \makeatletter
 
