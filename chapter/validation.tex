@@ -122,11 +122,11 @@ We present the results of this experiment in ~\tabref{val-waterfall-performance}
 %
 \begin{table}[!ht]
     \centering
-    \begin{tabular}{rrr}
-					& Running Time 						& Relative Time \\\midrule
-		\VM			& \ttt{  6.4}  $\pm$ \ttt{0.14} ms & $1.0\times$\\
-		\WF	        & \ttt{ 22.8}  $\pm$ \ttt{0.17} ms & $\approx3.6\times$\\
-        Reflective	& \ttt{195.0}  $\pm$ \ttt{0.16} ms & $\approx30.0\times$
+    \begin{tabular}{rSS}
+					& {Running Time [ms]} & {Relative Time} \\\midrule
+		\VM			&   6.4(14)           & 1.0\\
+		\WF	        &  22.8(17)           & \approx3.6\\
+        Reflective	& 195.0(16)           & \approx30.0
     \end{tabular}
     \caption[\WF Speed Comparison: Large Integer]{Comparing running time of different implementations of integer arithmetic primitive.}
     \tablabel{val-waterfall-performance}
@@ -140,14 +140,13 @@ A more detailed analysis of \WF is available separately \cite{Char13a}.
 %
 \begin{table*}[t]
     \centering
-    \begin{tabular}{llr}
-                                           & Average Time                     & Relative Time \\\midrule
-        Unmodified                         & \ttt{ 0.28} $\pm$ \ttt{0.16} ms  & $1 \times$ \\
-        Unsafe reflective instrumentation  & \ttt{21.80} $\pm$ \ttt{0.33} ms  & $\approx 78\times$ \\
-        Secure reflective instrumentation  & \ttt{27.72} $\pm$ \ttt{0.40} ms  & $\approx 99\times$ \\
-
-        \WF-based instrumentation          & \ttt{ 7.72} $\pm$ \ttt{0.27} ms  & $\approx 28\times$ \\
-        \WF-based unmodified               & \ttt{ 7.08} $\pm$ \ttt{0.23} ms  & $\approx 25\times$ \\
+    \begin{tabular}{rSS}
+					                      & {Running Time [ms]} & {Relative Time} \\\midrule
+        Unmodified                        &  0.28(16) &          1 \\
+        Unsafe reflective instrumentation & 21.80(33) & \approx 78 \\
+        Secure reflective instrumentation & 27.72(40) & \approx 99 \\
+        \WF-based instrumentation         &  7.72(27) & \approx 28 \\
+        \WF-based unmodified              &  7.08(23) & \approx 25 \\
     \end{tabular}
     \caption[\WF Speed Comparison: \ttt{basicNew}]{Slowdown comparison for instrumentation of the  essential primitive \ttt{basicNew}.}
     \tablabel{val-waterfall-basicnew}
@@ -267,10 +266,10 @@ Instead of focusing on the final performance of the generated code, we present t
 
 \begin{table}[!ht]
     \centering
-    \begin{tabular}{rll}
-                      & Compilation Time \\\midrule
-        \PH Compiler  & \ttt{71} $\pm$ \ttt{1} ms   \\
-        \NBJ      & \ttt{73} $\pm$ \ttt{1} ms
+    \begin{tabular}{rS}
+                      & {Compilation Time[ms]} \\\midrule
+        \PH Compiler  & 71(1) \\
+        \NBJ          & 73(1)
     \end{tabular}
     \caption[\NBJ Compilation Speed]{Compilation efforts of the standard \ST compiler in \PH and \NBJ for the a simple method returning the constant \ttt{nil}.}
     \tablabel{val-nabujito-performance-small}
