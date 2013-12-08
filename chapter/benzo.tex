@@ -956,11 +956,11 @@ The previous two issues discussed, robustness and debuggability, both target the
 This third issue on the other hand is related to the system integration: platform independence.
 
 The \textsc{Intel x86} instruction set is widely distributed among a variety of operating systems and thus the primary choice for \B.
-Since the generated code is independent of C functions it will work on all platforms with \x86 support.
+Since the generated code is independent of C functions it will work on all platforms with x86 support.
 However, other architectures such as \ARM start to be more widespread on portable devices.
 A prominent example are \textsc{Apple}'s tablets and mobile phones running iOS.
 
-In contrast to \PH itself, \B does not work on \ARM platform since all the low-level code is written in terms of \x86 instructions.
+In contrast to \PH itself, \B does not work on \ARM platform since all the low-level code is written in terms of x86 instructions.
 While there is no way around a \ARM version of the underlying assembler, it does not pay off to port all the existing \B routines to each new platform.
 Instead we suggest to use an intermediate format that is platform independent with the following properties:
 \begin{itemize}[noitemsep]
@@ -987,7 +987,7 @@ Benzo vcpu x86 generate: [ :asm | | temp1 temp2 |
 	temp2 := asm uint: 2.
 	asm return: temp1 + temp1 ]
 \end{stcode}
-The same functionality expressed in \x86 instructions is as follows:
+The same functionality expressed in x86 instructions is as follows:
 \begin{stcode}{}
 Benzo x86 generate: [ :asm |
 	asm mov: 16r12345 ptr to: asm EAX.

@@ -716,14 +716,13 @@ Upon first activation the \NB primitive will fail and by default continues to ev
 This is the point where \NB generates native code and attaches it to the compiled method.
 \NB then reflectively resends the original message with the original arguments (for instance \ttt{abs:} in the example \figref{ffi-nativeBoostSyntax}).
 On the second activation, the native code is present and thus the primitive will no fail but run the native code.
-\secref{ffi-nbPrimitive} will give more internal details about the code activation and triggering of code generation.
+\secref{benzo-code-activation} will gave more internal details about the code activation and triggering of code generation.
 
 % ---------------------------------------------------------------------------
 \paragraph{Generating Assembler Instructions}
 
 \figref{ffi-nbArchitecture} shows that \NB relies on \urlfootnote{AsmJit}{http://smalltalkhub.com/\#!/~Pharo/AsmJit/}, a language-side assembler.
 AsmJit emerged from an existing \urlfootnote{C++ implementation}{http://code.google.com/p/asmjit/} and currently supports the x86 instruction set.
-
 In fact it is even possible to inline custom assembler instructions in \PH when using \NB.
 This way it is possible to meet critical performance requirements.
 Typically \ST does not excel at algorithmic code since such code does not benefit from dynamic message sends.
@@ -816,15 +815,13 @@ Compared to that, \NB is a very lightweight solution.
 
 
 Other dynamic high-level languages such as \Lua leverage \FFI performance by using a close interaction with the \JIT.
-\urlfootnote{\LuaJIT}{https://github.com/jmckaskill/luaffi} for instance is an efficient \Lua implementation that inlines \FFI calls directly into the \JIT compiled code.
+\urlfootnote{\LuaJIT}{https://github.com/jmckaskill/luaffi/} for instance is an efficient \Lua implementation that inlines \FFI calls directly into the \JIT compiled code.
 Similar to \NB this allows one to minimize the constant overhead by generating custom-made native code.
 The \LuaJIT runtime is mainly written in C which has clearly different semantics than \Lua itself.
 
 
 On a more abstract level, high-level low-level programming \cite{Fram09a} encourage to use high-level languages for system programming.
 Frampton et al. present a low-level framework  which is used as system interface for \Jikes, an experimental \Java \VM.
-%Additionally their framework is successfully used in MMTK \cite{Blac04a} which is used independently in several other projects.
-%The \ttt{org.vmmagic} package is much more elaborate than \NB but it is tailored towards Java with static types.
 However their approach focuses on a static solution.
 Methods have to be annotated to use low-level functionality.
 Additionally the strong separation between low-level code and runtime does not allow for reflective extensions of the runtime.
