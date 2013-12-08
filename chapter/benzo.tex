@@ -876,9 +876,11 @@ Enabling debugging support for the low-level \B code is not that easy as we will
 As a first step we should provided a debug mode for \B where the low-level errors do not terminate the main process.
 The most simple way to achieve this is by forking the whole \VM process at the moment the native \B code is activated.
 However, the current implementation of the \PH \VM does not support clean forking, even so close implementations such as \Squeak supports forking with a specific \urlfootnote{\VM plugin}{http://wiki.squeak.org/squeak/708/}.
-Implementing a second version of the \B plugin to activate native code would solve this issue, though at the cost of an additional primitive.
+Implementing a debugging version of the \B plugin to activate native code in a forked process would solve this issue, though at the cost of an additional primitive.
 
-\todo{possible emulation of the code to highlight very common bugs?}
+Addressing faulty stack management requires more effort.
+One possibility is to use an existing \ASM simulation framework and run the code in there and check for unbalanced stack operations.
+This difficulty leads us the second issue with \B.
 
 % -----------------------------------------------------------------------------
 \subsection{Low-level Debugging}
