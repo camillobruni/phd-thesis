@@ -784,7 +784,8 @@ Hence it is possible to statically refer to a \PH object using a double indirect
 
 In this section we present the \VM-level interaction of \NB.
 Even though \NB handles most tasks directly at language-side it requires certain changes on \VM level:
-\begin{itemize}
+%
+\begin{itemize}[noitemsep]
 	\item executable memory,
 	\item activation primitives for native code.
 \end{itemize}
@@ -793,44 +794,12 @@ Since \NB manages native code at language-side there is no special structure or 
 Native instructions are appended to compiled methods which reside on the heap.
 Hence the heap has to be executable in order to jump to the native instructions.
 
-
-% ---------------------------------------------------------------------------
-\paragraph{The \NB activation Primitive}
-\seclabel{ffi-nbPrimitive}
-
-\todo{strip BENZO duplication: see how much overlaps, only put a small summary here and push detailed explanation to the benzo chapter}
-
-In \secref{ffi-generating} we explained how \NB creates \FFI callouts at language-side.
-However, so far we left out the part on how the generated native code is activated.
-
-The examples in \secref{ffi-nutshell}, especially \figref{ffi-nativeBoostSyntax} show that each \NBFFI callout requires a special primitive.
-\figref{ffi-nativeCodeActivation} shows how a \NB method is activated.
-
-
-\begin{figure}[h]
-	\centering
-	\includegraphics[scale=1.1]{nativeCodeActivation}
-	\caption[\NB Native Code Activation]{\todo{Add Primitive Failure Arrow + link to NB code generation}Native code activation. The first call triggers the code generation. Then the method is restarted and the native code executed.}
-	\figlabel{ffi-nativeCodeActivation}
-\end{figure}
-
-\begin{itemize}
-\item In the first step (cf. \ding{182}) the \NB callout primitive is activated.
-	The primitive checks if the compiled method actually contains native code.
-\item On the first activation there is no native code available yet.
-	Hence the primitive will fail and the \ST body (cf. \ding{183}) of the \NB method gets evaluated.
-	This is where \NB prepares the native code for the \FFI callout.
-\item After installing the native code in the method trailer, the \NB method is reactivated with the original arguments (cf. \ding{184}).
-\item Again we end up in the \NB activation primitive (cf. \ding{185}).
-	However, this time there is native code (cf. \ding{186}) available and thus the primitive jumps to the native code instead.
-\end{itemize}
+\todo{small paragraph outlining the basic activation + link back to the benzo \secref{benzo-code-activation}}
 
 % ===========================================================================
 \section{Related Work}
 \seclabel{ffi-relatedWork}
 % ===========================================================================
-\todo{only show \FFI related work here! all the abstract implementations are covered in the Benzo secrtion}
-
 % other less related approaches: Python ctypes ? SWIG ?
 
 Typical \ST system are isolated from the low-level world and provide only limited interoperability with C libraries.

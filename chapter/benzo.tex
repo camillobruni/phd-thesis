@@ -349,6 +349,18 @@ Behind the scenes \B adds some more information to the code as the previously me
 	\figlabel{benzo-nativeCodeActivation}
 \end{figure}
 
+\todo{merge the following descriptive list with the following paragraph}
+\begin{itemize}
+\item In the first step (cf. \ding{182}) the \B primitive is activated.
+	The primitive checks if the compiled method actually contains native code.
+\item On the first activation there is no native code available yet.
+	Hence the primitive will fail and the \ST body (cf. \ding{183}) of the \B method gets evaluated.
+	This is where \B prepares the native code for the \FFI callout.
+\item After installing the native code in the method trailer, the \NB method is reactivated with the original arguments (cf. \ding{184}).
+\item Again we end up in the \B activation primitive (cf. \ding{185}).
+	However, this time there is native code (cf. \ding{186}) available and thus the primitive jumps to the native code instead.
+\end{itemize}
+
 \noindent Now we completed the first the left half of the activation process shown in \figref{benzo-nativeCodeActivation}.
 What is left is the third step, the actual activation of the native code.
 After we the native code is installed in the compiled method, we still run \PH code to restart the same \B-enabled method again, this corresponds to the arrow in \figref{benzo-nativeCodeActivation} connecting both sides.
@@ -962,7 +974,7 @@ Along with the ongoing work for this thesis we started \VCPU, a first attempt fo
 A \TAC instruction takes the following form.
 %
 \begin{stcode}{}
-	result := argument1 OP argument2
+result := argument1 OP argument2
 \end{stcode}
 %
 There are three operands involved, \ttt{result}, \ttt{argument1} and \ttt{argument2}, from which the name of this instruction format originates.
@@ -970,7 +982,7 @@ Based on this assumption, each standard \VCPU instruction returns a temporary va
 The following code example outlines the basic usage of \VCPU:
 %
 \begin{stcode}{}
-Benzo vcpu generate: [ :asm | | temp1 temp2 |
+Benzo vcpu x86 generate: [ :asm | | temp1 temp2 |
 	temp1 := asm memoryAt: 16r12345.
 	temp2 := asm uint: 2.
 	asm return: temp1 + temp1 ]
