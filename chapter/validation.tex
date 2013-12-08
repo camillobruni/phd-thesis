@@ -76,13 +76,13 @@ We identified two main benefits of changing \VM primitives at runtime:
 	\item Dynamic instrumentation of primitives.
 \end{enumerate}
 
-\paragraph{Reducing \VM Complexity.}
+\paragraph{Reducing \VM Complexity}
 \VM extensions are only justified in the presence of strong performance requirements (see \secref{benzo-related}).
 All non-essential primitives fall into this category.
 Using \WF, these primitives can be implemented at language-side.
 This means that these primitives become first-class citizens of the high-level environment and thus evolve with less effort.
 
-\paragraph{Essential Primitives.}
+\paragraph{Essential Primitives}
 For essential primitives the previous argument does not hold since a static version is needed for a correct startup of the system.
 These primitives can not be fully replace by a language-side implementation using \WF.
 For instance, essential primitives are required for system startup.
