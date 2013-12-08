@@ -557,12 +557,12 @@ The C function takes no argument and returns an integer thus guaranteeing a mini
 %
 \begin{table}[H]
     \centering
-    \begin{tabular}{rlr}
-                    & Call Time                         & Relative Time \\\midrule
-        \NB         & \ttt{492.13} $\pm$ \ttt{0.73} ms  & $1.0 \times$ \\
-        \Alien       & \ttt{606.6 } $\pm$ \ttt{1.9 } ms  & $\approx 1.2\times$ \\
-        C-\FFI       & \ttt{541.77} $\pm$ \ttt{0.88} ms  & $\approx 1.1\times$ \\
-        \LuaJIT      & \ttt{343.0 } $\pm$ \ttt{1.2 } ms  & $\approx 0.7\times$
+    \begin{tabular}{rSS}
+                     & {Call Time [ms]} & {Relative Time} \\\midrule
+        \NB          & 492.13(73)       & 1.0 \\
+        \Alien       & 606.6 (19)       & \approx 1.2\\
+        C-\FFI       & 541.77(88)       & \approx 1.1\\
+        \LuaJIT      & 343.0 (12)       & \approx 0.7
     \end{tabular}
     \caption{Speed comparison of an \ttt{uint clock(void)} \FFI call (see Code~\lstref{ffi-clock}).}
     \tablabel{ffi-performance-clock}
@@ -572,13 +572,13 @@ The C function takes no argument and returns an integer thus guaranteeing a mini
 %
 \begin{table}[h!]
     \centering
-    \begin{tabular}{rlr}
-                    & Call Time                           & Relative Time \\\midrule
-        \NB         & \ttt{ 65.34 } $\pm$ \ttt{0.23 } ms  & $1.00 \times$ \\
-        \Alien       & \ttt{175.77 } $\pm$ \ttt{0.31 } ms  & $\approx 2.69\times$ \\
-        C-\FFI       & \ttt{148.77 } $\pm$ \ttt{0.21 } ms  & $\approx 2.27\times$ \\
+    \begin{tabular}{rSS}
+                & {Call Time [ms]} & {Relative Time} \\\midrule
+        \NB     &  65.34(23)       &         1.00 \\
+        \Alien  & 175.77(31)       & \approx 2.69 \\
+        C-\FFI  & 148.77(21)       & \approx 2.27 \\
         \LuaJIT\tablefootnote{Downsampled from increased loop size by a factor $100$ to guarantee accuracy.}
-                    & \ttt{  }\ttt{  2.035} $\pm$ \ttt{0.015} ms  & $\approx 0.03\times$
+                & 2.035(15)        & \approx 0.03
     \end{tabular}
     \caption{Speed comparison of an \ttt{int abs(int i)} \FFI call (see \figref{ffi-nativeBoostSyntax}).}
     \tablabel{ffi-performance-abs}
@@ -602,13 +602,13 @@ Both argument and result have to be converted from high-level strings to C-level
 %
 \begin{table}[h!]
     \centering
-    \begin{tabular}{rlr}
-                    & Call Time                          & Relative Time \\\midrule
-        \NB         & \ttt{ 105.29} $\pm$ \ttt{0.24} ms  & $1.0 \times$ \\
-        \Alien      & \ttt{1058.7 } $\pm$ \ttt{2.0 } ms  & $\approx 10.1\times$ \\
-        C-\FFI      & \ttt{ 282.94} $\pm$ \ttt{0.24} ms  & $\approx 2.7\times$ \\
+    \begin{tabular}{rSS}
+                    & {Call Time [ms]} & {Relative Time} \\\midrule
+        \NB         &  105.29(24)      &          1.0 \\
+        \Alien      & 1058.7 (20)      & \approx 10.1 \\
+        C-\FFI      &  282.94(24)      & \approx  2.7 \\
         \LuaJIT\tablefootnote{Downsampled from increased loop size by a factor $10$ to guarantee accuracy.}
-                    & \ttt{ }\ttt{ 97.3 } $\pm$ \ttt{5.1 } ms  & $\approx 0.9\times$
+                    & 97.3(51)         & \approx 0.9
     \end{tabular}
     \caption{Speed comparison of an \ttt{char * getenv(char *name)} \FFI call (see Code \lstref{ffi-getenv}).}
     \tablabel{ffi-performance-getenv}
@@ -621,12 +621,12 @@ Hence the relative overhead of an \FFI call is reduced.
 %
 \begin{table}[h!]
     \centering
-    \begin{tabular}{rlr}
-                    & Call Time                          & Relative Time \\\midrule
-        \NB         & \ttt{ 371.03} $\pm$ \ttt{0.51} ms  & $1\times$ \\
-        \Alien      & \ttt{1412.37} $\pm$ \ttt{0.79} ms  & $\approx 3.8\times$ \\
-        C-\FFI      & \ttt{ 605.02} $\pm$ \ttt{0.23} ms  & $\approx 1.6\times$ \\
-        \LuaJIT     & \ttt{ 202.4 } $\pm$ \ttt{2.1 } ms  & $\approx 0.6\times$
+    \begin{tabular}{rSS}
+                    & {Call Time [ms]}  & {Relative Time} \\\midrule
+        \NB         &  371.03(51)       &         1.0 \\
+        \Alien      & 1412.37(79)       & \approx 3.8 \\
+        C-\FFI      &  605.02(23)       & \approx 1.6 \\
+        \LuaJIT     &  202.4 (21)       & \approx 0.6
     \end{tabular}
     \caption{Speed comparison of an \ttt{int printf(char *name, int num1, int num2)} \FFI call}
     \tablabel{ffi-performance-printf}
@@ -649,12 +649,12 @@ In all cases, the allocation time of the structs is not included in the measurem
 
 \begin{table}[h!]
     \centering
-    \begin{tabular}{rlr}
-                    & Call Time                         & Relative Time \\\midrule
-        \NB         & \ttt{ 79.00} $\pm$ \ttt{0.27} ms  & $1.0\times$ \\
-        \Alien      & \ttt{753.82} $\pm$ \ttt{0.51} ms  & $\approx 9.5\times$ \\
-        C-\FFI      & \ttt{380.8 } $\pm$ \ttt{2.7 } ms  & $\approx 3.6\times$ \\
-        \LuaJIT     & \ttt{ }\ttt{ 5.66} $\pm$ \ttt{0.15} ms  & $\approx 0.07\times$
+    \begin{tabular}{rSS}
+                    & {Call Time [ms]} & {Relative Time} \\\midrule
+        \NB         &  79.00 (27)      &         1.0 \\
+        \Alien      & 753.82 (51)      & \approx 9.5 \\
+        C-\FFI      & 380.8  (27)      & \approx 3.6 \\
+        \LuaJIT     &  5.66  (15)      & \approx 0.07
     \end{tabular}
     \caption{Speed comparison of an \ttt{cairo\_matrix\_multiply} \FFI call (cf. \lstref{ffi-cairoCallouts})}
  	\tablabel{ffi-performance-structs}
@@ -673,15 +673,14 @@ Callbacks are usually much more slower than callouts.
 
 \begin{table}[H]
     \centering
-    \begin{tabular}{rlr}
-                    & Call Time                          & Rel. Time \\ \midrule
-        \NB         & \ttt{2300.0 } $\pm$ \ttt{1.1 } ms  & $ 1.0 \times$ \\
-        \Alien      & \ttt{ 600.83} $\pm$ \ttt{0.35} ms  & $\approx 0.26 \times$ \\
-        C-\FFI      & NA                                 & NA \\
-        \LuaJIT     & \ttt{ }\ttt{ 46.13} $\pm$ \ttt{0.62} ms  & $\approx 0.02 \times$\\
-		\cmidrule(r){2-3}
-	\NB \small{with}
-	   \small{Native Callbacks}    & \ttt{ }\ttt{ }\ttt{ 4.98} $\pm$ \ttt{0.21} ms  & $\approx 0.002 \times$
+    \begin{tabular}{rSS}
+                    & {Call Time [ms]} & {Relative Time} \\\midrule
+        \NB         & 2300.0 (11)      &         1.0 \\
+        \Alien      &  600.83 (35)     & \approx 0.26 \\
+        C-\FFI      & NA               & NA \\
+        \LuaJIT     &   46.13(62)      & \approx 0.02\\ \cmidrule(r){2-3}
+	\NB with Native Callbacks
+	                & 4.98(21)  & \approx 0.002
     \end{tabular}
     \caption{Speed comparison of a \ttt{qsort} \FFI call (cf. \lstref{ffi-calloutWithCallback})}
  	\tablabel{ffi-performance-qsort}
