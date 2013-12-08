@@ -554,8 +554,7 @@ The following table contains a performance comparison of three different \FFI im
         \Alien, language-side \FFI  & \ttt{31.09} $\pm$ \ttt{0.94} ms  & $\approx 3.0\times$ \\
         C-\FFI, plugin-based \FFI   & \ttt{19.55} $\pm$ \ttt{0.64} ms  & $\approx 1.9\times$
     \end{tabular}
-    \caption[Basic \B-based \FFI Performance]{Different \FFI implementations in \PH evaluating 
-    \ttt{abs(int)}. Alien does marshalling at language-side while \FFI does everything in C.}
+    \caption[Basic \B-based \FFI Performance]{Different \FFI implementations in \PH evaluating \ttt{abs(int)}. \Alien does marshalling at language-side while \FFI does everything in \VM plugin written in C.}
     \tablabel{benzo-ffi-performance-simple}
 \end{table}
 
@@ -816,11 +815,10 @@ Compared to our approach the efficient \VM implementation suffers from the short
 
 Kell and Irwin \cite{Kell11a} take a different look at interacting with external libraries.
 They advocate a \Python \VM that allows for dynamically shared objects with external libraries.
-It uses the low-level \textsc{Dwarf} debugging information present in the external libraries to gather enough metadata to automatically generate \FFI\ugh{s}.
+It uses the low-level \textsc{Dwarf} debugging information present in the external libraries to gather enough metadata to automatically generate \FFIs.
 However, they do not focus on the reflective interaction with low-level code and the resulting benefits. 
 
-\todo{reduce the quicktalk paragraph here and move most of this discussion to the waterfall validation}
-\textsc{Quicktalk} \cite{Ball86a} follows a similar approach as \WF.
+\textsc{Quicktalk} \cite{Ball86a} follows a similar approach as the dynamic primitives in \WF.
 However, Ballard et al. focus mostly on the development of a complex compiler for a new \ST dialect.
 Using type annotations \textsc{Quicktalk} allows for statically typing methods.
 By inlining methods and eliminating the bytecode dispatch overhead by generating native code \textsc{Quicktalk} outperforms interpreted bytecode methods.

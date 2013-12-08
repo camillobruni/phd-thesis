@@ -204,11 +204,11 @@ This example shows that \NBFFI accepts literals, local and instance variable nam
         \ttt{char}   & \ttt{Character} \\
         \ttt{oop}    & \ttt{Object}
     \end{tabular}
-    \caption[\NB Primitive Types]{Default \NBFFI mappings between C/primitive types and high-level types.Note that \ttt{oop} is not a real primitive type as no marshalling is applied and the raw pointer is directly exposed to \PH.}
+    \caption[\NB Primitive Types]{Default \NBFFI mappings between C/primitive types and high-level types. Note that \ttt{oop} is not a real primitive type as no marshalling is applied and the raw pointer is directly exposed to \PH.}
     \tablabel{ffi-nbPrimitiveTypes}
 \end{table}
-%
-\lstref{ffi-setenv} shows another example to callout the \ttt{setenv} function.
+
+\noindent \lstref{ffi-setenv} shows another example to callout the \ttt{setenv} function.
 The return value will be converted to a \ST \ttt{Boolean}.
 The two first parameters are specified as \ttt{String} and will be automatically transformed in \ttt{char*} with an ending \cnull character.
 The last parameter is \ttt{1}, a \ST literal value without any type specification and \NB translates it as an \ttt{int} by default.
@@ -227,24 +227,22 @@ setenv: name value: value
 		module: NativeBoost CLibrary
 \end{stcode}
 
-Another interesting example of automatic marshalling is to define the \ttt{abs} method (cf. \figref{ffi-nativeBoostSyntax}) in the \ttt{SmallInteger} class and passing \ttt{self} as argument in the callout.
+\noindent Another interesting example of automatic marshalling is to define the \ttt{abs} method (cf. \figref{ffi-nativeBoostSyntax}) in the \ttt{SmallInteger} class and passing \ttt{self} as argument in the callout.
 In such case, \NB automatically converts \ttt{self} (which is a \ttt{SmallInteger}) into an \ttt{int}.
 This list of mapping is not exhaustive and \NB also supports the definition of new data types and new conversions into more complex C types such as structures (cf. \secref{ffi-internals}).
 
-
-
 % memory alloc & structs
-\begin{table}[t]
+\begin{table}[h]
 	\begin{adjustwidth}{-2.0in}{-2.0in}
 	\centering
-    \begin{tabular}{lcccc}
+    \begin{tabular}{lllll}
                     &  Memory 	    & Address  & Marshalling         & Constraint  \\\midrule
 C-managed struct 	&  C heap  	    & fixed    & passed by reference & must be freed \\
-\PH-managed struct  & Object memory & variable & passed by reference & may move \\
-& & & or passed by copy & costly\\
+\multirow{2}{*}{\PH-managed struct}  & \multirow{2}{*}{Object memory} & \multirow{2}{*}{variable} & passed by reference & may move \\
+& & & passed by copy & costly\\
     \end{tabular}
     \end{adjustwidth}
-    \caption{Wrapping structures possibilities in \NB}
+    \caption{Choice of wrapping structures in \NB}
     \tablabel{ffi-wrappingstruct}
 \end{table}
 
@@ -493,7 +491,6 @@ This native code is responsible of the marshalling and calling the external func
 \end{figure}
 
 \paragraph{Callout propagation.}
-\todo{ugly separation}
 \figref{ffi-ffi} shows a comparison of the resolution of a \FFI call both in \NBFFI and a plugin-based \FFI.
 At step 1, a \FFI call is emitted.
 The \NBFFI call is mostly processed at language-side and it is only during step 4 that a primitive is called and the \VM effectively does the external call by executing the native code.
@@ -524,13 +521,10 @@ In this section we compare \NB with other \FFI implementations.
 \paragraph{Choice of \FFI Implementations.}
 To evaluate \NB we explicitly target \FFI implementations running on the same platform, hence we can rule out additional performance differences.
 \Alien and C-\FFI run in the same \PH image as \NB allowing a much closer comparison.
-
 \Alien \FFI is implemented almost completely at language-side, much like \NB.
 However, as the following benchmarks will stress, it also suffers from performance loss.
-
 On the other end there is C-\FFI which is faster than \Alien but by far not as flexible.
 For instance only primitive types are handled directly.
-
 As the third implementation we chose \Lua which is widely used as scripting language in game development.
 Hence much care has been taken to closely integrate \Lua into C and C++ environments.
 \LuaJIT integrates an \FFI library that generates the native code for marshalling and directly inlines C functions callout in the \JIT-compiled code.
@@ -667,7 +661,8 @@ In all cases, the allocation time of the structs is not included in the measurem
 \end{table}
 
 \paragraph{Evaluation.}
-In \tabref{ffi-performance-structs} shows that \NB outperforms the two other \ST implementations.
+\tabref{ffi-performance-structs} shows that \NB outperforms the two other \ST implementations.
+\todo{moa text hea needed}
 
 % ---------------------------------------------------------------------------
 \subsection{Callbacks}
@@ -744,9 +739,7 @@ Through reflective access to the execution context we can retrieve the method's 
 
 % ---------------------------------------------------------------------------
 \paragraph{Memory Management}
-
 \todo{strip BENZO duplication}
-
 \NB supports external heap management with explicit allocation and freeing of memory regions.
 There are interfaces for \ttt{allocate} and \ttt{free} as well as for \ttt{memcopy}:
 %
@@ -766,7 +759,7 @@ NativeBoost memCopy: memory to: bytes size: 4.
 NativeBoost free: memory.
 \end{stcode}
 
-Using the external heap management it is possible to prepare binary blobs and structures for \FFI calls.
+\noindent Using the external heap management it is possible to prepare binary blobs and structures for \FFI calls.
 
 In the previous example Code \lstref{ffi-externalHeap} the \ttt{memory} variable holds a wrapper for the static address of the allocated memory.
 Hence accessing it from low-level code is straight forward.
