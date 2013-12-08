@@ -519,6 +519,7 @@ When the language-side jitted code is activated \B ensures that we do not have t
 %============================================================================
 \section{Performance}
 \seclabel{benzo-issues-performance}
+\seclabel{benzo-performance}
 %============================================================================
 \todo{Shorten this section and put forward pointers to the real validation chapters yet to come (copied contents, feel free to distroy...)}
 In this section we discuss the general performance characteristics of \B for the three example applications outlined in the previous section.
@@ -842,8 +843,11 @@ However, most existing solutions target only specific use cases and can not be r
 \section{Problems of Benzo}
 \seclabel{benzo-problems}
 % ===========================================================================
-\todo{most problems are related to the missing debugging facilities}
-
+In this section we will point out the current limitations of the \B framework.
+As we outlined in \secref{benzo-performance} \B is a promising alternative to building \VM-plugins.
+Our prototype use cases, the dynamic primitives and the language-side \JIT compiler, even suggest that \B can replace certain \VM modifications.
+However, throughout the development of these tools we also noticed certain drawbacks and limitations of the current \B implementation.
+We will now discuss the following three main issues in more detail: robustness, debuggability and portability.
 
 % -----------------------------------------------------------------------------
 \subsection{Robustness}
@@ -852,6 +856,27 @@ However, most existing solutions target only specific use cases and can not be r
 \todo{sketch an outline for a safe benzo test by forking the main process} \\
 \todo{image + code example} \\
 \todo{possible emulation of the code to highlight very common bugs?}
+
+The first immediately visible flaw of \B is that there is currently no support for running the native code in a protected environment.
+\B directly transfer the execution context to the generated native code without protection.
+Whilst this makes sense from a performance point of view for a stable piece of native code, it is nuisance during development.
+The most common errors we noticed during development were cause due to stack misalignment and access to invalid memory region.
+The latter one is also typical for C development, whereas creating a misaligned stack in pure C is not possible.
+In \PH it is possible to willingly corrupt the stack by for instance injecting a wrong sender as illustrated with following the code example.
+%
+\begin{stcode}{}[label=lst:benzo-pharo-stack-corruption]
+thisContext instVarNamed: #closureOrNil put: 1.
+\end{stcode}
+%
+However, it is not very common to directly modify the current context in \PH and it requires rather deep knowledge of the system to break the stack explicitly.
+
+
+In \B the standard developer will most probably be more familiar with \PH than with C or even Assembler, which will easily lead to the aforementioned errors.
+Which means that we have to be prepared for these common errors.
+Currently the active operating system process will be killed when the misaligned stack eventually lead to an invalid memory access.
+From a \PH point of view this is unacceptable behavior.
+Typically every error is revealed in \PH by opening a debugger, giving the programmer a chance to figure out the problem at hand.
+
 
 
 % -----------------------------------------------------------------------------
