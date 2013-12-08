@@ -940,9 +940,6 @@ Nevertheless, this scheme could bring approximate a \PH like user experience for
 % -----------------------------------------------------------------------------
 \subsection{Platform Independence}
 % -----------------------------------------------------------------------------
-\todo{- outlook to the VirtualCPU} \\
-\todo{- image: mini architecture picture}
-
 The previous two issues discussed, robustness and debuggability, both target the integration into the existing \PH development environment.
 This third issue on the other hand is related to the system integration: platform independence.
 
@@ -953,7 +950,48 @@ A prominent example are \textsc{Apple}'s tablets and mobile phones running iOS.
 
 In contrast to \PH itself, \B does not work on \ARM platform since all the low-level code is written in terms of \x86 instructions.
 While there is no way around a \ARM version of the underlying assembler, it does not pay off to port all the existing \B routines to each new platform.
-Instead we suggest to use an intermediate format the is platform independent.
+Instead we suggest to use an intermediate format that is platform independent with the following properties:
+\begin{itemize}[noitemsep]
+	\item High-level three-address-code (\TAC) instructions
+	\item Automatic stack-management
+\end{itemize}
+
+\paragraph{\VCPU.}
+Along with the ongoing work for this thesis we started \VCPU, a first attempt for such an implementation.
+\VCPU is based on an \TAC to simplify the adoption of optimizations such as \SSA.
+A \TAC instruction takes the following form.
+%
+\begin{stcode}{}
+	result := argument1 OP argument2
+\end{stcode}
+%
+There are three operands involved, \ttt{result}, \ttt{argument1} and \ttt{argument2}, from which the name of this instruction format originates.
+Based on this assumption, each standard \VCPU instruction returns a temporary variable which can be used for further operations.
+The following code example outlines the basic usage of \VCPU:
+%
+\begin{stcode}{}
+Benzo vcpu generate: [ :asm | | temp1 temp2 |
+	temp1 := asm memoryAt: 16r12345.
+	temp2 := asm uint: 2.
+	asm return: temp1 + temp1 ]
+\end{stcode}
+The same functionality expressed in \x86 instructions is as follows:
+\begin{stcode}{}
+Benzo x86 generate: [ :asm |
+	asm mov: 16r12345 ptr to: asm EAX.
+	asm add: asm EAX with: 2.
+	asm return ]
+\end{stcode}
+
+\cb{messy here, too tired: create proper link between the two sections}
+\noindent Even though the \VCPU has a built-in register allocator and a minor optimization pipeline it yields the following inferior instructions:
+\begin{stcode}{}
+mov   6 -> EDX
+mov   2 -> ECX
+add EDX, ECX
+mov ECX -> EAX
+return 
+\end{stcode}
 
 
 % ===========================================================================
