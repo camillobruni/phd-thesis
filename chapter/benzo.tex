@@ -918,13 +918,22 @@ A potential solution to this problem would be to install low-level signal handle
 \begin{figure}[h]
 	\centering
 	\includegraphics[scale=1.1]{benzo-debugger}
+	\caption{\B Debugger Outline}
+	\figlabel{benzo-debugger}
 \end{figure}
+
+The following list explains the detailed steps of \figref{benzo-debugger}.
 \begin{enumerate}
 	\item Standard \PH method activating a \B-enabled method through the \ttt{primitiveNativeCall} primitive.
 	\item Native code causing a memory access violation (for example \ttt{SIGSEV}) which can not be handled by \PH directly.
 	\item Low-level signal handler is activated by the operating system and tries to walk back the native stack up to the \ttt{primitiveNativeCall} activation.
 	\item After successfully finding the \ttt{primitiveNativeCall} the signal handler sends a \B failure back to \PH.
 \end{enumerate}
+
+We assume that with the outlined mechanism an important fraction of the occurring memory access violations could be handled adequately in \PH.
+However, since there is no real protection in the native code, there is no guarantee that the main \PH \VM can continue working.
+Faulty native code might have corrupted the main \PH stack or heap beyond repair.
+Nevertheless, this scheme could bring approximate a \PH like user experience for native \B code.
 
 
 % -----------------------------------------------------------------------------
