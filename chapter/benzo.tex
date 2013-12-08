@@ -851,6 +851,7 @@ We will now discuss the following three main issues in more detail: robustness, 
 
 % -----------------------------------------------------------------------------
 \subsection{Robustness}
+\seclabel{benzo-problems-robustness}
 % -----------------------------------------------------------------------------
 
 The first immediately visible flaw of \B is that there is currently no support for running the native code in a protected environment.
@@ -895,14 +896,24 @@ This difficulty leads us the second issue with \B.
 
 % -----------------------------------------------------------------------------
 \subsection{Low-level Debugging}
-\secref{benzo-problems-debugging}
+\seclabel{benzo-problems-debugging}
 % -----------------------------------------------------------------------------
-\todo{sketch a possible debugger with ptrace and Co based on the previously forked process} \\
-\todo{outlook to the \FFI section (reified structures)} \\
-\todo{hard to debug when only looking at the memory} \\
-\todo{- need full stack view} \\
-\todo{- need register view} \\
-\todo{- need possible view on references to PH objects}
+The second main limitation of \B is the lack of a dedicated debugger.
+\PH inherits the long standing tradition of \ST to provide an excellent debug interaction for programmers.
+The \PH debugger shows the stack, the current receiver along with the temporary variables and argument.
+However when working with \B this important tool is no longer available.
+Currently the only way to debug \B code is to launch the \VM upfront in a C debugger such as \GDB or \LLDB.
+However, the debug interaction is rather limited compared to \PH.
+Not only does the programmer have to resort to an external tool, but there are only a handful mostly proprietary standalone debuggers available.
+For a better low-level debugging experience we have to rely on a complete \textsc{ide} such as \textsc{Eclipse} or \textsc{Xcode}, a rather cumbersome overhead to standard \PH programming.
+
+Besides using these external tools there is no simple alternative.
+The only way to provide a seamless debugger is to either build on the fork solution presented in the previous \secref{benzo-problems-robustness} or a separate simulator.
+System libraries such as \ptrace enable debugging for an external process.
+It would be possible to write bindings to this library with an \FFI from within \PH and debug a \B-enabled method this way.
+Even so this would be a great step forward compared to the current infrastructure it implies that the programmer anticipates debugging.
+Something that is very uncommon in \PH as the debugger is tightly integrated into the standard development environment.
+A potential solution to this problem would be to install low-level signal handlers which try to backtrack from signals triggered by memory access violations such as \ttt{SIGBUS} and \ttt{SIGSEGV} under Linux.
 
 % -----------------------------------------------------------------------------
 \subsection{Platform Independence}
