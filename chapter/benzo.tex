@@ -620,7 +620,8 @@ A more detailed analysis of \WF is available later in \secref{val-waterfall-perf
 \seclabel{benzo-nabujito-performance}
 % ---------------------------------------------------------------------------
 
-The performance evaluation for our \B-based \JIT compiler is focused on the language-side code-generation part.
+The performance evaluation for our \B-based \JIT compiler is focused on the language-side code-generation part a more detailed discussion is given in \secref{val-nabujito-performance}.
+
 \NBJ essentially generates the same native code as the \VM-level \JIT, hence there is no performance difference at evaluation time.
 However, \NBJ is clearly slower during the warm-up phase.
 Compilation of the native instructions will take considerably more time compared to the \VM-level implementation of the same bytecode to assembler transformation.
@@ -634,7 +635,7 @@ Instead of focusing on the final performance of the generated code, we present t
     \begin{tabular}{rll}
                       & Compilation Time \\\midrule
         \PH Compiler  & \ttt{71} $\pm$ \ttt{1} ms   \\
-        \NBJ      & \ttt{73} $\pm$ \ttt{1} ms
+        \NBJ          & \ttt{73} $\pm$ \ttt{1} ms
     \end{tabular}
     \caption[Basic \B-based \JIT Performance]{Compilation efforts of the standard \PH compiler in \PH and \NBJ for the a simple method returning the constant \ttt{nil}.}
     \tablabel{benzo-nabujito-performance-small}
