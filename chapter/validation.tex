@@ -54,7 +54,7 @@ This includes for instance the finding of addresses of \VM internal symbols and 
 \WF relies on \B for most of this low-level functionality.
 In particular \NB, the \B-based \FFI presented in \chapref{ffi}, is used for interfacing with C libraries (\ttt{dlsym}). 
 
-\paragraph{Primitives in \ST.}
+\paragraph{Primitives in \ST}
 As already partially explained, whenever a method is compiled with the \ttt{primitive} pragma as shown in \secref{benzo-vm-interaction} a flag is set on the \ttt{CompiledMethod}. 
 If the \VM tries to activate such a method, instead of interpreting the bytecodes it calls the corresponding function at \VM-level~\cite{Gold83a}.
 %The binding between primitives and numbers is described in a table indexed by number.
@@ -62,7 +62,7 @@ If the \VM tries to activate such a method, instead of interpreting the bytecode
 Essential primitives are required for the bootstrapping and the essential operations of the language, such as creating a new object or activating a block.
 The second category of primitives are mainly used for optimization purposes.
 
-\paragraph{Dynamically Interchangeable Primitives.}
+\paragraph{Dynamically Interchangeable Primitives}
 \WF uses \B's mechanism for replacing primitive methods with customized versions that are nativized dynamically as described in \chapref{benzo}.
 The loophole described there is exploited by \WF to enable dynamic modification of \VM behavior and hence bring primitives to life at language-side.
 
@@ -155,7 +155,7 @@ A more detailed analysis of \WF is available separately \cite{Char13a}.
 % -----------------------------------------------------------------------------
 \subsection{Problems}
 % -----------------------------------------------------------------------------
-\paragraph{\WF Future.}
+\paragraph{\WF Future}
 Currently \WF reimplements all \Slang arithmetic essential operations statically as native code templates.
 The existing \JIT of the \PH \VM does exactly the same for performance reasons.
 This is code duplication and should be avoided.
@@ -180,7 +180,7 @@ Primitives tend to be more low-level, whereas \NBJ focuses on high-level \ST cod
 
 
 %----------------------------------------------------------------------------
-\paragraph{The \JIT of the \PH \VM.}
+\paragraph{The \JIT of the \PH \VM}
 The \PH \VM (Cog) already comes with a \JIT that translates bytecodes to native instructions.
 It transforms \ST methods into slightly optimized native code at runtime.
 The main speed improvement comes from avoiding bytecode dispatching and by inlining certain known operations and primitives \cite{Ayco03a}.
@@ -191,7 +191,7 @@ There exists more important stages as an additional register allocation pass to 
 The existing \JIT infrastructure is implemented in \Slang \cite[Ch.\ 5]{Blac09a} as the rest of the \VM.
 
 %----------------------------------------------------------------------------
-\paragraph{Limitations of \VM-level \JIT Compilers.}
+\paragraph{Limitations of \VM-level \JIT Compilers}
 In the context of \NBJ we separate a \JIT infrastructure into separate parts.
 The major part is to have a \VM that uses stack-mapping.
 In the case of a bytecode-based interpreter, we assume that the \VM provides routines to switch between a bytecode interpretation context and a low-level native execution context.
@@ -205,7 +205,7 @@ With \NBJ we move the \JIT compiler,the part that generates native code at runti
 	\item The JIT reimplements primitives for optimization reasons resulting in code duplication.
 \end{itemize}
 
-\paragraph{Optimization Limitations for \PH.}
+\paragraph{Optimization Limitations for \PH}
 In \ST methods tend to be very small and it is considered good practice to delegate behavior to other objects.
 This implies that several common optimization techniques for static languages do not work well.
 Dynamic method activation does not provide enough context for a static compiler to optimize methods.
@@ -213,7 +213,7 @@ Hence after inline caches and register allocation the next optimization techniqu
 However, inlining in a dynamic context is difficult and requires hooks at \VM-level to invalidate native code when the language-side changes.
 Since in \PH, compiling a method to bytecode is handled completely with language-side code most of the infrastructure to get notified about method changes is already present.
 
-\paragraph{Primitives in the Existing JIT.}
+\paragraph{Primitives in the Existing JIT}
 The existing JIT reimplements the most used primitives at \VM-level.
 This guarantees that the \VM stays as long as possible in the \JIT context (see \secref{benzo-jit-interaction} on page~\pageref{sec:benzo-jit-interaction}).
 Additionally this enables new performance optimizations that for instance are hard to achieve with standard compliant C code.
@@ -239,7 +239,7 @@ Nabujito relies on the following \VM-level infrastructure to manage and run nati
 	\item Native stack management.
 \end{itemize}
 
-\paragraph{Dynamic Code Generation.}
+\paragraph{Dynamic Code Generation}
 To simplify the implementation we decide to manually trigger JIT compilation.
 For primitives known by \WF we rely on that infrastructure to generate the native code.
 For standard methods \NBJ takes the bytecodes and transforms them to native code.
@@ -292,11 +292,11 @@ Hence our approach is even valid for short-timed script-like applications as mos
 \subsection{Problems}
 \seclabel{val-nabujito-problems}
 % -----------------------------------------------------------------------------
-\paragraph{Hidden \VM Internals.}
+\paragraph{Hidden \VM Internals}
 
-\paragraph{Debugging Cycle.}
+\paragraph{Debugging Cycle}
 
-\paragraph{Outlook.}
+\paragraph{Outlook}
 One major performance optimization missing in both, the original \PH \VM-level \JIT and \NBJ, is inlining. 
 By inlining we are able to create methods that are potentially big enough for optimizations.
 However, inlining is a difficult task in a highly dynamic language such as \ST or \Self \cite{Cham89a}. 

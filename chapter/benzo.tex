@@ -109,7 +109,7 @@ Mainly our requirement is being able to generate executable code and activate it
 This is general and essential so it applies to any \VM that wants to support dynamic code execution managed at language-side.
 
 %----------------------------------------------------------------------------
-\paragraph{Executable Memory.}
+\paragraph{Executable Memory}
 \seclabel{benzo-exeutable-memory}
  
 We chose to follow a very lightweight approach to dynamically execute native code at runtime. 
@@ -133,7 +133,7 @@ As the \VM has a moving \GC, it gives us certain restrictions on what kind of na
 As we will describe in \secref{benzo-platform-interaction}, we can access high-level \PH objects only via an indirection from low-level code.
 
 %----------------------------------------------------------------------------
-\paragraph{\VM Interaction.}
+\paragraph{\VM Interaction}
 \seclabel{benzo-vm-interaction}
 
 The standard way in \PH to execute low-level code is to use a tag in the method definition. The following example shows such a method on the \ttt{Float} class.
@@ -198,7 +198,7 @@ Figure \figref{nativeCodeMethodDetail} shows the resulting compiled method in fu
 \end{figure}
 
 %----------------------------------------------------------------------------
-\paragraph{Native Code Platform Interaction.}
+\paragraph{Native Code Platform Interaction}
 \seclabel{benzo-platform-interaction}
 
 To ensure that the code is compatible with the current platform a \VM specific marker is expected at the beginning of the native code on the compiled method.
@@ -208,7 +208,7 @@ With this elegant approach \B regenerates native code lazily on new platforms.
 Moreover, it does not have to flush the native code when the application is restarted on the same platform.
 
 %----------------------------------------------------------------------------
-\paragraph{Garbage Collector Interaction.}
+\paragraph{Garbage Collector Interaction}
 \seclabel{benzo-gc-interaction}
 
 Compiled methods in \PH have a special section, the literal frame, which stores objects referenced in the bytecodes.
@@ -240,7 +240,7 @@ This means that for native code, instead of a method-local literal array we shar
 %\revc{The external roots concept appears here first but the idea of "indirection" has been mentioned. The regular literal frame of compiled methods are discussed heavily; that would suggest that the generated native code could use relative offset from the code location and still be able to "pin-point" the literal slot in the literal frame. What is the downside of this approach? (And how slots in the external roots garbage collected?)}
 %\gc{I'm not very interested with the comment above. But perhaps here it is a good place to say that once the native code start executing our \VM assures that a \GC could not happen}
 %----------------------------------------------------------------------------
-\paragraph{\JIT Interaction.}
+\paragraph{\JIT Interaction}
 \seclabel{benzo-jit-interaction}
 
 A special case worth being mentioned is the interaction of \B and the JIT.
@@ -262,7 +262,7 @@ The performance boost of this optimization is further discussed in \secref{benzo
 
 
 %----------------------------------------------------------------------------
-\paragraph{Error Handling.}
+\paragraph{Error Handling}
 \seclabel{benzo-error-handling}
 
 \B provides an error handling facility that allows to return high-level error messages from the low-level code.
@@ -290,7 +290,7 @@ As a key design decision, we determine to keep the interface to the low-level wo
 The following describes the features of \B at the high-level language-side.
 
 %----------------------------------------------------------------------------
-\paragraph{Code Generation.}
+\paragraph{Code Generation}
 \seclabel{benzo-code-generation}
 
 \B delegates native code generation to a full assembler written in \PH. The following example shows how to use the assembler to generate the native code for moving \ttt{1} into the 32-bit register \ttt{EAX}.
@@ -322,7 +322,7 @@ By default the value in the result register is returned back to the language-sid
 In \secref{benzo-usecase} we introduce more substantial applications based on \B.
 
 %----------------------------------------------------------------------------
-\paragraph{Code Activation.}
+\paragraph{Code Activation}
 \seclabel{benzo-code-activation}
  
 So far we only broadly described how \B activates the native code.
@@ -505,7 +505,7 @@ We believe that a hard-coded static and low-level implementation is not optimal 
 	\item The \JIT reimplements primitives for optimization reasons resulting in code duplication.
 \end{itemize}
 
-\paragraph{Implementing \NBJ with \B.}
+\paragraph{Implementing \NBJ with \B}
 Motivated by the aforementioned implications of a \VM-level \JIT we conceived \NB a prototype \JIT compiler based on \B.
 \NBJ is an experimental \JIT implementation which replaces the bytecode to native code translation of the existing \JIT infrastructure with a dynamic language-side implementation.
 \NBJ is implemented as a visitor over the existing intermediate bytecode representation. 
@@ -968,7 +968,7 @@ Instead we suggest to use an intermediate format that is platform independent wi
 	\item Automatic stack-management
 \end{itemize}
 
-\paragraph{\VCPU.}
+\paragraph{\VCPU}
 Along with the ongoing work for this thesis we started \VCPU, a first attempt for such an implementation.
 \VCPU is based on an \TAC to simplify the adoption of optimizations such as \SSA.
 A \TAC instruction takes the following form.
