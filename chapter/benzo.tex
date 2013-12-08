@@ -915,6 +915,18 @@ Even so this would be a great step forward compared to the current infrastructur
 Something that is very uncommon in \PH as the debugger is tightly integrated into the standard development environment.
 A potential solution to this problem would be to install low-level signal handlers which try to backtrack from signals triggered by memory access violations such as \ttt{SIGBUS} and \ttt{SIGSEGV} under Linux.
 
+\begin{figure}[h]
+	\centering
+	\includegraphics[scale=1.1]{benzo-debugger}
+\end{figure}
+\begin{enumerate}
+	\item Standard \PH method activating a \B-enabled method through the \ttt{primitiveNativeCall} primitive.
+	\item Native code causing a memory access violation (for example \ttt{SIGSEV}) which can not be handled by \PH directly.
+	\item Low-level signal handler is activated by the operating system and tries to walk back the native stack up to the \ttt{primitiveNativeCall} activation.
+	\item After successfully finding the \ttt{primitiveNativeCall} the signal handler sends a \B failure back to \PH.
+\end{enumerate}
+
+
 % -----------------------------------------------------------------------------
 \subsection{Platform Independence}
 % -----------------------------------------------------------------------------
