@@ -858,9 +858,20 @@ The first immediately visible flaw of \B is that there is currently no support f
 Whilst this makes sense from a performance point of view for a stable piece of native code, it is nuisance during development.
 The most common errors we noticed during development were cause due to stack misalignment and access to invalid memory region.
 The latter one is also typical for C development, whereas creating a misaligned stack in pure C is not possible.
-In \PH it is possible to willingly corrupt the stack by for instance injecting a wrong sender as illustrated with following the code example.
+
+\begin{stcode}[caption={Simple \B code possibly leading to an unbalanced stack.}]{}
+Benzo x86 generate: [ :asm |
+	asm push: asm EAX ]
+\end{stcode}
+
+\begin{stcode}[caption={\B code possibly leading memory access violation.}]{}
+Benzo x86 generate: [ :asm |
+	asm mov: asm EAX ptr to: asm EAX ]
+\end{stcode}
+
+\noindent In \PH it is possible to willingly corrupt the stack by for instance injecting a wrong sender as illustrated with following the code example.
 %
-\begin{stcode}{}[label=lst:benzo-pharo-stack-corruption]
+\begin{stcode}[label=lst:benzo-pharo-stack-corruption]{}
 thisContext instVarNamed: #closureOrNil put: 1.
 \end{stcode}
 %
