@@ -341,37 +341,29 @@ This is where the actual native code generation happens.
 As shown in previous examples, the native code is expressed in standard \PH code using our language-side assembler.
 Once the whole code is generated, it is appended to the compiled method body leaving the existing \PH bytecodes intact.
 Behind the scenes \B adds some more information to the code as the previously mentioned platform marker. 
-
+After we the native code is installed in the compiled method, we still run \PH code to restart the same \B-enabled method again.
+%
 \begin{figure}[ht]
 	\centering
 	\includegraphics[scale=1.1]{nativeCodeActivation}
 	\caption[\B Native Code Acivation]{Native code activation with \B: The first call triggers the code generation. Then the method is restarted and the native code executed.}
 	\figlabel{benzo-nativeCodeActivation}
 \end{figure}
-
-\todo{merge the following descriptive list with the following paragraph}
-\begin{itemize}
-\item In the first step (cf. \ding{182}) the \B primitive is activated.
+%
+For clarification we visualize the code activation process in \figref{benzo-nativeCodeActivation} and the following list describes the separates steps in more detail:
+%
+\begin{description}
+\item[Activation:] In the first step (cf. \ding{182}) the \B primitive is activated.
 	The primitive checks if the compiled method actually contains native code.
-\item On the first activation there is no native code available yet.
-	Hence the primitive will fail and the \ST body (cf. \ding{183}) of the \B method gets evaluated.
-	This is where \B prepares the native code for the \FFI callout.
-\item After installing the native code in the method trailer, the \NB method is reactivated with the original arguments (cf. \ding{184}).
-\item Again we end up in the \B activation primitive (cf. \ding{185}).
-	However, this time there is native code (cf. \ding{186}) available and thus the primitive jumps to the native code instead.
-\end{itemize}
+\item[Code Generation:] On the first activation there is no native code available yet.
+	Hence the primitive will fail and the \PH body (cf. \ding{183}) of the \B-enabled method gets evaluated.
+	This is where we use the \B \API and write native instructions as shown in previous examples.
+\item[Code Installation:] After installing the native code in the method trailer, the \B-enabled method is reactivated with the original arguments (cf. \ding{184}).
+	For activation \B uses \PH's  \ttt{\#perform:withArguments:} to reflectively restart the method.
+\item[Method Reactivation:] Again we end up in the \B activation primitive (cf. \ding{185}).
+	However, this time native code is present and thus the \B jumps to native code attached to the compiled method (cf. \ding{186} and returns the generated result.
+\end{description}
 
-\noindent Now we completed the first the left half of the activation process shown in \figref{benzo-nativeCodeActivation}.
-What is left is the third step, the actual activation of the native code.
-After we the native code is installed in the compiled method, we still run \PH code to restart the same \B-enabled method again, this corresponds to the arrow in \figref{benzo-nativeCodeActivation} connecting both sides.
-For activation \B uses reflective features to restart the method.
-Imagine that the method takes some arguments.
-These arguments have to be preserved during the code-generation phase and reused for the second activation.
-\B will simply use \PH's reflective \ttt{\#perform:withArguments:} method on the original receiver to restart/activate the same method with the same arguments again.
-
-When running the \B-enabled method again the \B primitive is activated once more.
-However, this time native code is present and thus the \B jumps to code attached to the compiled method and returns the generated result.
-This is depicted in the right half of \figref{benzo-nativeCodeActivation}.
 
 % ===========================================================================
 \section{\B in Practice}
@@ -571,7 +563,7 @@ The following table contains a performance comparison of three different \FFI im
     \tablabel{benzo-ffi-performance-simple}
 \end{table}
 
-\tabref{benzo-ffi-performance-simple} measures the accumulative time of 100'000 \FFI calls.
+\noindent \tabref{benzo-ffi-performance-simple} measures the accumulative time of 100'000 \FFI calls.
 Included in these numbers is at least one additional \PH message send to activate the \NB method containing the actual call to the C function.
 \NB outperforms the existing language-side \FFI (\Alien) and the implementation (C-\FFI).
 
@@ -653,7 +645,7 @@ Instead of focusing on the final performance of the generated code, we present t
     \tablabel{benzo-nabujito-performance-small}
 \end{table}
 
-In \tabref{benzo-nabujito-performance-small} we compare the compilation speed of the standard \PH compiler and \NBJ.
+\noindent In \tabref{benzo-nabujito-performance-small} we compare the compilation speed of the standard \PH compiler and \NBJ.
 We measure the accumulated time spent to compile the method 1000 times.
 The average and deviation are taken over 100 runs. 
 The \PH compiler takes source code as input and outputs \PH bytecodes.
@@ -964,6 +956,7 @@ Instead we suggest to use an intermediate format that is platform independent mo
 %
 \paragraph{\VCPU}
 We call this intermediate format \VCPU and it has the following properties:
+%
 \begin{itemize}[noitemsep]
 	\item High-level three-address-code (\TAC) instructions
 	\item Automatic stack-management
@@ -1006,7 +999,7 @@ Benzo x86 generate: [ :asm |
 To get to the final native instructions the \VCPU infrastructure compiles the high-level instructions to the specific backend.
 The current compiler is divided into the following passes:
 %
-\begin{itemize}
+\begin{itemize}[noitemsep]
 \item Platform Specific Transformation
 \item Register Allocation
 \item Superfluous Assignment Remover
@@ -1022,9 +1015,10 @@ add EDX, ECX
 mov ECX -> EAX
 return 
 \end{stcode}
-%
-With a properly parametrized register allocator and a separate constant folding pass the result could be greatly improved.
 
+
+\noindent With a properly parametrized register allocator and a separate constant folding pass the result could be greatly improved.
+A more detailed motivation and implementation details of this compiler are given in the following \secref{future-mate-compiler}.
 
 % ===========================================================================
 \section{Conclusion and Summary}
