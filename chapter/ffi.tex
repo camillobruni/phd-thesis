@@ -800,9 +800,12 @@ It uses the low-level \textsc{dwarf} debugging information present in the extern
 \section{Problems}
 \seclabel{ffi-problems}
 % ===========================================================================
-\todo{most problems overlap with the problems mentioned in the Benzo chapter} \\
-\todo{address problems on a more high-level view}
 
+After presenting \NB with all its benefits in detail we also have to shed some light on its limitations in this section. 
+The problems and limitations described in this section were discovered while using \NB extensively in \PH.
+Since \NB is based on \B for the low-level programming part, most of \NB's limitations are the limitations of \B itself that were already presented previously in \secref{benzo-problems}.
+In this section we will focus on the high-level problems and leave out the low-level limitations of \B as they are not the domain of \NB.
+As such the major issue with \NB is the lack of a dedicated debugging infrastructure followed by a \NB-specific approach to support platform dependent code.
 
 \subsection{Difficult Debug Cycles}
 \todo{debugging facility (on a higher level than Benzo, see invisible \VMs)} \\
