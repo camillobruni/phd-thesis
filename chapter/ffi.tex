@@ -808,20 +808,48 @@ In this section we will focus on the high-level problems and leave out the low-l
 As such the major issue with \NB is the lack of a dedicated debugging infrastructure followed by a \NB-specific approach to support platform dependent code.
 
 \subsection{Difficult Debug Cycles}
-\todo{debugging facility (on a higher level than Benzo, see invisible \VMs)} \\
-\todo{resolve C symbols} \\
-\todo{show C source code?} \\
-\todo{Compare with luajit-ffi}
+As a direct consequence from \B's shortcomings is the limited debugging support.
+Once \NB generated the native code for the callout there is no possibility to interact with the code anymore.
+We \B described in \secref{benzo-problems-robustness} that there is not special debugging mode available and native code is run unprotected.
+As a result, errors happening inside external libraries have fatal consequences in \NB: the process running the \PH image is terminated.
+The core of this problem has to be addressed at \B-level and not directly in \NB.
+
+In a future version of \NB, together with improvements of the underlying \B debugging infrastructure (see \secref{benzo-problems-debugging}), we envision a seamless interaction with the external libraries.
+There should be no barrier between \PH and external code, a more sophisticated debugger could dynamically switch context and start displaying more C oriented information in the external library.
+In the worst case we could still display native instructions and inspect the stack as we step through the external function.
+In best case we could provide a \GDB-like debugging experience with source code and resolved symbol names.
 
 
 \subsection{Platform Independence}
-\todo{general / direct dependence on assembler which is not good} \\
-\todo{partial platform indepencen with platform-id is guaranteed}
-\todo{low-level platform independence solved by Benzo (link to future reference to VirtualCPU)} \\
-\todo{platform independence on function level (see OSEnvironment as an Example)} \\
-\todo{	- requires explicit subclasses} \\
-\todo{	- manual maintenance + singletons} \\
-\todo{missing support for multi-platform code definition in a single method}
+The second problem we would like to address is platform independence.
+This is certainly a crucial issue for any framework that deals with native code and as such a main concern of \B (see \secref{benzo-problems-platform-independence}).
+However, the instruction-level architecture support is of secondary importance for \NB as it interacts mostly on operating system level.
+Rewriting \NB's explicit assembler routines in the platform independent intermediate representation (\VCPU) presented in \secref{benzo-problems-vcpu} would solve the \CPU architecture dependency.
+
+Currently \NB is used on three operating system: \Linux, \textsc{Mac OS X} and \Windows.
+Internally \NB already deals with different calling conventions C-functions on the different platforms.
+Nevertheless, from a user point of view it is mandatory to have a well defined way to deal with platform specific \FFI callouts.
+The current approach as outlined for the \PH \OS environment variables object in \secref{reification-simple} is to create a specific subclass for each platform.
+A simple extension to \NB to allow callout definitions for multiple platforms in a single method would greatly improve this case.
+The following code example illustrates a possible solution:
+%
+\begin{stcode}[basicstyle=\ttfamily\footnotesize]{}
+FFI 
+  unix: [ :builder |
+    builder 
+      nbCall: #(int setenv(String name, String value, 1))
+      module: NativeBoost CLibrary ];
+  windows: [ :builder |
+    builder
+      nbCall: #(int SetEnvironmentVariableA(String name, String value))
+      module: #Kernel32
+      options: #(optStringOrNull) ].
+\end{stcode}
+%
+This examples includes the platform specific version for accessing an environment variable.
+In this case the difference of the two platforms is handled by simply using a different native function.
+However, already in the case of \ttt{getenv} function, \Windows and \unix implementations behave fundamentally different from \Windows' \ttt{GetEnvironmentVariableA} and a small \PH helper method is necessary to overcome the differences.
+In this case it would be nice to mix \PH code and \FFI callouts more vividly and for instance allow inline \PH code in the example above.
 
 
 \subsection{Limited Expressiveness}

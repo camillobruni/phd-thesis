@@ -943,6 +943,7 @@ Nevertheless, this scheme could bring approximate a \PH like user experience for
 
 % -----------------------------------------------------------------------------
 \subsection{Platform Independence}
+\seclabel{benzo-problems-platform-independence}
 % -----------------------------------------------------------------------------
 The previous two issues discussed, robustness and debuggability, both target the integration into the existing \PH development environment.
 This third issue on the other hand is related to the system integration: platform independence.
@@ -954,8 +955,6 @@ A prominent example are \textsc{Apple}'s tablets and mobile phones running iOS.
 In contrast to \PH itself, \B does not work on \ARM platform since all the low-level code is written in terms of x86 instructions.
 While there is no way around a \ARM version of the underlying assembler, we think that porting all existing \B routines is too costly.
 Instead we suggest to use an intermediate format that is platform independent more high-level than direct assembler instructions.
-%
-\paragraph{\VCPU}
 We call this intermediate format \VCPU and it has the following properties:
 %
 \begin{itemize}[noitemsep]
@@ -966,6 +965,7 @@ We call this intermediate format \VCPU and it has the following properties:
 Along with the ongoing work for this thesis we already started implementing \VCPU as a fork of the original compiler infrastructure of the \P \VM.
 
 \paragraph{\VCPU}
+\seclabel{benzo-problems-vcpu}
 In this following paragraph we are going to highlight the benefits and usage of this intermediate format.
 \VCPU is based on a \TAC to simplify the adoption of optimizations such as \SSA.
 These \TAC instruction take the following form:
