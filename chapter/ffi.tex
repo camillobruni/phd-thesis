@@ -834,15 +834,17 @@ The current approach as outlined for the \PH \OS environment variables object in
 A simple extension to \NB to allow callout definitions for multiple platforms in a single method would greatly improve this case.
 The following code example illustrates a possible solution:
 %
-\begin{stcode}[basicstyle=\ttfamily\footnotesize]{}
+\begin{stcode}[]{}
 FFI 
   unix: [ :builder |
     builder 
-      nbCall: #(int setenv(String name, String value, 1))
+      nbCall: #(int setenv(
+                      String name, String value, 1 ))
       module: NativeBoost CLibrary ];
   windows: [ :builder |
     builder
-      nbCall: #(int SetEnvironmentVariableA(String name, String value))
+      nbCall: #(int SetEnvironmentVariableA(
+                      String name, String value ))
       module: #Kernel32
       options: #(optStringOrNull) ].
 \end{stcode}
