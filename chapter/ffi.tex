@@ -799,6 +799,7 @@ It uses the low-level \textsc{dwarf} debugging information present in the extern
 % ===========================================================================
 \section{Problems}
 \seclabel{ffi-problems}
+\seclabel{ffi-futurework}
 % ===========================================================================
 
 After presenting \NB with all its benefits in detail we also have to shed some light on its limitations in this section. 
@@ -861,10 +862,8 @@ In this case it would be nice to mix \PH code and \FFI callouts more vividly and
 \subsection{Bootstrap Recursion}
 \todo{What happens when using \FFI in bootstrap critical applications?}
 
-% ===========================================================================
-\section{Future Work}
-\seclabel{ffi-futurework}
-% ===========================================================================
+
+\subsection{Performance}
 Even though \NB shows good overall performance when it comes to callbacks it does not keep up with other \ST-based solutions.
 In the current development phase not much attention was payed to callback performance as it is not a common use case for \FFI callouts.
 Fast callbacks require close interaction and specific modifications at \VM-level.
