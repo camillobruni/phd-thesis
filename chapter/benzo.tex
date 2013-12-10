@@ -210,6 +210,7 @@ Moreover, it does not have to flush the native code when the application is rest
 %----------------------------------------------------------------------------
 \paragraph{Garbage Collector Interaction}
 \seclabel{benzo-gc-interaction}
+\seclable{benzo-external-roots}
 
 Compiled methods in \PH have a special section, the literal frame, which stores objects referenced in the bytecodes.
 Bytecodes then only have indirect access to these objects by indexing into the literal frame.

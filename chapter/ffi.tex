@@ -15,15 +15,15 @@ In this chapter we present the most mature \B application, the \FFI which is suc
 With \FFIs the high-level environment interacts with low-level functions allowing for a unique combination of features.
 This need to interconnect high-level (Objects) and low-level (C functions) has a strong impact on the implementation of a FFI: it has to be flexible and fast at the same time.
 
-We propose \NB a language-side approach to \sFFIs that only requires minimal changes to the VM.
+We propose \NB a language-side approach to \FFIs that only requires minimal changes to the VM.
 \NB directly creates specific native code at language-side and thus combines the flexibility of a language-side library with the performance of a native plugin.
+
 
 % ===========================================================================
 \newpage
 \section{Background}
 \seclabel{ffi-background}
 % ===========================================================================
-
 
 Currently, more and more code is produced and available through reusable libraries such as \urlfootnote{OpenGL}{http://www.opengl.org/} or \urlfootnote{Cairo}{http://cairographics.org/}.
 While working on your own projects using dynamic languages, it is crucial to be able to use such existing libraries with little effort.
@@ -61,18 +61,6 @@ Typical choices are resorting purely to the \VM-level and thus sacrificing flexi
 The inverse of this approach exists as well: \FFIs can be implemented almost completely at language-side but at a significant performance loss.
 Both these pitfalls are presented in more detail in \secref{ffi-evaluation}.
 
-
-% list shortcomings of typical implementations (C-\FFI vs ALIEN)
-% - too low-level (C-\FFI) fast in simple examples, complex calls not possible
-% - too high-level (ALIEN) slow in simple examples, quite slow in complex ones
-% - missing specific code generation
-% - missing \JIT interaction for speed (like LuaJIT, org.vmmagic)
-
-% \Alien and C-\FFI run in the same \PH image as \NB allowing a much closer comparison.
-% \Alien \FFI is implemented almost completely at language-side, much like \NB. However, as the following benchmarks will stress, it also suffers from performance loss.
-% On the other end there is C-\FFI which is faster than \Alien but by far not as flexible. For instance only primitive types are handled directly.
-
-
 This paper presents \urlfootnote{\NBFFI}{http://code.google.com/p/nativeboost/} an \FFI library at language-side for \PH that supports callouts and callbacks, which we present in \secref{ffi-nutshell}.
 There are at least two other existing \FFI libraries in \PH worth mentioning: C-\FFI and \Alien.
 Nevertheless, they both present shortcomings.
@@ -94,11 +82,6 @@ The main contributions of \NBFFI are:
 	\item[Performance.] Despite the fact it is implemented mostly at language-side, \NBFFI achieves superior performance compared to other \FFI implementations running \PH.
     This is essentially because it uses automatic and transparent native code generation at language-side for marshalling.
 \end{description}
-
-%In the following section we present the language-side code that one should write to achieve to interact with external libraries with \NBFFI.
-%We then compare performance of \NBFFI with three other \FFI implementations in \secref{ffi-evaluation}.
-%The following \secref{ffi-internals} gives more insights on the \NB.
-%After the related work presented in \secref{ffi-relatedWork} and we conclude this paper in \secref{ffi-conclusion}.
 
 
 % ===========================================================================
@@ -140,7 +123,6 @@ This example uses a convenience method of \NB named \ttt{CLibrary} to obtain a h
 \subsection{Callout with Parameters}
 % ---------------------------------------------------------------------------
 
-% - explain argument detection (match var names)
 \figref{ffi-nativeBoostSyntax} presents the general syntax of \NBFFI through an example of a callout to the \ttt{abs} function of the \ttt{libc}.
 The \ttt{abs:} method has one argument named \ttt{anInteger} (cf. \ding{182}).
 This method uses the pragma \ttt{<primitive:module:error:>} which indicates that the \ttt{\#primitiveNativeCall} of the \ttt{\#NativeBoostPlugin} should be called when this method is executed (cf. \ding{183}).
@@ -152,20 +134,7 @@ These types annotations are then used by \NBFFI to automatically do the marshall
 Second, the values to be passed when calling out.
 In this example, \ttt{anInteger} refers to the argument of the \ttt{abs} method, meaning that the value of this variable should be passed to the \ttt{abs} C function.
 Finally, this \ttt{abs} function is looked up in the \ttt{libc} whose an handle is passed in the \ttt{module:} parameter (cf. \ding{186}).
-% A library can be designated either by its file path on disk or its memory address.
-% \begin{stcode}[
-% 	label={lst:abs},
-% 	caption={Example of callout to the \ttt{abs} function}]{0}
-% abs: anInteger
-% 	<primitive: #primitiveNativeCall
-% 	 module: #NativeBoostPlugin>
-%
-% 	^ self
-% 		nbCall: #(uint abs(int anInteger))
-% 		module: NativeBoost CLibrary
-% \end{stcode}
-%
-% - explain syntax in picture (line plus arrows)
+
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=1.2]{nativeBoostSyntax}
@@ -300,7 +269,7 @@ primImage: aFormat width: aWidth height: aHeight
 									int aHeight) )
 \end{stcode}
 
-Conversely, passing an \ttt{AthensCairoSurface} object as a parameter in a callout makes its pointer stored in its \ttt{handle} iv (cf. \lstref{ffi-calloutOpaqueStructParameter}) to be passed.
+\noindent Conversely, passing an \ttt{AthensCairoSurface} object as a parameter in a callout makes its pointer stored in its \ttt{handle} iv (cf. \lstref{ffi-calloutOpaqueStructParameter}) to be passed.
 Since the parameter type is \ttt{AthensCairoSurface} in the callout definition, \NB also ensures that the passed object is really an instance of this class.
 If it is not, the callout fails before executing the external function because passing it an address on a non-expected data could lead to unpredicted behavior.
 
@@ -746,7 +715,6 @@ Through reflective access to the execution context we can retrieve the method's 
 
 % ---------------------------------------------------------------------------
 \paragraph{Memory Management}
-\todo{strip BENZO duplication}
 \NB supports external heap management with explicit allocation and freeing of memory regions.
 There are interfaces for \ttt{allocate} and \ttt{free} as well as for \ttt{memcopy}:
 %
@@ -767,23 +735,15 @@ NativeBoost free: memory.
 \end{stcode}
 
 \noindent Using the external heap management it is possible to prepare binary blobs and structures for \FFI calls.
-
 In the previous example Code \lstref{ffi-externalHeap} the \ttt{memory} variable holds a wrapper for the static address of the allocated memory.
 Hence accessing it from low-level code is straight forward.
 However in certain situations it is required to access a high-level object from assembler.
 \PH has a moving garbage collector which means that you can not refer directly to a high-level object by a fixed address.
 
-\begin{figure}[h]
-	\centering
-	\includegraphics{externalRoots}
-	\caption[\NBFFI External Roots]{\todo{duplicate and minor importance here, refer to section in benzo chapter}Pointers in a \ttt{CompiledMethod} to objects registered as external roots are pinpointed at fixed offset in global \VM-level object.}
-	\figlabel{ffi-externalRoots}
-\end{figure}
-
-To deal with this problem the \VM has a special array at a known address that contains pointers to high-level objects.
+As explained in more detail in \secref{benzo-gc-interaction} \B uses a special array at a known to deal with this problem.
+Unlike normal \PH objects, this array has a known, fixed address that contains pointers to high-level objects.
 The garbage collector keeps this external roots array up to date.
 Hence it is possible to statically refer to a \PH object using a double indirection over the external roots.
-\figref{ffi-externalRoots} visualizes how native code directly accesses \PH objects through this indirection.
 
 
 % ---------------------------------------------------------------------------
