@@ -61,7 +61,7 @@ Typical choices are resorting purely to the \VM-level and thus sacrificing flexi
 The inverse of this approach exists as well: \FFIs can be implemented almost completely at language-side but at a significant performance loss.
 Both these pitfalls are presented in more detail in \secref{ffi-evaluation}.
 
-This paper presents \urlfootnote{\NBFFI}{http://code.google.com/p/nativeboost/} an \FFI library at language-side for \PH that supports callouts and callbacks, which we present in \secref{ffi-nutshell}.
+This chapter presents \urlfootnote{\NBFFI}{http://code.google.com/p/nativeboost/} an \FFI library at language-side for \PH that supports callouts and callbacks, which we present in \secref{ffi-nutshell}.
 There are at least two other existing \FFI libraries in \PH worth mentioning: C-\FFI and \Alien.
 Nevertheless, they both present shortcomings.
 C-\FFI is fast because it is mostly implemented at \VM-level, however it is limited when it comes to do complex calls that involve non-primitive types or when we want to define new data types.
@@ -767,7 +767,6 @@ Hence the heap has to be executable in order to jump to the native instructions.
 \section{Related Work}
 \seclabel{ffi-relatedWork}
 % ===========================================================================
-% other less related approaches: Python ctypes ? SWIG ?
 
 Typical \ST system are isolated from the low-level world and provide only limited interoperability with C libraries.
 However there are notable exceptions: \textsc{Étoilé} and \ST/X.
@@ -781,12 +780,10 @@ All these operations can be performed dynamically at runtime.
 Unlike our approach, \textsc{Étoilé} aims at a complete new style of runtime environment without a \VM.
 Compared to that, \NB is a very lightweight solution.
 
-
 Other dynamic high-level languages such as \Lua leverage \FFI performance by using a close interaction with the \JIT.
 \urlfootnote{\LuaJIT}{https://github.com/jmckaskill/luaffi/} for instance is an efficient \Lua implementation that inlines \FFI calls directly into the \JIT compiled code.
 Similar to \NB this allows one to minimize the constant overhead by generating custom-made native code.
 The \LuaJIT runtime is mainly written in C which has clearly different semantics than \Lua itself.
-
 
 On a more abstract level, high-level low-level programming \cite{Fram09a} encourage to use high-level languages for system programming.
 Frampton et al. present a low-level framework  which is used as system interface for \Jikes, an experimental \Java \VM.
@@ -794,7 +791,6 @@ However their approach focuses on a static solution.
 Methods have to be annotated to use low-level functionality.
 Additionally the strong separation between low-level code and runtime does not allow for reflective extensions of the runtime.
 Finally, they do not support the execution and not even generation of custom assembly code on the fly.
-
 
 Kell and Irwin \cite{Kell11a} take a different look at interacting with external libraries.
 They advocate a Python \VM that allows for dynamically shared objects with external libraries.
@@ -857,7 +853,7 @@ Hence the cost for the context switch plus the cost of activating the \NB callou
 \seclabel{ffi-conclusion}
 % ===========================================================================
 \todo{make proper summary and mention more \B}
-In this paper we presented \NB a novel approach to foreign function interfaces.
+In this chapter we presented \NB a novel approach to foreign function interfaces.
 Our approach relies only on a very generic extension of the \VM to allow for language-side code to directly call native instructions.
 
 Using a in depth evaluation of \NB comparing against two other \ST \FFI implementations and \LuaJIT we showed in \secref{ffi-evaluation} that our language-side approach is competitive.
