@@ -809,7 +809,9 @@ Since \NB is based on \B for the low-level programming part, most of \NB's limit
 In this section we will focus on the high-level problems and leave out the low-level limitations of \B as they are not the domain of \NB.
 As such the major issue with \NB is the lack of a dedicated debugging infrastructure followed by a \NB-specific approach to support platform dependent code.
 
+% ---------------------------------------------------------------------------
 \subsection{Difficult Debug Cycles}
+% ---------------------------------------------------------------------------
 As a direct consequence from \B's shortcomings is the limited debugging support.
 Once \NB generated the native code for the callout there is no possibility to interact with the code anymore.
 We \B described in \secref{benzo-problems-robustness} that there is not special debugging mode available and native code is run unprotected.
@@ -821,8 +823,9 @@ There should be no barrier between \PH and external code, a more sophisticated d
 In the worst case we could still display native instructions and inspect the stack as we step through the external function.
 In best case we could provide a \GDB-like debugging experience with source code and resolved symbol names.
 
-
+% ---------------------------------------------------------------------------
 \subsection{Platform Independence}
+% ---------------------------------------------------------------------------
 The second problem we would like to address is platform independence.
 This is certainly a crucial issue for any framework that deals with native code and as such a main concern of \B (see \secref{benzo-problems-platform-independence}).
 However, the instruction-level architecture support is of secondary importance for \NB as it interacts mostly on operating system level.
@@ -855,18 +858,67 @@ In this case the difference of the two platforms is handled by simply using a di
 However, already in the case of \ttt{getenv} function, \Windows and \unix implementations behave fundamentally different from \Windows' \ttt{GetEnvironmentVariableA} and a small \PH helper method is necessary to overcome the differences.
 In this case it would be nice to mix \PH code and \FFI callouts more vividly and for instance allow inline \PH code in the example above.
 
-
+% ---------------------------------------------------------------------------
 \subsection{Limited Expressiveness}
+% ---------------------------------------------------------------------------
 \todo{fork example is hard to achieve (vm is not directly forkable)} \\
 \todo{current design makes it difficult to perform more C-like operations in one run} \\
 \todo{adopt benzo-level abstractions on VirtualCPU}
 
 
+\NB has been designed to call a single external function per callout.
+To our knowledge this is the standard in \FFI implementations.
+For most of the use cases this is sufficient but during development we found a peculiar case, when using \ttt{fork}, where two C function consecutive calls have to be made.
+\ttt{fork} creates a new process at \OS-level.
+It returns $0$ in the newly forked process and the new process id to the original parent process.
+Hence a typical \ttt{fork} usage in C looks as follows:
+%
+\begin{ccode}{}
+pid_t pid;
+int status = 0;
+// spawn child process 
+if(!(pid = fork())) {
+	// execute code in the child process
+	....
+	// stop the child process
+	exit(EXIT_SUCCESS);
+}
+// in the parent process wait for the child process
+waitpid(pid, &status, 0);	
+\end{ccode}
+%
+Currently it is not possible to express this directly in \NB due to the \VM.
+Imagine the following hypothetical \NB-based implementation of the previous example:
+%
+\begin{stcode}{}
+pid := FFI fork.
+pid isZero
+	ifTrue: [ 
+		self childProcessMethod.
+		FFI exit: 0 ]
+	ifFalse: [ 
+		FFI waitPid: pid for: 10 seconds ]
+\end{stcode}
+%
+The first two lines pose a significant problem, still ignoring the implementation details of the rest of the method.
+What happens when we call \ttt{fork} with an \FFI callout?
+Essentially this creates a fork of the whole \VM running \PH which has some side-effects since the resources between the child and the parent \VM process are shared.
+\todo{maybe present the full details...}
+In consequence when the \FFI callout for \ttt{fork} finishes, the \VM continues interpreting \PH code which in some cases stops to work due to the aforementioned side-effects.
+This could technically be avoided if the solve purpose of the child process is to execute some native code in the background and the exit.
+One would have to make sure that the sequence, \ttt{fork}, \textsc{pid} check, \ttt{exit} happens all in native code without handing over execution to \PH in between.
+
+
+
+% ---------------------------------------------------------------------------
 \subsection{Bootstrap Recursion}
+% ---------------------------------------------------------------------------
 \todo{What happens when using \FFI in bootstrap critical applications?}
 
 
+% ---------------------------------------------------------------------------
 \subsection{Performance}
+% ---------------------------------------------------------------------------
 Even though \NB shows good overall performance when it comes to callbacks it does not keep up with other \ST-based solutions.
 In the current development phase not much attention was payed to callback performance as it is not a common use case for \FFI callouts.
 Fast callbacks require close interaction and specific modifications at \VM-level.
@@ -878,7 +930,6 @@ Currently the \VM has to leave from \JIT-mode to standard interpretation mode wh
 This context switch introduces an unnecessary overhead for an \FFI callout.
 A current prototype directly inlines the native code of a \NB method in the \JIT.
 Hence the cost for the context switch plus the cost of activating the \NB callout primitive can be avoided.
-
 
 
 % ===========================================================================
