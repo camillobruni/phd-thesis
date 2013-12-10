@@ -861,10 +861,6 @@ In this case it would be nice to mix \PH code and \FFI callouts more vividly and
 % ---------------------------------------------------------------------------
 \subsection{Limited Expressiveness}
 % ---------------------------------------------------------------------------
-\todo{fork example is hard to achieve (vm is not directly forkable)} \\
-\todo{current design makes it difficult to perform more C-like operations in one run} \\
-\todo{adopt benzo-level abstractions on VirtualCPU}
-
 
 \NB has been designed to call a single external function per callout.
 To our knowledge this is the standard in \FFI implementations.
@@ -907,7 +903,11 @@ Essentially this creates a fork of the whole \VM running \PH which has some side
 In consequence when the \FFI callout for \ttt{fork} finishes, the \VM continues interpreting \PH code which in some cases stops to work due to the aforementioned side-effects.
 This could technically be avoided if the solve purpose of the child process is to execute some native code in the background and the exit.
 One would have to make sure that the sequence, \ttt{fork}, \textsc{pid} check, \ttt{exit} happens all in native code without handing over execution to \PH in between.
+Which brings us back to the original observation that we cannot create a combined \FFI callout for multiple methods in \NB.
 
+To solve this we could allow \NB to mix assembler instructions (or the more abstract \VCPU instructions) with multiple callouts.
+Currently this almost possible by manually invoking the callout generator for different C functions.
+However, there are certain side-effects with the stack-management which require more work.
 
 
 % ---------------------------------------------------------------------------
