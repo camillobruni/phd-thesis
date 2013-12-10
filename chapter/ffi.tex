@@ -77,7 +77,7 @@ The main contributions of \NBFFI are:
 	A traditional approach is to implement most low-level features at \VM-side and provide interfaces to the language-side.
 	But that comes at cost of less flexibility and longer development and release cycles.
 	On the opposite, we argue that extending language features, even low-level ones, should be done at language-side instead.
-	This results in higher flexibility and without incurring high runtime costs which usually happen when using high-level languages such as \ST.
+	This results in higher flexibility and without incurring high runtime costs which usually happen when using high-level languages such as \PH.
 	\item[Language-side extension.] Accessing a new external library using \NBFFI involves a reduced amount of work since it is only a matter of writing a language-side extension.
 	\item[Performance.] Despite the fact it is implemented mostly at language-side, \NBFFI achieves superior performance compared to other \FFI implementations running \PH.
     This is essentially because it uses automatic and transparent native code generation at language-side for marshalling.
@@ -97,7 +97,7 @@ to enable interactions with external libraries.
 \subsection{Simple Callout}
 % ---------------------------------------------------------------------------
 
-\lstref{ffi-clock} shows the code of a regular \ST method named \ttt{ticksSinceStart} that defines a callout to the \ttt{clock} function of the \ttt{libc}.
+\lstref{ffi-clock} shows the code of a regular \PH method named \ttt{ticksSinceStart} that defines a callout to the \ttt{clock} function of the \ttt{libc}.
 \NB imposes no constraint on the class in which such a binding should be defined.
 However, this method must be annotated with a specific pragma (such as \ttt{<primitive:module:>}) which specifies that a native call should be performed using the \NB plugin.
 
@@ -126,7 +126,7 @@ This example uses a convenience method of \NB named \ttt{CLibrary} to obtain a h
 \figref{ffi-nativeBoostSyntax} presents the general syntax of \NBFFI through an example of a callout to the \ttt{abs} function of the \ttt{libc}.
 The \ttt{abs:} method has one argument named \ttt{anInteger} (cf. \ding{182}).
 This method uses the pragma \ttt{<primitive:module:error:>} which indicates that the \ttt{\#primitiveNativeCall} of the \ttt{\#NativeBoostPlugin} should be called when this method is executed (cf. \ding{183}).
-An \ttt{errorCode} is returned by this primitive if it fails and the regular \ST code below is executed (cf. \ding{184}).
+An \ttt{errorCode} is returned by this primitive if it fails and the regular \PH code below is executed (cf. \ding{184}).
 The main difference with the previous example is that the \ttt{abs} function takes one integer parameter.
 In this example, the array \ttt{\#(uint abs(int anInteger))} passed as argument to \ttt{\#nbCall:} contains two important information (cf. \ding{185}).
 First, the types annotations such as the return type (\ttt{uint} in both examples) and arguments type (\ttt{int} in this example).
@@ -162,18 +162,18 @@ getenv: name
 %
 In this example, the \NB type specified for the parameter is \ttt{String} instead of \ttt{char*} as specified by the standard \ttt{libc} documentation.
 This is on purpose because strings in C are sequences of characters (\ttt{char*}) but they must be terminated with the special character: \cnull.
-Specifying \ttt{String} in the \ttt{\#nbCall:} array will make \NB to automatically do the arguments conversion from \ST strings to C strings (\cnull terminated \ttt{char*}).
+Specifying \ttt{String} in the \ttt{\#nbCall:} array will make \NB to automatically do the arguments conversion from \PH strings to C strings (\cnull terminated \ttt{char*}).
 It means that the string passed will be put in an external C \ttt{char} array and a \cnull character will be added to it at the end.
 This array will be automatically released after the call returned.
 This is an example of automatic memory management of \NB that can also be controlled if needed.
-Obviously, the opposite conversion happens for the returned value and the method returns a \ST String.
+Obviously, the opposite conversion happens for the returned value and the method returns a \PH string.
 This example shows that \NBFFI accepts literals, local and instance variable names in callout declarations and it uses their type annotation to achieve the appropriate data conversion.
 \tabref{ffi-nbPrimitiveTypes} shows the default and automatic data conversions achieved by \NBFFI.
 
 \begin{table}[hbt]
     \centering
     \begin{tabular}{rll}
-        Primitive Type       & \ST Type \\\midrule
+        Primitive Type       & \PH Type \\\midrule
         \ttt{uint}   & \ttt{Integer} \\
         \ttt{int}    & \ttt{Integer} \\
         \ttt{String} & \ttt{ByteString} \\
@@ -187,9 +187,9 @@ This example shows that \NBFFI accepts literals, local and instance variable nam
 \end{table}
 
 \noindent \lstref{ffi-setenv} shows another example to callout the \ttt{setenv} function.
-The return value will be converted to a \ST \ttt{Boolean}.
+The return value will be converted to a \PH \ttt{Boolean}.
 The two first parameters are specified as \ttt{String} and will be automatically transformed in \ttt{char*} with an ending \cnull character.
-The last parameter is \ttt{1}, a \ST literal value without any type specification and \NB translates it as an \ttt{int} by default.
+The last parameter is \ttt{1}, a \PH literal value without any type specification and \NB translates it as an \ttt{int} by default.
 
 \begin{stcode}[
 	label={lst:ffi-setenv},
@@ -235,7 +235,7 @@ The strength of language-side \FFIs appears when it comes to do callouts with ne
 
 \paragraph{Declaring structures}
 For example, the \urlfootnote{Cairo library}{http://cairographics.org/} provides complex structures such as \ttt{cairo\_surface\_t} and functions to manipulate this data type. % which makes field access useless.
-\lstref{ffi-AthensCairoSurface} shows how to write a regular \ST class to wrap a C structure.
+\lstref{ffi-AthensCairoSurface} shows how to write a regular \PH class to wrap a C structure.
 \NB only requires a class-side method named \ttt{asNBExternalType:} that describes how to marshall this type back and forth from native code.
 In this example, we use existing marshalling mechanism defined in \ttt{NBExternalObjectType} that just copies the structure's pointer and stores it in an instance variable named \ttt{handle}.
 
@@ -513,7 +513,7 @@ From the 100 probes we show the average and the standard deviation for a $68\%$ 
 To exclude the calling and loop overhead we subtract from each evaluation the time spent in the same setup, but without the \FFI call.
 The final deviation displayed is the arithmetic average of the measured deviation of the base and the callout measurement.
 
-The three \ST \FFI solutions (\NB, \Alien, C-\FFI) are evaluated on the very same \PH 1.4 (version 14458) image on a \PH \VM (version of May 5. 2013).
+The three \FFI solutions that work in \PH (\NB, \Alien, C-\FFI) are evaluated on the very same \PH 1.4 (version 14458) image on a \PH \VM (version of May 5. 2013).
 For the \Lua benchmarks we use \LuaJIT 2.0.1.
 The benchmarks are performed under the constant conditions on a MacBook Pro.
 Even though a standalone machine could improve the performance we are only interested in the relative performance of each implementation.
@@ -566,7 +566,7 @@ The C function takes no argument and returns an integer thus guaranteeing a mini
 \paragraph{Evaluation}
 For measuring the calling overhead we chose the \ttt{abs} \FFI callout.
 This C function is completed in a couple of instructions which in comparison to the conversion and activation effort of the \FFI callout is negligible.
-In \tabref{ffi-performance-abs} we see that \NB is at least a factor two faster than the other \ST implementation.
+In \tabref{ffi-performance-abs} we see that \NB is at least a factor two faster than the other \PH implementation.
 Yet \LuaJIT outperform \NB by an impressive factor 30.
 \LuaJIT has a really close integration with the \JIT and this is what makes the impressive \FFI callout results possible.
 
@@ -639,7 +639,7 @@ In all cases, the allocation time of the structs is not included in the measurem
 \end{table}
 
 \paragraph{Evaluation}
-\tabref{ffi-performance-structs} shows that \NB outperforms the two other \ST implementations.
+\tabref{ffi-performance-structs} shows that \NB outperforms the two other \PH implementations.
 \todo{moa text hea needed}
 
 % ---------------------------------------------------------------------------
@@ -678,10 +678,9 @@ We do not argue here that callbacks should be implemented in native code but tha
 \section{\NBFFI Implementation Details}
 \seclabel{ffi-internals}
 % ===========================================================================
-\todo{Check that we don't have too much overlap with the Benzo Chapter}
 
 The following subsections will first focus on the high-level, language-side aspects of \NB, such as native code generation and marshalling.
-As a second part we describe implementation details of the low-level extensions, such as the \NB primitives and the \JIT interaction.
+As a second part we describe the low-level interaction of \NB with \B.
 
 % ---------------------------------------------------------------------------
 \subsection{Generating Native Code}
@@ -703,7 +702,7 @@ On the second activation, the native code is present and thus the primitive will
 AsmJit emerged from an existing \urlfootnote{C++ implementation}{http://code.google.com/p/asmjit/} and currently supports the x86 instruction set.
 In fact it is even possible to inline custom assembler instructions in \PH when using \NB.
 This way it is possible to meet critical performance requirements.
-Typically \ST does not excel at algorithmic code since such code does not benefit from dynamic message sends.
+Typically \PH does not excel at algorithmic code since such code does not benefit from dynamic message sends.
 
 % ---------------------------------------------------------------------------
 \paragraph{Reflective Symbiosis}
@@ -850,7 +849,6 @@ Currently the \VM has to leave from \JIT-mode to standard interpretation mode wh
 This context switch introduces an unnecessary overhead for an \FFI callout.
 A current prototype directly inlines the native code of a \NB method in the \JIT.
 Hence the cost for the context switch plus the cost of activating the \NB callout primitive can be avoided.
-% \lf{This modification aims at better integrating \NB and the \JIT such as it is done in LuaJIT.}
 
 
 
@@ -858,7 +856,7 @@ Hence the cost for the context switch plus the cost of activating the \NB callou
 \section{Conclusion}
 \seclabel{ffi-conclusion}
 % ===========================================================================
-\todo{make proper summary}
+\todo{make proper summary and mention more \B}
 In this paper we presented \NB a novel approach to foreign function interfaces.
 Our approach relies only on a very generic extension of the \VM to allow for language-side code to directly call native instructions.
 
