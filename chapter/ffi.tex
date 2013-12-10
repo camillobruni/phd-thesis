@@ -483,6 +483,7 @@ In \NBFFI, doing most of the \FFI call processing at language-side makes easier 
 	\caption[\FFI Implementation Comparison]{Comparison of \FFI calls propagation in \NBFFI and a typical \VM plugin-based implementation. \NB resorts to \VM-level only for the native-code activation, whereas typical implementations cross this barrier much earlier.}
 	\figlabel{ffi-ffi}
 \end{figure*}
+
 % ===========================================================================
 \section{\NBFFI Evaluation}
 \seclabel{ffi-evaluation}
@@ -621,11 +622,11 @@ For the \ttt{getenv} a comparably long string is returned which causes a factor 
 \subsection{Using Complex Structures}
 % ---------------------------------------------------------------------------
 
-To evaluate the impact of marshalling complex types, we measure the execution time for a callout to \ttt{cairo\_matrix\_multiply}.
+To evaluate the impact of marshalling complex types, we measure the execution time for a callout to \ttt{cairo\_matrix\_multiply} described in \lstref{ffi-cairoCallouts}.
 In all cases, the allocation time of the structs is not included in the measurement nor their field assignments.
 \tabref{ffi-performance-structs} shows the results.
 
-\begin{table}[h!]
+\begin{table}[h]
     \centering
     \begin{tabular}{rSS}
                     & {Call Time [ms]} & {Relative Time} \\\midrule
@@ -649,7 +650,7 @@ In all cases, the allocation time of the structs is not included in the measurem
 \tabref{ffi-performance-qsort} shows a comparison of \ttt{qsort} callouts passing callbacks.
 Callbacks are usually much slower than callouts.
 
-\begin{table}[H]
+\begin{table}[h]
     \centering
     \begin{tabular}{rSS}
                     & {Call Time [ms]} & {Relative Time} \\\midrule
