@@ -924,8 +924,9 @@ In return it allowed us to add functionality to access to known directory locati
 In a second refactoring the functionality for opening the changes-file in \PH containing the changelog was made more flexible supporting more file locations.
 This last change introduced a recursive dependency that is not visible on the first sight and illustrated in the following figure.
 %
-\begin{figure}
-	\todo{missing figure}
+\begin{figure}[h]
+	\centering
+	\includegraphics[scale=1.1]{nb-bootstrap-cycle}
 \end{figure}
 %
 Essentially this meant that in certain cases where \NB required to compile the native code for callout it was impossible to start up \PH.
