@@ -121,6 +121,7 @@ This example uses a convenience method of \NB named \ttt{CLibrary} to obtain a h
 
 % ---------------------------------------------------------------------------
 \subsection{Callout with Parameters}
+\seclabel{ffi-callout-parameters}
 % ---------------------------------------------------------------------------
 
 \figref{ffi-nativeBoostSyntax} presents the general syntax of \NBFFI through an example of a callout to the \ttt{abs} function of the \ttt{libc}.
@@ -911,10 +912,32 @@ However, there are certain side-effects with the stack-management which require 
 
 
 % ---------------------------------------------------------------------------
-\subsection{Bootstrap Recursion}
+\subsection{Startup Recursion}
 % ---------------------------------------------------------------------------
-\todo{What happens when using \FFI in bootstrap critical applications?}
 
+Starting with \PH 3.0 we tried to slowly replace \VM plugin functionality with direct \FFI callouts at language-side.
+This is an attempt to make language more open and shift a part of the development done in C at \VM-level to \PH.
+The driving motivation is the same as for \NB itself: accessible and flexible code.
+
+The \OS environment implementation based on \NB described earlier in \secref{reification-simple} was such an attempt.
+In return it allowed us to add functionality to access to known directory locations under \Linux by directly or indirectly querying environment variables such as \ttt{HOME}.
+In a second refactoring the functionality for opening the changes-file in \PH containing the changelog was made more flexible supporting more file locations.
+This last change introduced a recursive dependency that is not visible on the first sight and illustrated in the following figure.
+%
+\begin{figure}
+	\todo{missing figure}
+\end{figure}
+%
+Essentially this meant that in certain cases where \NB required to compile the native code for callout it was impossible to start up \PH.
+Once the native code was cached this recursion chain was broken and subsequently \PH started up well.
+
+This particular issue was solved in \PH by caching the argument names in \NB used for assigning the \PH arguments to the callout parameters (see \secref{ffi-callout-parameters}).
+The downside of this approach is that \NB reimplements part of \PH's existing reflection.
+Of course there are other possibilities to avoid the described situation: deferred startup logics, lazy startup or storing the complete \PH source code in the image.
+However, they would leave the general problem of using \NB during startup which might happen more often if more \VM plugins are replaced with \FFI callouts.
+And even more general, how do we enable \NB on a system that does not allow dynamic code generation?
+The only solution to this problem is to generate the \FFI callouts upfront and make these binaries available to the final product.
+\todo{somehow missing ending}
 
 % ---------------------------------------------------------------------------
 \subsection{Performance}
