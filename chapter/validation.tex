@@ -26,7 +26,6 @@ Much like the primitives, the \JIT can not be changed from language-side and thi
 \NBJ reimplements the \VM-level \JIT compiler at language-side and uses \B to install the native code.
 
 
-
 % ===========================================================================
 \newpage
 \section{\WF: Dynamic Primitives}
@@ -309,6 +308,12 @@ Eventually the native code is ready and \B attaches it to the existing compiled 
 When the language-side jitted code is activated \B ensures that we do not have to leave the \JIT execution mode, and thus we can call methods at the same speed as the existing \JIT.
 \todo{figure showing an extended method installation into \JIT space}
 
+
+\paragraph{Overcoming the Missing \VM Interface for the \JIT}
+\todo{why do we need patch methods?}\\
+\todo{Explain how the patch methods work}\\
+\todo{give example of the assember of a simple method with the patch call}
+
 % -----------------------------------------------------------------------------
 \subsection{Validation}
 \seclabel{val-nabujito-performance}
@@ -363,10 +368,13 @@ Hence our approach is even valid for short-timed script-like applications as mos
 \seclabel{val-nabujito-problems}
 % -----------------------------------------------------------------------------
 \paragraph{Hidden \VM Internals}
+\todo{backref to patch methods}
 
 \paragraph{Debugging Cycle}
+\todo{Missing tools to directly interact with benzo / the real vm} \\
+\todo{missing small assembler tests}
 
-\paragraph{Outlook}
+\paragraph{Missing Optimizations}
 One major performance optimization missing in both, the original \PH \VM-level \JIT and \NBJ, is inlining. 
 By inlining we are able to create methods that are potentially big enough for optimizations.
 However, inlining is a difficult task in a highly dynamic language such as \ST or \Self \cite{Cham89a}. 
@@ -379,9 +387,13 @@ The \JIT lives on the same level as the information it needs relying on the alre
 \section{Outlook}
 % ===========================================================================
 
+\todo{Common problem: missing debugging infrastructure} \\
+\todo{\WF and \NBJ share the same problems} \\
+\todo{For speed a proper \JIT interface is missing } \\
+
 
 % ===========================================================================
-\section{Symmary}
+\section{Summary}
 % ===========================================================================
 
 
