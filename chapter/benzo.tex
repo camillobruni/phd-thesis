@@ -238,8 +238,6 @@ Summarizing, for accessing \PH objects within native code we first register it a
 This means that for native code, instead of a method-local literal array we share a global literal array as shown in \figref{benzo-externalRoots}. 
 \B only adds an \ttt{Array} to the external root objects which is managed from language-side and administers all references.
 
-%\revc{The external roots concept appears here first but the idea of "indirection" has been mentioned. The regular literal frame of compiled methods are discussed heavily; that would suggest that the generated native code could use relative offset from the code location and still be able to "pin-point" the literal slot in the literal frame. What is the downside of this approach? (And how slots in the external roots garbage collected?)}
-%\gc{I'm not very interested with the comment above. But perhaps here it is a good place to say that once the native code start executing our \VM assures that a \GC could not happen}
 %----------------------------------------------------------------------------
 \paragraph{\JIT Interaction}
 \seclabel{benzo-jit-interaction}
