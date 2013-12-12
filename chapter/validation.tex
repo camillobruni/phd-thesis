@@ -8,8 +8,23 @@
 \introduction
 % ===========================================================================
 
-\todo{Introduction explaining why a different chapter for \NBJ + \WF} \\
-\todo{recap the reuse of infrastructure}
+In \chapref{ffi} we presented \NB, a mature language-side \FFI implementation that makes heavy use of \B's infrastructure.
+\NB is only one of three applications that are based on \B that were initially outlined in \secref{benzo-usecase}.
+While \NB is considered stable, the two other applications are currently only prototypes: dynamic primitives and a language-side \JIT.
+Hence we will present the two solutions combined in this chapter.
+
+As first we will present \WF, dynamic primitives based on \B.
+\WF takes advantage of the metacircular approach of \PH's \VM and makes the primitive definition available at runtime.
+This is a step forward from the typical metacircular approach where the whole reflective power of the host environment can only be used at compile-time.
+Once the \VM is compiled, all the high-level definitions that existed at compilation time are no longer accessible from language-side.
+\WF tries to make a fraction of the original compile-time definitions accessible.
+
+The second prototype, \NB a language-side \JIT compiler takes the core idea of \WF even further.
+\WF is capable of defining new primitives at runtime which are not reentrant: it is not possible to activate \PH methods from within primitives.
+However, this is what happens in jitted methods: it is possible to switch seamlessly between native methods and standard \PH methods using bytecode evaluation.
+Much like the primitives, the \JIT can not be changed from language-side and this is where we bring \NBJ into play.
+\NBJ reimplements the \VM-level \JIT compiler at language-side and uses \B to install the native code.
+
 
 
 % ===========================================================================
@@ -18,14 +33,13 @@
 \seclabel{val-waterfall}
 % ===========================================================================
 
-\todo{Introduction}
-
 \begin{figure}[h]
 	\centering
 	\includegraphics[scale=1.1]{waterfall-overview}
-	\caption[\WF Overview]{\WF reuses the definitions of \VM primtives written in \Slang and compiles them dynamically. The same primitive definition is used for generating the static primitive at \VM compilation time.}
-	\figlabel{benzo-waterfall-overview}
 \end{figure}
+
+\todo{Introduction}
+
 
 
 % -----------------------------------------------------------------------------
@@ -116,7 +130,7 @@ In \secref{val-waterfall-performance} we show how \WF, the \B based approach for
 \todo{Create overview Image}
 
 % -----------------------------------------------------------------------------
-\subsubsection*{General Architecture}
+\subsubsection*{Architecture}
 
 % -----------------------------------------------------------------------------
 \subsubsection*{Dynamically Replacing Primitives}
@@ -200,14 +214,12 @@ Finally, adding stages to the compiler with different levels of intermediate rep
 \section{\NBJ: Language-side \JIT}
 \seclabel{val-nabujito}
 % ===========================================================================
-\todo{Introduction}
 
 \begin{figure}[h]
 	\centering
 	\includegraphics[scale=1.1]{nabujito-overview}
-	\caption[\NBJ Overview]{\NBJ compiles standard \PH methods with the help of \B to the same format the \VM \JIT uses.}
-	\figlabel{benzo-nabujito-overview}
 \end{figure}
+\todo{Introduction}
 
 % ---------------------------------------------------------------------------
 \subsection{Background}
