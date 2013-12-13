@@ -37,8 +37,11 @@ Much like the primitives, the \JIT can not be changed from language-side and thi
 	\includegraphics[scale=1.1]{waterfall-overview}
 \end{figure}
 
-\todo{Introduction}
+\noindent In this section we present \WF, a compiler toolchain that allows primitives to be changed dynamically from language-side.
+We successfully use \WF to change and recompile whole \VM plugins such as the file plugin as we show in the following \secref{val-waterfall-plugins}.
 
+\WF uses the \B infrastructure to activate native code at runtime.
+However, unlike the previously presented \FFI library \WF is not based on directly writing assembler instructions.
 
 
 % -----------------------------------------------------------------------------
@@ -193,6 +196,7 @@ A more detailed analysis of \WF is available separately \cite{Char13a}.
 
 % -----------------------------------------------------------------------------
 \subsubsection*{Validation of Dynamic Plugins}
+\seclabel{val-waterfall-plugins}
 
 \todo{Write about the File Plugin Validation}\\
 \todo{Possdible Validate other plugin}
@@ -210,7 +214,7 @@ Finally, adding stages to the compiler with different levels of intermediate rep
 
 
 % ===========================================================================
-\section{\NBJ: Language-side \JIT}
+\section{\NBJ: Language-side \JIT Prototype}
 \seclabel{val-nabujito}
 % ===========================================================================
 
