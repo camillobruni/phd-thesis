@@ -35,8 +35,8 @@
 
 
 % =============================================================================
-\section{VM-level Improvements}
-\seclabel{mate}
+\section{\VM-level Improvements}
+\seclabel{future-vm}
 % =============================================================================
 \todo{Introduction: Lanugage-side is not enough} \\
 \todo{Need to get a onstacle-free VM} \\
@@ -63,14 +63,31 @@
 \todo{List advantages}
 
 % -----------------------------------------------------------------------------
+\subsection{Runtime Reification / Dual Objects}
+% -----------------------------------------------------------------------------
+\todo{Reuse the same objects for the bootstrap and at runtime inspectors/mirrors} \\
+\todo{goes further than the sheer compile-time reification} \\
+\todo{accessible from language-side => leads to the following MOP}
+
+% -----------------------------------------------------------------------------
 \subsection{Mate Object Model and Runtime MOP}
 % -----------------------------------------------------------------------------
+\todo{consequence of the runtime reification of the VM introspection => intercession}\\
 \todo{Rough Overview of all the Objects currently present in Mate (UMLish)}
 
 % -----------------------------------------------------------------------------
-\subsection{Dual Objects}
+\subsection{Be Native}
 % -----------------------------------------------------------------------------
-\todo{Reuse the same objects for the bootstrap and at runtime inspectors/mirrors}
+\todo{out of the intercession capabilities follows that we need native support at runtime (see \B)}\\
+\todo{that means we need to have decent / better infrasrtucture for native code}\\
+\todo{need to be able to achieve what \NBJ didn't manage: compile native methods and hand them over to the \VM}\\
+\todo{step towards our implementation in \Mate}
+
+
+% =============================================================================
+\section{\Mate a \VM prototype}
+\seclabel{mate}
+% =============================================================================
 
 % -----------------------------------------------------------------------------
 \subsection{Mate Compiler Outline}
@@ -84,14 +101,14 @@
 \end{figure}
 
 % -----------------------------------------------------------------------------
-\subsubsection{Mate Bootstrap Outline}
+\subsection{Mate Bootstrap Outline}
 \todo{Small Intro: Why Bootstrap and how to use the reified objects} \\
 \todo{Compare to Pinocchio (manual approach)} \\
 \todo{Work in Progress: Envision the trace-based Bootstrap}
 
 
 % -----------------------------------------------------------------------------
-\subsubsection{Mate Towards Complete Reflection}
+\subsection{Mate Towards Complete Reflection}
 \cb{not sure about this section}
 
 % -----------------------------------------------------------------------------
