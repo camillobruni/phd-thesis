@@ -313,6 +313,13 @@ When the language-side jitted code is activated \B ensures that we do not have t
 \todo{figure showing an extended method installation into \JIT space}
 
 
+\paragraph{The \Cog \JIT}
+\todo{explain the \Cog infrastructure}\\
+\todo{Step 1: Native Stack Mapping as requirement}\\
+\todo{Step 2: transform bytecodes to native code}\\
+\todo{Step 3: Trampolines to jump back and forth between native activated scheme and bytecode interpreter based approach}\\
+\todo{Step 4: Minor summary of the how the ICs work in the \JIT}
+
 \paragraph{Overcoming the Missing \VM Interface for the \JIT}
 \todo{why do we need patch methods?}\\
 \todo{Explain how the patch methods work}\\
@@ -364,7 +371,7 @@ Hence our approach is even valid for short-timed script-like applications as mos
 
 % -----------------------------------------------------------------------------
 \subsubsection*{Per Method Comparison}
-\todo{choose simple enough methods that we can compile with nabujito...}
+\todo{choose simple enough methods that we can compile with nabujito: currently only + works}
 
 
 % -----------------------------------------------------------------------------
@@ -372,11 +379,14 @@ Hence our approach is even valid for short-timed script-like applications as mos
 \seclabel{val-nabujito-problems}
 % -----------------------------------------------------------------------------
 \paragraph{Hidden \VM Internals}
-\todo{backref to patch methods}
+\todo{backref to patch methods}\\
+\todo{maintenance problem: \NBJ harcodes the \VM interaction}
+
 
 \paragraph{Debugging Cycle}
 \todo{Missing tools to directly interact with benzo / the real vm} \\
-\todo{missing small assembler tests}
+\todo{missing small assembler tests} \\
+\todo{reactivate the VM simulator infrastructure}
 
 \paragraph{Missing Optimizations}
 One major performance optimization missing in both, the original \PH \VM-level \JIT and \NBJ, is inlining. 
