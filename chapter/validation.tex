@@ -321,11 +321,18 @@ When the language-side jitted code is activated \B ensures that we do not have t
 \todo{Step 3: Trampolines to jump back and forth between native activated scheme and bytecode interpreter based approach}\\
 \todo{Step 4: Minor summary of the how the ICs work in the \JIT}
 
-\begin{figure}
+\begin{figure}[h]
 	\centering
 	\includegraphics[scale=1.1]{cog-memory}
-	\caption[\Cog Memory Model Overview]{\Cog Memory Model Overview: Fixed-sized \JIT space, slow changing old space and fast young space}
-	\figlabel{[cog-memory]}
+	\caption[\Cog Memory Model Overview]{\Cog Memory Model Overview: Fixed-sized \JIT space, slow changing old space and fast young space.}
+	\figlabel{cog-memory}
+\end{figure}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[scale=1.1]{cog-method}
+	\caption[\Cog Method]{\Cog Method: Compiled method representation at \JIT-level residing in the \JIT memory space.}
+	\figlabel{cog-method}
 \end{figure}
 
 \paragraph{Overcoming the Missing \VM Interface for the \JIT}
