@@ -78,7 +78,7 @@ Unlike typical implementations that would focus on writing them as \VM extension
 
 \begin{description}
 	\item[Language-side \FFI] A complete language-side Foreign Function Interface (\FFI) implementation, described in \secref{benzo-ffi} and in more detail in \chapref{ffi}.
-	\item[Dynamic Primitives] A language-side compilation toolchain that replaces system primitives at runtime with customized code, described in \secref{benzo-waterfall} and in more detail in \secref{val-waterfall}. 
+	\item[Dynamic Primitives] A language-side compilation toolchain that replaces system primitives at runtime with customized code, described later in \secref{benzo-waterfall} and in more detail in \secref{val-waterfall}. 
 	\item[Language-side \JIT Compiler] A \JIT compiler that works at language-side and interacts with the \VM for code synchronization, described in \secref{benzo-nabujito} and in more detail in \secref{val-nabujito}.
 \end{description}
 
@@ -93,8 +93,8 @@ Unlike typical implementations that would focus on writing them as \VM extension
 \seclabel{benzo-benzo}
 % ===========================================================================
 \B is implemented in \urlfootnote{\PH}{http://pharo.org/}, a \ST inspired language.
-\PH comes with all the reflective capabilities known from \ST where most language-side components can be altered dynamically.
-\B is implemented at language-side and only requires the help of two simple and generic primitives to activate native code and resolve the entry point address position of referenced C functions.
+\PH comes with all the reflective capabilities known from \ST where most lan\-guage-side components can be altered dynamically.
+\B is implemented at lan\-guage-side and only requires the help of two simple and generic primitives to activate native code and resolve the entry point address position of referenced C functions.
 
 %----------------------------------------------------------------------------
 \subsection{\VM Context}
@@ -512,7 +512,7 @@ Additionally we reimplemented vital native routines for the \JIT which are not d
 
 \paragraph{Dynamic Code Generation}
 For standard methods \Nabujito takes the bytecodes and transforms them to native code.
-It also applies optimizations such as creating low-level branches for \PH level branching operations like \ttt{ifTrue:}.
+It also applies optimizations such as creating low-level branches for \PH level branching operations like \ttt{if\-True:}.
 Optimizations for additional methods are all implemented flexibly at language-side.
 Wherever possible, we reimplement the same behavior as the existing native \JIT compiler.
 Eventually the native code is ready and \B attaches it to the existing compiled method.
