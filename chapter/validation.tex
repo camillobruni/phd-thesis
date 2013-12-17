@@ -69,23 +69,27 @@ Just loading the original definitions in \PH does not bring them back to live, e
 \WF compiles these definitions to native code and installs them with \B as new primitives.
 With this infrastructure primitive and plugin modifications are not limited to \VM compilation time.
 
-The \PH \VM (\urlfootnote{\textsc{Cog}}{http://www.mirandabanda.org/cogblog/}) is developed in a language that is a subset of \ST, known as \Slang, which is transformed to C and then compiled using a standard C compiler.  
-\Slang basically has the same syntax as \ST but is semantically constrained to expressions that can be resolved statically at compilation or code generation time and are compatible with C.
-Hence \Slang's semantics are closer to C than to \ST. 
-
-
 \paragraph{A Metacircular \VM Written in \Slang}
 
-The primitives of the \VM are written in \Slang and that is why even in a highly reflective languages such as \ST, where almost every aspect of the language is available for inspection and modification \cite{Denk10a}, primitives can not be changed at runtime.
-They can only be intercepted with reflective techniques with considerable performance overheads.
-This is an important limitation since primitives are, in general, performance demanding components.
-\WF~\cite{Char13a} is a tool that allows developers to change the code written in \Slang for primitives and translate it to native code at runtime.
-This replaces the indirection via C that is used in the default compilation process.
-Given that \Slang source code can be modified at runtime as any other \ST method, \WF fosters primitives to be dynamically adapted without imposing the common pure reflective techniques performance degradation.
+\WF is implemtend in \PH which uses the \urlfootnote{\Cog \VM}{http://www.mirandabanda.org/cogblog/}, originating from the \Squeak \VM\cite{Inga97a}.
+The \VM itself is written in a dialect of \ST called \Slang that is essentially limited to the functionality that can be expressed with standard C code.
+\Slang serves for two purposes: a high-level C preprocessor, a interactive simulator of the \VM.
+The first point has severe consequences.
+\Slang basically has the same syntax as \ST but is semantically constrained to expressions that can be resolved statically at compilation or code generation time and are compatible with C.
+Hence \Slang's semantics are closer to C than to \ST.
+This fact is also visible in the simulator for the \VM.
+If \Slang were \ST, separate parts of the \VM could be directly evaluated.
+However, since \Slang is bound to C expressions, the simulator sets up a byte array as memory.
+The simulated \VM then accesses this byte array as if it were the native memory.
 
+In conclusion we see that the \PH \VM has an abstract representation of the \VM available for simulation.
+This abstract representation is then used to generate C sources, already lowering the abstraction level.
+After compiling the C sources the original representation of the \VM is not directly accessible anymore.
+For instance, even debug symbols are usually stripped from the final binary for performance reasons.
+Of course this implies that the \VM can not be changed nor directly inspected from language-side.
 
-\paragraph{\WF and \Slang}
-
+\paragraph{\WF Summary}
+\WF partially overcomes the current limitations of the \PH \VM, allowing parts of the \VM to be changed from language-side.
 From a high-level point of view \WF provides two services which work transparently: 
 
 \begin{enumerate}
