@@ -350,18 +350,21 @@ To understand the implementation issues of \NBJ we have to dive into the details
 \PH uses a flavor of the \Cog \VM which evolved in several steps from a simple bytecode interpreter.
 A successful and fast \JIT implies a \VM that uses the native stack.
 
-The original \ST-80 implementation uses a spaghetti-stack where all contexts are normal objects on the heap.
+The original \ST-80 blue book implementation foresees a spaghetti-stack where all contexts are normal objects on the heap.
 This design simplifies the \VM implementation significantly since there is no special treatment necessary for blocks.
-Also this makes it rather easy to implement \ST's feature to access the current context using the special \ttt{thisContext} variable.
+Also this makes it rather easy to implement \PH's feature to access the current context using the special \ttt{thisContext} variable.
 However, the obvious down side of this implementation is the massive stress on the \GC.
 For each message send a new context has to be allocated and on each return contexts have to be reclaimed.
 It would naturally be more efficient to use the native stack which allows for cheap allocation and precise reclaiming of method context.
+While this mapping can be done rather easily there are three properties of \PH that make this hard: blocks, non-local returns and the mentioned \ttt{thisContext}.
+Eliot Miranda eventually succeeded to implement an efficient mapping scheme for the \Cog \VM that is based on the original work done by Peter Deutsch and Allan Schiffman \cite{Deut84a}.
+
+Even so the basic concepts of the native stack mapping are easy to understand the final implementation is rather tricky.
+Real closures that outlive their outer method activation context make the mapping tricky.
+At the same time all the reflective capabilities to modified the stack from within \PH have to be supported.
+\cb{shall we explain more here?}.
 
 
-A \VM for language without closures and limited reflection can be 
-
-\todo{explain the \Cog infrastructure}\\
-\todo{Step 1: Native Stack Mapping as requirement}\\
 \todo{Step 2: transform bytecodes to native code}\\
 \todo{Step 3: Trampolines to jump back and forth between native activated scheme and bytecode interpreter based approach}\\
 \todo{Step 4: Minor summary of the how the ICs work in the \JIT}
