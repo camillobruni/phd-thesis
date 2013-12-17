@@ -19,6 +19,7 @@ This is a step forward from the typical metacircular approach where the whole re
 Once the \VM is compiled, all the high-level definitions that existed at compilation time are no longer accessible from language-side.
 \WF tries to make a fraction of the original compile-time definitions accessible.
 
+\todo{probably retrofit to the final results of \NBJ}
 The second prototype, \NB a language-side \JIT compiler takes the core idea of \WF even further.
 \WF is capable of defining new primitives at runtime which are not reentrant: it is not possible to activate \PH methods from within primitives.
 However, this is what happens in jitted methods: it is possible to switch seamlessly between native methods and standard \PH methods using bytecode evaluation.
@@ -40,10 +41,21 @@ Much like the primitives, the \JIT can not be changed from language-side and thi
 \noindent In this section we present \WF, a compiler toolchain that allows primitives to be changed dynamically from language-side.
 We successfully use \WF to change and recompile whole \VM plugins such as the file plugin as we show in the following \secref{val-waterfall-plugins}.
 
-\WF uses the \B infrastructure to activate native code at runtime.
-However, unlike the previously presented \FFI library \WF is not based on directly writing assembler instructions.
-\todo{finish}
+\WF is our second application on top of \B after \NB, the complete \FFI library previously presented in \chapref{ffi}.
+\NB uses \B to generate the glue code between \PH and the external library.
+Even though \NB is extendable it is not used to directly synthesize new functionality, the main functionality is defined the external libraries typically written in a low-level language such as C.
+Interestingly, the \NB methods containing the callouts behave almost like the existing primitive methods of \PH.
+These primitives define a hook into \VM-level native functionality.
+In \PH the same mechanism is also used to activate plugins which are again similar to an \FFI callout from language-side.
+However, primitives and plugins are statically defined and modifications happen outside \PH.
+This is where the domain of \WF begins.
 
+\WF provides infrastructure to dynamically compile and install primitives on top of the \B infrastructure at language-side in \PH.
+As we will describe in more detail in the following sections, the \PH \VM is written in a metacircular fashion.
+Hence the definition of plugins and primitives can be loaded in standard \PH.
+Typically this happens only at compile-time of the \VM, where these definitions are exported to C and compiled to the \VM binary.
+Once compiled, the original high-level description of primitives and plugins is no longer accessible from \PH.
+As a consequence, existing primitives or plugins can not be changed at runtime.
 
 % -----------------------------------------------------------------------------
 \subsection{Background}
