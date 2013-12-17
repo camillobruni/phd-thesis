@@ -36,10 +36,17 @@ Much like the primitives, the \JIT can not be changed from language-side and thi
 \begin{figure}[h]
 	\centering
 	\includegraphics[scale=1.1]{waterfall-overview}
+	\caption{\WF Overview}
+	\figlabel{val-waterfall-overview}
 \end{figure}
 
 \noindent In this section we present \WF, a compiler toolchain that allows primitives to be changed dynamically from language-side.
 We successfully use \WF to change and recompile whole \VM plugins such as the file plugin as we show in the following \secref{val-waterfall-plugins}.
+
+% -----------------------------------------------------------------------------
+\subsection{Background}
+\seclabel{val-waterfall-background}
+% -----------------------------------------------------------------------------
 
 \WF is our second application on top of \B after \NB, the complete \FFI library previously presented in \chapref{ffi}.
 \NB uses \B to generate the glue code between \PH and the external library.
@@ -57,14 +64,17 @@ Typically this happens only at compile-time of the \VM, where these definitions 
 Once compiled, the original high-level description of primitives and plugins is no longer accessible from \PH.
 As a consequence, existing primitives or plugins can not be changed at runtime.
 
-% -----------------------------------------------------------------------------
-\subsection{Background}
-\seclabel{val-waterfall-background}
-% -----------------------------------------------------------------------------
+\WF brings the static primitive definitions to live again.
+Just loading the original definitions in \PH does not bring them back to live, even though we can now inspect the definition and browse the sources.
+\WF compiles these definitions to native code and installs them with \B as new primitives.
+With this infrastructure primitive and plugin modifications are not limited to \VM compilation time.
 
 The \PH \VM (\urlfootnote{\textsc{Cog}}{http://www.mirandabanda.org/cogblog/}) is developed in a language that is a subset of \ST, known as \Slang, which is transformed to C and then compiled using a standard C compiler.  
 \Slang basically has the same syntax as \ST but is semantically constrained to expressions that can be resolved statically at compilation or code generation time and are compatible with C.
 Hence \Slang's semantics are closer to C than to \ST. 
+
+
+\paragraph{A Metacircular \VM Written in \Slang}
 
 The primitives of the \VM are written in \Slang and that is why even in a highly reflective languages such as \ST, where almost every aspect of the language is available for inspection and modification \cite{Denk10a}, primitives can not be changed at runtime.
 They can only be intercepted with reflective techniques with considerable performance overheads.
@@ -72,6 +82,9 @@ This is an important limitation since primitives are, in general, performance de
 \WF~\cite{Char13a} is a tool that allows developers to change the code written in \Slang for primitives and translate it to native code at runtime.
 This replaces the indirection via C that is used in the default compilation process.
 Given that \Slang source code can be modified at runtime as any other \ST method, \WF fosters primitives to be dynamically adapted without imposing the common pure reflective techniques performance degradation.
+
+
+\paragraph{\WF and \Slang}
 
 From a high-level point of view \WF provides two services which work transparently: 
 
