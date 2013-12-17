@@ -245,7 +245,7 @@ Finally, adding stages to the compiler with different levels of intermediate rep
 
 
 % ===========================================================================
-\newpage
+%\newpage
 \section{\NBJ: Language-side \JIT Prototype}
 \seclabel{val-nabujito}
 % ===========================================================================
@@ -346,6 +346,20 @@ When the language-side jitted code is activated \B ensures that we do not have t
 
 
 \paragraph{The \Cog \JIT}
+To understand the implementation issues of \NBJ we have to dive into the details of \PH's \JIT.
+\PH uses a flavor of the \Cog \VM which evolved in several steps from a simple bytecode interpreter.
+A successful and fast \JIT implies a \VM that uses the native stack.
+
+The original \ST-80 implementation uses a spaghetti-stack where all contexts are normal objects on the heap.
+This design simplifies the \VM implementation significantly since there is no special treatment necessary for blocks.
+Also this makes it rather easy to implement \ST's feature to access the current context using the special \ttt{thisContext} variable.
+However, the obvious down side of this implementation is the massive stress on the \GC.
+For each message send a new context has to be allocated and on each return contexts have to be reclaimed.
+It would naturally be more efficient to use the native stack which allows for cheap allocation and precise reclaiming of method context.
+
+
+A \VM for language without closures and limited reflection can be 
+
 \todo{explain the \Cog infrastructure}\\
 \todo{Step 1: Native Stack Mapping as requirement}\\
 \todo{Step 2: transform bytecodes to native code}\\
