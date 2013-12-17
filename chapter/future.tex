@@ -7,8 +7,31 @@
 \introduction
 % =============================================================================
 
+In \chapref{background} we gave an overview of different concepts of reflection and we focused on the main distinction between language-side and \VM-side reflection.
+While language-side reflection is very well described in research and rather wide-spread in dynamic languages, the \VM-side counterpart is not.
+Up to some extent it is always possible to introspect the \VM at a very basic level.
+Tools like \DTrace provide a simple way to instrument a binary.
+However, that still does not make the internal structure of the \VM accessible that were available at compilation time.
+And the restrictions are even more sever when it comes to \VM-level intercession.
+Languages are hardly capable of directly influencing the underlying \VM in a structured way.
+
+In the course of this thesis we presented tools that try to access this special area of \VM-level reflection -- all based on \B, a common framework to activate native code from language-side.
+
+\WF's dynamic primitives are a first step towards modifying \VM behavior from language-side in a rather controlled way.
+By bringing the metacircular \VM definition alive in \PH we connect the former static definition to the running artifact.
+Modification happens not by injecting basic native instructions but at high-level by modifying and dynamically compiling primitive definitions.
+
+In contrast to \WF we developed \NBJ, a \JIT compiler prototype, that moves the original \VM component to the language-side.
+While \NBJ is defined as language-side compiler using familiar coding patterns its \VM interaction is by far not clean.
+Unlike the plugins and primitives defined by \WF the \JIT generates native code that is closely integrated into the low-level execution model of the \VM.
+As a result \NBJ needs to manually circumvent the current restrictions of the \VM, clearly not an optimal path.
+
+In this chapter we present possible solutions and an early prototype \VM that addresses the limitations we encountered while developing \NB, the \B-based \FFI, \WF and \NBJ.
+
+
+
 % =============================================================================
-\newpage
+%\newpage
 \section{Language-side Improvements}
 % =============================================================================
 \todo{intro: extend the summary of \chapref{reification}}
