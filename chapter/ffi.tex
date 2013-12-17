@@ -252,7 +252,7 @@ AthensCairoSurface class>>asNBExternalType: gen
 \end{stcode}
 
 \paragraph{Callout with structures}
-\lstref{ffi-calloutOpaqueStruct} shows a callout definition to the \ttt{cairo\_image\_surface\_create} function that returns a \ttt{cairo\_surface\_t*} data type.
+\lstref{ffi-calloutOpaqueStruct} shows a callout definition to the \ttt{cai\-ro\_image\_surface\_create} function that returns a \ttt{cairo\_surface\_t*} data type.
 In this code example, the return type is \ttt{AthensCairoSurface} directly (not a pointer).
 When returning from this callout, \NB creates an instance of \ttt{AthensCairoSurface} and the marshalling mechanism  stores the returned address in the \ttt{handle} instance variable of this object.
 
@@ -493,7 +493,7 @@ In \NBFFI, doing most of the \FFI call processing at language-side makes easier 
 
 In this section we compare \NB with other \FFI implementations.
 \begin{description}
-	\item[\Alien \FFI:] An \FFI implementation for \Squeak/\PH that focuses on the language-side. All marshalling happens transparently at language-side.
+	\item[\Alien \FFI:] An \FFI implementation for \Squeak/\PH that focuses on the lan\-guage-side. All marshalling happens transparently at language-side.
 	\item[C-\FFI:] A C based \FFI implementation for \Squeak/\PH that performs all marshalling operations at \VM-side.
 	\item[\LuaJIT:] A fast \Lua implementation that has a close \FFI integration with \JIT interaction.
 \end{description}

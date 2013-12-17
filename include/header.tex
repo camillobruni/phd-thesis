@@ -363,16 +363,26 @@
 	{\oldendquote}
 	
 % =============================================================================
-\hyphenation{tool-chain pipe-line lan-guage lan-guage-side}
+\hyphenation{tool-chain pipe-line lan-guage lan-guage-side ge-ne-ric bind-ing bind-ings pri-mi-tive pri-mi-tives Na-tive-Bo-ost}
+
+% the following settings limit a bit the warnings latex spits out to focus on the
+% really bad ones
+
+% allow lines to stretch spaces to cope with lines that cannot be filled properly 
+\setlength{\emergencystretch}{2em}
+% only report underfull hbox above this badness level
+\hbadness=2000
+% only report overfull hbox above this badness level
+\hfuzz=1pt
 
 % =============================================================================
 \newcommand{\API}	{\textsc{api}\xspace}
 \newcommand{\ARM}	{\textsc{arm}\xspace}
 \newcommand{\AST}	{\textsc{ast}\xspace}
 \newcommand{\ASM}	{\textsc{asm}\xspace}
-\newcommand{\AsmJIT}{\textsc{AsmJit}\xspace}
-\newcommand{\Alien}	{\textsc{Alien}\xspace}
-\newcommand{\B}		{\textsc{Benzo}\xspace}
+\newcommand{\AsmJIT}{\textsc{Asm\-Jit}\xspace}
+\newcommand{\Alien}	{\textsc{Al\-ien}\xspace}
+\newcommand{\B}		{\textsc{Ben\-zo}\xspace}
 \newcommand{\CPU}	{\textsc{cpu}\xspace}
 \newcommand{\Cog}	{\textsc{Cog}\xspace}
 \newcommand{\DTrace}	{\textsc{DTrace}\xspace}
@@ -384,27 +394,27 @@
 \newcommand{\INRIA}	{\textsc{inria}\xspace}
 \newcommand{\IR}	{\textsc{ir}\xspace}
 \newcommand{\JIT}	{\textsc{jit}\xspace}
-\newcommand{\Java}	{\textsc{Java}\xspace}
-\newcommand{\Jikes}	{\textsc{Jikes}\xspace}
+\newcommand{\Java}	{\textsc{Ja\-va}\xspace}
+\newcommand{\Jikes}	{\textsc{Ji\-kes}\xspace}
 \newcommand{\Klein}	{\textsc{Klein}\xspace}
-\newcommand{\Linux}	{\textsc{Linux}\xspace}
+\newcommand{\Linux}	{\textsc{Li\-nux}\xspace}
 \newcommand{\LLDB}	{\textsc{lldb}\xspace}
 \newcommand{\LuaJIT}{\Luajit}
-\newcommand{\Luajit}{\textsc{Luajit}\xspace}
+\newcommand{\Luajit}{\textsc{Lua\-jit}\xspace}
 \newcommand{\Lua}	{\textsc{Lua}\xspace}
-\newcommand{\Mate}	{\textsc{Mate}\xspace}
+\newcommand{\Mate}	{\textsc{Ma\-te}\xspace}
 \newcommand{\MOP}	{\textsc{mop}\xspace}
-\newcommand{\NBFFI}	{\textsc{Native\-Boost-ffi}\xspace}
-\newcommand{\NBJ}	{\textsc{Nabujito}\xspace}
-\newcommand{\NB}	{\textsc{Native\-Boost}\xspace}
+\newcommand{\NBFFI}	{\textsc{Na\-tive\-Bo\-ost-ffi}\xspace}
+\newcommand{\NBJ}	{\textsc{Nabu\-jito}\xspace}
+\newcommand{\NB}	{\textsc{Na\-tive\-Bo\-ost}\xspace}
 \newcommand{\Nabujito}	{\NBJ\xspace}
 \newcommand{\OS}	{\textsc{os}\xspace}
 \newcommand{\PH}	{\textsc{Pharo}\xspace}
-\newcommand{\Pinocchio}		{\textsc{Pinocchio}\xspace}
+\newcommand{\Pinocchio}		{\textsc{Pi\-noc\-chio}\xspace}
 \newcommand{\ptrace}		{\textsc{ptrace}\xspace}
 \renewcommand{\P}	{\Pinocchio}
-\newcommand{\PyPy}	{\textsc{PyPy}\xspace}
-\newcommand{\Python}{\textsc{Python}\xspace}
+\newcommand{\PyPy}	{\textsc{Py\-Py}\xspace}
+\newcommand{\Python}{\textsc{Py\-thon}\xspace}
 \newcommand{\RMoD}	{\textsc{rmod}\xspace}
 \newcommand{\SCG}	{\textsc{scg}\xspace}
 \newcommand{\SSA}	{\textsc{ssa}\xspace}
@@ -415,10 +425,10 @@
 \newcommand{\TAC}	{\textsc{tac}\xspace}
 \newcommand{\UBA}	{\textsc{uba}\xspace}
 \newcommand{\unix}	{\textsc{unix}\xspace}
-\newcommand{\VCPU}	{\textsc{VirtualCpu}\xspace}
+\newcommand{\VCPU}	{\textsc{Vir\-tual\-Cpu}\xspace}
 \newcommand{\VirtualCPU}	{\VCPU}
-\newcommand{\Windows}	{\textsc{Windows}\xspace}
+\newcommand{\Windows}	{\textsc{Win\-dows}\xspace}
 \newcommand{\VMs}	{\textsc{vm}s\xspace}
 \newcommand{\VM}	{\textsc{vm}\xspace}
-\newcommand{\WF}	{\textsc{Waterfall}\xspace}
+\newcommand{\WF}	{\textsc{Wa\-ter\-fall}\xspace}
 \newcommand{\x}	{\textsc{x}\xspace}

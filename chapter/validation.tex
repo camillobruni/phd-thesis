@@ -145,7 +145,7 @@ They would trigger an endless recursion when booting up the system and trying to
 However, nothing prevents from replacing essential primitives at runtime with customized versions, once the system startup is completed. 
 
 \paragraph{Better instrumentation}
-Instrumentation of essential primitives from language side is an error-prone task falling in many cases in non-termination due to recursive loops. 
+Instrumentation of essential primitives from lan\-guage-side is an error-prone task falling in many cases in non-termination due to recursive loops. 
 An example of this behavior, can be observed when changing the essential \ttt{basicNew} primitive, which is responsible for instantiating new objects.
 Even a very simple instrumentation task such as printing the address in memory of the created object is problematic.
 If during the printing process another object is created the very same instrumented \ttt{basicNew} primitive would be triggered.
@@ -350,7 +350,7 @@ To understand the implementation issues of \NBJ we have to dive into the details
 \PH uses a flavor of the \Cog \VM which evolved in several steps from a simple bytecode interpreter.
 A successful and fast \JIT implies a \VM that uses the native stack.
 
-The original \ST-80 blue book implementation foresees a spaghetti-stack where all contexts are normal objects on the heap.
+The original \ST-80 blue book implementation foresees a spa\-ghet\-ti-stack where all contexts are normal objects on the heap.
 This design simplifies the \VM implementation significantly since there is no special treatment necessary for blocks.
 Also this makes it rather easy to implement \PH's feature to access the current context using the special \ttt{thisContext} variable.
 However, the obvious down side of this implementation is the massive stress on the \GC.

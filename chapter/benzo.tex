@@ -316,7 +316,7 @@ Benzo x86 generate: [ :asm :helper | | register |
 %
 The \VM helper exposes a basic, low-level interface to access objects and its properties.
 Additional methods cover the access to the external roots described in \secref{benzo-gc-interaction}.
-In this case the \ttt{\#instantiateClass:indexableSize:} will generate the proper native code to call to a \VM function and make sure that the side-effects of a possible \GC run are handled properly.
+In this case the \ttt{\#instantiateClass:\-in\-dex\-able\-Size:} will generate the proper native code to call to a \VM function and make sure that the side-effects of a possible \GC run are handled properly.
 By default the value in the result register is returned back to the language-side. On \textsc{x86} this defaults to \ttt{EAX}.
 In \secref{benzo-usecase} we introduce more substantial applications based on \B.
 
@@ -802,7 +802,7 @@ The languages interact through a well-defined Foreign Function Interface (\FFI).
 \FFI-based extensions are a hybrid approach between pure language-side extensions and \VM-side ones.
 Interaction with native libraries is supported by a dedicated \VM functionality for calling external functions.
 This allows for a smooth interaction of external code and language-side code.
-\FFI-based extensions share the benefits of a maintainable and efficient language-side library with modest implementation efforts.
+\FFI-based extensions share the benefits of a maintainable and efficient lan\-guage-side library with modest implementation efforts.
 However, \FFI is only a bridge or interface for allowing the interaction of different languages. 
 It is not possible to directly synthesize new native features from language-side.
 For this purpose we have to interact with a custom-made native library.
@@ -1012,7 +1012,7 @@ Applying these compiler passes to the example in \lstref{benzo-problem-vcpu} yie
 \begin{stcode}{}
 mov   6 -> EDX
 mov   2 -> ECX
-add EDX, ECX
+add EDX,   ECX
 mov ECX -> EAX
 return 
 \end{stcode}
