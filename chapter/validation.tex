@@ -145,13 +145,20 @@ These restrictions are more related to the underlying \B infrastructure than \WF
 For instance already exposed similar limitations with the \B-based \FFI when used during startup (see \secref{ffi-startup-recursion}).
 Nevertheless, nothing prevents from replacing essential primitives at runtime with customized versions, once the system startup is completed. 
 
-\paragraph{Better instrumentation}
-Instrumentation of essential primitives from lan\-guage-side is an error-prone task falling in many cases in non-termination due to recursive loops. 
+\paragraph{Primitive Instrumentation}
+Instrumentation of essential primitives from lan\-guage-side is an error-prone task falling in many cases in non-termination due to previously described meta-recursion. 
 An example of this behavior, can be observed when changing the essential \ttt{basicNew} primitive, which is responsible for instantiating new objects.
-Even a very simple instrumentation task such as printing the address in memory of the created object is problematic.
-If during the printing process another object is created the very same instrumented \ttt{basicNew} primitive would be triggered.
-Using reflective techniques it is possible to avoid this loop, however, with a considerable overhead.
-With \WF we can forget about these issues since the instrumentation code will be implemented at the lowest level.
+Only very limited instrumentation is possible at language-side, for instance counting how many instances have been created.
+This only works since the \VM internally does not represent small integers as full objects.
+However, this is only true up to some extent.
+Small integers bigger than $2^{30}$ are transformed to a more expensive object representation since they no longer fit in a machine word of the 32-bit \VM. 
+These big integers will use the \ttt{basicNew} primitive again as they are not implement in the \VM but in at language-side.
+Thus, we are back the original problem of running into meta-recursion.
+So even this very simple example has unwanted side-effects that are not directly visible.
+More complex instructions tasks will inevitably suffer from the same problems.
+
+Using reflective techniques it is possible to escape from this meta-recursion, however, with a considerable overhead.
+\WF avoids these issues since the instrumentation code for primitives will be implemented at the lowest level on top of \B.
 In \secref{val-waterfall-performance} we show how \WF, the \B based approach for generating primitives on the fly, outperforms the reflective solutions for primitives instrumentation. 
 
 
