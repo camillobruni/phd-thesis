@@ -71,7 +71,7 @@ With this infrastructure primitive and plugin modifications are not limited to \
 
 \paragraph{A Metacircular \VM Written in \Slang}
 
-\WF is implemtend in \PH which uses the \urlfootnote{\Cog \VM}{http://www.mirandabanda.org/cogblog/}, originating from the \Squeak \VM\cite{Inga97a}.
+\WF is implemented in \PH which uses the \urlfootnote{\Cog \VM}{http://www.mirandabanda.org/cogblog/}, originating from the \Squeak \VM\cite{Inga97a}.
 The \VM itself is written in a dialect of \ST called \Slang that is essentially limited to the functionality that can be expressed with standard C code.
 \Slang serves for two purposes: a high-level C preprocessor, a interactive simulator of the \VM.
 The first point has severe consequences.
@@ -89,15 +89,23 @@ For instance, even debug symbols are usually stripped from the final binary for 
 Of course this implies that the \VM can not be changed nor directly inspected from language-side.
 
 
-\paragraph{Primitives in \ST}
+\paragraph{Primitives in \PH}
 \todo{explain instrumentation here by distinguishing essential / non-essential primitives} \\
-\todo{meta-recursion}\\
+\todo{meta-recursion}
+\PH is a highly reflective environment where classes and methods can be changed at runtime, even the current execution context is accessible.
+For instance this is used to implement an exception mechanism purely at language-side in \PH.
+However, some features can not be implemented at language-side.
+\PH uses primitive methods, that instead of evaluating \PH-code switch to a \VM routine.
 As already partially explained in \secref{benzo-vm-interaction}, whenever a method is compiled with the \ttt{primitive} pragma as shown a flag is set on the \ttt{CompiledMethod}. 
 If the \VM tries to activate such a method, instead of interpreting the bytecodes it calls the corresponding function at \VM-level~\cite{Gold83a}.
-%The binding between primitives and numbers is described in a table indexed by number.
-\ST distinguishes two types of primitives: essential and non-essential primitives.
-Essential primitives are required for the bootstrapping and the essential operations of the language, such as creating a new object or activating a block.
-The second category of primitives are mainly used for optimization purposes.
+We distinguish three categories of primitives based on their functionality: certain parts of the language semantics, \OS-level functionality that can not be implemented in \PH itself and a third less important category where performance is critical.
+
+As we mentioned in the previous paragraph, these primitives are bound to the \VM and can not be changed at runtime.
+However, for a certain subset of these primitives we can write language-side substitutes in pure \PH-code.
+These primitives are called non-essential and are mainly used for optimization purposes. 
+In contrast there are essential primitives which are for instance used during start up of the \PH environment.
+Two prominent examples of essential primitives are the ones used for creating new objects or activating a block.
+
 
 \paragraph{Dynamically Interchangeable Primitives}
 \WF uses \B's mechanism for replacing primitive methods with customized versions that are nativized dynamically as described in \chapref{benzo}.
