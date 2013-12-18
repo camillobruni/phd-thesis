@@ -99,7 +99,7 @@ If the \VM tries to activate such a method, instead of interpreting the bytecode
 Essential primitives are required for the bootstrapping and the essential operations of the language, such as creating a new object or activating a block.
 The second category of primitives are mainly used for optimization purposes.
 
-\paragraph{\WF's Dynamically Interchangeable Primitives}
+\paragraph{Dynamically Interchangeable Primitives}
 \WF uses \B's mechanism for replacing primitive methods with customized versions that are nativized dynamically as described in \chapref{benzo}.
 The loophole described there is exploited by \WF to enable dynamic modification of \VM behavior and hence bring primitives to life at language-side.
 From a high-level point of view \WF provides two services which work transparently: 
