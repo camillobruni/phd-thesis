@@ -127,17 +127,23 @@ Following the implementation overview of the \PH \VM and the differentiation of 
 \end{enumerate}
 
 \paragraph{Reducing \VM Complexity}
-\VM extensions are only justified in the presence of strong performance requirements (see \secref{benzo-related}).
-All non-essential primitives fall into this category.
-Using \WF, these primitives can be implemented at language-side.
+Low-level \VM extensions are only justified in the presence of strong performance requirements (see \secref{benzo-related}).
+All non-essential primitives fall into this category since these primitives can be implemented in \PH without restrictions.
+However, in certain cases for performance a language-side implementation is unsuitable.
+Additionally we already know that these primitives are available as \Slang code at \VM generation time.
+Using \WF, these primitives can be implemented at language-side based on the unmodified \Slang sources.
 This means that these primitives become first-class citizens of the high-level environment and thus evolve with less effort.
+Thus, \WF opens new possibilities of changing \PH that were previously possible only with significant overhead.
 
 \paragraph{Essential Primitives}
 For essential primitives the previous argument does not hold since a static version is needed for a correct startup of the system.
-These primitives can not be fully replace by a language-side implementation using \WF.
-For instance, essential primitives are required for system startup.
-They would trigger an endless recursion when booting up the system and trying to generate them using \WF at the same time.
-However, nothing prevents from replacing essential primitives at runtime with customized versions, once the system startup is completed. 
+These primitives can not be directly replaced by a language-side implementation using \WF.
+Even though \WF itself avoids meta-recursion by generating low-level code with \B.
+However, \B itself relies on essential primitives as it is written in \PH.
+This imposes certain restrictions how and when these essential primitives can be modified with \WF during system startup.
+These restrictions are more related to the underlying \B infrastructure than \WF.
+For instance already exposed similar limitations with the \B-based \FFI when used during startup (see \secref{ffi-startup-recursion}).
+Nevertheless, nothing prevents from replacing essential primitives at runtime with customized versions, once the system startup is completed. 
 
 \paragraph{Better instrumentation}
 Instrumentation of essential primitives from lan\-guage-side is an error-prone task falling in many cases in non-termination due to recursive loops. 
