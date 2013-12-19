@@ -1,7 +1,7 @@
 \input{chapter-header.tex}
 % ===========================================================================
 
-\chapter{\B Prototype Validation}
+\chapter{\B Prototype Application Validation}
 \chaplabel{validation}
 \minitoc
 % ===========================================================================
@@ -28,7 +28,7 @@ Much like the primitives, the \JIT can not be changed from language-side and thi
 
 
 % ===========================================================================
-\newpage
+%\newpage
 \section{\WF: Dynamic Primitives}
 \seclabel{val-waterfall}
 % ===========================================================================
@@ -193,16 +193,26 @@ This includes for instance the finding of addresses of \VM internal symbols and 
 In particular \NB, the \B-based \FFI presented in \chapref{ffi}, is used for interfacing with C libraries (\ttt{dlsym}). 
 
 % -----------------------------------------------------------------------------
-\subsubsection*{Architecture}
+\paragraph{Architecture}
+The \WF compiler consists of the following elements:
+%
+\begin{itemize}[noitemsep]
+	\item Installed \Slang sources
+	\item \B-based compilation toolchain
+\end{itemize}
+
 
 % -----------------------------------------------------------------------------
-\subsubsection*{Dynamically Replacing Primitives}
+\paragraph{Compilation Steps}
 
 % -----------------------------------------------------------------------------
-\subsubsection*{Dynamically Replacing Plugins}
+\paragraph{Dynamically Replacing Primitives}
+\todo{Explaing step by step the compilation and installation proceedure for dynamic primitives}
 
 % -----------------------------------------------------------------------------
-\subsubsection*{Compilation Steps}
+\paragraph{Dynamically Replacing Plugins}
+\todo{explain step by step the proceedure to dynamically install new plugins}
+
 
 % -----------------------------------------------------------------------------
 \subsection{Validation}
@@ -254,6 +264,7 @@ A more detailed analysis of \WF is available separately \cite{Char13a}.
     \tablabel{val-waterfall-basicnew}
 \end{table*}
 
+\todo{add explanation of the results of \tabref{val-waterfall-basicnew}}
 
 % -----------------------------------------------------------------------------
 \subsubsection*{Validation of Dynamic Plugins}
@@ -275,7 +286,7 @@ Finally, adding stages to the compiler with different levels of intermediate rep
 
 
 % ===========================================================================
-%\newpage
+\newpage
 \section{\NBJ: Language-side \JIT Prototype}
 \seclabel{val-nabujito}
 % ===========================================================================
