@@ -1036,21 +1036,26 @@ A more detailed motivation and implementation details of this compiler are given
 \seclabel{benzo-conclusion}
 % ===========================================================================
 \todo{Extend to full summary}
+
+\todo{\B summary:}
 In this chapter we presented \B, an integral approach for reflective high-level low-level programming.
 Using \B we efficiently implemented at language-side three distinct language feature extensions that typically reside at \VM-level.
 \B promotes a smooth and powerful interaction with the low-level world by dynamically generating native code from language-side.
 This enables to exploit the underlying platform capabilities only when strongly needed without leaving the development platform and through a high-level programming interface. 
 As a result, \B advocates the use of development tools and abstraction level of the high-level language for as much as possible or desired.
 
+\todo{\B application:}
 By combining high-level reflection capabilities with efficient low-level code we manage to do dynamic primitive instrumentation and reuse the code for primitive operations which is duplicated on the standard \JIT approach.
 We also show that since \B caches native code transparently at language-side our \JIT compiler poses only a one-time overhead when generating native code. 
 Finally, we also show how our mature \FFI implementation outperforms an existing C-\FFI implementation by a factor of 1.5 even though we control every aspect from language-side.
 
+\todo{\B related (more suitable in the following situations):}
+
+\todo{\B outlook: future and following chapters}
 As a final conclusion, \B shows that promoting clear interfaces for controlling low-level code completely from language-side produces efficient solutions for system programming requirements without resorting to pure low-level solutions.
 We showed that fostering the abstraction provided by high-level languages and resorting to the system programming capabilities of low-level languages only when completely needed is not only possible but profitable.
 Furthermore we manage to considerably reduce complexity and code duplication which results in better maintainability.
 
-\todo{extend the summary of the problems a bit}
 
 
 % =============================================================================
