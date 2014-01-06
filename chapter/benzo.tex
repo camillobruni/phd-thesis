@@ -751,7 +751,7 @@ Reflective capabilities are not enough for general extensions. Even when suitabl
 \end{quote}
 
 %----------------------------------------------------------------------------
-\subsection{\VM Extensions and \VM Forks.}
+\subsection{\VM Extensions and Forks.}
 \seclabel{benzo-vm-extensions}
 %----------------------------------------------------------------------------
 \todo{explain the fork}
@@ -768,19 +768,11 @@ Typically, even very complex \VMs have a clean interface to build plugins.
 However, certain functionality can not be added by simply creating a nicely separated plugin that encapsulates the new feature.
 In this case core pieces of the \VM have to be modified: the \VM has to be forked.
 From a \VM maintenance point of view, forks have to be avoided if possible and should only be used for critical performance issues that can not be properly addressed at language-side or with plugins.
+From our experience with \PH, even promising \VM experiments are not maintained for a long time.
+For instance, \todo{ref to back in time}.
 
-%An example of how the complexity of the \VM can affect development efforts is the core of the \Self \VM \cite{Unga07a}.
-%After reduced development resources parts of the complex but efficient compiler infrastructure had to be abandoned in favor of a more maintainable code-base.
-
-\todo{properly integrate}
-High-level low-level programming \cite{Fram09a} encourage to use high-level languages for system programming.
-Frampton et al. present a low-level framework packaged as \textsc{org.vmmagic}, which is used as system interface for Jikes, an experimental \Java \VM.
-Additionally their framework is successfully used in \textsc{mmtk} \cite{Blac04a} which is used independently in several other projects.
-The \textsc{org.vmmagic} package is much more elaborate than \B but it is tailored towards \Java with static types.
-Methods have to be annotated to use low-level functionality.
-Additionally the strong separation between low-level code and language-side application does not allow for reflective extensions of the language runtime.
-Finally, they do not support the execution nor generation of custom assembly code in the fly.
-
+\paragraph{\VM Generation Framworks}
+\todo{properly integrate: make link from unmaintable fork to use a well-defined interface at that level}
 Other related approaches are \VM generation frameworks in general.
 They try to abstract away the complexity of the \VM and use high-level languages as compiler infrastructure.
 A very successful research project is \urlfootnote{\textsc{Jikes} Research \VM}{http://jikesrvm.org/} (former \textsc{Jalapeño})~\cite{Alpe99a}.
@@ -791,6 +783,20 @@ A similar framework is \urlfootnote{\PyPy}{http://pypy.org/} \cite{Rigo06a} a \V
 There exist several different high-level language \VM implementations on top of \PyPy such as \ST \cite{Bolz08a} or \textsc{Prolog}.
 However, its main focus lies on an efficient \JIT generator mainly for a \Python interpreter, and not on a direct, language-side assembler interface.
 
+%An example of how the complexity of the \VM can affect development efforts is the core of the \Self \VM \cite{Unga07a}.
+%After reduced development resources parts of the complex but efficient compiler infrastructure had to be abandoned in favor of a more maintainable code-base.
+\paragraph{High-level Low-level Programming}
+\todo{properly integrate: make link from unmaintable fork to use a well-defined interface at that level}
+High-level low-level programming \cite{Fram09a} encourage to use high-level languages for system programming.
+Frampton et al. present a low-level framework packaged as \textsc{org.vmmagic}, which is used as system interface for Jikes, an experimental \Java \VM.
+Additionally their framework is successfully used in \textsc{mmtk} \cite{Blac04a} which is used independently in several other projects.
+The \textsc{org.vmmagic} package is much more elaborate than \B but it is tailored towards \Java with static types.
+Methods have to be annotated to use low-level functionality.
+Additionally the strong separation between low-level code and language-side application does not allow for reflective extensions of the language runtime.
+Finally, they do not support the execution nor generation of custom assembly code in the fly.
+
+
+\todo{summary + connection paragraph}
 
 \begin{quote}
 VM extensions provide good performance at the cost of maintainability. 
