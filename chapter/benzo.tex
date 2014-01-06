@@ -571,7 +571,6 @@ Included in these numbers is at least one additional \PH message send to activat
 The existing language-side \FFI has a generic plugin to call C-functions and performs type-conversions at language-side.
 However, converting \PH objects from and into low-level data is comparably expensive.
 In \NB this happens directly in custom generated native code and is thus significantly faster.
-
 The plugin-based \FFI is also slower than \NB since it still has generic conversion function for \PH objects, albeit written in C and thus faster than in \Alien.
 However, \NB custom tailored \ASM code is still faster than the hard-coded C counterpart.
 
@@ -752,10 +751,10 @@ Reflective capabilities are not enough for general extensions. Even when suitabl
 \end{quote}
 
 %----------------------------------------------------------------------------
-\subsection{\VM Extensions.}
+\subsection{\VM Extensions and \VM Forks.}
 \seclabel{benzo-vm-extensions}
 %----------------------------------------------------------------------------
-
+\todo{explain the fork}
 Another approach is to attach plugins to the \VM.
 Plugins are direct bindings to external libraries described at \VM-side or libraries linked to the \VM executable \cite[Ch.\ 5]{Blac09a}. 
 They provide a performance boost in comparison to pure language-side solutions.
@@ -764,9 +763,14 @@ However, plugins are commonly written in the same language as the \VM, at a low 
 Few exceptions are self-hosted languages \cite{Unga05a,Wimm13a,Rigo06a}.
 To support a fluent development process, \VMs should come with an infrastructure for building extensions at same abstraction level than the language.
 Instead they tend to be very complex and to have sluggish building processes. For example, only a few \VMs have high-level debugging facilities \cite{Inga97a,Unga05a,Wimm13a}.
-Also from a \VM maintenance point of view, extensions have to be avoided if possible and should only be used for critical performance issues that can not be properly addressed at language-side.
-An example of how the complexity of the \VM can affect development efforts is the core of the \Self \VM \cite{Unga07a}.
-After reduced development resources parts of the complex but efficient compiler infrastructure had to be abandoned in favor of a more maintainable code-base.
+
+Typically, even very complex \VMs have a clean interface to build plugins.
+However, certain functionality can not be added by simply creating a nicely separated plugin that encapsulates the new feature.
+In this case core pieces of the \VM have to be modified: the \VM has to be forked.
+From a \VM maintenance point of view, forks have to be avoided if possible and should only be used for critical performance issues that can not be properly addressed at language-side or with plugins.
+
+%An example of how the complexity of the \VM can affect development efforts is the core of the \Self \VM \cite{Unga07a}.
+%After reduced development resources parts of the complex but efficient compiler infrastructure had to be abandoned in favor of a more maintainable code-base.
 
 \todo{properly integrate}
 High-level low-level programming \cite{Fram09a} encourage to use high-level languages for system programming.
