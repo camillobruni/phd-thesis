@@ -751,35 +751,27 @@ Reflective capabilities are not enough for general extensions. Even when suitabl
 \end{quote}
 
 %----------------------------------------------------------------------------
-\subsection{\VM Extensions and Forks.}
+\subsection{\VM Extensions / Plugins}
 \seclabel{benzo-vm-extensions}
 %----------------------------------------------------------------------------
 Another approach is to attach separate plugins to the \VM.
 Plugins are direct bindings to external libraries described at \VM-side or libraries linked to the \VM executable \cite[Ch.\ 5]{Blac09a}. 
 They provide a performance boost in comparison to pure language-side solutions.
 Using highly optimized native libraries it is straightforward to outperform code written at language-side.
-However, plugins are commonly written in the same language as the \VM, at a low abstraction level, which means that they can no longer be changed easily at runtime.
-Few exceptions are self-hosted languages \cite{Unga05a,Wimm13a,Rigo06a}.
-\todo{weird connection}
-To support a fluent development process, \VMs should come with an infrastructure for building extensions at same abstraction level than the language.
-Instead they tend to be very complex and to have sluggish building processes.
-For example, only a few \VMs have high-level debugging facilities \cite{Inga97a,Unga05a,Wimm13a}.
 
-Typically, even very complex \VMs such as the \Self \VM \cite{Unga07a} provide a clean interface to write plugins.
-However, certain functionality can not be added by simply creating a nicely separated plugin that encapsulates the new feature.
-Prominent examples are \JIT support, immutability or first-class handles \cite{Arna13a}.
-In this case core pieces of the \VM have to be modified: the \VM has to be forked.
-From a \VM maintenance point of view, forks have to be avoided if possible and should only be used for critical performance issues that can not be properly addressed at language-side or with plugins.
-From our experience with \PH, even promising \VM experiments are not maintained for a long time.
-For instance, \todo{back in time debugger} \cite{Lien08b}.
+\subsubsection*{Problem: Abstraction Mismatch}
+However, plugins are commonly written in the same language as the \VM, at a low abstraction level,
+Few exceptions are self-hosted languages \cite{Unga05a,Wimm13a,Rigo06a}.
+To support a fluent development process, \VMs should come with an infrastructure for building extensions at same abstraction level as the provided language.
+Instead \VMs tend to be rather complex which includes the whole development cycle.
+For example, only a few \VMs have high-level debugging facilities \cite{Inga97a,Unga05a,Wimm13a}.
+It is more common to be stuck in the compilation step waiting for the debugging binary to be ready.
 
 \paragraph{\VM Generation Framworks}
-\todo{properly integrate: make link from unmaintable fork to use a well-defined interface at that level}
-Other related approaches are \VM generation frameworks in general.
+The lack of abstraction for \VM-level extensions can is addressed by \VM generation frameworks in general.
 They try to abstract away the complexity of the \VM and use high-level languages as compiler infrastructure.
 A very successful research project is \urlfootnote{\textsc{Jikes} Research \VM}{http://jikesrvm.org/} (former \textsc{Jalapeño})~\cite{Alpe99a}.
 It uses \Java to metacircularly define a \Java environment which then generates the final \VM.
-
 A similar framework is \urlfootnote{\PyPy}{http://pypy.org/} \cite{Rigo06a} a \VM framework including an efficient \JIT. 
 \PyPy uses a restricted subset of the  \textsc{Python} language named \textsc{RPython} which is then translated to various low-level backends such as C or \textsc{llvm} code.
 There exist several different high-level language \VM implementations on top of \PyPy such as \ST \cite{Bolz08a} or \textsc{Prolog}.
@@ -787,8 +779,23 @@ However, its main focus lies on an efficient \JIT generator mainly for a \Python
 
 %An example of how the complexity of the \VM can affect development efforts is the core of the \Self \VM \cite{Unga07a}.
 %After reduced development resources parts of the complex but efficient compiler infrastructure had to be abandoned in favor of a more maintainable code-base.
+
+\subsubsection*{Problem: Plugin Limitations}
+Typically, even very complex \VMs such as the \Self \VM \cite{Unga07a} provide a clean interface to write plugins.
+However, certain functionality can not be added by simply creating a nicely separated plugin that encapsulates the new feature.
+Prominent examples are \JIT support, immutability or first-class handles \cite{Arna13a}.
+In this case core pieces of the \VM have to be modified: the \VM has to be forked.
+From a \VM maintenance point of view, forks have to be avoided if possible and should only be used for critical performance issues that can not be properly addressed at language-side or with plugins.
+
+From our experience with \PH, even promising \VM experiments are not maintained for a long time.
+An example for that is the modified \VM supporting back-in-time debugging implemented for an early version of \PH and \Squeak \cite{Lien08b}.
+The features would improve debugging without a doubt.
+However, the \VM evolved in the mean time adding new features required by newer versions of \PH.
+As a result the back-in-time enabled \VM is no longer compatible with \PH.
+Presumably it would be easier to port the back-in-time debugger to a new \PH version if it were implemented purely at language-side.
+
+
 \paragraph{High-level Low-level Programming}
-\todo{properly integrate: make link from unmaintable fork to use a well-defined interface at that level}
 High-level low-level programming \cite{Fram09a} encourage to use high-level languages for system programming.
 Frampton et al. present a low-level framework packaged as \textsc{org.vmmagic}, which is used as system interface for Jikes, an experimental \Java \VM.
 Additionally their framework is successfully used in \textsc{mmtk} \cite{Blac04a} which is used independently in several other projects.
