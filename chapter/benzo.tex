@@ -754,13 +754,21 @@ Reflective capabilities are not enough for general extensions. Even when suitabl
 \subsection{\VM Extensions / Plugins}
 \seclabel{benzo-vm-extensions}
 %----------------------------------------------------------------------------
-Another approach is to attach separate plugins to the \VM.
+Another approach to extend add new features to a programming language is to extend the \VM.
+At this level we differentiate between two extension mechanisms: \VM plugins and modified \VMs itself.
 Plugins are direct bindings to external libraries described at \VM-side or libraries linked to the \VM executable \cite[Ch.\ 5]{Blac09a}. 
 They provide a performance boost in comparison to pure language-side solutions.
 Using highly optimized native libraries it is straightforward to outperform code written at language-side.
+Typically, even very complex \VMs such as the \Self \VM \cite{Unga07a} provide a clean interface to write plugins.
+Missing high-level concepts make them harder to maintain than language-side code.
+Depending on the added feature the plugin interface may prove to be too inflexible and the only choice is an modified \VM.
+Such a fork comes at an even higher cost of maintenance.
+In the following paragraph we will explain the these two main limitations we found when working with plugins: a certain abstraction mismatch compared to host language and the limitations imposed by a clean plugin interface.
+
 
 \subsubsection*{Problem: Abstraction Mismatch}
-However, plugins are commonly written in the same language as the \VM, at a low abstraction level,
+Plugins are commonly written in the same language as the \VM, at a low abstraction level.
+The abstraction difference compared to a language-side extensions makes it difficult for standard programmers to modify or write \VM plugins.
 Few exceptions are self-hosted languages \cite{Unga05a,Wimm13a,Rigo06a}.
 To support a fluent development process, \VMs should come with an infrastructure for building extensions at same abstraction level as the provided language.
 Instead \VMs tend to be rather complex which includes the whole development cycle.
@@ -776,15 +784,13 @@ A similar framework is \urlfootnote{\PyPy}{http://pypy.org/} \cite{Rigo06a} a \V
 \PyPy uses a restricted subset of the  \textsc{Python} language named \textsc{RPython} which is then translated to various low-level backends such as C or \textsc{llvm} code.
 There exist several different high-level language \VM implementations on top of \PyPy such as \ST \cite{Bolz08a} or \textsc{Prolog}.
 However, its main focus lies on an efficient \JIT generator mainly for a \Python interpreter, and not on a direct, language-side assembler interface.
-
-%An example of how the complexity of the \VM can affect development efforts is the core of the \Self \VM \cite{Unga07a}.
-%After reduced development resources parts of the complex but efficient compiler infrastructure had to be abandoned in favor of a more maintainable code-base.
+\PyPy encourages to use reflection at compile-time which helps to write a maintainable code base.
 
 \subsubsection*{Problem: Plugin Limitations}
-Typically, even very complex \VMs such as the \Self \VM \cite{Unga07a} provide a clean interface to write plugins.
-However, certain functionality can not be added by simply creating a nicely separated plugin that encapsulates the new feature.
+Once a programmer is fluent at \VM-level a clean plugin interface is a big aid in terms of maintenance.
+However, certain functionality can not be added by simply creating a separate plugin that encapsulates the new feature.
 Prominent examples are \JIT support, immutability or first-class handles \cite{Arna13a}.
-In this case core pieces of the \VM have to be modified: the \VM has to be forked.
+In all these examples core pieces of the \VM have to be modified: the \VM has to be forked.
 From a \VM maintenance point of view, forks have to be avoided if possible and should only be used for critical performance issues that can not be properly addressed at language-side or with plugins.
 
 From our experience with \PH, even promising \VM experiments are not maintained for a long time.
@@ -804,8 +810,6 @@ Methods have to be annotated to use low-level functionality.
 Additionally the strong separation between low-level code and language-side application does not allow for reflective extensions of the language runtime.
 Finally, they do not support the execution nor generation of custom assembly code in the fly.
 
-
-\todo{summary + connection paragraph}
 
 \begin{quote}
 VM extensions provide good performance at the cost of maintainability. 

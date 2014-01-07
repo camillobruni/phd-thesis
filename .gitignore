@@ -21,6 +21,12 @@
 *.mtc7
 *.mtc8
 *.mtc9
+*.mtc10
+*.mtc11
+*.mtc12
+*.mtc13
+*.mtc14
+*.mtc15
 *.bbl
 *.blg
 *.brf
