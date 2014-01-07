@@ -2,12 +2,26 @@
 %% http://bibdesk.sourceforge.net/
 
 
-%% Created for cami at 2014-01-07 12:30:32 +0100 
+%% Created for cami at 2014-01-07 21:20:47 +0100 
 
 
 %% Saved with string encoding Unicode (UTF-8) 
 
 
+
+@phdthesis{Verw12a,
+	Abstract = {High-performance virtual machines (VMs) are increasingly reused for programming languages for which they were not initially designed. Unfortunately, VMs are usually tailored to specific languages, offer only a very limited interface to running applications, and are closed to extensions. As a consequence, extensions required to support new languages often entail the construction of custom VMs, thus impacting reuse, compatibility and performance. Short of building a custom VM, the language designer has to choose between the expressiveness and the performance of the language. In this dissertation we argue that the best way to open the VM is to eliminate it. We present Pinocchio, a natively compiled Smalltalk, in which we identify and reify three basic building blocks for object-oriented languages.  First we define a protocol for message passing similar to calling conventions, independent of the actual message lookup mechanism. The lookup is provided by a self-supporting runtime library written in Smalltalk and compiled to native code. Since it unifies the meta- and base-level we obtain a metaobject protocol (MOP).  Then we decouple the language-level manipulation of state from the machine-level implementation by extending the structural reflective model of the language with object layouts, layout scopes and slots.  Finally we reify behavior using AST nodes and first-class interpreters separate from the low-level language implementation. We describe the implementations of all three first-class building blocks. For each of the blocks we provide a series of examples illustrating how they enable typical extensions to the runtime, and we provide benchmarks validating the practicality of the approaches.},
+	Author = {Toon Verwaest},
+	Date-Added = {2014-01-07 20:20:43 +0000},
+	Date-Modified = {2014-01-07 20:20:43 +0000},
+	Keywords = {scg-phd snf-none jb12 pinocchio},
+	Month = mar,
+	School = {University of Bern},
+	Title = {Bridging the Gap between Machine and Language using First-Class Building Blocks},
+	Type = {PhD thesis},
+	Url = {http://scg.unibe.ch/archive/phd/verwaest-phd.pdf},
+	Year = {2012},
+	Bdsk-Url-1 = {http://scg.unibe.ch/archive/phd/verwaest-phd.pdf}}
 
 @inproceedings{Lien08b,
 	Abstract = {Back-in-time debuggers are extremely useful tools

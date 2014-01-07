@@ -937,10 +937,13 @@ Once the native code was cached this recursion chain was broken and subsequently
 This particular issue was solved in \PH by caching the argument names in \NB used for assigning the \PH arguments to the callout parameters (see \secref{ffi-callout-parameters}).
 The downside of this approach is that \NB reimplements part of \PH's existing reflection.
 Of course there are other possibilities to avoid the described situation: deferred startup logics, lazy startup or storing the complete \PH source code in the image.
-However, they would leave the general problem of using \NB during startup which might happen more often if more \VM plugins are replaced with \FFI callouts.
+However, they would leave the general problem of using \NB during startup which will happen more often if more \VM plugins are replaced with \FFI callouts.
 And even more general, how do we enable \NB on a system that does not allow dynamic code generation?
 The only solution to this problem is to generate the \FFI callouts upfront and make these binaries available to the final product.
-\todo{somehow missing ending}
+At the current state of the \FFI library and the underlying assembler from \B this is only feasible for the x86 architecture while for instance \ARM support missing.
+Next to the additional assembler backends we also have to implement the platform specific binary formats such as \ELF under \Linux or \MachO under \OSX.
+This would work much similar to the implementation used in the research \ST implementation \P \cite{Verw12a}.
+\todo{add image ;)}
 
 % ---------------------------------------------------------------------------
 \subsection{Performance}
@@ -962,10 +965,12 @@ Hence the cost for the context switch plus the cost of activating the \NB callou
 \section{Conclusion}
 \seclabel{ffi-conclusion}
 % ===========================================================================
-\todo{make proper summary and mention more \B}
-In this chapter we presented \NB a novel approach to foreign function interfaces.
-Our approach relies only on a very generic extension of the \VM to allow for language-side code to directly call native instructions.
+In this chapter we presented \NB a novel approach to foreign function interfaces (\FFI).
+Unlike other implementations \NB does not rely on specific plugins for doing \FFI callout. 
+Instead it is implemented on top of the generic low-level programming framework \B which we presented earlier in \chapref{benzo}.
+As such \NB is implemented completely language-side.
 
+\paragraph{\NB Performance}
 Using a in depth evaluation of \NB comparing against two other \ST \FFI implementations and \LuaJIT we showed in \secref{ffi-evaluation} that our language-side approach is competitive.
 \NB reduces the callout overhead by more than a factor two compared to the two closest \ST solutions.
 
@@ -976,6 +981,20 @@ With a partial solution ready to integrate \NB closer with the \JIT we expect to
 
 Furthermore we showed that \NB essentially combines \VM-level performance with language-side flexibility when it comes to marshal complex types.
 New structures are defined practically at language-side and conversion optimizations are added transparently.
+
+\paragraph{\NB Limitations}
+Much of the limitations of \NB are due to shortcomings of the underlying \B framework.
+The most prominent effects are the ones already mentioned earlier in \secref{benzo-problems} and concern the debugging cycle.
+Currently the great performance and flexibility comes at the price of hard crashes when writing faulty code.
+In support of \NB callouts we state that C code is equally prone to these bugs.
+A possible solution would be a debugger that is also capable of stepping through native code.
+
+\paragraph{\NB Outlook}
+We have shown that \NB is a stable and fast \FFI framework and thus a clear validation of the underlying \B framework.
+Much like \B, \NB requires still some work to improve the debugging cycle to provide a barrier free development experience for \PH programmers.
+However, we believe that with this language-side approach changes to the \FFI framework are much simpler to perform and thus eventually will encourage more contributors to improve \NB.
+
+
 
 % =============================================================================
 \input{chapter-footer.tex}
