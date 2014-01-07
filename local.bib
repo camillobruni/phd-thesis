@@ -2,12 +2,80 @@
 %% http://bibdesk.sourceforge.net/
 
 
-%% Created for cami at 2013-12-17 23:40:37 +0100 
+%% Created for cami at 2014-01-07 12:30:32 +0100 
 
 
 %% Saved with string encoding Unicode (UTF-8) 
 
 
+
+@inproceedings{Lien08b,
+	Abstract = {Back-in-time debuggers are extremely useful tools
+                  for identifying the causes of bugs, as they allow us
+                  to inspect the past states of objects no longer
+                  present in the current execution stack.
+                  Unfortunately the "omniscient" approaches that try
+                  to remember all previous states are impractical
+                  because they either consume too much space or they
+                  are far too slow. Several approaches rely on
+                  heuristics to limit these penalties, but they
+                  ultimately end up throwing out too much relevant
+                  information. In this paper we propose a practical
+                  approach to back-in-time debugging that attempts to
+                  keep track of only the relevant past data. In
+                  contrast to other approaches, we keep object history
+                  information together with the regular objects in the
+                  application memory. Although seemingly
+                  counter-intuitive, this approach has the effect that
+                  past data that is not reachable from current
+                  application objects (and hence, no longer relevant)
+                  is automatically garbage collected. In this paper we
+                  describe the technical details of our approach, and
+                  we present benchmarks that demonstrate that memory
+                  consumption stays within practical bounds.
+                  Furthermore since our approach works at the virtual
+                  machine level, the performance penalty is
+                  significantly better than with other approaches.},
+	Annote = {internationalconference},
+	Author = {Adrian Lienhard and Tudor G\^irba and Oscar Nierstrasz},
+	Booktitle = {Proceedings of the 22nd European Conference on Object-Oriented Programming (ECOOP'08)},
+	Date-Added = {2014-01-07 10:43:48 +0000},
+	Date-Modified = {2014-01-07 10:43:48 +0000},
+	Doi = {10.1007/978-3-540-70592-5_25},
+	Isbn = {978-3-540-70591-8},
+	Keywords = {scg08 scg-pub object-flow snf08 jb08 girba},
+	Medium = {2},
+	Note = {{ECOOP} distinguished paper award},
+	Pages = {592--615},
+	Peerreview = {yes},
+	Publisher = {Springer},
+	Series = {LNCS},
+	Title = {Practical Object-Oriented Back-in-Time Debugging},
+	Url = {http://scg.unibe.ch/archive/papers/Lien08bBackInTimeDebugging.pdf},
+	Volume = {5142},
+	Year = {2008},
+	Bdsk-File-1 = {YnBsaXN0MDDUAQIDBAUGJCVYJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoKgHCBMUFRYaIVUkbnVsbNMJCgsMDxJXTlMua2V5c1pOUy5vYmplY3RzViRjbGFzc6INDoACgAOiEBGABIAFgAdccmVsYXRpdmVQYXRoWWFsaWFzRGF0YV8QSC4uLy4uL3BhcGVyL0xpZW4wOGIgUHJhY3RpY2FsIE9iamVjdC1PcmllbnRlZCBCYWNrLWluLVRpbWUgRGVidWdnaW5nLnBkZtIXCxgZV05TLmRhdGFPEQISAAAAAAISAAIAAANPU1gAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADK6CfzSCsAAAAOPwwfTGllbjA4YiBQcmFjdGljYWwgT2JqI0U0MDZBLnBkZgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA5Aasooq5IAAAAAAAAAAAACAAIAAAkgAAAAAAAAAAAAAAAAAAAABXBhcGVyAAAQAAgAAMroGeMAAAARAAgAAMooj3IAAAABABAADj8MAAscigAGUc0AAuaMAAIAR09TWDpVc2VyczoAY2FtaS1kYXRhOgBlZHVjYXRpb246AHBhcGVyOgBMaWVuMDhiIFByYWN0aWNhbCBPYmojRTQwNkEucGRmAAAOAHoAPABMAGkAZQBuADAAOABiACAAUAByAGEAYwB0AGkAYwBhAGwAIABPAGIAagBlAGMAdAAtAE8AcgBpAGUAbgB0AGUAZAAgAEIAYQBjAGsALQBpAG4ALQBUAGkAbQBlACAARABlAGIAdQBnAGcAaQBuAGcALgBwAGQAZgAPAAgAAwBPAFMAWAASAFxVc2Vycy9jYW1pLWRhdGEvZWR1Y2F0aW9uL3BhcGVyL0xpZW4wOGIgUHJhY3RpY2FsIE9iamVjdC1PcmllbnRlZCBCYWNrLWluLVRpbWUgRGVidWdnaW5nLnBkZgATAAEvAAAVAAIAC///AACABtIbHB0eWiRjbGFzc25hbWVYJGNsYXNzZXNdTlNNdXRhYmxlRGF0YaMdHyBWTlNEYXRhWE5TT2JqZWN00hscIiNcTlNEaWN0aW9uYXJ5oiIgXxAPTlNLZXllZEFyY2hpdmVy0SYnVHJvb3SAAQAIABEAGgAjAC0AMgA3AEAARgBNAFUAYABnAGoAbABuAHEAcwB1AHcAhACOANkA3gDmAvwC/gMDAw4DFwMlAykDMAM5Az4DSwNOA2ADYwNoAAAAAAAAAgEAAAAAAAAAKAAAAAAAAAAAAAAAAAAAA2o=},
+	Bdsk-Url-1 = {http://scg.unibe.ch/archive/papers/Lien08bBackInTimeDebugging.pdf},
+	Bdsk-Url-2 = {http://dx.doi.org/10.1007/978-3-540-70592-5_25}}
+
+@article{Arna13a,
+	Abstract = {{Controlling object graphs and giving specific semantics to references (such as read-only, own- ership, scoped sharing) has been the focus of a large body of research in the context of static type systems. Controlling references to single objects and to graphs of objects is essential to be able to build more secure systems, but is notoriously hard to achieve in absence of static type systems. In this article we embrace this challenge by proposing a solution to the following question: What is the underlying mechanism that can support the definition of properties (such as revocable, read-only, lent) at the reference level in the absence of a static type system? We present handles: first class references that propagate behavioral change dynamically to the object subgraph during program execution. In this article we describe handles and show how handles support the implementation of read-only references and revocable references. Handles have been fully implemented by modifying an existing virtual machine and we report their costs.}},
+	Affiliation = {RMOD - INRIA Lille - Nord Europe},
+	Audience = {internationale},
+	Author = {Arnaud, Jean-Baptiste and Ducasse, St{\'e}phane and Denker, Marcus},
+	Date-Added = {2014-01-07 10:41:30 +0000},
+	Date-Modified = {2014-01-07 10:41:30 +0000},
+	Hal_Id = {hal-00881865},
+	Journal = {Science of Computer Programming},
+	Language = {Anglais},
+	Month = Nov,
+	Pdf = {http://hal.inria.fr/hal-00881865/PDF/Arna13b-Handles-ScienceOfComputerProgramming.pdf},
+	Publisher = {Elsevier},
+	Title = {{Handles: Behavior-Propagating First Class References For Dynamically-Typed Languages}},
+	Url = {http://hal.inria.fr/hal-00881865},
+	Year = {2013},
+	Bdsk-File-1 = {YnBsaXN0MDDUAQIDBAUGJCVYJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoKgHCBMUFRYaIVUkbnVsbNMJCgsMDxJXTlMua2V5c1pOUy5vYmplY3RzViRjbGFzc6INDoACgAOiEBGABIAFgAdccmVsYXRpdmVQYXRoWWFsaWFzRGF0YV8Qay4uLy4uL3BhcGVyL0FybmExM2EgSGFuZGxlcyBCZWhhdmlvci1Qcm9wYWdhdGluZyBGaXJzdCBDbGFzcyBSZWZlcmVuY2VzIEZvciBEeW5hbWljYWxseS1UeXBlZCBMYW5ndWFnZXMucGRm0hcLGBlXTlMuZGF0YU8RAnwAAAAAAnwAAgAAA09TWAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMroJ/NIKwAAAA4/DB9Bcm5hMTNhIEhhbmRsZXMgQmVoIzZCQzQzOUUucGRmAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGvEOezvGYVQAAAAAAAAAAAAIAAgAACSAAAAAAAAAAAAAAAAAAAAAFcGFwZXIAABAACAAAyugZ4wAAABEACAAAzvGKRQAAAAEAEAAOPwwACxyKAAZRzQAC5owAAgBHT1NYOlVzZXJzOgBjYW1pLWRhdGE6AGVkdWNhdGlvbjoAcGFwZXI6AEFybmExM2EgSGFuZGxlcyBCZWgjNkJDNDM5RS5wZGYAAA4AwABfAEEAcgBuAGEAMQAzAGEAIABIAGEAbgBkAGwAZQBzACAAQgBlAGgAYQB2AGkAbwByAC0AUAByAG8AcABhAGcAYQB0AGkAbgBnACAARgBpAHIAcwB0ACAAQwBsAGEAcwBzACAAUgBlAGYAZQByAGUAbgBjAGUAcwAgAEYAbwByACAARAB5AG4AYQBtAGkAYwBhAGwAbAB5AC0AVAB5AHAAZQBkACAATABhAG4AZwB1AGEAZwBlAHMALgBwAGQAZgAPAAgAAwBPAFMAWAASAH9Vc2Vycy9jYW1pLWRhdGEvZWR1Y2F0aW9uL3BhcGVyL0FybmExM2EgSGFuZGxlcyBCZWhhdmlvci1Qcm9wYWdhdGluZyBGaXJzdCBDbGFzcyBSZWZlcmVuY2VzIEZvciBEeW5hbWljYWxseS1UeXBlZCBMYW5ndWFnZXMucGRmAAATAAEvAAAVAAIAC///AACABtIbHB0eWiRjbGFzc25hbWVYJGNsYXNzZXNdTlNNdXRhYmxlRGF0YaMdHyBWTlNEYXRhWE5TT2JqZWN00hscIiNcTlNEaWN0aW9uYXJ5oiIgXxAPTlNLZXllZEFyY2hpdmVy0SYnVHJvb3SAAQAIABEAGgAjAC0AMgA3AEAARgBNAFUAYABnAGoAbABuAHEAcwB1AHcAhACOAPwBAQEJA4kDiwOQA5sDpAOyA7YDvQPGA8sD2APbA+0D8AP1AAAAAAAAAgEAAAAAAAAAKAAAAAAAAAAAAAAAAAAAA/c=},
+	Bdsk-Url-1 = {http://hal.inria.fr/hal-00881865}}
 
 @inproceedings{Deut84a,
 	Address = {Salt Lake City, Utah},

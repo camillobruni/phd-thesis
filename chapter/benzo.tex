@@ -733,7 +733,7 @@ Additionally not all performance bottlenecks can be addressed at language-side.
 \subsection{Language-side Reflective Extensions}
 %----------------------------------------------------------------------------
 
-This is a subcase of the previous approach but in the context of reflective environments that expose particular characteristics.
+This is a specialization of the previous approach but in the context of reflective environments.
 For instance, Meta Object Protocols (\MOP) \cite{Kicz91a} based on reflection \cite{Maes87a} are used to define certain control points in the system to change the language.
 By composing meta objects it is possible to even modify the semantics of the language. 
 Several languages such as \PH, \ST, \urlfootnote{\Python}{http://python.org/}, \urlfootnote{Ruby}{http://www.ruby-lang.org/}, and others provide reflective capabilities with different depths \cite{Ande98a,Van10a}.
@@ -754,22 +754,24 @@ Reflective capabilities are not enough for general extensions. Even when suitabl
 \subsection{\VM Extensions and Forks.}
 \seclabel{benzo-vm-extensions}
 %----------------------------------------------------------------------------
-\todo{explain the fork}
-Another approach is to attach plugins to the \VM.
+Another approach is to attach separate plugins to the \VM.
 Plugins are direct bindings to external libraries described at \VM-side or libraries linked to the \VM executable \cite[Ch.\ 5]{Blac09a}. 
 They provide a performance boost in comparison to pure language-side solutions.
 Using highly optimized native libraries it is straightforward to outperform code written at language-side.
-However, plugins are commonly written in the same language as the \VM, at a low abstraction level.
+However, plugins are commonly written in the same language as the \VM, at a low abstraction level, which means that they can no longer be changed easily at runtime.
 Few exceptions are self-hosted languages \cite{Unga05a,Wimm13a,Rigo06a}.
+\todo{weird connection}
 To support a fluent development process, \VMs should come with an infrastructure for building extensions at same abstraction level than the language.
-Instead they tend to be very complex and to have sluggish building processes. For example, only a few \VMs have high-level debugging facilities \cite{Inga97a,Unga05a,Wimm13a}.
+Instead they tend to be very complex and to have sluggish building processes.
+For example, only a few \VMs have high-level debugging facilities \cite{Inga97a,Unga05a,Wimm13a}.
 
-Typically, even very complex \VMs have a clean interface to build plugins.
+Typically, even very complex \VMs such as the \Self \VM \cite{Unga07a} provide a clean interface to write plugins.
 However, certain functionality can not be added by simply creating a nicely separated plugin that encapsulates the new feature.
+Prominent examples are \JIT support, immutability or first-class handles \cite{Arna13a}.
 In this case core pieces of the \VM have to be modified: the \VM has to be forked.
 From a \VM maintenance point of view, forks have to be avoided if possible and should only be used for critical performance issues that can not be properly addressed at language-side or with plugins.
 From our experience with \PH, even promising \VM experiments are not maintained for a long time.
-For instance, \todo{ref to back in time}.
+For instance, \todo{back in time debugger} \cite{Lien08b}.
 
 \paragraph{\VM Generation Framworks}
 \todo{properly integrate: make link from unmaintable fork to use a well-defined interface at that level}
@@ -1051,7 +1053,7 @@ Finally, we also show how our mature \FFI implementation outperforms an existing
 
 \todo{\B related (more suitable in the following situations):}
 
-\todo{\B outlook: future and following chapters}
+\todo{\B outlook: future and following chapterse}
 As a final conclusion, \B shows that promoting clear interfaces for controlling low-level code completely from language-side produces efficient solutions for system programming requirements without resorting to pure low-level solutions.
 We showed that fostering the abstraction provided by high-level languages and resorting to the system programming capabilities of low-level languages only when completely needed is not only possible but profitable.
 Furthermore we manage to considerably reduce complexity and code duplication which results in better maintainability.
