@@ -1048,27 +1048,44 @@ A more detailed motivation and implementation details of this compiler are given
 \section{Conclusion and Summary}
 \seclabel{benzo-conclusion}
 % ===========================================================================
-\todo{Extend to full summary}
 
-\todo{\B summary:}
 In this chapter we presented \B, an integral approach for reflective high-level low-level programming.
-Using \B we efficiently implemented at language-side three distinct language feature extensions that typically reside at \VM-level.
+\B consists of three core parts: \AsmJIT a language-side assembler, a set of primitives to activate native code and language-side library to handle dynamic code installation and activation.
 \B promotes a smooth and powerful interaction with the low-level world by dynamically generating native code from language-side.
-This enables to exploit the underlying platform capabilities only when strongly needed without leaving the development platform and through a high-level programming interface. 
+This enables to exploit the underlying platform capabilities when strongly needed without leaving the host development platform.
+Most of the \B infrastructure is implemented at language-side and thus susceptible to modification. 
 As a result, \B advocates the use of development tools and abstraction level of the high-level language for as much as possible or desired.
 
-\todo{\B application:}
+\paragraph{\B Applications}
+Based on \B we outlined in this chapter three example applications: an \FFI in \secref{benzo-ffi}, dynamic primitives in \secref{benzo-waterfall} and a language-side \JIT compiler in \secref{benzo-nabujito}.
+Typically all these applications require either a modified \VM or a dedicated plugin while our implementations are based on a central framework for low-level interaction.
+In this chapter we only outlined these application to stress the fact that they use \B and only the following chapters will shed light on the implementation details of these three applications.
+
+\paragraph{\B Performance}
+Using the three \B-based applications we evaluate the performance of \B compare to a typical \VM-level implementation.
+In summary we note that \B's code generation at language-side is slow compared to a single invocation the final native code.
+However, this is only a one-time overhead since \B caches native code transparently at language-side.
+Additionally we generate specific native code for each different application we easily outperform a static solution.
+This becomes evident with the \FFI implementation that is based on \B.
+Our mature \FFI implementation outperforms an existing C-\FFI implementation by a factor of 1.5 even though we control every aspect from language-side.
+
 By combining high-level reflection capabilities with efficient low-level code we manage to do dynamic primitive instrumentation and reuse the code for primitive operations which is duplicated on the standard \JIT approach.
-We also show that since \B caches native code transparently at language-side our \JIT compiler poses only a one-time overhead when generating native code. 
-Finally, we also show how our mature \FFI implementation outperforms an existing C-\FFI implementation by a factor of 1.5 even though we control every aspect from language-side.
+We also show that since our \JIT compiler poses only a one-time overhead when generating native code. 
+Finally, we also show how 
 
-\todo{\B related (more suitable in the following situations):}
+\paragraph{\B's Limitiations}
+Even though \B allows us to implement the three example applications at language-side, the complete development interaction requires improvement.
+Currently there is not protection against faulty assembler code nor support for a low-level debugger.
+To clearly support the theory of boundary-less low-level interaction a basic debugging infrastructure is required as outlined in \secref{benzo-problems}.
 
-\todo{\B outlook: future and following chapterse}
-As a final conclusion, \B shows that promoting clear interfaces for controlling low-level code completely from language-side produces efficient solutions for system programming requirements without resorting to pure low-level solutions.
-We showed that fostering the abstraction provided by high-level languages and resorting to the system programming capabilities of low-level languages only when completely needed is not only possible but profitable.
-Furthermore we manage to considerably reduce complexity and code duplication which results in better maintainability.
-
+\paragraph{\B Outlook}
+\B shows that promoting clear interfaces for controlling low-level code completely from language-side produces efficient solutions for system programming without resorting to pure low-level solutions.
+Our set of \B-based applications shows that it our approach is feasible and efficient.
+At the first sight \B is a simple application to invoke native code but we think that it opens doors for a new kind of language runtime.
+In this envisioned system there is no longer a clear barrier between \VM and language-side.
+This might seem far fetched but becomes more apparent when having a look at the \JIT of \PH which reimplements a performance critical set of primitives in its own native code.
+Essentially this is code duplication since the primitives already exist as normal C code in the \VM sources.
+With \B and the described dynamic primitives we should reuse the same code base for creating the \JIT representation of the primitive.
 
 
 % =============================================================================
