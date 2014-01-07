@@ -940,6 +940,17 @@ Of course there are other possibilities to avoid the described situation: deferr
 However, they would leave the general problem of using \NB during startup which will happen more often if more \VM plugins are replaced with \FFI callouts.
 And even more general, how do we enable \NB on a system that does not allow dynamic code generation?
 The only solution to this problem is to generate the \FFI callouts upfront and make these binaries available to the final product.
+In this case \NB would need to modes: an interactive development mode and a static deployment mode.
+The development mode is how we describe \NB so far, programmers can interactively create callouts.
+In the static or deployment mode all the dynamic callouts written using \NB are replaced by \PH plugin primitives.
+Only that the plugins are generated from the original \NB callouts rather than compiled from standard C sources.
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=1.1]{nb-deployment-mode}
+\caption[\NB Deployment Mode]{Comparison of the callout actiation for a) the development mode and b) the deployment mode}
+\end{figure}
+
 At the current state of the \FFI library and the underlying assembler from \B this is only feasible for the x86 architecture while for instance \ARM support missing.
 Next to the additional assembler backends we also have to implement the platform specific binary formats such as \ELF under \Linux or \MachO under \OSX.
 This would work much similar to the implementation used in the research \ST implementation \P \cite{Verw12a}.
