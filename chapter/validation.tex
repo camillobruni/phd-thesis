@@ -415,7 +415,8 @@ Also we have seen that there is a significant overlap with the \NB \FFI.
 For example, many plugins wrap around existing external libraries and thus are perfect candidates for \NB.
 Even though \WF would add a lot of flexibility for such plugins, we believe that \NB is more intention revealing and less confusing that dealing with the semantic differences of \Slang code over \PH code.
 Nevertheless, this still leaves the big field of instrumentation open for \WF.
-
+Additionally, for documentation purposes it makes sense to load the \Slang definition of all the essential primitives into the \PH image.
+In this case \WF would be a perfect way to bring these primitives to live for exploration purposes.
 
 \todo{better JIT interaction (leading to the following \NBJ section)}
 
