@@ -241,22 +241,22 @@ Once the installation is complete, the resulting \B-enabled method will contain 
 
 % -----------------------------------------------------------------------------
 \paragraph{Dynamically Replacing Plugins}
-In \PH there is no real distinction between primitives and plugins as we illustrate with the following code snippets.
-
-\begin{stcode}{3}
+In \PH there is no real distinction between primitives and plugins as we illustrate with the following code snippets:
+%
+\begin{stcode}[caption={\ttt{Object>>\#basicNew} Primitive}]{3}
 basicNew
   <primitive: 70>
   OutOfMemory signal.
 \end{stcode}
-
-\begin{stcode}{4}
+%
+\begin{stcode}[caption={\ttt{FilePlugin>>\#open:writeable:} Plugin Primitive}]{5}
 open: fileName writable: writableFlag
   "Open a file of the given name, and return
    the file ID obtained."
   <primitive: 'primitiveFileOpen' module: 'FilePlugin'>
   ^ nil
 \end{stcode}
-
+%
 
 % -----------------------------------------------------------------------------
 \subsection{Validation}
