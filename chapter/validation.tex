@@ -285,8 +285,13 @@ A more detailed analysis of \WF is also available separately \cite{Char13a}.
 % -----------------------------------------------------------------------------
 \subsubsection*{Validation of Dynamic Primitives}
 
-In this first part of the \WF validation we compare the performance of primitives in \PH.
-Once for the simple integer operation "greater than" (\ttt{$>$}) and once for the essential primitive \ttt{basicNew} which we already showed in \lstref{validation-basicnew}.
+In this first part of the \WF validation we compare the performance of \WF generated primitives in \PH.
+In the first part we simply measure the speed of a dynamically replaced primitive, while in the second we add instrumentation overhead.
+For the simple replacement we choose the simple integer operation "greater than" (\ttt{$>$}) and for instrumentation the more complex \ttt{basicNew} primitive.
+
+\paragraph{Simple Dynamic Primitives}
+In this first validation we compare the speed of the \WF generated code on a simple "greater than" primitive.
+The primitive is rather simple as it only works on small integers arguments and delegates the functionality for other types to its superclass.
 The code for the \ttt{Smallinteger} operation looks as follows.
 %
 \begin{stcode}{3}
