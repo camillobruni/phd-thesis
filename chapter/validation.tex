@@ -282,12 +282,36 @@ Evaluating a whole plugin puts more stress on the quality of the generated code 
 
 In this first part of the \WF validation we compare the performance of primitives in \PH.
 Once for the simple integer operation "greater than" (\ttt{$>$}) and once for the essential primitive \ttt{basicNew} which we already showed in \lstref{validation-basicnew}.
-For comparing performance of the "greater than" primitive we use three different approaches:
+The code for the \ttt{Smallinteger} operation looks as follows.
+%
+\begin{stcode}{3}
+> aNumber
+	<primitive: 4>
+	^super > aNumber
+\end{stcode}
+%
+The fallback code at the end of the method triggers a slower "greater than" implementation on the super class \ttt{Integer} which mostly deals with the multitude of possible arguments to \ttt{>}.
+
+\begin{stcode}{1}
+> aNumber
+	aNumber isInteger 
+		ifFalse:[
+			^ aNumber 
+				adaptToInteger: self andCompare: #> ]
+	self negative == aNumber negative
+		ifFalse: [ ^ aNumber negative ].
+	self negative
+		ifTrue: [ ^(self digitCompare: aNumber) < 0 ]
+		ifFalse: [ ^(self digitCompare: aNumber) > 0 ].
+\end{stcode}
+
+
+\noindent For comparing performance of the "greater than" primitive we use three different approaches:
 %
 \begin{enumerate}[noitemsep,nolistsep]
 	\item The first approach is the implementation with \WF.
-	\item The second is to run the language-side implementation that is triggered whenever the standard primitive failed.
-	\item Finally the fast standard primitive provided by the \VM.
+	\item For the second approach we run the fallback language-side implementation that is triggered whenever the standard primitive failed.
+	\item Finally we the fast standard primitive provided by the \VM.
 \end{enumerate}
 %
 We run the three approaches by measuring the cumulative time over one million primitive activations averaged over $100$ runs.
@@ -305,8 +329,8 @@ We present the results of this experiment in ~\tabref{val-waterfall-performance}
     \caption[\WF Speed Comparison: Large Integer]{Comparing running time of different implementations of integer arithmetic primitive.}
     \tablabel{val-waterfall-performance}
 \end{table}
-%
-As expected \WF's solution outperforms pure reflective one by factor $9$ to $10$.
+
+\noindent As expected \WF's solution outperforms pure reflective one by factor $9$ to $10$.
 \WF clearly outperforms a purely reflective solution since all the meta programming overhead for the intercession mechanism is avoided. This results thus makes a whole new set of runtime extensions feasible that were previously limited by their strong performance penalty.
 Furthermore the performance penalty over a completely optimized \VM solution that has extreme optimization techniques, such as inlining and register allocation, is less than a factor of $4$.
 Applying standard optimization techniques, not yet implemented in \WF, will almost sure improve these numbers even more.
