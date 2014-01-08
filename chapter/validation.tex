@@ -241,7 +241,9 @@ Once the installation is complete, the resulting \B-enabled method will contain 
 
 % -----------------------------------------------------------------------------
 \paragraph{Dynamically Replacing Plugins}
-In \PH there is no real distinction between primitives and plugins as we illustrate with the following code snippets:
+In \PH there is no real distinction between primitives and plugins as we illustrate with the following code snippets.
+The first one depicts an essential primitive to allocate new objects.
+The second code example shows the a plugin primitive to open a new file stream.
 %
 \begin{stcode}[caption={\ttt{Object>>\#basicNew} Primitive}]{3}
 basicNew
@@ -250,19 +252,27 @@ basicNew
 \end{stcode}
 %
 \begin{stcode}[caption={\ttt{FilePlugin>>\#open:writeable:} Plugin Primitive}]{5}
-open: fileName writable: writableFlag
-  "Open a file of the given name, and return
+open: pathString writable: writableFlag
+  "Open a file at the given pathString, and return
    the file ID obtained."
   <primitive: 'primitiveFileOpen' module: 'FilePlugin'>
   ^ nil
 \end{stcode}
 %
+The main difference between primitives and plugins is only how they are distributed.
+Primitives are inlined in the \VM and can not be loaded at runtime, while plugins can be loaded dynamically and are bundled separately.
+That also means that there is no difference in handling plugins for \WF, the compilation and installation process is exactly the same.
 
 % -----------------------------------------------------------------------------
 \subsection{Validation}
 \seclabel{val-waterfall-performance}
 % -----------------------------------------------------------------------------
-\todo{small validation introduction}
+After explaining the implementation details of \WF we would like to present a thorough evaluation of the \WF infrastructure.
+We split up the validation in two parts following the outlined applications of \WF in the introduction.
+The first part describes the performance of \WF when used for instrumenting primitives.
+This is the major field of application for \WF as it stresses its dynamic nature.
+In contrast to that we evaluate the performance of a \WF compiled plugin in the second part of the validation.
+Evaluating a whole plugin puts more stress on the quality of the generated code than the fact that we can dynamically modify primitives.
 
 
 % -----------------------------------------------------------------------------
