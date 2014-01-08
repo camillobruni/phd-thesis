@@ -387,27 +387,36 @@ This shows that there is certainly room for performance improvements for \WF.
 \subsubsection*{Validation of Dynamic Plugins}
 \seclabel{val-waterfall-plugins}
 
+In this second part of the \WF performance evaluation we focus on whole plugins.
+Even so we already mentioned that from a language-side point of view there is no difference in plugins and primitives there typically is a significant difference in code size.
+While primitives tend to be small and do simple tasks very efficiently (like arithmetic operations) plugins follow a different approach where larger more complex tasks are solved externally.
+ 
+
 \todo{Write about the File Plugin Validation}\\
 \todo{Possdible Validate other plugin}
 
 
 % -----------------------------------------------------------------------------
-\subsection{Problems}
+\subsection{Problems and Outlook}
 % -----------------------------------------------------------------------------
 
-Currently \WF reimplements all \Slang arithmetic essential operations statically as native code templates.
-The existing \JIT of the \PH \VM does exactly the same for performance reasons.
-This is code duplication and should be avoided.
-With the language-side \JIT compiler described on next section we can reuse the same code. Another plan for \WF is to use it for disconnecting most plugins defined at \Slang side from the \VM compilation process and dynamically compile them on a lazy approach.
-Finally, adding stages to the compiler with different levels of intermediate representations and applying optimizations to each would bring its performance closer to completely low-level optimized primitives.
+\WF is still a research prototype and thus there are several issues that problems that require attention with the most obvious one being performance.
+We have shown that \WF is fast enough to compete against dynamic primitive instrumentation written at language-side, but when compared to native solutions we are still up to two magnitudes slower.
+For simplicity \WF currently does not apply any optimizations which still leaves room for improvements.
+For instance we do not apply register allocation yet.
+However, in our eyes it does not make sense to implement a specific register allocator for \WF itself.
+Instead, we envision to use a future platform independent intermediate representation of \B that we presented in \secref{benzo-problems-platform-independence}.
+This way most optimizations only require one implementation from which all \B applications benefit.
+Using this new \IR would have very little impact on the current \WF compiler infrastructure as we would only have to replace the \AST to \ASM compilation step.
+Instead of generating the \ASM we use the \B \IR and let \B generate the native code for the primitives.
+
+\WF is currently only a research prototype that is not used in production.
+Also we have seen that there is a significant overlap with the \NB \FFI.
+For example, many plugins wrap around existing external libraries and thus are perfect candidates for \NB.
+Even though \WF would add a lot of flexibility for such plugins, we believe that \NB is more intention revealing and less confusing that dealing with the semantic differences of \Slang code over \PH code.
+Nevertheless, this still leaves the big field of instrumentation open for \WF.
 
 
-% -----------------------------------------------------------------------------
-\subsection{Outlook}
-% -----------------------------------------------------------------------------
-\todo{link to the future native compilation infrastrcuture common for FFI  Benzo}\\
-\todo{more performance improvements} \\
-\todo{real worl applocation?} \\
 \todo{better JIT interaction (leading to the following \NBJ section)}
 
 % ===========================================================================
