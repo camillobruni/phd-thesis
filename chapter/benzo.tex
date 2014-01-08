@@ -384,7 +384,7 @@ Whereas the typical \FFI implementation is based on an separate plugin, dynamic 
 \begin{figure}[h]
 	\centering
 	\includegraphics[scale=1.1]{nativeboost-overview}
-	\caption[\NB Overview]{\NB generates generates native code at language-side with \B to perform an \FFI callout to an external function.}
+	\caption[\NB Overview]{\NB generates native code at language-side with \B to perform an \FFI callout to an external function.}
 	\figlabel{benzo-ffi-overview}
 \end{figure}
 
@@ -576,7 +576,7 @@ However, \NB custom tailored \ASM code is still faster than the hard-coded C cou
 
 This simple \FFI evaluation already highlights the core benefit of \B to generate very customized native code when needed.
 Yet we have to emphasize that \NB is based on the \B infrastructure whereas the other solutions require both a \VM plugin whose sole purpose is to enable the \FFI functionality.
-Furthermore \NB benefits from the the \JIT interaction described in \secref{benzo-jit-interaction}.
+Furthermore \NB benefits from the \JIT interaction described in \secref{benzo-jit-interaction}.
 This optimization is especially an important optimization factor when calling out small helper routines where the context switch from jitted mode is no longer negligible.
 
 % ---------------------------------------------------------------------------
