@@ -163,7 +163,7 @@ In \secref{val-waterfall-performance} we show how \WF, the \B based approach for
 
 
 % -----------------------------------------------------------------------------
-\subsection{Implementation}
+\subsection{\WF Implementation}
 \seclabel{val-waterfall-implementation}
 % -----------------------------------------------------------------------------
 \WF uses \B's mechanism for replacing primitive methods with customized versions that are nativized dynamically as described in \chapref{benzo}.
@@ -177,7 +177,7 @@ From a high-level point of view \WF provides two services which work transparent
 
 \noindent The first item allows to change the code of primitives at language-side and generate the corresponding native code when needed. 
 It also provides the possibility to write methods or functionality with the same \ST syntax but with a static semantic. 
-It consists essentially of a transformation toolchain that transforms the \Slang sources to naitve code using a \B-based compilation toolchain.
+It consists essentially of a transformation toolchain that transforms the \Slang sources to native code using a \B-based compilation toolchain.
 
 The second item enables the execution of the dynamically generated native code.
 This includes for instance the finding of addresses of \VM internal symbols and all the effort to link the two worlds, \ST and native.
@@ -245,7 +245,9 @@ In \PH there is no real distinction between primitives and plugins as we illustr
 The first one depicts an essential primitive to allocate new objects.
 The second code example shows the a plugin primitive to open a new file stream.
 %
-\begin{stcode}[caption={\ttt{Object>>\#basicNew} Primitive}]{3}
+\begin{stcode}[
+	caption={\ttt{Object>>\#basicNew} Primitive},
+	label={lst:validation-basicnew}]{3}
 basicNew
   <primitive: 70>
   OutOfMemory signal.
@@ -264,7 +266,7 @@ Primitives are inlined in the \VM and can not be loaded at runtime, while plugin
 That also means that there is no difference in handling plugins for \WF, the compilation and installation process is exactly the same.
 
 % -----------------------------------------------------------------------------
-\subsection{Validation}
+\subsection{\WF Validation}
 \seclabel{val-waterfall-performance}
 % -----------------------------------------------------------------------------
 After explaining the implementation details of \WF we would like to present a thorough evaluation of the \WF infrastructure.
@@ -278,11 +280,17 @@ Evaluating a whole plugin puts more stress on the quality of the generated code 
 % -----------------------------------------------------------------------------
 \subsubsection*{Validation of Dynamic Primitives}
 
-For comparing performance we implement a very simple integer operation primitive (\ttt{$>$}) using three different approaches.
-The first approach is the implementation with \WF.
-The second is to run the language-side implementation that is triggered whenever the standard primitive failed.
-Finally the fast standard primitive provided by the \VM.
-We run the three approaches by measuring the cumulative time over one million primitive activations averaged over 100 runs.
+In this first part of the \WF validation we compare the performance of primitives in \PH.
+Once for the simple integer operation "greater than" (\ttt{$>$}) and once for the essential primitive \ttt{basicNew} which we already showed in \lstref{validation-basicnew}.
+For comparing performance of the "greater than" primitive we use three different approaches:
+%
+\begin{enumerate}[noitemsep,nolistsep]
+	\item The first approach is the implementation with \WF.
+	\item The second is to run the language-side implementation that is triggered whenever the standard primitive failed.
+	\item Finally the fast standard primitive provided by the \VM.
+\end{enumerate}
+%
+We run the three approaches by measuring the cumulative time over one million primitive activations averaged over $100$ runs.
 The absolute numbers are less important than the relative factor between them.
 We present the results of this experiment in ~\tabref{val-waterfall-performance}.
 %
@@ -413,7 +421,7 @@ In \secref{val-waterfall} we describe how \WF suffers a similar constraint.
 \NBJ reuses the same optimized primitives so we rely on a single optimized definition which is shared among all native code libraries.
 
 %----------------------------------------------------------------------------
-\subsection{Implementation}
+\subsection{\NBJ Implementation}
 \seclabel{val-nabujito-implementation}
 %----------------------------------------------------------------------------
 \todo{EXTEND: Show more internals}
@@ -492,7 +500,7 @@ At the same time all the reflective capabilities to modified the stack from with
 \todo{give example of the assember of a simple method with the patch call}
 
 % -----------------------------------------------------------------------------
-\subsection{Validation}
+\subsection{\NBJ Validation}
 \seclabel{val-nabujito-performance}
 % -----------------------------------------------------------------------------
 
