@@ -204,7 +204,7 @@ Additionally \WF does not use intermediate representations (\IR) such as static 
 
 % -----------------------------------------------------------------------------
 \paragraph{Compilation Steps}
-As shown in \figref{waterfall-architecture} the \WF compiler transform the \AST of the \Slang input to \PH primitives.
+As shown in \figref{waterfall-architecture} the \WF compiler transforms the \AST of the \Slang input to \PH primitives.
 
 \begin{figure}[h]
 	\centering
@@ -215,25 +215,47 @@ As shown in \figref{waterfall-architecture} the \WF compiler transform the \AST 
 
 \noindent We divide the \WF compiler into four distinct steps:
 \begin{description}
-\item[\Slang to \AST:] The first step is to access the \AST of the \Slang sources which happens automatically by loading the \Slang code in the \PH image.	
+\item[\Slang to \AST:] The first step is to access the \AST of the \Slang source method which happens automatically by loading the \Slang code in the \PH image.
+At this stage \WF also recursively collects the set of reachable \Slang methods.
+
 
 \item[\AST Purification:] In a second step certain expressions of the original \Slang \AST are transformed into custom \WF expressions that can be easier transformed later on.
 For instance \WF converts C macros that are supported in \Slang which of course only make sense when using a standard C compiler.
 
 \item[\AST to \ASM:] The real native compilation happens in the third step where an \AST-visitor creates assembler instructions using \B's \AsmJIT.
+At this point external symbols are statically resolved and directly inlined in the final \ASM code.
 
 \item[\ASM to Primitive] Although not strictly part of the compilation, in the fourth step the final native instructions are installed as a primitive methods using \B (see \secref{benzo-benzo} for more details).
 \end{description}
 
-\noindent With these compilation steps we are capable of compiling 
 
 % -----------------------------------------------------------------------------
 \paragraph{Dynamically Replacing Primitives}
-\todo{Explaing step by step the compilation and installation proceedure for dynamic primitives}
+After explaining the general architecture and the different compilation steps of \WF we shed some light on how the primitives are actually installed.
+In reality we rely 100\% on \B for this feature.
+Once the native code is generated we transform the target method to a special \B-enabled method that contains the native code.
+This procedure is explained in detail in \secref{benzo-benzo} where we show the implementation details of \B.
+
+From a user point-of-view we only have to make sure that the corresponding \Slang sources are available and then hand over that source method to \WF to compile and install it.
+Once the installation is complete, the resulting \B-enabled method will contain behave like a \Slang primitive compiled with the original approach using \GCC.
 
 % -----------------------------------------------------------------------------
 \paragraph{Dynamically Replacing Plugins}
-\todo{explain step by step the proceedure to dynamically install new plugins}
+In \PH there is no real distinction between primitives and plugins as we illustrate with the following code snippets.
+
+\begin{stcode}{3}
+basicNew
+  <primitive: 70>
+  OutOfMemory signal.
+\end{stcode}
+
+\begin{stcode}{4}
+open: fileName writable: writableFlag
+  "Open a file of the given name, and return
+   the file ID obtained."
+  <primitive: 'primitiveFileOpen' module: 'FilePlugin'>
+  ^ nil
+\end{stcode}
 
 
 % -----------------------------------------------------------------------------
@@ -299,13 +321,21 @@ A more detailed analysis of \WF is available separately \cite{Char13a}.
 % -----------------------------------------------------------------------------
 \subsection{Problems}
 % -----------------------------------------------------------------------------
-\paragraph{\WF Future}
+
 Currently \WF reimplements all \Slang arithmetic essential operations statically as native code templates.
 The existing \JIT of the \PH \VM does exactly the same for performance reasons.
 This is code duplication and should be avoided.
-With the language-side \JIT compiler described on next section we can reuse the same code. Another plan for \WF is to use it for disconnecting most plugins defined at \Slang side from the \VM compilation process and dynamically nativize them on a lazy approach.
+With the language-side \JIT compiler described on next section we can reuse the same code. Another plan for \WF is to use it for disconnecting most plugins defined at \Slang side from the \VM compilation process and dynamically compile them on a lazy approach.
 Finally, adding stages to the compiler with different levels of intermediate representations and applying optimizations to each would bring its performance closer to completely low-level optimized primitives.
 
+
+% -----------------------------------------------------------------------------
+\subsection{Outlook}
+% -----------------------------------------------------------------------------
+\todo{link to the future native compilation infrastrcuture common for FFI  Benzo}\\
+\todo{more performance improvements} \\
+\todo{real worl applocation?} \\
+\todo{better JIT interaction (leading to the following \NBJ section)}
 
 % ===========================================================================
 \newpage
