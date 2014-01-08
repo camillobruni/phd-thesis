@@ -186,7 +186,11 @@ In particular \NB, the \B-based \FFI presented in \chapref{ffi}, is used for int
 
 % -----------------------------------------------------------------------------
 \paragraph{Architecture Overview}
-The \WF infrastructure is mainly divided in the following two parts: the installed \Slang sources and a \B-based compilation toolchain.
+The \WF infrastructure is mainly divided in the following two parts: 
+\begin{itemize}[nolistsep,noitemsep]
+	\item the installed \Slang sources,
+	\item a \B-based compilation toolchain.
+\end{itemize}
 The \WF compiler transforms the \Slang sources to native code through various transformation steps as show in \figref{waterfall-architecture}.
 In order to work properly \WF needs the complete \Slang sources for compilation unit (primitive or plugin) to be loaded upfront.
 Once loaded in the \PH image the \AST of the \Slang sources are available which form the input for the \WF compiler.
@@ -275,6 +279,7 @@ The first part describes the performance of \WF when used for instrumenting prim
 This is the major field of application for \WF as it stresses its dynamic nature.
 In contrast to that we evaluate the performance of a \WF compiled plugin in the second part of the validation.
 Evaluating a whole plugin puts more stress on the quality of the generated code than the fact that we can dynamically modify primitives.
+A more detailed analysis of \WF is also available separately \cite{Char13a}.
 
 
 % -----------------------------------------------------------------------------
@@ -307,50 +312,71 @@ The fallback code at the end of the method triggers a slower "greater than" impl
 
 
 \noindent For comparing performance of the "greater than" primitive we use three different approaches:
-%
 \begin{enumerate}[noitemsep,nolistsep]
-	\item The first approach is the implementation with \WF.
-	\item For the second approach we run the fallback language-side implementation that is triggered whenever the standard primitive failed.
-	\item Finally we the fast standard primitive provided by the \VM.
+	\item the standard primitive provided by the \VM,
+	\item the fallback language-side implementation that is triggered whenever the standard primitive failed,
+	\item the reimplementation with \WF (not instrumented).
 \end{enumerate}
 %
 We run the three approaches by measuring the cumulative time over one million primitive activations averaged over $100$ runs.
 The absolute numbers are less important than the relative factor between them.
 We present the results of this experiment in ~\tabref{val-waterfall-performance}.
 %
-\begin{table}[!ht]
+\begin{table}[H]
     \centering
     \begin{tabular}{rSS}
 					& {Running Time [ms]} & {Relative Time} \\\midrule
-		\VM			&   6.4(14)           & 1.0\\
-		\WF	        &  22.8(17)           & \approx3.6\\
-        Reflective	& 195.0(16)           & \approx30.0
+		Unmodified	&   6.4(14)           & 1.0\\
+		Fallback	& 195.0(16)           & \approx30.0 \\
+		\WF	        &  22.8(17)           & \approx3.6
     \end{tabular}
     \caption[\WF Speed Comparison: Large Integer]{Comparing running time of different implementations of integer arithmetic primitive.}
     \tablabel{val-waterfall-performance}
 \end{table}
 
 \noindent As expected \WF's solution outperforms pure reflective one by factor $9$ to $10$.
-\WF clearly outperforms a purely reflective solution since all the meta programming overhead for the intercession mechanism is avoided. This results thus makes a whole new set of runtime extensions feasible that were previously limited by their strong performance penalty.
+\WF clearly outperforms a purely reflective solution since all the meta programming overhead for the intercession mechanism is avoided.
+This results thus makes a whole new set of runtime extensions feasible that were previously limited by their strong performance penalty.
 Furthermore the performance penalty over a completely optimized \VM solution that has extreme optimization techniques, such as inlining and register allocation, is less than a factor of $4$.
-Applying standard optimization techniques, not yet implemented in \WF, will almost sure improve these numbers even more.
-A more detailed analysis of \WF is available separately \cite{Char13a}.
+
+\paragraph{Essential Primitive Instrumentation}
+As a second validation target for primitives we chose to instrument \ttt{basicNew} which is a critical primitive for object allocation.
+Like the previous "greater than" primitive this belongs to the set of essential primitives that are used during startup of the image.
+For instrumentation \ttt{basicNew} is again a rather tricky target as wrong code easily leads to infinite recursion.
+However, this can be avoided with a rather costly recursion guard.
+We chose a rather simple instrumentation method by simply printing the address of the allocated object to the standard output stream.
+We validate the four flavors of the \ttt{basicNew} primitive:
+\begin{enumerate}[noitemsep,nolistsep]
+	\item the unmodified primitive,
+	\item a reflectively instrumented primitive with a recursion guard written in \PH,
+	\item a \WF generated and instrumented version,
+	\item a \WF generated version without instrumentation.
+\end{enumerate}
+
+\noindent We measure again with the same setup as for the previous validation of the "greater than" primitive.
+The outcome of this validation is shown in \tabref{val-waterfall-basicnew}.
 %
 \begin{table*}[h]
     \centering
     \begin{tabular}{rSS}
 					                      & {Running Time [ms]} & {Relative Time} \\\midrule
         Unmodified                        &  0.28(16)           &          1 \\
-        Unsafe reflective instrumentation & 21.80(33)           & \approx 78 \\
         Secure reflective instrumentation & 27.72(40)           & \approx 99 \\
         \WF-based instrumentation         &  7.72(27)           & \approx 28 \\
-        \WF-based unmodified              &  7.08(23)           & \approx 25 \\
+        \WF-based non-instrumentation     &  7.08(23)           & \approx 25 \\
     \end{tabular}
     \caption[\WF Speed Comparison: \ttt{basicNew}]{Slowdown comparison for instrumentation of the  essential primitive \ttt{basicNew}.}
     \tablabel{val-waterfall-basicnew}
 \end{table*}
-
-\todo{add explanation of the results of \tabref{val-waterfall-basicnew}}
+%
+Again the results present a similar picture as for the "greater than" validation.
+However, since we added instrumentation this time, the reflective \PH is significantly slower than the unmodified version of the primitive.
+This proves our theory that in certain performance critical cases reflective solutions are not sufficient.
+While we were able to circumvent the recursion problem rather elegantly, the recursion guard is simply too slow to be used by default.
+Compared to that, the \WF-based instrumentation is a factor $3$ faster than the reflective solution.
+We see that the instrumentation overhead compared to the non-instrument \WF is in the range of only $0.7$ms whereas in the \PH version the overhead is several magnitudes higher.
+Unlike for the simpler "greater than" primitive \WF is slower: factor $25$ instead of only a factor $3.6$ previously.
+This shows that there is certainly room for performance improvements for \WF.
 
 % -----------------------------------------------------------------------------
 \subsubsection*{Validation of Dynamic Plugins}
