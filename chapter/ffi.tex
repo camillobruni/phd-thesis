@@ -845,12 +845,12 @@ FFI
   unix: [ :builder |
     builder 
       nbCall: #(int setenv(
-                      String name, String value, 1 ))
+                      String name, String value, 1))
       module: NativeBoost CLibrary ];
   windows: [ :builder |
     builder
       nbCall: #(int SetEnvironmentVariableA(
-                      String name, String value ))
+                      String name, String value))
       module: #Kernel32
       options: #(optStringOrNull) ].
 \end{stcode}
