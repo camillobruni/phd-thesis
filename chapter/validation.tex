@@ -379,7 +379,7 @@ However, since we added instrumentation this time, the reflective \PH is signifi
 This proves our theory that in certain performance critical cases reflective solutions are not sufficient.
 While we were able to circumvent the recursion problem rather elegantly, the recursion guard is simply too slow to be used by default.
 Compared to that, the \WF-based instrumentation is a factor $3$ faster than the reflective solution.
-We see that the instrumentation overhead compared to the non-instrument \WF is in the range of only $0.7$ms whereas in the \PH version the overhead is several magnitudes higher.
+We see that the instrumentation overhead compared to the non-instrumented \WF version is in the range of only $0.7$ms whereas in the \PH version the overhead is several magnitudes higher.
 Unlike for the simpler "greater than" primitive \WF is slower: factor $25$ instead of only a factor $3.6$ previously.
 This shows that there is certainly room for performance improvements for \WF.
 
@@ -391,9 +391,10 @@ In this second part of the \WF performance evaluation we focus on whole plugins.
 Even so we already mentioned that from a language-side point of view there is no difference in plugins and primitives there typically is a significant difference in code size.
 While primitives tend to be small and do simple tasks very efficiently (like arithmetic operations) plugins follow a different approach where larger more complex tasks are solved externally.
  
-
+\paragraph{\WF Compiled File Plugin}
+\paragraph{\WF Compiled ??? Plugin}
 \todo{Write about the File Plugin Validation}\\
-\todo{Possdible Validate other plugin}
+\todo{Possibly Validate other plugin}
 
 
 % -----------------------------------------------------------------------------
@@ -418,7 +419,7 @@ Nevertheless, this still leaves the big field of instrumentation open for \WF.
 Additionally, for documentation purposes it makes sense to load the \Slang definition of all the essential primitives into the \PH image.
 In this case \WF would be a perfect way to bring these primitives to live for exploration purposes.
 
-\todo{better JIT interaction (leading to the following \NBJ section)}
+\todo{better \JIT interaction (leading to the following \NBJ section)}
 
 % ===========================================================================
 \newpage
@@ -430,13 +431,15 @@ In this case \WF would be a perfect way to bring these primitives to live for ex
 	\centering
 	\includegraphics[scale=1.1]{nabujito-overview}
 \end{figure}
+
+\noindent In this section we present \NBJ, a \B-based approach for a language-side \JIT compiler.
 \todo{Introduction}
 
 % ---------------------------------------------------------------------------
 \subsection{Background}
 \seclabel{val-nabujito-background}
 % ---------------------------------------------------------------------------
-In this section we present \NBJ, a \B-based approach for a language-side \JIT compiler.
+
 \NBJ goes even further than \WF using almost the same techniques.
 However, instead of focusing on primitives, \NBJ generates native executable code for standard \ST methods.
 Primitives tend to be more low-level, whereas \NBJ focuses on high-level \ST code. 
@@ -453,76 +456,7 @@ The \JIT compiler, by which we refer in this context to the transformation of by
 There exists more important stages as an additional register allocation pass to reduce the number of stack operations \cite{Mira99a,Mira11a}.
 The existing \JIT infrastructure is implemented in \Slang \cite[Ch.\ 5]{Blac09a} as the rest of the \VM.
 
-%----------------------------------------------------------------------------
-\paragraph{Limitations of \VM-level \JIT Compilers}
-In the context of \NBJ we separate a \JIT infrastructure into separate parts.
-The major part is to have a \VM that uses stack-mapping.
-In the case of a bytecode-based interpreter, we assume that the \VM provides routines to switch between a bytecode interpretation context and a low-level native execution context.
-With \NBJ we move the \JIT compiler,the part that generates native code at runtime, from the \VM to the image.%, the part that generates native code at runtime, typically from bytecodes.
- Since the \JIT compiler is quite decoupled from the rest of the \JIT infrastructure we believe that a hard-coded static and low-level implementation is not optimal for several reasons:
-
-\begin{itemize}
-	\item Optimizing \ST code requires strong interactions with the dynamic environment.
-	\item Accessing language-side properties from the \VM-side is hard.
-	\item Changing the JIT compiler requires changes at \VM-level.
-	\item The JIT reimplements primitives for optimization reasons resulting in code duplication.
-\end{itemize}
-
-\paragraph{Optimization Limitations for \PH}
-In \ST methods tend to be very small and it is considered good practice to delegate behavior to other objects.
-This implies that several common optimization techniques for static languages do not work well.
-Dynamic method activation does not provide enough context for a static compiler to optimize methods.
-Hence after inline caches and register allocation the next optimization technique is inlining.
-However, inlining in a dynamic context is difficult and requires hooks at \VM-level to invalidate native code when the language-side changes.
-Since in \PH, compiling a method to bytecode is handled completely with language-side code most of the infrastructure to get notified about method changes is already present.
-
-\paragraph{Primitives in the Existing JIT}
-The existing JIT reimplements the most used primitives at \VM-level.
-This guarantees that the \VM stays as long as possible in the \JIT context (see \secref{benzo-jit-interaction} on page~\pageref{sec:benzo-jit-interaction}).
-Additionally this enables new performance optimizations that for instance are hard to achieve with standard compliant C code.
-A typical example is the integer addition which has to deal with overflow checks and conversion of tagged integers.
-In \secref{val-waterfall} we describe how \WF suffers a similar constraint.
-\WF manually defines such primitives in terms of native assembler instructions through the language-side \B interface.
-\NBJ reuses the same optimized primitives so we rely on a single optimized definition which is shared among all native code libraries.
-
-%----------------------------------------------------------------------------
-\subsection{\NBJ Implementation}
-\seclabel{val-nabujito-implementation}
-%----------------------------------------------------------------------------
-\todo{EXTEND: Show more internals}
-\todo{Add overview picture}
-\NBJ is an experimental JIT implementation which replaces the bytecode to native code translation of the existing JIT infrastructure with a dynamic language-side implementation.
-\NBJ is implemented mainly with a visitor strategy over the existing intermediate bytecode representation. 
-Additionally we reimplemented vital native routines for the JIT which are not directly exported by the \VM using \B. 
-Nabujito relies on the following \VM-level infrastructure to manage and run native code for any \PH method:
-
-\begin{itemize}[noitemsep]
-	\item Fixed native code memory segments.
-	\item Routines for switching contexts.
-	\item Native stack management.
-\end{itemize}
-
-
-\paragraph{\NBJ Compiler Steps}
-\todo{Overview Figure of the input / transformation steps} \\
-\todo{Almost Reified Cog Routines} \\
-\todo{CogMethod patching problem leading to the following parargraph}
-
-
-\paragraph{Dynamic Code Generation}
-To simplify the implementation we decide to manually trigger JIT compilation.
-For primitives known by \WF we rely on that infrastructure to generate the native code.
-For standard methods \NBJ takes the bytecodes and transforms them to native code.
-It also applies optimizations such as creating low-level branches for \ST level branching operations like \ttt{ifTrue:}.
-Optimizations for additional methods are all implemented flexibly at language-side.
-Wherever possible, we reimplement the same behavior as the existing native \JIT compiler.
-Eventually the native code is ready and \B attaches it to the existing compiled method.
-When the language-side jitted code is activated \B ensures that we do not have to leave the \JIT execution mode, and thus we can call methods at the same speed as the existing \JIT.
-\todo{figure showing an extended method installation into \JIT space}
-
-
-\paragraph{The \Cog \JIT}
-To understand the implementation issues of \NBJ we have to dive into the details of \PH's \JIT.
+To understand the upcoming implementation issues of \NBJ we have to dive into the details of \PH's \JIT.
 \PH uses a flavor of the \Cog \VM which evolved in several steps from a simple bytecode interpreter.
 A successful and fast \JIT implies a \VM that uses the native stack.
 
@@ -558,6 +492,81 @@ At the same time all the reflective capabilities to modified the stack from with
 	\caption[\Cog Method]{\Cog Method: Compiled method representation at \JIT-level residing in the \JIT memory space.}
 	\figlabel{cog-method}
 \end{figure}
+
+
+%----------------------------------------------------------------------------
+\paragraph{Limitations of \VM-level \JIT Compilers}
+In the context of \NBJ we separate a \JIT infrastructure into separate parts.
+The major part is to have a \VM that uses stack-mapping.
+In the case of a bytecode-based interpreter, we assume that the \VM provides routines to switch between a bytecode interpretation context and a low-level native execution context.
+With \NBJ we move the \JIT compiler,the part that generates native code at runtime, from the \VM to the image.%, the part that generates native code at runtime, typically from bytecodes.
+ Since the \JIT compiler is quite decoupled from the rest of the \JIT infrastructure we believe that a hard-coded static and low-level implementation is not optimal for several reasons:
+
+\begin{itemize}
+	\item Optimizing \ST code requires strong interactions with the dynamic environment.
+	\item Accessing language-side properties from the \VM-side is hard.
+	\item Changing the \JIT compiler requires changes at \VM-level.
+	\item The \JIT reimplements primitives for optimization reasons resulting in code duplication.
+\end{itemize}
+
+\paragraph{Optimization Limitations for \PH}
+In \ST methods tend to be very small and it is considered good practice to delegate behavior to other objects.
+This implies that several common optimization techniques for static languages do not work well.
+Dynamic method activation does not provide enough context for a static compiler to optimize methods.
+Hence after inline caches and register allocation the next optimization technique is inlining.
+However, inlining in a dynamic context is difficult and requires hooks at \VM-level to invalidate native code when the language-side changes.
+Since in \PH, compiling a method to bytecode is handled completely with language-side code most of the infrastructure to get notified about method changes is already present.
+
+\paragraph{Primitives in the Existing \JIT}
+The existing \JIT reimplements the most used primitives at \VM-level.
+This guarantees that the \VM stays as long as possible in the \JIT context (see \secref{benzo-jit-interaction} on page~\pageref{sec:benzo-jit-interaction}).
+Additionally this enables new performance optimizations that for instance are hard to achieve with standard compliant C code.
+A typical example is the integer addition which has to deal with overflow checks and conversion of tagged integers.
+In \secref{val-waterfall} we describe how \WF suffers a similar constraint.
+\WF manually defines such primitives in terms of native assembler instructions through the language-side \B interface.
+\NBJ reuses the same optimized primitives so we rely on a single optimized definition which is shared among all native code libraries.
+
+%----------------------------------------------------------------------------
+\subsection{\NBJ Implementation}
+\seclabel{val-nabujito-implementation}
+%----------------------------------------------------------------------------
+\NBJ is an experimental \JIT implementation which replaces the bytecode to native code translation of the existing \JIT infrastructure with a dynamic language-side implementation.
+\NBJ is implemented mainly with a visitor strategy over the existing intermediate bytecode representation. 
+Additionally we reimplemented vital native routines for the \JIT which are not directly exported by the \VM using \B. 
+Nabujito relies on the following \VM-level infrastructure to manage and run native code for any \PH method:
+
+\begin{itemize}[noitemsep,nolistsep]
+	\item native stack management,
+	\item routines for switching contexts,
+	\item \JIT-level memory management for code segments.
+\end{itemize}
+
+\noindent The native stack mapping is an implicit requirement for an efficient \JIT.
+Since this feature requires deep changes at \VM-level we can not alter or reimplement this at language-side.
+However, the routines for switching between \JIT and non-\JIT execution context can be mostly reimplemented at language-side.
+We only chose to implement a small subset of them with \B and reuse the existing routines for simplicity.
+The last item we reuse, \JIT-level memory management, poses certain problems as we have little to no control over this from language-side.
+There is no well-defined interface to interact with the \JIT from language-side in \PH.
+However, to properly interact with the \JIT we have to provide certain low-level meta-information.
+Namely we have to tell the \JIT where references to language-side objects are located in the native code.
+
+\paragraph{\NBJ Compiler Steps}
+\todo{Overview Figure of the input / transformation steps} \\
+\todo{Almost Reified Cog Routines} \\
+\todo{CogMethod patching problem leading to the following parargraph}
+
+
+\paragraph{Dynamic Code Generation}
+To simplify the implementation we decide to manually trigger \JIT compilation.
+For primitives known by \WF we rely on that infrastructure to generate the native code.
+For standard methods \NBJ takes the bytecodes and transforms them to native code.
+It also applies optimizations such as creating low-level branches for \ST level branching operations like \ttt{ifTrue:}.
+Optimizations for additional methods are all implemented flexibly at language-side.
+Wherever possible, we reimplement the same behavior as the existing native \JIT compiler.
+Eventually the native code is ready and \B attaches it to the existing compiled method.
+When the language-side jitted code is activated \B ensures that we do not have to leave the \JIT execution mode, and thus we can call methods at the same speed as the existing \JIT.
+\todo{figure showing an extended method installation into \JIT space}
+
 
 \paragraph{Overcoming the Missing \VM Interface for the \JIT}
 \todo{why do we need patch methods?}\\
