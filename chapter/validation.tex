@@ -576,7 +576,25 @@ Hence, whenever a \B-enabled method is jitted its native code is directly access
 Thus we essentially remove the overhead of activating \B-enabled methods since we do not have to leave the \JIT execution mode.
 As a result we call \B-enabled methods at the same speed as the existing \JIT.
 
+
 \paragraph{Overcoming the Missing \VM Interface for the \JIT}
+After the initial promising progress on building \NBJ on top of \B we soon realized that is does not suffice to just generate the equivalent native code as the \VM internal \JIT.
+The first goal was to compile a simple method that just returns a constant integer.
+Even at this stage it became apparent that there is a missing interface to the \JIT.
+To explain that we have a look at the frame setup of a jitted method in \Cog shown in \lstref{val-nabujito-cog-frame}.
+%
+\begin{numstcode}[
+	caption={\Cog \JIT Stackframe Setup},
+	label={lst:val-nabujito-cog-frame}]{7}
+push EAX
+push EBP
+mov  EBP, ESP
+push 0x1f452b00<CogMethod>
+mov  EBX, 0x1f500004<nil>
+push EBX
+push EBX
+\end{numstcode} 
+%
 \todo{why do we need patch methods?}\\
 \todo{Explain how the patch methods work}\\
 \todo{give example of the assember of a simple method with the patch call}
