@@ -511,16 +511,16 @@ The same information is also used to update jumps to other native code in the \J
 	\figlabel{cog-method}
 \end{figure}
 
-So far we explained how \Cog uses native stack mapping for performance reasons and how the basic \JIT compiler works.
+\noindent So far we explained how \Cog uses native stack mapping for performance reasons and how the basic \JIT compiler works.
 The limit the stress on the \CPU cache only the most used methods are jitted.
 \Cog uses a hierarchy of inline caches to avoid the costly method lookup and checks if a method is already jitted or not.
 Message sends from one jitted method to another hence happen with a very low overhead.
 However, due to the limited size of the \JIT space that still means that infrequently used methods are evaluated using the existing bytecode interpreter.
+\cb{the previous paragraph might be a bit dense, depending on the knowledge of the reader}
 
 
 
 \todo{Step 3: Trampolines to jump back and forth between native activated scheme and bytecode interpreter based approach}\\
-\todo{Step 4: Minor summary of the how the ICs work in the \JIT}
 
 %----------------------------------------------------------------------------
 \paragraph{Limitations of \VM-level \JIT Compilers}
