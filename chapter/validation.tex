@@ -628,15 +628,25 @@ We can do so since we know the following things:
 	label={lst:val-nabujito-frame-setup}]{7}
 push EBP
 mov  EBP, ESP
+
 mov  EAX, 0x643d02e<pushCogMethodHelper>
 call EAX
-mov  EBX, 0x1f500004<nil>
-push EBX
-push EBX
 \end{numstcode}
 %
 In the \ttt{pushCogMethodHelper} we access the instruction pointer from where the call happened in the stack frame setup and deduce the start of the \ttt{CogMethod}.
+Once the address of the \ttt{CogMethod} is retrieved the \ttt{pushCogMethodHelper} patches the \ttt{mov} and \ttt{call} instruction in the jitted method.
+The result is shown in \lstref{val-nabujito-patched-frame-setup}.
+%
+\begin{numstcode}[
+	caption={\NBJ Patched Stack Frame Setup},
+	label={lst:val-nabujito-patched-frame-setup}]{7}
+push EBP
+mov  EBP, ESP
 
+push 0x1f452b00<CogMethod>
+nop
+\end{numstcode}
+%
 
 % -----------------------------------------------------------------------------
 \subsection{\NBJ Validation}
