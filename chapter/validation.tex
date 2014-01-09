@@ -634,7 +634,7 @@ call EAX
 \end{numstcode}
 %
 In the \ttt{pushCogMethodHelper} we access the instruction pointer from where the call happened in the stack frame setup and deduce the start of the \ttt{CogMethod}.
-Once the address of the \ttt{CogMethod} is retrieved the \ttt{pushCogMethodHelper} patches the \ttt{mov} and \ttt{call} instruction in the jitted method.
+Once the address of the \ttt{CogMethod} is retrieved the \ttt{pushCogMethodHelper} patches the \ttt{MOV} and \ttt{CALL} instruction in the jitted method.
 The result is shown in \lstref{val-nabujito-patched-frame-setup}.
 %
 \begin{numstcode}[
@@ -646,10 +646,13 @@ mov  EBP, ESP
 push 0x1f452b00<CogMethod>
 nop
 \end{numstcode}
+%
+By using this indirection we circumvent the missing interface to the \JIT.
+The helper routine only imposes a one-time overhead, however we slow down the final execution of the \NBJ method by a single \ttt{NOP} instruction.
+Yet, looking at the \Cog stack frame in \figref{val-nabujito-cog-stack-frame} we only dealt with finding the reference to the \ttt{CogMethod}.
+So far we left out the \GC interaction at \JIT-level, which leads us to the following paragraph.
 
-\todo{concluding sentence}
-
-\paragraph{Overcoming the Missing \VM Interface for the \JIT}
+\paragraph{Overcoming the \GC Missing \VM Interface for the \JIT}
 
 \todo{explain the proplem of object relocation vs. native code}
 
@@ -708,13 +711,16 @@ Hence our approach is even valid for short-timed script-like applications as mos
 % -----------------------------------------------------------------------------
 \paragraph{Hidden \VM Internals}
 \todo{backref to patch methods}\\
-\todo{maintenance problem: \NBJ harcodes the \VM interaction}
+\todo{maintenance problem: \NBJ harcodes the \VM interaction} \\
+\todo{unsuited \VM architecture for a feasible real-world \JIT} \\
+\todo{focusing on a future version on SISTA}
 
 
 \paragraph{Debugging Cycle}
 \todo{Missing tools to directly interact with benzo / the real vm} \\
 \todo{missing small assembler tests} \\
-\todo{reactivate the VM simulator infrastructure}
+\todo{reactivate the VM simulator infrastructure} \\
+\todo{missing \VM development tools under \PH (mainly disassembler)}
 
 \paragraph{Missing Optimizations}
 One major performance optimization missing in both, the original \PH \VM-level \JIT and \NBJ, is inlining. 
@@ -732,7 +738,8 @@ The \JIT lives on the same level as the information it needs relying on the alre
 \todo{Common problem: missing debugging infrastructure} \\
 \todo{\WF and \NBJ share the same problems} \\
 \todo{For speed a proper \JIT interface is missing } \\
-
+\todo{SISTA} \\
+\todo{better intermediate format (VCPU) from \B}
 
 % ===========================================================================
 \section{Summary}
