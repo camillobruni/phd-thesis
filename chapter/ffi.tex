@@ -464,7 +464,7 @@ This native code is responsible of the marshalling and calling the external func
 
 \begin{figure}[ht]
 	\centering
-	\includegraphics[scale=1.1]{nbArchitecture}
+	\includegraphics[scale=\imagescale]{nbArchitecture}
 	\caption[\NB Components Layering]{\NB main components that major part of the code resides at language-side.}
 	\figlabel{ffi-nbArchitecture}
 \end{figure}
@@ -479,7 +479,7 @@ In \NBFFI, doing most of the \FFI call processing at language-side makes easier 
 \begin{figure*}[h]
 	\begin{adjustwidth}{-2.0in}{-2.0in}
 		\centering
-		\includegraphics[scale=1.1]{ffiOverview}
+		\includegraphics[scale=\imagescale]{ffiOverview}
 	\end{adjustwidth}
 	\caption[\FFI Implementation Comparison]{Comparison of \FFI calls propagation in \NBFFI and a typical \VM plugin-based implementation. \NB resorts to \VM-level only for the native-code activation, whereas typical implementations cross this barrier much earlier.}
 	\figlabel{ffi-ffi}
@@ -928,7 +928,7 @@ This last change introduced a recursive dependency that is not visible on the fi
 %
 \begin{figure}[h]
 	\centering
-	\includegraphics[scale=1.1]{nb-bootstrap-cycle}
+	\includegraphics[scale=\imagescale]{nb-bootstrap-cycle}
 \end{figure}
 %
 Essentially this meant that in certain cases where \NB required to compile the native code for callout it was impossible to start up \PH.
@@ -947,7 +947,7 @@ Only that the plugins are generated from the original \NB callouts rather than c
 %
 \begin{figure}[h]
 \centering
-\includegraphics[scale=1.1]{nb-deployment-mode}
+\includegraphics[scale=\imagescale]{nb-deployment-mode}
 \caption[\NB Deployment Mode]{Comparison of the callout actiation for a) the development mode and b) the deployment mode}
 \end{figure}
 %

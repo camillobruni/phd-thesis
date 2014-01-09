@@ -35,7 +35,7 @@ Much like the primitives, the \JIT can not be changed from language-side and thi
 
 \begin{figure}[h]
 	\centering
-	\includegraphics[scale=1.1]{waterfall-overview}
+	\includegraphics[scale=\imagescale]{waterfall-overview}
 	\caption{\WF Overview}
 	\figlabel{val-waterfall-overview}
 \end{figure}
@@ -212,7 +212,7 @@ As shown in \figref{waterfall-architecture} the \WF compiler transforms the \AST
 
 \begin{figure}[h]
 	\centering
-	\includegraphics[scale=1.1]{waterfall-architecture}
+	\includegraphics[scale=\imagescale]{waterfall-architecture}
 	\caption{\WF Compilation Steps}
 	\figlabel{waterfall-architecture}
 \end{figure}
@@ -429,7 +429,7 @@ In this case \WF would be a perfect way to bring these primitives to live for ex
 
 \begin{figure}[h]
 	\centering
-	\includegraphics[scale=1.1]{nabujito-overview}
+	\includegraphics[scale=\imagescale]{nabujito-overview}
 \end{figure}
 
 \noindent In this section we present \NBJ, a \B-based approach for a language-side \JIT compiler.
@@ -481,14 +481,14 @@ At the same time all the reflective capabilities to modified the stack from with
 
 \begin{figure}[h]
 	\centering
-	\includegraphics[scale=1.1]{cog-memory}
+	\includegraphics[scale=\imagescale]{cog-memory}
 	\caption[\Cog Memory Model Overview]{\Cog Memory Model Overview: Fixed-sized \JIT space, slow changing old space and fast young space.}
 	\figlabel{cog-memory}
 \end{figure}
 
 \begin{figure}[h]
 	\centering
-	\includegraphics[scale=1.1]{cog-method}
+	\includegraphics[scale=\imagescale]{cog-method}
 	\caption[\Cog Method]{\Cog Method: Compiled method representation at \JIT-level residing in the \JIT memory space.}
 	\figlabel{cog-method}
 \end{figure}
@@ -577,7 +577,7 @@ Thus we essentially remove the overhead of activating \B-enabled methods since w
 As a result we call \B-enabled methods at the same speed as the existing \JIT.
 
 
-\paragraph{Overcoming the Missing \VM Interface for the \JIT}
+\paragraph{Talking to the \JIT}
 After the initial promising progress on building \NBJ on top of \B we soon realized that is does not suffice to just generate the equivalent native code as the \VM internal \JIT.
 The first goal was to compile a simple method that just returns a constant integer.
 Even at this stage it became apparent that there is a missing interface to the \JIT.
@@ -594,11 +594,11 @@ push EBX
 push EBX
 \end{numstcode} 
 %
-After finishing this setup instructions the stack frame looks as depicted in \figref{val-nabujito-cog-stack-frame}.
+After finishing executing these setup instructions the stack frame looks as depicted in \figref{val-nabujito-cog-stack-frame}.
 %
 \begin{figure}[h]
 	\centering
-	\includegraphics[scale=1.1]{cog-stack-frame}
+	\includegraphics[scale=\imagescale]{cog-stack-frame}
 	\caption{\Cog Stack Frame Header}
 	\figlabel{val-nabujito-cog-stack-frame}
 \end{figure}
@@ -646,7 +646,12 @@ mov  EBP, ESP
 push 0x1f452b00<CogMethod>
 nop
 \end{numstcode}
-%
+
+\todo{concluding sentence}
+
+\paragraph{Overcoming the Missing \VM Interface for the \JIT}
+
+\todo{explain the proplem of object relocation vs. native code}
 
 % -----------------------------------------------------------------------------
 \subsection{\NBJ Validation}
