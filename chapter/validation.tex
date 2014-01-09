@@ -469,23 +469,41 @@ It would naturally be more efficient to use the native stack which allows for ch
 While this mapping can be done rather easily there are three properties of \PH that make this hard: blocks, non-local returns and the mentioned \ttt{thisContext}.
 Eliot Miranda eventually succeeded to implement an efficient mapping scheme for the \Cog \VM that is based on the original work done by Peter Deutsch and Allan Schiffman \cite{Deut84a}.
 
-Even so the basic concepts of the native stack mapping are easy to understand the final implementation is rather tricky.
-Real closures that outlive their outer method activation context make the mapping tricky.
+Even so the basic concepts of the native stack mapping are easy to understand the final implementation is tricky details.
+Real closures that outlive their outer method activation context make the mapping difficult.
 At the same time all the reflective capabilities to modified the stack from within \PH have to be supported.
-\cb{shall we explain more here?}.
+This, in return limits the optimization opportunities.
+\Cog chose a path in between where most reflective modifications of the stack are permitted.
+However, in certain exotic edge cases the \VM does not support the operation.
 
+After supporting the native stack the next optimization in line is the real \JIT infrastructure where the \VM generates native code on the fly.
+In \Cog there is a bytecode compiler that generates a simple intermediate representation which then is used to generate the final native instructions.
+The \IR makes it easier to support new platforms next to the default 32-bit x86 implementation.
+\Cog applies minor optimizations like a simple register allocation strategy to lower the stress on stack usage.
+The most underestimated optimization is the fact that all the native code for the jitted methods is stored in a compact separate memory region.
+This lowers the chances of cache misses, an ever growing problem on modern \CPU architectures.
 
-\todo{Step 2: transform bytecodes to native code}\\
-\todo{Step 3: Trampolines to jump back and forth between native activated scheme and bytecode interpreter based approach}\\
-\todo{Step 4: Minor summary of the how the ICs work in the \JIT}
-
+\figref{cog-memory} gives and overview of the memory separation used by \Cog.
+%
 \begin{figure}[h]
 	\centering
 	\includegraphics[scale=\imagescale]{cog-memory}
 	\caption[\Cog Memory Model Overview]{\Cog Memory Model Overview: Fixed-sized \JIT space, slow changing old space and fast young space.}
 	\figlabel{cog-memory}
 \end{figure}
-
+%
+New objects are allocated in the young space which uses a fast semispace \GC with frequent reclaiming.
+Objects that survive a \GC pass move to the old space where infrequent reclaims happen.
+Separated from the two memory regions where normal \PH objects reside is the \JIT space dedicated for native code.
+In \Cog the \JIT space has its own \GC strategy tailored to native code which is stored in a structure called \ttt{CogMethod}.
+Each jitted \PH method has a corresponding \ttt{CogMethod} with native code which resides in the \JIT space.
+The \ttt{CogMethod} caches certain information such as the selector or number of arguments.
+Again this improves code locality as all the frequently accessed information resides in the \JIT space.
+\figref{cog-method} gives an overview of the \ttt{CogMethod}.
+We see that additionally to the cached meta information there is relocation information (method map) attached to the \ttt{CogMethod}.
+This is used to update object reference, typically to selectors, form the native code in sync with the objects that were moved in a \GC pass.
+The same information is also used to update jumps to other native code in the \JIT space if the dedicated \JIT \GC performs a compaction.
+%
 \begin{figure}[h]
 	\centering
 	\includegraphics[scale=\imagescale]{cog-method}
@@ -493,6 +511,14 @@ At the same time all the reflective capabilities to modified the stack from with
 	\figlabel{cog-method}
 \end{figure}
 
+So far we explained how \Cog uses native stack mapping for performance reasons and how the basic \JIT compiler works.
+The limit the stress on the \CPU cache only the most used methods are jitted.
+That means that a infrequently used methods still have to be evaluated using the existing bytecode interpreter.
+\todo{now mention inline caches}
+
+
+\todo{Step 3: Trampolines to jump back and forth between native activated scheme and bytecode interpreter based approach}\\
+\todo{Step 4: Minor summary of the how the ICs work in the \JIT}
 
 %----------------------------------------------------------------------------
 \paragraph{Limitations of \VM-level \JIT Compilers}
