@@ -586,7 +586,6 @@ To explain that we have a look at the frame setup of a jitted method in \Cog sho
 \begin{numstcode}[
 	caption={\Cog \JIT Stackframe Setup},
 	label={lst:val-nabujito-cog-frame}]{7}
-push EAX
 push EBP
 mov  EBP, ESP
 push 0x1f452b00<CogMethod>
@@ -595,6 +594,15 @@ push EBX
 push EBX
 \end{numstcode} 
 %
+After finishing this setup instructions the stack frame looks as depicted in \figref{val-nabujito-cog-stackframe}.
+%
+\begin{figure}[h]
+	\centering
+	\includegraphics[scale=1.1]{cog-stackframe}
+	\caption{\Cog Stackframe Header}
+	\figlabel{val-nabujito-cog-stackframe}
+\end{figure}
+
 \todo{why do we need patch methods?}\\
 \todo{Explain how the patch methods work}\\
 \todo{give example of the assember of a simple method with the patch call}
