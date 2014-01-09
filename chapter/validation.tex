@@ -533,6 +533,7 @@ In \secref{val-waterfall} we describe how \WF suffers a similar constraint.
 \NBJ is an experimental \JIT implementation which replaces the bytecode to native code translation of the existing \JIT infrastructure with a dynamic language-side implementation.
 \NBJ is implemented mainly with a visitor strategy over the existing intermediate bytecode representation. 
 Additionally we reimplemented vital native routines for the \JIT which are not directly exported by the \VM using \B. 
+\cb{not sure if better to put down next to the \JIT limitation paragraphs...}
 Nabujito relies on the following \VM-level infrastructure to manage and run native code for any \PH method:
 
 \begin{itemize}[noitemsep,nolistsep]
@@ -544,29 +545,36 @@ Nabujito relies on the following \VM-level infrastructure to manage and run nati
 \noindent The native stack mapping is an implicit requirement for an efficient \JIT.
 Since this feature requires deep changes at \VM-level we can not alter or reimplement this at language-side.
 However, the routines for switching between \JIT and non-\JIT execution context can be mostly reimplemented at language-side.
-We only chose to implement a small subset of them with \B and reuse the existing routines for simplicity.
+We only chose to implement a small subset of them with \B that were directly required for performing message sends.
+Some of the helper routines' C-level addresses are easily accessible from language-side using \ttt{dlsym}.
+Hence we reuse these for simplicity and only reimplemented the ones that are "hidden".
 The last item we reuse, \JIT-level memory management, poses certain problems as we have little to no control over this from language-side.
 There is no well-defined interface to interact with the \JIT from language-side in \PH.
-However, to properly interact with the \JIT we have to provide certain low-level meta-information.
-Namely we have to tell the \JIT where references to language-side objects are located in the native code.
+However, to properly interact with the \JIT we have to tell it where references to language-side objects are located in the native code.
+To overcome this limitation we chose to hack the current \VM to better interact with the \JIT.
+More details on this topic follow in the following paragraphs.
 
-\paragraph{\NBJ Compiler Steps}
-\todo{Overview Figure of the input / transformation steps} \\
-\todo{Almost Reified Cog Routines} \\
-\todo{CogMethod patching problem leading to the following parargraph}
+\paragraph{\NBJ Dynamic Code Generation}
+\NB mainly consists of a visitor over the bytecode-level \IR that is provided by the \PH compiler.
+Additionally we reimplemented some of the aforementioned helper routines to switch execution context in the \VM.
+The main difficulty of the \NBJ compiler is the missing interface to the \JIT.
+For instance we did not have direct control on which methods in \PH are jitted or not, or to force-\JIT a method.
+We added one additional primitive to be able to manually trigger \JIT compilation.
 
-
-\paragraph{Dynamic Code Generation}
-To simplify the implementation we decide to manually trigger \JIT compilation.
-For primitives known by \WF we rely on that infrastructure to generate the native code.
-For standard methods \NBJ takes the bytecodes and transforms them to native code.
-It also applies optimizations such as creating low-level branches for \ST level branching operations like \ttt{ifTrue:}.
+For standard methods \NBJ takes the bytecodes and transforms them with a visitor to native code.
+It also applies simple optimizations such as creating low-level branches for \PH-level branching operations such as \ttt{ifTrue:}.
 Optimizations for additional methods are all implemented flexibly at language-side.
 Wherever possible, we reimplement the same behavior as the existing native \JIT compiler.
-Eventually the native code is ready and \B attaches it to the existing compiled method.
-When the language-side jitted code is activated \B ensures that we do not have to leave the \JIT execution mode, and thus we can call methods at the same speed as the existing \JIT.
-\todo{figure showing an extended method installation into \JIT space}
 
+Eventually the native code is ready and \B attaches it to the existing compiled method.
+At this point we benefit from the \JIT integration of \B itself.
+As a reminder, we have shown in \secref{benzo-benzo} how \B-enabled methods are treated like normal primitive methods.
+The \VM triggers a \B primitive which itself then jumps to the native code attached to the \B-enabled method.
+By default the \Cog \JIT can only directly inline the native code for a known set of primitives.
+As we have shown in \secref{benzo-jit-interaction} that the \Cog's \JIT was made aware of the special behavior of the \B primitive.
+Hence, whenever a \B-enabled method is jitted its native code is directly accessible to the \JIT and inlined.
+Thus we essentially remove the overhead of activating \B-enabled methods since we do not have to leave the \JIT execution mode.
+As a result we call \B-enabled methods at the same speed as the existing \JIT.
 
 \paragraph{Overcoming the Missing \VM Interface for the \JIT}
 \todo{why do we need patch methods?}\\
