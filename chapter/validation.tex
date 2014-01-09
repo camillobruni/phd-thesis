@@ -581,7 +581,7 @@ As a result we call \B-enabled methods at the same speed as the existing \JIT.
 After the initial promising progress on building \NBJ on top of \B we soon realized that is does not suffice to just generate the equivalent native code as the \VM internal \JIT.
 The first goal was to compile a simple method that just returns a constant integer.
 Even at this stage it became apparent that there is a missing interface to the \JIT.
-To explain that we have a look at the frame setup of a jitted method in \Cog shown in \lstref{val-nabujito-cog-frame}.
+To explain that we have a look at the standard stack frame setup of a jitted method in \Cog shown in \lstref{val-nabujito-cog-frame}.
 %
 \begin{numstcode}[
 	caption={\Cog \JIT Stackframe Setup},
@@ -603,11 +603,40 @@ After finishing this setup instructions the stack frame looks as depicted in \fi
 	\figlabel{val-nabujito-cog-stack-frame}
 \end{figure}
 %
-As we can see there are already two references to \ttt{nil} in the stack frame header
+As we can see there are already two references to \ttt{nil} in the stack frame header.
+Already these two references pose a problem in a simple \NBJ setup, but for now we focus on the reference to the \ttt{CogMethod}.
+As we explained earlier the \ttt{CogMethod} is a meta object at \JIT-level to make certain information of \PH methods faster accessible.
+The \VM currently keeps a pointer to the class, the selector or the number of arguments cached in there.
+Having the information there improves locality and make the assembler code required for the frequent querying simpler.
+Going back to the native code in \lstref{val-nabujito-cog-frame} we see that we need the final address of the \ttt{CogMethod} for the frame setup.
+However, at the moment where \NBJ generates the native code the target method is not yet jitted.
+This again implies that the corresponding \ttt{CogMethod} has not yet been allocated by the \JIT.
+And since the native code has to be installed in the \JIT we inevitably have to wait for \NBJ to finish compilation, we are stuck.
 
-\todo{why do we need patch methods?}\\
-\todo{Explain how the patch methods work}\\
-\todo{give example of the assember of a simple method with the patch call}
+Instead of directly putting the absolute address of the meta-object in the native code we add a call to a helper routine which will patch the original code on the first activation.
+We can do so since we know the following things:
+\begin{itemize}[noitemsep,nolistsep]
+	\item \ttt{CogMethod}s have a fixed size known upfront,
+	\item we know the relative offset of the jitted method's instruction to the start of its \ttt{CogMethod},
+	\item we can access the instruction pointer with a helper routine.
+\end{itemize}
+%
+\noindent With this information we modify \NBJ to generate the modified frame setup show in \lstref{val-nabujito-frame-setup}.
+%
+\begin{numstcode}[
+	caption={\NBJ Stack Frame Setup},
+	label={lst:val-nabujito-frame-setup}]{7}
+push EBP
+mov  EBP, ESP
+mov  EAX, 0x643d02e<pushCogMethodHelper>
+call EAX
+mov  EBX, 0x1f500004<nil>
+push EBX
+push EBX
+\end{numstcode}
+%
+In the \ttt{pushCogMethodHelper} we access the instruction pointer from where the call happened in the stack frame setup and deduce the start of the \ttt{CogMethod}.
+
 
 % -----------------------------------------------------------------------------
 \subsection{\NBJ Validation}
