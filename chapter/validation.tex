@@ -594,14 +594,16 @@ push EBX
 push EBX
 \end{numstcode} 
 %
-After finishing this setup instructions the stack frame looks as depicted in \figref{val-nabujito-cog-stackframe}.
+After finishing this setup instructions the stack frame looks as depicted in \figref{val-nabujito-cog-stack-frame}.
 %
 \begin{figure}[h]
 	\centering
-	\includegraphics[scale=1.1]{cog-stackframe}
-	\caption{\Cog Stackframe Header}
-	\figlabel{val-nabujito-cog-stackframe}
+	\includegraphics[scale=1.1]{cog-stack-frame}
+	\caption{\Cog Stack Frame Header}
+	\figlabel{val-nabujito-cog-stack-frame}
 \end{figure}
+%
+As we can see there are already two references to \ttt{nil} in the stack frame header
 
 \todo{why do we need patch methods?}\\
 \todo{Explain how the patch methods work}\\
