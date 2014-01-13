@@ -544,7 +544,7 @@ The C function takes no argument and returns an integer thus guaranteeing a mini
         C-\FFI       & 541.77(88)       & \approx 1.1\\
         \LuaJIT      & 343.0 (12)       & \approx 0.7
     \end{tabular}
-    \caption{Speed comparison of an \ttt{uint clock(void)} \FFI call (see Code~\lstref{ffi-clock}).}
+    \caption[\ttt{clock} \FFI Callout Speed]{Speed comparison of an \ttt{uint clock(void)} \FFI call (see Code~\lstref{ffi-clock}).}
     \tablabel{ffi-performance-clock}
 \end{table}
 %
@@ -560,7 +560,7 @@ The C function takes no argument and returns an integer thus guaranteeing a mini
         \LuaJIT\tablefootnote{Downsampled from increased loop size by a factor $100$ to guarantee accuracy.}
                 & 2.035(15)        & \approx 0.03
     \end{tabular}
-    \caption{Speed comparison of an \ttt{int abs(int i)} \FFI call (see \figref{ffi-nativeBoostSyntax}).}
+    \caption[\ttt{abs} \FFI Callout Speed]{Speed comparison of an \ttt{int abs(int i)} \FFI call (see \figref{ffi-nativeBoostSyntax}).}
     \tablabel{ffi-performance-abs}
 \end{table}
 
@@ -590,7 +590,7 @@ Both argument and result have to be converted from high-level strings to C-level
         \LuaJIT\tablefootnote{Downsampled from increased loop size by a factor $10$ to guarantee accuracy.}
                     & 97.3(51)         & \approx 0.9
     \end{tabular}
-    \caption{Speed comparison of an \ttt{char * getenv(char *name)} \FFI call (see Code \lstref{ffi-getenv}).}
+    \caption[\ttt{getenv} \FFI Callout Speed]{Speed comparison of an \ttt{char * getenv(char *name)} \FFI call (see Code \lstref{ffi-getenv}).}
     \tablabel{ffi-performance-getenv}
 \end{table}
 
@@ -608,7 +608,7 @@ Hence the relative overhead of an \FFI call is reduced.
         C-\FFI      &  605.02(23)       & \approx 1.6 \\
         \LuaJIT     &  202.4 (21)       & \approx 0.6
     \end{tabular}
-    \caption{Speed comparison of an \ttt{int printf(char *name, int num1, int num2)} \FFI call}
+    \caption[\ttt{printf} \FFI Callout Speed]{Speed comparison of an \ttt{int printf(char *name, int num1, int num2)} \FFI call}
     \tablabel{ffi-performance-printf}
 \end{table}
 
@@ -636,7 +636,7 @@ In all cases, the allocation time of the structs is not included in the measurem
         C-\FFI      & 380.8  (27)      & \approx 3.6 \\
         \LuaJIT     &  5.66  (15)      & \approx 0.07
     \end{tabular}
-    \caption{Speed comparison of an \ttt{cairo\_matrix\_multiply} \FFI call (cf. \lstref{ffi-cairoCallouts})}
+    \caption[\ttt{cairo\_matrix\_multiply} \FFI Callout Speed]{Speed comparison of an \ttt{cairo\_matrix\_multiply} \FFI call (cf. \lstref{ffi-cairoCallouts})}
  	\tablabel{ffi-performance-structs}
 \end{table}
 
@@ -662,7 +662,7 @@ Callbacks are usually much slower than callouts.
 	\NB with Native Callbacks
 	                & 4.98(21)  & \approx 0.002
     \end{tabular}
-    \caption{Speed comparison of a \ttt{qsort} \FFI call (cf. \lstref{ffi-calloutWithCallback})}
+    \caption[\ttt{qsort} \FFI Callout Speed]{Speed comparison of a \ttt{qsort} \FFI call (cf. \lstref{ffi-calloutWithCallback})}
  	\tablabel{ffi-performance-qsort}
 \end{table}
 
