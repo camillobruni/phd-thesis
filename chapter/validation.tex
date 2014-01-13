@@ -472,7 +472,7 @@ Eliot Miranda eventually succeeded to implement an efficient mapping scheme for 
 Even so the basic concepts of the native stack mapping are easy to understand the final implementation is tricky details.
 Real closures that outlive their outer method activation context make the mapping difficult.
 At the same time all the reflective capabilities to modified the stack from within \PH have to be supported.
-This, in return limits the optimization opportunities.
+This, in return, limits the optimization opportunities.
 \Cog chose a path in between where most reflective modifications of the stack are permitted.
 However, in certain exotic edge cases the \VM does not support the operation.
 
@@ -519,8 +519,8 @@ However, due to the limited size of the \JIT space that still means that infrequ
 \cb{the previous paragraph might be a bit dense, depending on the knowledge of the reader}
 
 
-
 \todo{Step 3: Trampolines to jump back and forth between native activated scheme and bytecode interpreter based approach}\\
+\todo{lanugage has infinite stack, while the bytecode interpreter uses a loop} \\
 \todo{\JIT uses native stack, so does the bytecode interpreter} \\
 \todo{returning inside native code should also return on the native stack} \\
 \todo{switching to native code would not increase the C stack, while calling the bytecode interpreter from the \JIT code would} \\
