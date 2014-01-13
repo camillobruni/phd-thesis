@@ -521,6 +521,10 @@ However, due to the limited size of the \JIT space that still means that infrequ
 
 
 \todo{Step 3: Trampolines to jump back and forth between native activated scheme and bytecode interpreter based approach}\\
+\todo{\JIT uses native stack, so does the bytecode interpreter} \\
+\todo{returning inside native code should also return on the native stack} \\
+\todo{switching to native code would not increase the C stack, while calling the bytecode interpreter from the \JIT code would} \\
+\todo{avoid ever-growing C stack}
 
 %----------------------------------------------------------------------------
 \paragraph{Limitations of \VM-level \JIT Compilers}
