@@ -771,20 +771,27 @@ While it is possible to modify the lookup mechanism in many \VM generation frame
 
 
 % -----------------------------------------------------------------------------
-\subsection{Problems}
+\subsection{\NBJ Problems and Future Work}
 \seclabel{val-nabujito-problems}
 % -----------------------------------------------------------------------------
 \paragraph{Hidden \VM Internals}
 The major obstacle found while implementing \NBJ is the lack of a language-side interface to the \JIT.
 In \secref{val-nabujito-implementation} we already showed how we circumvented most of the limitations.
-However, our final conclusion was to extend the \VM and add a customized primitive with its own \JIT support.
+Our final conclusion was to extend the \VM and add a customized primitive with its own \JIT support.
 Strictly speaking this is against the principles of the \B framework, where tools should be implemented transparently at language-side.
+Even though the \NBJ is mainly implemented in \PH, the required \VM modifications result in the problems already described in \secref{benzo-vm-extensions}.
+\VM extensions tend to be less maintainable, eventually \NBJ will take the same path as many other research \VM projects based on \PH and stay unmaintained until the \VM becomes incompatible.
 
-\todo{backref to patch methods}\\
-\todo{maintenance problem: \NBJ harcodes the \VM interaction} \\
-\todo{unsuited \VM architecture for a feasible real-world \JIT} \\
-\todo{focusing on a future version on SISTA}
-
+Most of the problems described for \NBJ are being addressed with \Sista, a new adaptive \JIT compiler for the \Cog infrastructure. 
+Until now the \JIT compiler for \Cog is completely written in \Slang and thus frozen at \VM compilation-time.
+\Sista takes a different approach by implementing most \JIT optimizations at language-side.
+Though the underlying approach is very different from \NBJ.
+\Sista will require a new \VM that supports querying the status of the inline caches from \PH code.
+Based on the retrieved information \Sista will apply standard optimization techniques like inlining.
+Instead of directly generating native code at language-side \Sista will encode additional information in an extended bytecode set.
+The \VM is then capable of extracting the necessary information to generate optimized native code.
+\Sista essentially avoids the problems we described in \secref{val-nabujito-implementation} which occur when directly injecting native code into the \JIT machinery.
+\Sista's flexibility lies between the current \JIT present in \Cog and the \NBJ prototype.
 
 \paragraph{Debugging Cycle}
 \todo{Missing tools to directly interact with benzo / the real vm} \\
