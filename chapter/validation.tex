@@ -702,7 +702,7 @@ Hence we first evaluate in detail the compilation speed of \NBJ, and only in the
 % -----------------------------------------------------------------------------
 \subsubsection*{Compilation Time}
 
-The performance evaluation for our \B-based \JIT compiler is focused on the language-side code-generation part.
+In this first part of the performance evaluation for our \B-based \JIT compiler we focus on the language-side code-generation part.
 \NBJ essentially generates the same native code as the \VM-level \JIT, hence there is no performance difference at evaluation time.
 However, \NBJ is clearly slower during the warm-up phase.
 Compilation of the native instructions will take considerably more time compared to the \VM-level implementation of the same bytecode to assembler transformation.
@@ -741,11 +741,31 @@ Hence our approach is even valid for short-timed script-like applications as mos
 
 
 % -----------------------------------------------------------------------------
+\subsection{Related Work}
+\seclabel{val-nabujito-related-work}
+% -----------------------------------------------------------------------------
+There is a vast amount of scientific literature when it comes to \JIT optimizers.
+However, they focus on the optimization opportunities itself such as different compilation strategies or an efficient \GC interaction.
+In the context of our work the compiler-based optimization are of second importance since we focus on the hybrid nature of a system that interacts with the low-level \VM world.
+
+Jan Vran\'{y} et al. present a \ST with an explicit meta-object-protocol allowing for method lookup customization at language-side\cite{Vran12a}.
+Their customized \ST/X \VM has an extended lookup mechanism where each class can specialize the lookup with a user definable \ttt{LookupObject}.
+Hence for each message send the \VM first checks if the receiver's class provides a \ttt{LookupObject}.
+By default this is not the case and the \VM falls back to the standard hierarchical \ST method lookup which is hard-coded in the \VM.
+However, if the receiver class returns a proper \ttt{LookupObject} the \VM delegates the lookup to this user-defined object.
+
+
+
+% -----------------------------------------------------------------------------
 \subsection{Problems}
 \seclabel{val-nabujito-problems}
 % -----------------------------------------------------------------------------
 \paragraph{Hidden \VM Internals}
-\ref{val-nabujito-implementation}
+The major obstacle found while implementing \NBJ is the lack of a language-side interface to the \JIT.
+In \secref{val-nabujito-implementation} we already showed how we circumvented most of the limitations.
+However, our final conclusion was to extend the \VM and add a customized primitive with its own \JIT support.
+Strictly speaking this is against the principles of the \B framework, where tools should be implemented transparently at language-side.
+
 \todo{backref to patch methods}\\
 \todo{maintenance problem: \NBJ harcodes the \VM interaction} \\
 \todo{unsuited \VM architecture for a feasible real-world \JIT} \\
