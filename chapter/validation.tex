@@ -810,19 +810,31 @@ The \JIT lives on the same level as the information it needs relying on the alre
 
 % ===========================================================================
 \newpage
-\section{Outlook}
+\section{\B Applications: Outlook and Summary}
 % ===========================================================================
 
-\todo{Common problem: missing debugging infrastructure} \\
-\todo{\WF and \NBJ share the same problems} \\
-\todo{For speed a proper \JIT interface is missing } \\
-\todo{SISTA} \\
-\todo{better intermediate format (VCPU) from \B}
 
-% ===========================================================================
-\section{Summary}
-% ===========================================================================
+In this chapter we presented two \B-based research projects: dynamic primitives and a language-side \JIT compiler prototype.
+We have shown in \secref{val-waterfall} how the \WF toolchain allows us to modify \PH primitives on the fly. 
+\WF uses the existing \VM source code written in the \ST subset \Slang, thus simplifying the modification of existing primitives.
+Using the same \Slang sources \WF is also capable of compiling whole plugins on the fly.
+In \secref{val-waterfall-performance} we showed that \WF outperforms a pure \PH-based solution when instrumenting primitives.
+\WF is up to one magnitude slower than native \VM primitives leaving room for optimizations.
 
+In the second part we presented \NBJ a language-side \JIT compiler that uses \B for the code generation part.
+Even though \NBJ looks promising, the current implementation does not go beyond the stage of a prototype.
+We identified that a reasonable \B-based \JIT implementation requires a well-defined interface to the otherwise isolated \JIT.
+We have shown that the compilation time from bytecode to native code takes the same time as the standard bytecode compiler.
+However, from a real-world point of the view the current \NBJ setup is insufficient since it requires a customized \VM.
+A sufficient stable \JIT interface is required to efficiently implement \NBJ.
+\todo{SISTA}
+
+Both of these applications are a further validation of the \B framework and the concept of an open language-runtime without a clear distinction between language-side and \VM-side.
+With the current setup we are capable of hosting important \VM parts such as non-essential plugins and primitives to the language-side.
+However, again we encountered the typical limitations of the \B framework: missing high-level debugging and hard-coded assembler assumptions.
+As before we refer to the suggested \B improvement presented in \secref{benzo-problems}.
+
+\todo{common experiment to reuse single primitive definition}
 
 % =============================================================================
 \input{chapter-footer.tex}
