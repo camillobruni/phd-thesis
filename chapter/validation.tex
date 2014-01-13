@@ -681,12 +681,26 @@ So far we left out the \GC interaction at \JIT-level, which leads us to the foll
 \paragraph{Overcoming the \GC Missing \VM Interface for the \JIT}
 \Cog embeds references to normal \PH objects in its jitted methods.
 Most often this is the case for the symbols used as selectors in message sends.
-This is different from the indirection approach used in compiled methods for the bytecode interpreter.
+This is different from the indirect approach used in compiled methods for the bytecode interpreter.
 There all objects used in the method are stored in a separate literal array and referenced by an index.
 Hence the bytecode can stay very compact and more importantly does not have to be updated on each \GC pass.
-While for space consumption was the only concern on the early \ST implementation the only thing the \JIT focuses on is performance and thus avoiding as many indirections possible.
+While for space consumption was the only concern on the early \ST implementation the \JIT only focuses on performance and thus avoids as many indirections possible; hence the use of direct references in the \JIT.
+That implies that unlike the bytecodes, the \JIT code is no longer independent of the location of the referenced objects and thus has to be updated on each \GC pass.
+Additional to moved objects no the \PH heap, the \JIT space itself moves a \CogMethod when compacting native code.
+Hence the \GC has to also be aware of jumps and reference to another \CogMethod inside the native code.
+In \Cog this additional information is stored in the \CogMethod itself, called method map.
+It contains simple entries which describe the location of jumps, calls, references to other \CogMethod objects and references to \PH objects.
 
-\todo{explain the proplem of object relocation vs. native code}
+The low-level design of \Cog has significant implications on how \NBJ has to interact with the \VM.
+\NBJ has to provide the location of every reference and jump inside the native code.
+With the design of \NBJ so far, this is not directly possible.
+So far \NBJ directly copies the native code from the \B-enabled method to the \CogMethod.
+Hence, \NBJ ignores all the additional information required for the \JIT to work properly.
+To comply with the \JIT we implemented a custom primitive for \NBJ with custom \JIT support, essentially creating a fork of the \VM.
+The newly added primitive is a copy of the existing \B primitive with \JIT support.
+However, the \NBJ adds support for the \CogMethod relocation maps.
+
+
 
 % -----------------------------------------------------------------------------
 \subsection{\NBJ Validation}
