@@ -699,8 +699,9 @@ Hence, \NBJ ignores all the additional information required for the \JIT to work
 To comply with the \JIT we implemented a custom primitive for \NBJ with custom \JIT support, essentially creating a fork of the \VM.
 The newly added primitive is a copy of the existing \B primitive with \JIT support.
 However, the \NBJ adds support for the \CogMethod relocation maps.
-
-
+At language-side the \NBJ compiler stores a relocation map as the first literal in the compiled method. \todo{make sure to implement it this way}
+In the customized \JIT code for the \NBJ primitive we read this relocation information and forward it to the \Cog \JIT infrastructure.
+Essentially we replicate the information of the \JIT-level \CogMethod inside a \B-enabled \PH method.
 
 % -----------------------------------------------------------------------------
 \subsection{\NBJ Validation}
