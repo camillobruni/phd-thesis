@@ -794,10 +794,13 @@ The \VM is then capable of extracting the necessary information to generate opti
 \Sista's flexibility lies between the current \JIT present in \Cog and the \NBJ prototype.
 
 \paragraph{Debugging Cycle}
-\todo{Missing tools to directly interact with benzo / the real vm} \\
-\todo{missing small assembler tests} \\
-\todo{reactivate the VM simulator infrastructure} \\
-\todo{missing \VM development tools under \PH (mainly disassembler)}
+While working on \NBJ we encountered the same debugging limitations found in the other \B applications.
+However, the interaction with the existing \JIT required already substantial debugging efforts, mostly at assembler-level.
+Hence, \B's missing high-level debugging facility does not have a big impact on the general development of \NBJ.
+The main issue is that the \VM itself lacks separate tests for the \JIT infrastructure.
+Even so the \Cog branch supports a high-level simulator for running the \JIT this is currently not supported under \PH.
+Additionally the \VM lacks dedicated tests for the separate parts of the \JIT infrastructure.
+However, with the previously mentioned \Sista project, efforts are being made to enable the existing \VM debugging infrastructure on \PH, along with dedicated tests.
 
 \paragraph{Missing Optimizations}
 One major performance optimization missing in both, the original \PH \VM-level \JIT and \NBJ, is inlining. 
