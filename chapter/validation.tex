@@ -656,7 +656,6 @@ We can do so since we know the following things:
 	label={lst:val-nabujito-frame-setup}]{7}
 push EBP
 mov  EBP, ESP
-
 mov  EAX, 0x643d02e<pushCogMethodHelper>
 call EAX
 \end{numstcode}
@@ -670,7 +669,6 @@ The result is shown in \lstref{val-nabujito-patched-frame-setup}.
 	label={lst:val-nabujito-patched-frame-setup}]{7}
 push EBP
 mov  EBP, ESP
-
 push 0x1f452b00<CogMethod>
 nop
 \end{numstcode}
@@ -694,12 +692,15 @@ While for space consumption was the only concern on the early \ST implementation
 \subsection{\NBJ Validation}
 \seclabel{val-nabujito-performance}
 % -----------------------------------------------------------------------------
-
-\todo{missing intro}
+After explaining the implementation details and challenges of \NBJ we present a performance validation of our language-side \JIT compiler prototype.
+Our current prototype implementation is not complete yet, we envision that the final compiler will produce the same native code as the existing \JIT of the \Cog \VM.
+Based on that idea we focus our evaluation mainly on the language-side code generation.
+Even though the underlying \B infrastructure caches the native code, the compilation step itself is several magnitudes slower than the native \JIT version.
+Hence we first evaluate in detail the compilation speed of \NBJ, and only in the second part we focus no the real execution speed of the generated native method.
+\todo{make sure we implement this claim}
 
 % -----------------------------------------------------------------------------
 \subsubsection*{Compilation Time}
-
 
 The performance evaluation for our \B-based \JIT compiler is focused on the language-side code-generation part.
 \NBJ essentially generates the same native code as the \VM-level \JIT, hence there is no performance difference at evaluation time.
@@ -744,6 +745,7 @@ Hence our approach is even valid for short-timed script-like applications as mos
 \seclabel{val-nabujito-problems}
 % -----------------------------------------------------------------------------
 \paragraph{Hidden \VM Internals}
+\ref{val-nabujito-implementation}
 \todo{backref to patch methods}\\
 \todo{maintenance problem: \NBJ harcodes the \VM interaction} \\
 \todo{unsuited \VM architecture for a feasible real-world \JIT} \\
