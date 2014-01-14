@@ -46,7 +46,7 @@ For this chapter we present a small summary of these two metacircular \VMs with 
 \subsection{\P \VM}
 % -----------------------------------------------------------------------------
 
-The \P \VM presented in \secref{background-pinocchio} is a direct predecessor of the work presented in this thesis.
+The \P \VM \cite{Verw11a} presented in \secref{background-pinocchio} is a direct predecessor of the work presented in this thesis.
 The knowledge gained while participating on \P had a great influence on the development direction of \B and its applications.
 
 Unlike \PH running on the \Cog \VM the \P research \VM has no bytecode interpreter.
@@ -83,6 +83,10 @@ Additionally some crucial primitives that required system calls were implemented
 % -----------------------------------------------------------------------------
 \subsection{\Klein \VM}
 % -----------------------------------------------------------------------------
+
+% -----------------------------------------------------------------------------
+\subsection{\Klein \VM}
+% -----------------------------------------------------------------------------
 \todo{refer to \secref{background-klein}}\\
 \todo{read again} \\
 \todo{unified model for runtime and compile time} \\
@@ -101,13 +105,21 @@ In this section we present the suggestion for improvements related mostly tied t
 Most of the solutions have been presented in the separate chapters of \B in \secref{benzo-problems}, \NB \FFI in \secref{ffi-problems} and the \B application prototypes (\secref{validation-waterfall-problems} and \secref{validation-nabujito-problems}).
 
 % -----------------------------------------------------------------------------
-\subsection{Domain Specific Inspectors}
+\subsection{Improved Domain Specific Inspectors}
 % -----------------------------------------------------------------------------
-\todo{make concepts explicit and first-class} \\
-\todo{limit the use of raw memory access and string-based programming} \\
-\todo{reified concepts imply a clear and more well-defined interface} \\ 
-\todo{More specific Inspectors (Also for VM development)} \\
-\todo{Restate the original VM Simulator to provide a smooth VM dev experience}
+Domain specific inspectors are important for an efficient development as we pointed out in \secref{reification-inspectors}.
+Similar to the \JIT approach we have to optimize the frequent tasks during development and provide a seamless integration.
+This becomes even more important when working with low-level code and data that does not come with existing first-class structures.
+We noticed that using \B for \NBJ and \WF that it is more convenient to rely on an existing low-level text-based debugger such as \ttt{gdb} to inspect C-level structures.
+
+We have seen excellent use of inspectors in the \VM development of the \Cog \VM itself.
+The original simulator supports inspecting objects in simulated raw memory.
+\Cog added additional inspectors including disassembled instructions for the \JIT development.
+However, with the recent changes the advanced simulator does not yet run in \PH and requires attention.
+
+Lately we have seen a very similar approach for the \Maxine research \VM \cite{Wimm13a}.
+It provides excellent low-level debugging interaction, switching seamlessly between low-level assembler views and high-level object inspectors.
+\cb{I think I should extend this a bit}
 
 
 % -----------------------------------------------------------------------------
@@ -144,7 +156,9 @@ Most of the solutions have been presented in the separate chapters of \B in \sec
 % -----------------------------------------------------------------------------
 \todo{Resulting from the first law of Inspectors, all VM-level objects are reified} \\
 \todo{List of typical objects that don't have a reification in COG} \\
-\todo{List advantages}
+\todo{List advantages}\\
+\todo{make concepts explicit and first-class} \\
+\todo{limit the use of raw memory access and string-based programming} \\
 
 % -----------------------------------------------------------------------------
 \subsection{Runtime Reification / Dual Objects}
