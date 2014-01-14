@@ -7,26 +7,30 @@
 \introduction
 % =============================================================================
 
-In \chapref{background} we gave an overview of different concepts of reflection and we focused on the main distinction between language-side and \VM-side reflection.
+In \chapref{background} we gave an overview of different concepts of reflection focusing on the main distinction between language-side and \VM-side reflection.
 While language-side reflection is very well described in research and rather wide-spread in dynamic languages, the \VM-side counterpart is not.
-Up to some extent it is always possible to introspect the \VM at a very basic level.
-Tools like \DTrace provide a simple way to instrument a binary.
-However, that still does not make the internal structure of the \VM accessible that were available at compilation time.
-And the restrictions are even more sever when it comes to \VM-level intercession.
-Languages are hardly capable of directly influencing the underlying \VM in a structured way.
+Compile-time reflection is the center of many popular \VM generation frameworks, but they usually exclude the dynamic reflection aspect of the final binary.
+Nevertheless, it is always possible to introspect (structural reflection) the \VM at a very basic level.
+Additionally, there are tools like \DTrace which provide a simple way to instrument a binary with little prior setup required.
+Thus a limited form of intercession is possible on the binary executable themselves.
+However, this still does not make the internal structural information of the \VM accessible that were available at compilation time.
+And the restrictions are even more severe when it comes to \VM-level intercession.
+It is foreseen for languages to dynamically influe the underlying \VM.
 
-In the course of this thesis we presented tools that try to access this special area of \VM-level reflection -- all based on \B, a common framework to activate native code from language-side.
+In the course of this thesis we presented tools that try to enter the field of \VM-level reflection -- all based on \B, a common framework to activate native code from language-side.
 
 \WF's dynamic primitives are a first step towards modifying \VM behavior from language-side in a rather controlled way.
-By bringing the metacircular \VM definition alive in \PH we connect the former static definition to the running artifact.
-Modification happens not by injecting basic native instructions but at high-level by modifying and dynamically compiling primitive definitions.
+By bringing the metacircular \VM sources alive in \PH we connect the former static definition to the running artifact.
+Modification happen not by injecting basic native instructions but at high-level by modifying and dynamically compiling primitives.
 
 In contrast to \WF we developed \NBJ, a \JIT compiler prototype, that moves the original \VM component to the language-side.
-While \NBJ is defined as language-side compiler using familiar coding patterns its \VM interaction is by far not clean.
-Unlike the plugins and primitives defined by \WF the \JIT generates native code that is closely integrated into the low-level execution model of the \VM.
-As a result \NBJ needs to manually circumvent the current restrictions of the \VM, clearly not an optimal path.
+While \NBJ is defined as language-side compiler using familiar coding patterns, its interaction with the \VM is not clean.
+Unlike the plugins and primitives defined by \WF the \JIT generates native code that is heavily depending on the low-level and internal execution model of the \VM.
+Unlike \WF \NBJ requires a modified \VM to add a basic interface for manually injecting \JIT code.
 
 In this chapter we present possible solutions and an early prototype \VM that addresses the limitations we encountered while developing \NB, the \B-based \FFI, \WF and \NBJ.
+We start by listing possible improvements for the language-side part of the \B infrastructure such as providing a well-defined high-level intermediate format.
+This will lead to a description of required \VM-level improvements to make applications such as \WF or \NBJ feasible outside a research context.
 
 \todo{some paragraph about the general outlook on missing tools for \VM development}
 

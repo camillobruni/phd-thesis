@@ -124,6 +124,13 @@ This example uses a convenience method of \NB named \ttt{CLibrary} to obtain a h
 \seclabel{ffi-callout-parameters}
 % ---------------------------------------------------------------------------
 
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=1.2]{nativeBoostSyntax}
+	\caption[\NB Basic Method]{Example of the general \NBFFI callout syntax}
+	\figlabel{ffi-nativeBoostSyntax}
+\end{figure}
+
 \figref{ffi-nativeBoostSyntax} presents the general syntax of \NBFFI through an example of a callout to the \ttt{abs} function of the \ttt{libc}.
 The \ttt{abs:} method has one argument named \ttt{anInteger} (cf. \ding{182}).
 This method uses the pragma \ttt{<primitive:module:error:>} which indicates that the \ttt{\#primitiveNativeCall} of the \ttt{\#NativeBoostPlugin} should be called when this method is executed (cf. \ding{183}).
@@ -135,13 +142,6 @@ These types annotations are then used by \NBFFI to automatically do the marshall
 Second, the values to be passed when calling out.
 In this example, \ttt{anInteger} refers to the argument of the \ttt{abs} method, meaning that the value of this variable should be passed to the \ttt{abs} C function.
 Finally, this \ttt{abs} function is looked up in the \ttt{libc} whose an handle is passed in the \ttt{module:} parameter (cf. \ding{186}).
-
-\begin{figure}[H]
-	\centering
-	\includegraphics[scale=1.2]{nativeBoostSyntax}
-	\caption[\NB Basic Method]{Example of the general \NBFFI callout syntax}
-	\figlabel{ffi-nativeBoostSyntax}
-\end{figure}
 
 % ---------------------------------------------------------------------------
 \subsection{Automatic Marshalling of Known Types}
