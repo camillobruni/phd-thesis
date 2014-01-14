@@ -655,8 +655,8 @@ We see that in the simple case displayed in \tabref{benzo-nabujito-performance-s
 We expect that in the future we apply more low-level optimizations and thus increase the compilation time of \NBJ.
 However, we have shown in the performance evaluation for \NB, the \B-based \FFI, in \secref{benzo-nb-performance} that even a rather high one-time overhead is quickly amortized.
 Furthermore with \PH's image approach the generated native code is persistent over several sessions.
-A subsequent restart of the same runtime will not cause the \JIT to nativize the same methods it did during the last launch.
-Hence our approach is even valid for short-timed script-like applications as most of the methods will already be available in optimized native code from a previous run.
+A subsequent restart of the same runtime will not cause the \JIT to compile the same methods it did during the last launch.
+Hence our approach is even valid for short-lived applications as most of the methods will already be available in optimized native code from a previous run.
 
 
 % ===========================================================================

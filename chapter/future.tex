@@ -32,26 +32,52 @@ In this chapter we present possible solutions and an early prototype \VM that ad
 We start by listing possible improvements for the language-side part of the \B infrastructure such as providing a well-defined high-level intermediate format.
 This will lead to a description of required \VM-level improvements to make applications such as \WF or \NBJ feasible outside a research context.
 
-\todo{some paragraph about the general outlook on missing tools for \VM development}
+
+% =============================================================================
+\section{Background and Related Work}
+\seclabel{future-related-work}
+\seclabel{future-background}
+% =============================================================================
+
+% -----------------------------------------------------------------------------
+\subsection{\P \VM}
+% -----------------------------------------------------------------------------
+\todo{related work: Klein VM (dual objects)}
+
+% -----------------------------------------------------------------------------
+\subsection{\Klein \VM}
+% -----------------------------------------------------------------------------
+\todo{related work: Pinocchio (native code)}
+
+% =============================================================================
+
 
 % =============================================================================
 %\newpage
 \section{Language-side Improvements}
+\seclabel{future-language}
 % =============================================================================
-\todo{intro: extend the summary of \chapref{reification}}
+\todo{mostly address the items we already outline for \B itsefl and the 3 applications presented}
 
 % -----------------------------------------------------------------------------
 \subsection{Domain Specific Inspectors}
 % -----------------------------------------------------------------------------
+\todo{make concepts explicit and first-class} \\
+\todo{limit the use of raw memory access and string-based programming} \\
+\todo{reified concepts imply a clear and more well-defined interface} \\ 
 \todo{More specific Inspectors (Also for VM development)} \\
 \todo{Restate the original VM Simulator to provide a smooth VM dev experience}
 
 
 % -----------------------------------------------------------------------------
-\subsection{Barrier Free Low-level Interaction}
+\subsection{Barrier-free Low-level Interaction}
 % -----------------------------------------------------------------------------
 \todo{Provide nice infrastructure for multi-platform low-level interaction} \\
-\todo{Provide debugging infrastructure for Benzo}
+\todo{summarize the solutions present in the benzo chapter}\\
+\todo{Provide debugging infrastructure for Benzo} \\
+\todo{outline barrier-free debugger} \\
+\todo{Extend debugging to low-level => CPU platform specific debugger necessary} \\
+\todo{might be simplified by having a common infrastructure => follow up on VCPU}
 
 % -----------------------------------------------------------------------------
 \subsection{Virtual CPU an Assembler DSL}
@@ -69,7 +95,7 @@ This will lead to a description of required \VM-level improvements to make appli
 \todo{Introduction: Lanugage-side is not enough} \\
 \todo{Need to get a onstacle-free VM} \\
 \todo{List of requirements for a new VM Infrastructure} \\ 
-\todo{Small comparison against the current solution we have with COG}
+\todo{Small comparison against the current solution we have with COG} \\
 
 
 % -----------------------------------------------------------------------------
