@@ -517,18 +517,21 @@ The limit the stress on the \CPU cache only the most used methods are jitted.
 Message sends from one jitted method to another hence happen with a very low overhead.
 However, due to the limited size of the \JIT space that still means that infrequently used methods are evaluated using the existing bytecode interpreter.
 \cb{the previous paragraph might be a bit dense, depending on the knowledge of the reader}
-
-
-\todo{Step 3: Trampolines to jump back and forth between native activated scheme and bytecode interpreter based approach}\\
-\todo{lanugage has infinite stack, while the bytecode interpreter uses a loop} \\
-\todo{\JIT uses native stack, so does the bytecode interpreter} \\
-\todo{returning inside native code should also return on the native stack} \\
-\todo{switching to native code would not increase the C stack, while calling the bytecode interpreter from the \JIT code would} \\
-\todo{avoid ever-growing C stack}
+Since \Cog uses stack mapping this means that the C-based bytecode interpreter runs on the same native stack with two slightly different strategies.
+For instance, typically the C stack depth is limited to a predefined constant, whereas the \PH stack can grow as big as the whole heap.
+Which means that recursion in a \PH program is not a direct threat.
+In the bytecode interpreter the language-side recursion is not directly present, since the interpreter only fetches and evaluates bytecodes in a loop.
+Thus, switching from \JIT-mode to bytecode interpretation requires some additional work to avoid negative side-effects.
+Essentially, \Cog separates the native stack for the \JIT and the bytecode interpreter.
+Each time \Cog has to switch execution mode it goes through a trampoline routine.
+The trampoline will exchange the two native stacks and jump to the proper location to continue the execution of the bytecode interpreter from the native \JIT mode or vice versa.
+If \Cog would simply call back to the C interpreter a new stack frame would be allocated, notably on the existing native \JIT stack.
+This stack frame would persist as the bytecode interpreter continues running normal \PH message sends.
+\todo{reread}
 
 %----------------------------------------------------------------------------
 \paragraph{Limitations of \VM-level \JIT Compilers}
-In the context of \NBJ we separate a \JIT infrastructure into separate parts.
+In the context of \NBJ we split the \JIT infrastructure into separate parts.
 The major part is to have a \VM that uses stack-mapping.
 In the case of a bytecode-based interpreter, we assume that the \VM provides routines to switch between a bytecode interpretation context and a low-level native execution context.
 With \NBJ we move the \JIT compiler,the part that generates native code at runtime, from the \VM to the image.%, the part that generates native code at runtime, typically from bytecodes.
@@ -856,7 +859,7 @@ With the current setup we are capable of hosting important \VM parts such as non
 However, again we encountered the typical limitations of the \B framework: missing high-level debugging and hard-coded assembler assumptions.
 As before we refer to the suggested \B improvement presented in \secref{benzo-problems}.
 
-\todo{common experiment to reuse single primitive definition}
+\todo{common experiment to reuse single primitive definition for \VM and \JIT + experiments}
 
 % =============================================================================
 \input{chapter-footer.tex}
