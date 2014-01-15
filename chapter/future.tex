@@ -184,6 +184,15 @@ With the aforementioned solution we are able to recover from certain low-level e
 In a \ST-like environment the debugger will pop up on the location causing the error and thus allowing a programmer to inspect stack and variables.
 To provide the same facility for \B we have to plug into the existing low-level debugging utilities such as \ttt{ptrace} to enable stepping over native instructions.
 
+\begin{figure}[h]
+	\centering
+	\includegraphics[scale=\imagescale]{benzo-crossover-debugger}
+	\caption{\B Crossover Debugger Outline}
+	\figlabel{benzo-crossover-debugger}
+\end{figure}
+%
+
+\todo{ref on cross language debugger: Helvetia?}
 \todo{diassembler support ...}
 
 \todo{Extend debugging to low-level => CPU platform specific debugger necessary} \\
