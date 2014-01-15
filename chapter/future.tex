@@ -140,11 +140,13 @@ The previously mentioned \VM generation frameworks usually have first-class obje
 Usually, none of this structural information survives the \VM compilation phase.
 Essentially this leaves the final \VM binary with little or no means for introspection. Of course the same restrictions apply then for language-side tools like \B that want to interact with the \VM internals.
 
+\paragraph{Customized \VM \MOP}
 We have seen in \secref{validation-nabujito-problems} for \NBJ that the only way to circumvent such issues is by creating modified \VMs which enable specific interaction points.
 There are other \PH-based research projects \cite{??} that took the same path and created a modified \VM.
 We, believe that with an extended low-level \MOP the focus for research projects could shift from the \VM to the language-side.
 The final extreme is to have a system that works like the described \Klein \VM where there is no longer a clear distinction of what is \VM-level and what is language-side.
 
+\paragraph{Anticipated Debugging}
 For \B we have more modest intermediate goals.
 The major drawback for a seamless developer experience is the lack of a dedicate low-level debugging infrastructure.
 At this point, \B developers have to rely on 3rd-party C-centric tools for debugging.
@@ -152,11 +154,31 @@ Hence, a developer has to decide upfront at which abstraction level the debuggin
 Either at high-level without the possibility to deal with low-level errors, or at low-level losing all the inspection capabilities.
 Besides the shortcomings that either side of the decision will bring, already the fact that the debugging direction has to be anticipated is inappropriate.
 
+We outlined in \secref{benzo-problems-debugging} already several ways to improve the current debugging situation for \B.
+The most important focus is on reducing the cases where the programmer has to anticipate the debugging tool.
+Since we have to deal with two very distinct abstraction levels we can not only rely on a pure language-side solution to provide different debuggers \cite{Towards a Moldable Debugger}.
+The major problem is the serious implications of a low-level error.
+Unlike user-level errors they are not well-defined or even contained.
+It is astonishingly simple to corrupt the \VM memory while writing low-level code and thus breaking any contract with the \VM code.
+However, it is more common to access protected memory due to a wrongly dereferenced pointer.
+Hence, the \B should focus on this most common bug by following the solution outlined in \figref{benzo-debugger}.
+%
+\begin{figure}[h]
+	\centering
+	\includegraphics[scale=\imagescale]{benzo-debugger}
+	\caption{\B Debugger Outline}
+	\figlabel{benzo-debugger}
+\end{figure}
+%
+\begin{enumerate}
+	\item Standard \PH method activating a \B-enabled method through the \ttt{primitiveNativeCall} primitive.
+	\item Native code causing a memory access violation (for example \ttt{SIGSEV}) which can not be handled by \PH directly.
+	\item Low-level signal handler is activated by the operating system and tries to walk back the native stack up to the \ttt{primitiveNativeCall} activation.
+	\item After successfully finding the \ttt{primitiveNativeCall} the signal handler sends a \B failure back to \PH.
+\end{enumerate}
 
 
-\todo{summarize the solutions present in the benzo chapter}\\
-\todo{Provide debugging infrastructure for Benzo} \\
-\todo{outline barrier-free debugger} \\
+
 \todo{Extend debugging to low-level => CPU platform specific debugger necessary} \\
 \todo{might be simplified by having a common infrastructure => follow up on VCPU}
 
