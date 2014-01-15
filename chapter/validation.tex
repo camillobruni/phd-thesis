@@ -687,7 +687,7 @@ The helper routine only imposes a one-time overhead, however we slow down the fi
 Yet, looking at the \Cog stack frame in \figref{val-nabujito-cog-stack-frame} we only dealt with finding the reference to the \CogMethod.
 So far we left out the \GC interaction at \JIT-level, which leads us to the following paragraph.
 
-\paragraph{Overcoming the \GC Missing \VM Interface for the \JIT}
+\paragraph{Overcoming the Missing \VM Interface for the \JIT}
 \Cog embeds references to normal \PH objects in its jitted methods.
 Most often this is the case for the symbols used as selectors in message sends.
 This is different from the indirect approach used in compiled methods for the bytecode interpreter.
@@ -699,6 +699,13 @@ Additional to moved objects no the \PH heap, the \JIT space itself moves a \CogM
 Hence the \GC has to also be aware of jumps and reference to another \CogMethod inside the native code.
 In \Cog this additional information is stored in the \CogMethod itself, called method map.
 It contains simple entries which describe the location of jumps, calls, references to other \CogMethod objects and references to \PH objects.
+%
+\begin{figure}[h]
+	\centering
+	\includegraphics[scale=\imagescale]{cog-method-map}
+	\caption{\Nabujito-generated Relocation Maps}
+	\figlabel{val-nabujito-cog-method-map}
+\end{figure}
 
 The low-level design of \Cog has significant implications on how \NBJ has to interact with the \VM.
 \NBJ has to provide the location of every reference and jump inside the native code.
