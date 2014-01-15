@@ -177,6 +177,11 @@ Hence, the \B should focus on this most common bug by following the solution out
 	\item After successfully finding the \ttt{primitiveNativeCall} the signal handler sends a \B failure back to \PH.
 \end{enumerate}
 
+\paragraph{Barrier-free Debugging}
+After proposing a solution to improve \B's bug recovery behavior we immediately encounter a second problem.
+How do we debug low-level code?
+With the aforementioned solution we are able to recover from certain low-level errors and signal them properly at language-side.
+In a \ST-like environment the debugger will pop up on the location causing the error and thus allowing a programmer to inspect stack and variables.
 
 
 \todo{Extend debugging to low-level => CPU platform specific debugger necessary} \\
