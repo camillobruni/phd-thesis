@@ -182,13 +182,15 @@ After proposing a solution to improve \B's bug recovery behavior we immediately 
 How do we debug low-level code?
 With the aforementioned solution we are able to recover from certain low-level errors and signal them properly at language-side.
 In a \ST-like environment the debugger will pop up on the location causing the error and thus allowing a programmer to inspect stack and variables.
+To provide the same facility for \B we have to plug into the existing low-level debugging utilities such as \ttt{ptrace} to enable stepping over native instructions.
 
+\todo{diassembler support ...}
 
 \todo{Extend debugging to low-level => CPU platform specific debugger necessary} \\
 \todo{might be simplified by having a common infrastructure => follow up on VCPU}
 
 % -----------------------------------------------------------------------------
-\subsection{Virtual CPU an Assembler DSL}
+\subsection{Virtual \CPU an Assembler \DSL}
 % -----------------------------------------------------------------------------
 \todo{small summary of the current shortcomings} \\
 \todo{Current State of the Implementation} \\
