@@ -131,7 +131,29 @@ Which is why most C-focused \IDEs are only partially sufficient for an efficient
 % -----------------------------------------------------------------------------
 \subsection{Barrier-free Low-level Interaction}
 % -----------------------------------------------------------------------------
-\todo{Provide nice infrastructure for multi-platform low-level interaction} \\
+Shifting from \VM development to the final language-runtime we see a similar issue when it comes to tools that span abstraction levels.
+It is not directly possible to inspect low-level objects from language-side.
+Focusing the on the \B architecture what comes closes to inspecting low-level objects is the \ttt{struct} support for the \NB \FFI library described in \secref{ffi-newtypes}.
+We already use this approach for the \NBJ project to inspect \VM internal meta objects for debugging purposes.
+It is important to note that giving access to the \VM internal objects is not permitted in most languages.
+The previously mentioned \VM generation frameworks usually have first-class objects for all the \VM internal objects or provide mirror-like facilities to access objects from raw memory.
+Usually, none of this structural information survives the \VM compilation phase.
+Essentially this leaves the final \VM binary with little or no means for introspection. Of course the same restrictions apply then for language-side tools like \B that want to interact with the \VM internals.
+
+We have seen in \secref{validation-nabujito-problems} for \NBJ that the only way to circumvent such issues is by creating modified \VMs which enable specific interaction points.
+There are other \PH-based research projects \cite{??} that took the same path and created a modified \VM.
+We, believe that with an extended low-level \MOP the focus for research projects could shift from the \VM to the language-side.
+The final extreme is to have a system that works like the described \Klein \VM where there is no longer a clear distinction of what is \VM-level and what is language-side.
+
+For \B we have more modest intermediate goals.
+The major drawback for a seamless developer experience is the lack of a dedicate low-level debugging infrastructure.
+At this point, \B developers have to rely on 3rd-party C-centric tools for debugging.
+Hence, a developer has to decide upfront at which abstraction level the debugging should occur.
+Either at high-level without the possibility to deal with low-level errors, or at low-level losing all the inspection capabilities.
+Besides the shortcomings that either side of the decision will bring, already the fact that the debugging direction has to be anticipated is inappropriate.
+
+
+
 \todo{summarize the solutions present in the benzo chapter}\\
 \todo{Provide debugging infrastructure for Benzo} \\
 \todo{outline barrier-free debugger} \\
