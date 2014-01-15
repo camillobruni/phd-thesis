@@ -81,7 +81,7 @@ However, for simplicity we relied on a small C Kernel for the complete bootstrap
 Additionally some crucial primitives that required system calls were implemented in C.
 
 % -----------------------------------------------------------------------------
-\subsection{\Klein \VM}
+\subsection{\Maxine \VM}
 % -----------------------------------------------------------------------------
 
 % -----------------------------------------------------------------------------
@@ -119,7 +119,13 @@ However, with the recent changes the advanced simulator does not yet run in \PH 
 
 Lately we have seen a very similar approach for the \Maxine research \VM \cite{Wimm13a}.
 It provides excellent low-level debugging interaction, switching seamlessly between low-level assembler views and high-level object inspectors.
-\cb{I think I should extend this a bit}
+We believe that it is an imperative requirement for a \VM development \IDE to support customizable inspectors that span from high-level to low-level.
+Even though existing C-focused \IDEs provide more and more support for integrated inspectors the \VM domain has different needs.
+C inspectors are tailored towards fixed-sized objects whose types can be statically inferred.
+Whereas, for \VMs we only have a handful types of object layouts and the real type is only implicitly available.
+For instance in certain \VMs the class is encoded in the header of an object instead of a simple full pointer to the class object.
+This means that a minor interpretation pass is necessary to retrieve such information.
+Which is why most C-focused \IDEs are only partially sufficient for an efficient \VM development.
 
 
 % -----------------------------------------------------------------------------
