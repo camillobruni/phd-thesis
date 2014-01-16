@@ -287,10 +287,10 @@ The following code example outlines the basic usage of \VCPU:
 	label={lst:benzo-problem-vcpu}, 
 	caption={Basic \VCPU Example}
 ]{}
-Benzo vcpu x86 generate: [ :asm | | temp1 temp2 |
-	temp1 := asm memoryAt: 16r12345.
-	temp2 := asm uint: 2.
-	asm return: temp1 + temp1 ]
+Benzo vcpu x86 generate: [ :cpu | | temp1 temp2 |
+	temp1 := cpu memoryAt: 16r12345.
+	temp2 := cpu uint: 2.
+	cpu return: temp1 + temp1 ]
 \end{stcode}
 %
 Which corresponds to the same functionality expressed in the following x86 instructions:
@@ -306,10 +306,10 @@ For this basic example we see that the two formats do not differ very much.
 Though, already on the example of the \ttt{return} instruction it becomes obvious that the \TAC-based solution is more explicit.
 When using more complex control structures the difference is apparent:
 \begin{stcode}{}
-Benzo vcpu x86 generate: [ :asm || a b c |
-	a := asm uint: 1.
-	b := asm uint: 2.
-	c := asm uint: 3.
+Benzo vcpu x86 generate: [ :cpu || a b c |
+	a := cpu uint: 1.
+	b := cpu uint: 2.
+	c := cpu uint: 3.
 	(a = b and: b = c) 
 		ifTrue:  [ c value: 5  ] 
 		ifFalse: [ c value: 10 ].
@@ -335,7 +335,19 @@ Under the hood \VCPU will lower the \TAC instructions to low-level \ASM instruct
 
 \paragraph{\VCPU Implementation}
 So far we presented the external interface of the \VCPU format which works similar to the existing \B assembler format.
-We will now shed lights on the internal implementation details of the \VCPU format.
+We will now shed lights on the internal implementation details of \VCPU which is divided in three classes of objects:
+%
+\begin{description}
+	\item[\CPUs:] Source for values named \ttt{cpu} in the previous examples.
+	The \CPU object will contain the list of instructions and for which backend it should generate the native code.
+	
+	\item[Instructions:] Encapsulates an instruction type, operands and result value according to the \TAC format.
+	Additionally each instructions holds a backpointer to the \CPU it originated.
+	For example \ttt{temp1 + temp1} yields a \VCPU instruction.
+	
+	\item[Low-level Objects:] A category of values or helper objects.
+	For example \ttt{cpu uint: 1} will create low-level word that contains the value \ttt{1}.
+\end{description}
 
 
 
