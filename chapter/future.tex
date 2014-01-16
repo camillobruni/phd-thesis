@@ -187,6 +187,7 @@ With the aforementioned solution we are able to recover from certain low-level e
 In a \ST-like environment the debugger will pop up on the location causing the error and thus allowing a programmer to inspect stack and variables.
 To provide the same facility for \B we have to plug into the existing low-level debugging utilities such as \ttt{ptrace} to enable stepping over native instructions.
 The following \figref{benzo-crossover-debugger} outlines the basics of a debugger that crosses the high-level / low-level barrier.
+%
 \begin{figure}[h]
 	\centering
 	\includegraphics[scale=\imagescale]{benzo-crossover-debugger}
@@ -195,24 +196,90 @@ The following \figref{benzo-crossover-debugger} outlines the basics of a debugge
 \end{figure}
 %
 \begin{enumerate}
-\item Point where a \B initiates a native call and the debugger switches from a high-level \PH stack to the low-level native stack.
+	\item Point where a \B initiates a native call and the debugger switches from a high-level \PH stack to the low-level native stack.
 To properly use low-level debugging tools we fork the complete \VM process.
-\item The low-level debugger in \PH switches the underlying debugging interface.
+	\item The low-level debugger in \PH switches the underlying debugging interface.
 Instead of directly interacting with first-class \PH context we communicate to the the forked process with tools like \ttt{ptrace}.
-\item The forked process is updated according to the actions initiated from the \PH side.
+	\item The forked process is updated according to the actions initiated from the \PH side.
 \end{enumerate}
 
-\todo{ref on cross language debugger: Helvetia?}
-\todo{diassembler support ...}
-\todo{not possible to work with }
+\noindent The outlined debugger will not work in certain cases where the native code directly interacts with the outer image.
+The forked debugger process provides security from the main \PH image by isolating it.
+However, for many \B applications such as the \FFI implementation this limitation would not apply.
 
-\todo{Extend debugging to low-level => CPU platform specific debugger necessary} \\
-\todo{might be simplified by having a common infrastructure => follow up on VCPU}
+\cb{more?}
 
 % -----------------------------------------------------------------------------
 \subsection{Virtual \CPU an Assembler \DSL}
 % -----------------------------------------------------------------------------
-\todo{small summary of the current shortcomings} \\
+\B uses \AsmJIT as assembler backend which is currently limited to x86 instruction set.
+This choice is aligned with \PH main development branches for the most common operating systems.
+However, this excludes mobile devices which currently focus on \ARM-based architectures.
+To support this new architecture we have to extend the assembler backend in \AsmJIT.
+The changes for \B-based applications such as the \NB \FFI are more severe.
+Essentially most low-level code has to be replicated for each new platform.
+A better solution is to use an intermediate format for all the low-level code which is then compiled for each platform specifically.
+
+\todo{\ASM code is too low-level: \NB lacks expressiveness} \\
+\todo{see \secref{benzo-problems-platform-independence}}
+
+\paragraph{A Low-level Intermediate Format}
+\todo{change a bit to make the copy}
+\VCPU is based on a \TAC to simplify the adoption of optimizations such as \SSA.
+These \TAC instruction take the following form:
+%
+\begin{stcode}{}
+result := argument1 OP argument2
+\end{stcode}
+%
+There are three operands involved, \ttt{result}, \ttt{argument1} and \ttt{argument2}, from which the name of this instruction format originates.
+Based on this assumption, each standard \VCPU instruction returns a temporary variable which can be used for further operations.
+The following code example outlines the basic usage of \VCPU:
+%
+\begin{stcode}[
+	label={lst:benzo-problem-vcpu}, 
+	caption={Basic \VCPU Example}
+]{}
+Benzo vcpu x86 generate: [ :asm | | temp1 temp2 |
+	temp1 := asm memoryAt: 16r12345.
+	temp2 := asm uint: 2.
+	asm return: temp1 + temp1 ]
+\end{stcode}
+%
+Which corresponds to the same functionality expressed in the following x86 instructions:
+%
+\begin{stcode}{}
+Benzo x86 generate: [ :asm |
+	asm mov: 16r12345 ptr to: asm EAX.
+	asm add: asm EAX with: 2.
+	asm return ]
+\end{stcode}
+
+\todo{inject high-level instructions} \\
+\todo{explain the difference to explicit code like \ASM by having a different backends}
+
+\paragraph{\VCPU Testing and Debugging}
+\todo{\VCPU interpreter} \\
+\todo{tracer backend for code generation} \\
+\todo{Native Simluator for the specific backends} \\
+\todo{Requires mapping from native instruction to the \VCPU instructions}
+
+
+\paragraph{\VCPU Optimizations}
+\todo{Optimizations required for \B-based applications can be shared} \\
+
+To get to the final native instructions the \VCPU infrastructure compiles the high-level instructions to the specific backend.
+The current compiler is divided into the following passes:
+%
+\begin{itemize}[noitemsep]
+\item Platform Specific Transformation
+\item Register Allocation
+\item Superfluous Assignment Remover
+\item Platform Specific Assembler
+\end{itemize}
+
+
+
 \todo{Current State of the Implementation} \\
 \todo{Support new Platforms} \\
 \todo{Indirect support for simluation and thus better debugging}
@@ -223,7 +290,7 @@ Instead of directly interacting with first-class \PH context we communicate to t
 \seclabel{future-vm}
 % =============================================================================
 \todo{Introduction: Lanugage-side is not enough} \\
-\todo{Need to get a onstacle-free VM} \\
+\todo{Need to get a obstacle-free VM} \\
 \todo{List of requirements for a new VM Infrastructure} \\ 
 \todo{Small comparison against the current solution we have with COG} \\
 
