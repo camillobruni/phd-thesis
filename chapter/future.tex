@@ -242,18 +242,25 @@ However, for many \B applications such as the \FFI implementation this limitatio
 \subsection{Virtual \CPU an Assembler \DSL}
 % -----------------------------------------------------------------------------
 \B uses \AsmJIT as assembler backend which is currently limited to x86 instruction set.
-This choice is aligned with \PH main development branches for the most common operating systems.
-However, this excludes mobile devices which currently focus on \ARM-based architectures.
+This choice is aligned with \PH's main development focus for the most common operating systems.
+However, this choice of architecture already excludes mobile devices which currently focus on \ARM-based architectures.
 To support this new architecture we have to extend the assembler backend in \AsmJIT.
-The changes for \B-based applications such as the \NB \FFI are more severe.
-Essentially most low-level code has to be replicated for each new platform.
-A better solution is to use an intermediate format for all the low-level code which is then compiled for each platform specifically.
+While the implementation effort for a new \AsmJIT architecture is an implicit requirement the implications on \B-based applications are more severe.
+For instance we already mentioned in \secref{ffi-problems-platform} how the \NB \FFI would suffer from code duplication.
+Essentially each newly added \CPU architecture has ripple-effects up to the final \B-based applications.
+Each \B application has to duplicate all native usage in and create internally separate generates for each platform.
+We believe that this approach is not the right path as it forces \B users into code duplication.
+
+A much better solution is to provide a more abstract and platform independent low-level intermediate format at \B-level.
+Ideally we can push the platform specific code generation fully to the native backends in \B itself.
+\B-based applications only have to focus on a single low-level instruction format reducing the development effort.
+
+\paragraph{A Low-level Intermediate Format}
 
 \todo{\ASM code is too low-level: \NB lacks expressiveness} \\
 \todo{see \secref{benzo-problems-platform-independence}} \\
 \todo{\ASM is hard to debug directly: very un \PH-ish, we need direct feedback}
 
-\paragraph{A Low-level Intermediate Format}
 \todo{change a bit to make the copy}
 \VCPU is based on a \TAC to simplify the adoption of optimizations such as \SSA.
 These \TAC instruction take the following form:
