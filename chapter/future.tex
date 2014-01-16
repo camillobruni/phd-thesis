@@ -255,14 +255,21 @@ A much better solution is to provide a more abstract and platform independent lo
 Ideally we can push the platform specific code generation fully to the native backends in \B itself.
 \B-based applications only have to focus on a single low-level instruction format reducing the development effort.
 
+
+We also noticed that for actual testing the native instruction set is not optimal.
+For instance the x86 instruction with all its modifier codes and variable width instructions makes it tedious to implement a proper simulator.
+Writing bindings for an existing simulator such as \urlfootnote{\Bochs}{http://bochs.sourceforge.net/} is a better choice.
+However, even with a proper simulator ready for x86 we can not provide a very fluent debugging process.
+For instance, the way assembler instructions are written in \B require them to be fully generated before they can be interpreted.
+We are used from \PH that any code snipped is executable, a property that we would like to bring to the low-level development as well.
+
+
 \paragraph{A Low-level Intermediate Format}
+To reduce the aforementioned platform dependency of \B we developed a intermediate low-level representation called \VCPU.
+\VCPU is based on a three-address-code (\TAC) to simplify the adoption of optimizations such as static single assignment (\SSA) \cite{??}.
+Additionally we chose to postpone register allocation to the final code generation phase.
+By using a \TAC-based format and rewiring the internals we are even able to make the \VCPU code directly executable in \PH.
 
-\todo{\ASM code is too low-level: \NB lacks expressiveness} \\
-\todo{see \secref{benzo-problems-platform-independence}} \\
-\todo{\ASM is hard to debug directly: very un \PH-ish, we need direct feedback}
-
-\todo{change a bit to make the copy}
-\VCPU is based on a \TAC to simplify the adoption of optimizations such as \SSA.
 These \TAC instruction take the following form:
 %
 \begin{stcode}{}
