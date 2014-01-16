@@ -94,24 +94,21 @@ And unlike \P it does not require kernel primitives written in C.
 % -----------------------------------------------------------------------------
 \subsection{\Maxine \VM}
 % -----------------------------------------------------------------------------
-\todo{refer to \secref{background-maxine} \cite{Wimm13a}}\\
-\todo{inspector overview} \\
-\todo{fluent navigation from low-level code to high-level inspectors}
-
-\todo{focuse more on the contribution part}
-\Maxine is a metacircular \Java \VM focused on an efficient developer experience.
+\Maxine is a metacircular \Java \VM \cite{Wimm13a} focused on an efficient developer experience.
 The \Maxine \VM stands out as it truly focuses on productivity and developer interaction.
 \Maxine uses abstract and high-level representations of \VM-level concepts and consistently exposes them throughout the development process.
 Inspectors at multiple abstraction levels are readily available while debugging, giving insights to the complete \VM state.
-Compared to \Maxine, \WF currently lacks the debugging tools which would enable a truly seamless interaction with the low-level world.
+\Maxine provides and excellent navigation for generated native code by providing links back to language-side objects as well as other native code and symbols.
+
+Compared to \Maxine, the \B infrastructure currently lacks the debugging tools which would enable a truly seamless interaction with the low-level world.
+Namely, \B does not support low-level debugging and does not support facilities to inspect low-level native code directly.
 However, \Maxine focuses on \Java, a language with inferior reflective capabilities compared to \PH.
-Hence the live interaction with the \VM is only presented in the development phase and not exposed to the language-side.
-\Maxine would be an excellent candidate to implement our approach for \Java.
+Hence the live interaction with the \VM is only possible during the development phase and not exposed to the language-side.
 
 % -----------------------------------------------------------------------------
 \subsection{\Klein \VM}
 % -----------------------------------------------------------------------------
-\Klein is a metacircular \VM for the \Self programming language that has no separation into \VM and language.
+\urlfootnote{\Klein}{http://kleinvm.sourceforge.net/} is a metacircular \VM for the \Self programming language that has no separation into \VM and language \cite{Unga05a}.
 The \VM is entirely written in \Self but takes the concept of metacircular beyond the compile-time.
 For instance, unlike many other metacircular \VMs, including \Cog and \Squeak, \Klein does not use an intermediate low-level language to bootstrap the system.
 It generates directly a binary image, much like the aforementioned \P or \MIST \VM.
