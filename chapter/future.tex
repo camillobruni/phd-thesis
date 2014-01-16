@@ -84,7 +84,7 @@ Additionally some crucial primitives that required system calls were implemented
 \subsection{\Maxine \VM}
 % -----------------------------------------------------------------------------
 \todo{refer to \secref{background-maxine}}\\
-\todo{inspector oviewview} \\
+\todo{inspector overview} \\
 \todo{fluent navigation from low-level code to high-level inspectors}
 
 % -----------------------------------------------------------------------------
@@ -186,7 +186,7 @@ How do we debug low-level code?
 With the aforementioned solution we are able to recover from certain low-level errors and signal them properly at language-side.
 In a \ST-like environment the debugger will pop up on the location causing the error and thus allowing a programmer to inspect stack and variables.
 To provide the same facility for \B we have to plug into the existing low-level debugging utilities such as \ttt{ptrace} to enable stepping over native instructions.
-
+The following \figref{benzo-crossover-debugger} outlines the basics of a debugger that crosses the high-level / low-level barrier.
 \begin{figure}[h]
 	\centering
 	\includegraphics[scale=\imagescale]{benzo-crossover-debugger}
@@ -195,13 +195,16 @@ To provide the same facility for \B we have to plug into the existing low-level 
 \end{figure}
 %
 \begin{enumerate}
-\item 
-\item 
-\item 
+\item Point where a \B initiates a native call and the debugger switches from a high-level \PH stack to the low-level native stack.
+To properly use low-level debugging tools we fork the complete \VM process.
+\item The low-level debugger in \PH switches the underlying debugging interface.
+Instead of directly interacting with first-class \PH context we communicate to the the forked process with tools like \ttt{ptrace}.
+\item The forked process is updated according to the actions initiated from the \PH side.
 \end{enumerate}
 
 \todo{ref on cross language debugger: Helvetia?}
 \todo{diassembler support ...}
+\todo{not possible to work with }
 
 \todo{Extend debugging to low-level => CPU platform specific debugger necessary} \\
 \todo{might be simplified by having a common infrastructure => follow up on VCPU}
