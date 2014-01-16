@@ -335,6 +335,7 @@ Under the hood \VCPU will lower the \TAC instructions to low-level \ASM instruct
 
 \paragraph{\VCPU Implementation Overview}
 So far we presented the external interface of the \VCPU format which works similar to the existing \B assembler format.
+We will now shed lights on the internal implementation details of \VCPU which is divided in three classes of objects:
 %
 \begin{figure}[h]
 	\centering
@@ -342,8 +343,6 @@ So far we presented the external interface of the \VCPU format which works simil
 	\caption{\VCPU Overview}
 	\figlabel{future-vcpu-overview}
 \end{figure}
-%
-We will now shed lights on the internal implementation details of \VCPU which is divided in three classes of objects:
 %
 \begin{description}
 	\item[\CPUs:] Source for values named \ttt{cpu} in the previous examples.
