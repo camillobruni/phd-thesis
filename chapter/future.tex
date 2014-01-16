@@ -83,24 +83,44 @@ Additionally some crucial primitives that required system calls were implemented
 % -----------------------------------------------------------------------------
 \subsection{MIST: A C-less \ST Implementation}
 % -----------------------------------------------------------------------------
-\todo{http://mist-project.org/} \\
-\todo{https://github.com/martinmcclure/mist}
+\urlfootnote{\MIST}{http://mist-project.org/} is another prototype \ST \VM that follows similar goals as the \P \VM.
+It not longer uses bytecode interpreter but only relies on native code.
+However, it goes one step further than \P by not relying on any C-based infrastructure.
+\MIST implements its own linker to build the final executable.
+And unlike \P it does not require kernel primitives written in C.
+\MIST brings its own implementation to directly perform system calls from within the language.
 
-
-% -----------------------------------------------------------------------------
-\subsection{\Maxine \VM}
-% -----------------------------------------------------------------------------
-\todo{refer to \secref{background-maxine}}\\
-\todo{inspector overview} \\
-\todo{fluent navigation from low-level code to high-level inspectors}
 
 % -----------------------------------------------------------------------------
 \subsection{\Klein \VM}
 % -----------------------------------------------------------------------------
 \todo{refer to \secref{background-klein}}\\
 \todo{read again} \\
+\todo{\VM and language written in the same language} \\
 \todo{unified model for runtime and compile time} \\
-\todo{much less hard-coded \VM level objects}
+\todo{\VM-level reflection since there is only a single code base}\\
+\todo{Responsive developement: no C++ / C compilation wait process involved}\\
+\todo{Cmopared to \B radical break with the existing system, no fluent development} \\
+\todo{Even though \B is capable, \Klein is much more} \\
+\todo{much less hard-coded \VM level objects} \\
+
+\todo{Fancy Debugging}
+
+% -----------------------------------------------------------------------------
+\subsection{\Maxine \VM}
+% -----------------------------------------------------------------------------
+\todo{refer to \secref{background-maxine} \cite{Wimm13a}}\\
+\todo{inspector overview} \\
+\todo{fluent navigation from low-level code to high-level inspectors}
+
+\Maxine is a metacircular \Java \VM focused on an efficient developer experience.
+The \Maxine \VM stands out as it truly focuses on productivity and developer interaction.
+\Maxine uses abstract and high-level representations of \VM-level concepts and consistently exposes them throughout the development process.
+Inspectors at multiple abstraction levels are readily available while debugging, giving insights to the complete \VM state.
+Compared to \Maxine, \WF currently lacks the debugging tools which would enable a truly seamless interaction with the low-level world.
+However, \Maxine focuses on \Java, a language with inferior reflective capabilities compared to \PH.
+Hence the live interaction with the \VM is only presented in the development phase and not exposed to the language-side.
+\Maxine would be an excellent candidate to implement our approach for \Java.
 
 
 % =============================================================================
