@@ -92,27 +92,13 @@ And unlike \P it does not require kernel primitives written in C.
 
 
 % -----------------------------------------------------------------------------
-\subsection{\Klein \VM}
-% -----------------------------------------------------------------------------
-\todo{refer to \secref{background-klein}}\\
-\todo{read again} \\
-\todo{\VM and language written in the same language} \\
-\todo{unified model for runtime and compile time} \\
-\todo{\VM-level reflection since there is only a single code base}\\
-\todo{Responsive developement: no C++ / C compilation wait process involved}\\
-\todo{Cmopared to \B radical break with the existing system, no fluent development} \\
-\todo{Even though \B is capable, \Klein is much more} \\
-\todo{much less hard-coded \VM level objects} \\
-
-\todo{Fancy Debugging}
-
-% -----------------------------------------------------------------------------
 \subsection{\Maxine \VM}
 % -----------------------------------------------------------------------------
 \todo{refer to \secref{background-maxine} \cite{Wimm13a}}\\
 \todo{inspector overview} \\
 \todo{fluent navigation from low-level code to high-level inspectors}
 
+\todo{focuse more on the contribution part}
 \Maxine is a metacircular \Java \VM focused on an efficient developer experience.
 The \Maxine \VM stands out as it truly focuses on productivity and developer interaction.
 \Maxine uses abstract and high-level representations of \VM-level concepts and consistently exposes them throughout the development process.
@@ -122,6 +108,27 @@ However, \Maxine focuses on \Java, a language with inferior reflective capabilit
 Hence the live interaction with the \VM is only presented in the development phase and not exposed to the language-side.
 \Maxine would be an excellent candidate to implement our approach for \Java.
 
+% -----------------------------------------------------------------------------
+\subsection{\Klein \VM}
+% -----------------------------------------------------------------------------
+\Klein is a metacircular \VM for the \Self programming language that has no separation into \VM and language.
+The \VM is entirely written in \Self but takes the concept of metacircular beyond the compile-time.
+For instance, unlike many other metacircular \VMs, including \Cog and \Squeak, \Klein does not use an intermediate low-level language to bootstrap the system.
+It generates directly a binary image, much like the aforementioned \P or \MIST \VM.
+However, it is important to note that the \VM-level structures and objects are not compiled away as it is usually the case.
+Instead the \VM structures are represented as real \Self objects.
+Hence the \Klein \VM supports true \VM-level reflection since there is only a single code base.
+
+Additionally to the advances in reflection and metacircularity, \Klein focuses on fast compilation turnarounds to allow for a responsive development process.
+Which is unlike the \Squeak \VM where a full \VM bootstrap takes a order of minutes on modern hardware.
+\Klein also supports advanced mirror-based debugging tools to inspect and modify a remote \VM.
+
+Development on the \Klein \VM seized in 2009 and left the \Klein \VM in fairly usable state.
+However, up to now it lacks a proper \GC which essentially limits its real-world application.
+Yet, it proved that it is possible and build a language-runtime without a proper separation of the language-side and the \VM or base-level.
+From the literature presented about the \Klein project we see a strong focus on the improvements of the development tools.
+The fact that the language-runtime allows \VM-level reflection to change the \VM dynamically is not directly mentioned in the literature.
+While we see the practical limitations of changing the \VM at runtime we would like to open the doors to this new form of reflection.
 
 % =============================================================================
 
@@ -207,7 +214,7 @@ Hence, the \B should focus on this most common bug by following the solution out
 	\item After successfully finding the \ttt{primitiveNativeCall} the signal handler sends a \B failure back to \PH.
 \end{enumerate}
 
-\paragraph{Barrier-free Debugging}
+\paragraph{Missing Barrier-free Debugging}
 After proposing a solution to improve \B's bug recovery behavior we immediately encounter a second problem.
 How do we debug low-level code?
 With the aforementioned solution we are able to recover from certain low-level errors and signal them properly at language-side.
@@ -233,8 +240,6 @@ Instead of directly interacting with first-class \PH context we communicate to t
 \noindent The outlined debugger will not work in certain cases where the native code directly interacts with the outer image.
 The forked debugger process provides security from the main \PH image by isolating it.
 However, for many \B applications such as the \FFI implementation this limitation would not apply.
-
-\cb{more?}
 
 % -----------------------------------------------------------------------------
 \subsection{Virtual \CPU an Assembler \DSL}
