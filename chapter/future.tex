@@ -263,21 +263,24 @@ However, even with a proper simulator ready for x86 we can not provide a very fl
 For instance, the way assembler instructions are written in \B require them to be fully generated before they can be interpreted.
 We are used from \PH that any code snipped is executable, a property that we would like to bring to the low-level development as well.
 
-
-\paragraph{A Low-level Intermediate Format}
+\paragraph{\VCPU: A Low-level Intermediate Format}
 To reduce the aforementioned platform dependency of \B we developed a intermediate low-level representation called \VCPU.
-\VCPU is based on a three-address-code (\TAC) to simplify the adoption of optimizations such as static single assignment (\SSA) \cite{??}.
+It is based on a three-address-code (\TAC) \cite{??} to simplify the adoption of optimizations such as static single assignment (\SSA) \cite{??}.
 Additionally we chose to postpone register allocation to the final code generation phase.
 By using a \TAC-based format and rewiring the internals we are even able to make the \VCPU code directly executable in \PH.
 
-These \TAC instruction take the following form:
+Before we go into the implementation details of \VCPU we show it is used.
+\VCPU is based on \TAC instruction which take the following form:
 %
 \begin{stcode}{}
 result := argument1 OP argument2
 \end{stcode}
 %
-There are three operands involved, \ttt{result}, \ttt{argument1} and \ttt{argument2}, from which the name of this instruction format originates.
+There are three operands involved, \ttt{result}, \ttt{argument1} and \ttt{argument2}, from which the name of this \TAC format originates.
 Based on this assumption, each standard \VCPU instruction returns a temporary variable which can be used for further operations.
+This makes the information-flow much more consistent.
+For instance the x86 instructions which sometimes have a predefined result register and sometimes not.
+
 The following code example outlines the basic usage of \VCPU:
 %
 \begin{stcode}[
@@ -298,17 +301,53 @@ Benzo x86 generate: [ :asm |
 	asm add: asm EAX with: 2.
 	asm return ]
 \end{stcode}
+%
+For this basic example we see that the two formats do not differ very much.
+Though, already on the example of the \ttt{return} instruction it becomes obvious that the \TAC-based solution is more explicit.
+When using more complex control structures the difference is apparent:
+\begin{stcode}{}
+Benzo vcpu x86 generate: [ :asm || a b c |
+	a := asm uint: 1.
+	b := asm uint: 2.
+	c := asm uint: 3.
+	(a = b and: b = c) 
+		ifTrue:  [ c value: 5  ] 
+		ifFalse: [ c value: 10 ].
+]
+\end{stcode}
+%
+\VCPU benefits from using explicit instruction objects to add a \PH-like \DSL on top.
+The previous example looks fairly similar in plain \PH code:
+%
+\begin{stcode}{}
+| a b c |
+a := 1.
+b := 2.
+c := 3.
+(a = b and: b = c) 
+	ifTrue:  [ c := 5  ] 
+	ifFalse: [ c := 10 ].
+\end{stcode}
+%
+The \DSL is transparently implemented by adding \PH methods on the corresponding \VCPU instructions.
+Under the hood \VCPU will lower the \TAC instructions to low-level \ASM instructions for the \AsmJIT backend.
 
-%%\todo{Design overview/flow figure with backends} \\
-\todo{inject high-level instructions} \\
-\todo{explain the difference to explicit code like \ASM by having a different backends}
 
-\paragraph{\VCPU Testing and Debugging}
+\paragraph{\VCPU Implementation}
+So far we presented the external interface of the \VCPU format which works similar to the existing \B assembler format.
+We will now shed lights on the internal implementation details of the \VCPU format.
+
+
+
 \todo{\VCPU interpreter} \\
 \todo{tracer backend for code generation} \\
 \todo{Native Simluator for the specific backends} \\
 \todo{Requires mapping from native instruction to the \VCPU instructions}
 
+\paragraph{Instruction Objects}
+
+%%\todo{Design overview/flow figure with backends} \\
+\todo{inject high-level instructions} \\
 
 \paragraph{\VCPU Optimizations}
 \todo{Optimizations required for \B-based applications can be shared} \\
