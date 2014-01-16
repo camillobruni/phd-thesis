@@ -221,7 +221,8 @@ Essentially most low-level code has to be replicated for each new platform.
 A better solution is to use an intermediate format for all the low-level code which is then compiled for each platform specifically.
 
 \todo{\ASM code is too low-level: \NB lacks expressiveness} \\
-\todo{see \secref{benzo-problems-platform-independence}}
+\todo{see \secref{benzo-problems-platform-independence}} \\
+\todo{\ASM is hard to debug directly: very un \PH-ish, we need direct feedback}
 
 \paragraph{A Low-level Intermediate Format}
 \todo{change a bit to make the copy}
@@ -255,6 +256,7 @@ Benzo x86 generate: [ :asm |
 	asm return ]
 \end{stcode}
 
+%%\todo{Design overview/flow figure with backends} \\
 \todo{inject high-level instructions} \\
 \todo{explain the difference to explicit code like \ASM by having a different backends}
 
@@ -293,6 +295,7 @@ The current compiler is divided into the following passes:
 \todo{Need to get a obstacle-free VM} \\
 \todo{List of requirements for a new VM Infrastructure} \\ 
 \todo{Small comparison against the current solution we have with COG} \\
+\todo{Follow the \Klein approach}
 
 
 % -----------------------------------------------------------------------------
@@ -327,7 +330,7 @@ The current compiler is divided into the following passes:
 
 
 % =============================================================================
-\section{\Mate a \VM prototype}
+\section{\Mate a Reflective \VM Prototype}
 \seclabel{mate}
 % =============================================================================
 
@@ -375,7 +378,7 @@ The current compiler is divided into the following passes:
 \todo{MIST}
 
 % =============================================================================
-\section{SISTA}
+\section{SISTA: Language-side Adaptive Recompilation}
 % =============================================================================
 
 \todo{do we put this in a separate section?}\\
