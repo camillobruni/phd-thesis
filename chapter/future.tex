@@ -217,13 +217,13 @@ How do we debug low-level code?
 With the aforementioned solution we are able to recover from certain low-level errors and signal them properly at language-side.
 In a \ST-like environment the debugger will pop up on the location causing the error and thus allowing a programmer to inspect stack and variables.
 To provide the same facility for \B we have to plug into the existing low-level debugging utilities such as \ttt{ptrace} to enable stepping over native instructions.
-The following \figref{benzo-crossover-debugger} outlines the basics of a debugger that crosses the high-level / low-level barrier.
+The following \figref{future-benzo-crossover-debugger} outlines the basics of a debugger that crosses the high-level / low-level barrier.
 %
 \begin{figure}[h]
 	\centering
 	\includegraphics[scale=\imagescale]{benzo-crossover-debugger}
 	\caption{\B Crossover Debugger Outline}
-	\figlabel{benzo-crossover-debugger}
+	\figlabel{future-benzo-crossover-debugger}
 \end{figure}
 %
 \begin{enumerate}
@@ -333,20 +333,33 @@ The \DSL is transparently implemented by adding \PH methods on the corresponding
 Under the hood \VCPU will lower the \TAC instructions to low-level \ASM instructions for the \AsmJIT backend.
 
 
-\paragraph{\VCPU Implementation}
+\paragraph{\VCPU Implementation Overview}
 So far we presented the external interface of the \VCPU format which works similar to the existing \B assembler format.
+%
+\begin{figure}[h]
+	\centering
+	\includegraphics[scale=\imagescale]{vcpu-overview}
+	\caption{\VCPU Overview}
+	\figlabel{future-vcpu-overview}
+\end{figure}
+%
 We will now shed lights on the internal implementation details of \VCPU which is divided in three classes of objects:
 %
 \begin{description}
 	\item[\CPUs:] Source for values named \ttt{cpu} in the previous examples.
 	The \CPU object will contain the list of instructions and for which backend it should generate the native code.
+	Additionally we provide specialized \CPU objects for debugging purposes or even immediate evaluation.
 	
-	\item[Instructions:] Encapsulates an instruction type, operands and result value according to the \TAC format.
-	Additionally each instructions holds a backpointer to the \CPU it originated.
-	For example \ttt{temp1 + temp1} yields a \VCPU instruction.
-	
-	\item[Low-level Objects:] A category of values or helper objects.
+	\item[Low-level Objects or Values:] A category of values or helper objects.
 	For example \ttt{cpu uint: 1} will create low-level word that contains the value \ttt{1}.
+	The corresponding high-level equivalent would be a variable.
+	In the final native code such a value object might be mapped to a register or stack location.
+	Another example is the special low-level object that is the result of a comparison, for instance created by \ttt{a = b}.
+	This object holds the result of the comparison and implements the known boolean messages such as \ttt{ifTrue:ifFalse:} or \ttt{and:}.
+			
+	\item[Instructions:] Encapsulates an instruction type, operands and result value according to the \TAC format.
+	Much like in \PH the programmer will almost never directly interact with instructions but with the yielded value. 
+	For example \ttt{temp1 + temp1} yields a new \VCPU value and internally records an add instruction in the \CPU object that created the value in \ttt{temp1}.
 \end{description}
 
 
