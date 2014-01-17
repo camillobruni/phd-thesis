@@ -432,6 +432,7 @@ However, for many \B applications such as the \FFI implementation this limitatio
 
 
 % =============================================================================
+\newpage
 \section{\VM-level Improvements}
 \seclabel{future-vm}
 % =============================================================================
@@ -449,12 +450,8 @@ We explored the limitations of \B with \NBJ the \B-based \JIT compiler presented
 I is not possible to build a \JIT compiler purely on top of \B instead we had to fall back on a customized \VM with the necessary modifications.
 The goal of this section is to outline \VM-level improvement to push the envelope on dynamic changes that extend down to the \VM.
 
-\todo{this has to link back to the introduction / problem statement}
-\paragraph{Missing Structured \VM Access}
-\B is a compatible approach to make the low-level power accessible to the language-side.
-Yet, it only provides access to native code execution.
-Even though this is the basis for generic interaction with the \VM it is too unstructured.
-
+\todo{this has to link back to the introduction / problem statement}\\
+\todo{write outline of the following 4 subsection}\\
 
 
 \todo{Introduction: Lanugage-side is not enough} \\
@@ -467,6 +464,10 @@ Even though this is the basis for generic interaction with the \VM it is too uns
 % -----------------------------------------------------------------------------
 \subsection{VM-level Reification}
 % -----------------------------------------------------------------------------
+\B is a compatible approach to make the low-level power accessible to the language-side.
+Yet, it only provides access to native code execution.
+Even though this is the basis for generic interaction with the \VM it is too unstructured.
+
 \todo{Resulting from the first law of Inspectors, all VM-level objects are reified} \\
 \todo{List of typical objects that don't have a reification in COG} \\
 \todo{List advantages}\\
