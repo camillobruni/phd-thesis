@@ -31,7 +31,7 @@ Unlike \WF \NBJ requires a modified \VM to add a basic interface for manually in
 In this chapter we present possible solutions and an early prototype \VM that addresses the limitations we encountered while developing \NB, the \B-based \FFI, \WF and \NBJ.
 We start by listing possible improvements for the language-side part of the \B infrastructure such as providing a well-defined high-level intermediate format.
 This will lead to a description of required \VM-level improvements to make applications such as \WF or \NBJ feasible outside a research context.
-
+\todo{recheck to be in sync with the chapter structure}
 
 % =============================================================================
 \section{Background and Related Work}
@@ -163,84 +163,9 @@ Which is why most C-focused \IDEs are only partially sufficient for an efficient
 
 
 % -----------------------------------------------------------------------------
-\subsection{Barrier-free Low-level Interaction}
-% -----------------------------------------------------------------------------
-Shifting from \VM development to the final language-runtime we see a similar issue when it comes to tools that span abstraction levels.
-It is not directly possible to inspect low-level objects from language-side.
-Focusing the on the \B architecture what comes closes to inspecting low-level objects is the \ttt{struct} support for the \NB \FFI library described in \secref{ffi-newtypes}.
-We already use this approach for the \NBJ project to inspect \VM internal meta objects for debugging purposes.
-It is important to note that giving access to the \VM internal objects is not permitted in most languages.
-The previously mentioned \VM generation frameworks usually have first-class objects for all the \VM internal objects or provide mirror-like facilities to access objects from raw memory.
-Usually, none of this structural information survives the \VM compilation phase.
-Essentially this leaves the final \VM binary with little or no means for introspection. Of course the same restrictions apply then for language-side tools like \B that want to interact with the \VM internals.
-
-\paragraph{Customized \VM \MOP}
-We have seen in \secref{validation-nabujito-problems} for \NBJ that the only way to circumvent such issues is by creating modified \VMs which enable specific interaction points.
-There are other \PH-based research projects \cite{??} that took the same path and created a modified \VM.
-We, believe that with an extended low-level \MOP the focus for research projects could shift from the \VM to the language-side.
-The final extreme is to have a system that works like the described \Klein \VM where there is no longer a clear distinction of what is \VM-level and what is language-side.
-
-\paragraph{Anticipated Debugging}
-For \B we have more modest intermediate goals.
-The major drawback for a seamless developer experience is the lack of a dedicate low-level debugging infrastructure.
-At this point, \B developers have to rely on 3rd-party C-centric tools for debugging.
-Hence, a developer has to decide upfront at which abstraction level the debugging should occur.
-Either at high-level without the possibility to deal with low-level errors, or at low-level losing all the inspection capabilities.
-Besides the shortcomings that either side of the decision will bring, already the fact that the debugging direction has to be anticipated is inappropriate.
-
-We outlined in \secref{benzo-problems-debugging} already several ways to improve the current debugging situation for \B.
-The most important focus is on reducing the cases where the programmer has to anticipate the debugging tool.
-Since we have to deal with two very distinct abstraction levels we can not only rely on a pure language-side solution to provide different debuggers \cite{Towards a Moldable Debugger}.
-The major problem is the serious implications of a low-level error.
-Unlike user-level errors they are not well-defined or even contained.
-It is astonishingly simple to corrupt the \VM memory while writing low-level code and thus breaking any contract with the \VM code.
-However, it is more common to access protected memory due to a wrongly dereferenced pointer.
-Hence, the \B should focus on this most common bug by following the solution outlined in \figref{benzo-debugger}.
-%
-\begin{figure}[h]
-	\centering
-	\includegraphics[scale=\imagescale]{benzo-debugger}
-	\caption{\B Debugger Outline}
-	\figlabel{benzo-debugger}
-\end{figure}
-%
-\begin{enumerate}
-	\item Standard \PH method activating a \B-enabled method through the \ttt{primitiveNativeCall} primitive.
-	\item Native code causing a memory access violation (for example \ttt{SIGSEV}) which can not be handled by \PH directly.
-	\item Low-level signal handler is activated by the operating system and tries to walk back the native stack up to the \ttt{primitiveNativeCall} activation.
-	\item After successfully finding the \ttt{primitiveNativeCall} the signal handler sends a \B failure back to \PH.
-\end{enumerate}
-
-\paragraph{Missing Barrier-free Debugging}
-After proposing a solution to improve \B's bug recovery behavior we immediately encounter a second problem.
-How do we debug low-level code?
-With the aforementioned solution we are able to recover from certain low-level errors and signal them properly at language-side.
-In a \ST-like environment the debugger will pop up on the location causing the error and thus allowing a programmer to inspect stack and variables.
-To provide the same facility for \B we have to plug into the existing low-level debugging utilities such as \ttt{ptrace} to enable stepping over native instructions.
-The following \figref{future-benzo-crossover-debugger} outlines the basics of a debugger that crosses the high-level / low-level barrier.
-%
-\begin{figure}[h]
-	\centering
-	\includegraphics[scale=\imagescale]{benzo-crossover-debugger}
-	\caption{\B Crossover Debugger Outline}
-	\figlabel{future-benzo-crossover-debugger}
-\end{figure}
-%
-\begin{enumerate}
-	\item Point where a \B initiates a native call and the debugger switches from a high-level \PH stack to the low-level native stack.
-To properly use low-level debugging tools we fork the complete \VM process.
-	\item The low-level debugger in \PH switches the underlying debugging interface.
-Instead of directly interacting with first-class \PH context we communicate to the the forked process with tools like \ttt{ptrace}.
-	\item The forked process is updated according to the actions initiated from the \PH side.
-\end{enumerate}
-
-\noindent The outlined debugger will not work in certain cases where the native code directly interacts with the outer image.
-The forked debugger process provides security from the main \PH image by isolating it.
-However, for many \B applications such as the \FFI implementation this limitation would not apply.
-
-% -----------------------------------------------------------------------------
 \subsection{Virtual \CPU an Assembler \DSL}
 % -----------------------------------------------------------------------------
+\todo{relink}
 \B uses \AsmJIT as assembler backend which is currently limited to x86 instruction set.
 This choice is aligned with \PH's main development focus for the most common operating systems.
 However, this choice of architecture already excludes mobile devices which currently focus on \ARM-based architectures.
@@ -408,7 +333,7 @@ The current compiler is divided into the following passes:
 \noindent Currently \VCPU does not include more aggressive optimization techniques such as constant folding or subexpression elimination that are associated with a  \TAC \IR.
 The, idea is to move the existing \B applications to this new \VCPU format and share the improvements across all tools.
 
-\paragraph{Instruction Objects}
+\paragraph{Custom Machine Objects}
 Using first-class machine objects during for the native code format in \VCPU has a secondary application that is not immediately visible.
 At code generation time we can use other machine object than the ones described so far.
 This finds a direct application in the \NB \FFI when working with structs.
@@ -426,11 +351,112 @@ In this example the \ttt{struct field1} message will create several instructions
 Typically, this involves dereferencing the pointer and masking out the corresponding bits of \ttt{field1} from the memory location. 
 The only visible artifact from the outside is the returned result.
 
+\todo{missing conclusion}
+
+
+% -----------------------------------------------------------------------------
+\subsection{Barrier-free Low-level Interaction}
+% -----------------------------------------------------------------------------
+Shifting from \VM development to the final language-runtime we see a similar issue when it comes to tools that span abstraction levels.
+It is not directly possible to inspect low-level objects from language-side.
+Focusing the on the \B architecture what comes closes to inspecting low-level objects is the \ttt{struct} support for the \NB \FFI library described in \secref{ffi-newtypes}.
+We already use this approach for the \NBJ project to inspect \VM internal meta objects for debugging purposes.
+It is important to note that giving access to the \VM internal objects is not permitted in most languages.
+The previously mentioned \VM generation frameworks usually have first-class objects for all the \VM internal objects or provide mirror-like facilities to access objects from raw memory.
+Usually, none of this structural information survives the \VM compilation phase.
+Essentially this leaves the final \VM binary with little or no means for introspection. Of course the same restrictions apply then for language-side tools like \B that want to interact with the \VM internals.
+
+\paragraph{Customized \VM \MOP}
+We have seen in \secref{validation-nabujito-problems} for \NBJ that the only way to circumvent such issues is by creating modified \VMs which enable specific interaction points.
+There are other \PH-based research projects \cite{??} that took the same path and created a modified \VM.
+We, believe that with an extended low-level \MOP the focus for research projects could shift from the \VM to the language-side.
+The final extreme is to have a system that works like the described \Klein \VM where there is no longer a clear distinction of what is \VM-level and what is language-side.
+
+\paragraph{Anticipated Debugging}
+For \B we have more modest intermediate goals.
+The major drawback for a seamless developer experience is the lack of a dedicate low-level debugging infrastructure.
+At this point, \B developers have to rely on 3rd-party C-centric tools for debugging.
+Hence, a developer has to decide upfront at which abstraction level the debugging should occur.
+Either at high-level without the possibility to deal with low-level errors, or at low-level losing all the inspection capabilities.
+Besides the shortcomings that either side of the decision will bring, already the fact that the debugging direction has to be anticipated is inappropriate.
+
+We outlined in \secref{benzo-problems-debugging} already several ways to improve the current debugging situation for \B.
+The most important focus is on reducing the cases where the programmer has to anticipate the debugging tool.
+Since we have to deal with two very distinct abstraction levels we can not only rely on a pure language-side solution to provide different debuggers \cite{Towards a Moldable Debugger}.
+The major problem is the serious implications of a low-level error.
+Unlike user-level errors they are not well-defined or even contained.
+It is astonishingly simple to corrupt the \VM memory while writing low-level code and thus breaking any contract with the \VM code.
+However, it is more common to access protected memory due to a wrongly dereferenced pointer.
+Hence, the \B should focus on this most common bug by following the solution outlined in \figref{benzo-debugger}.
+%
+\begin{figure}[h]
+	\centering
+	\includegraphics[scale=\imagescale]{benzo-debugger}
+	\caption{\B Debugger Outline}
+	\figlabel{benzo-debugger}
+\end{figure}
+%
+\begin{enumerate}
+	\item Standard \PH method activating a \B-enabled method through the \ttt{primitiveNativeCall} primitive.
+	\item Native code causing a memory access violation (for example \ttt{SIGSEV}) which can not be handled by \PH directly.
+	\item Low-level signal handler is activated by the operating system and tries to walk back the native stack up to the \ttt{primitiveNativeCall} activation.
+	\item After successfully finding the \ttt{primitiveNativeCall} the signal handler sends a \B failure back to \PH.
+\end{enumerate}
+
+\paragraph{Missing Barrier-free Debugging}
+After proposing a solution to improve \B's bug recovery behavior we immediately encounter a second problem.
+How do we debug low-level code?
+With the aforementioned solution we are able to recover from certain low-level errors and signal them properly at language-side.
+In a \ST-like environment the debugger will pop up on the location causing the error and thus allowing a programmer to inspect stack and variables.
+To provide the same facility for \B we have to plug into the existing low-level debugging utilities such as \ttt{ptrace} to enable stepping over native instructions.
+The following \figref{future-benzo-crossover-debugger} outlines the basics of a debugger that crosses the high-level / low-level barrier.
+%
+\begin{figure}[h]
+	\centering
+	\includegraphics[scale=\imagescale]{benzo-crossover-debugger}
+	\caption{\B Crossover Debugger Outline}
+	\figlabel{future-benzo-crossover-debugger}
+\end{figure}
+%
+\begin{enumerate}
+	\item Point where a \B initiates a native call and the debugger switches from a high-level \PH stack to the low-level native stack.
+To properly use low-level debugging tools we fork the complete \VM process.
+	\item The low-level debugger in \PH switches the underlying debugging interface.
+Instead of directly interacting with first-class \PH context we communicate to the the forked process with tools like \ttt{ptrace}.
+	\item The forked process is updated according to the actions initiated from the \PH side.
+\end{enumerate}
+
+\noindent The outlined debugger will not work in certain cases where the native code directly interacts with the outer image.
+The forked debugger process provides security from the main \PH image by isolating it.
+However, for many \B applications such as the \FFI implementation this limitation would not apply.
+
 
 % =============================================================================
 \section{\VM-level Improvements}
 \seclabel{future-vm}
 % =============================================================================
+We have presented solutions to improve the code quality and the development experience when working with \B that are focused on the language-side.
+We concluded the previous section with the \VCPU intermediate format brings a certain level of platform independence to native code written on the \B.
+At even higher-level, we pointed out how the lack of domain specific inspectors prevents a seamless development experience.
+The last of the three points present was barrier-free low-level interaction from the language-side point of view.
+We mainly focused on the debugger interaction when working with low-level \B code.
+One part included the fact that most debugging actions have to be anticipated when working with \B.
+This is counter-intuitive to the default \PH development workflow.
+However, the solution we presented already required certain \VM-level support to become feasible.
+
+It becomes obvious that a more powerful \B implementation also requires modification at \VM-level.
+We explored the limitations of \B with \NBJ the \B-based \JIT compiler presented in \secref{val-nabujito}.
+I is not possible to build a \JIT compiler purely on top of \B instead we had to fall back on a customized \VM with the necessary modifications.
+The goal of this section is to outline \VM-level improvement to push the envelope on dynamic changes that extend down to the \VM.
+
+\todo{this has to link back to the introduction / problem statement}
+\paragraph{Missing Structured \VM Access}
+\B is a compatible approach to make the low-level power accessible to the language-side.
+Yet, it only provides access to native code execution.
+Even though this is the basis for generic interaction with the \VM it is too unstructured.
+
+
+
 \todo{Introduction: Lanugage-side is not enough} \\
 \todo{Need to get a obstacle-free VM} \\
 \todo{List of requirements for a new VM Infrastructure} \\ 
