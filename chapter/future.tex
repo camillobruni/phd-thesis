@@ -335,7 +335,9 @@ Under the hood \VCPU will lower the \TAC instructions to low-level \ASM instruct
 
 \paragraph{\VCPU Implementation Overview}
 So far we presented the external interface of the \VCPU format which works similar to the existing \B assembler format.
-We will now shed lights on the internal implementation details of \VCPU which is divided in three classes of objects:
+We will now shed lights on the internal implementation details of \VCPU which is divided in three classes of objects: \CPUs, low-level objects and instructions.
+The relationship between these main classes are shown in \figref{future-vcpu-overview}.
+\todo{renamed to Machine Objects}
 %
 \begin{figure}[h]
 	\centering
@@ -361,8 +363,13 @@ We will now shed lights on the internal implementation details of \VCPU which is
 	For example \ttt{temp1 + temp1} yields a new \VCPU value and internally records an add instruction in the \CPU object that created the value in \ttt{temp1}.
 \end{description}
 
+\noindent In \VCPU the main responsibility for the programming interface lies on the machine objects.
+In contrast to that we see that in \AsmJit the full interface is defined on the \ASM itself.
+The intermediate values are almost never used, and even registers only play the role of spectators.
+Hence, \VCPU takes full advantage of the different types of values to define a simple \DSL.
+This way we are able to for instance create branches and loops following \PH semantics rather low-level jumps and labels. 
 
-
+\paragraph{\VCPU Debugging and Code Generation}
 \todo{\VCPU interpreter} \\
 \todo{tracer backend for code generation} \\
 \todo{Native Simluator for the specific backends} \\
