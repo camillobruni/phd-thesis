@@ -369,35 +369,49 @@ The intermediate values are almost never used, and even registers only play the 
 Hence, \VCPU takes full advantage of the different types of values to define a simple \DSL.
 This way we are able to for instance create branches and loops following \PH semantics rather low-level jumps and labels. 
 
-\paragraph{\VCPU Debugging and Code Generation}
-\todo{\VCPU interpreter} \\
-\todo{tracer backend for code generation} \\
-\todo{Native Simluator for the specific backends} \\
-\todo{Requires mapping from native instruction to the \VCPU instructions}
+\paragraph{\CPU Types}
+Typically, the \VCPU programmer will only directly interact with the machine objects.
+\VCPU instructions are tracked in the related \CPU object, but usually not accessed directly.
+However, the \CPU objects play an important role in the development process.
+By default each operation on machine objects is dispatched over the corresponding \CPU object as shown in the following code example for the \ttt{+} operation.
+%
+\begin{stcode}{4}
+MachineObject >> + machineObject
+	^ cpu add: self with: machineObject
+\end{stcode}
+%
+So, in the example \ttt{c := a + b}, the result object \ttt{c} is created in the \CPU object by invoking the \ttt{add:with:} method.
+This allows us to easily customize the behavior of the \CPU objects.
+Currently, we have two types of \CPU objects in use:
+\begin{description}
+	\item[Generating \CPU:] This \CPU delegates the addition to a low-level builder which keeps track of the corresponding \TAC operation.
+	After completing a routine, it will compile the \TAC instruction to native code using the specific \ASM backend.
+	
+	\item[Evaluating \CPU:] This \CPU object does not keep track of the \TAC operations but directly evaluates them.
+	Typically we use this \CPU type for debugging purposes.
+	The current setup includes a byte array simulating the native memory.
+	The evaluating \CPU gives us a \PH-like debugging behavior with very little additional implementation costs.
+\end{description}
 
-\paragraph{Instruction Objects}
-
+%\paragraph{Instruction Objects}
 %%\todo{Design overview/flow figure with backends} \\
-\todo{inject high-level instructions} \\
+%\todo{inject high-level instructions} \\
 
 \paragraph{\VCPU Optimizations}
 \todo{Optimizations required for \B-based applications can be shared} \\
 
-To get to the final native instructions the \VCPU infrastructure compiles the high-level instructions to the specific backend.
+To get to the final native instructions the \VCPU infrastructure compiles the high-level \TAC instructions to the specific backend.
 The current compiler is divided into the following passes:
 %
 \begin{itemize}[noitemsep]
-\item Platform Specific Transformation
-\item Register Allocation
-\item Superfluous Assignment Remover
-\item Platform Specific Assembler
+	\item Platform Specific Transformation
+	\item Register Allocation
+	\item Superfluous Assignment Remover
+	\item Platform Specific Assembler
 \end{itemize}
-
-
-
-\todo{Current State of the Implementation} \\
-\todo{Support new Platforms} \\
-\todo{Indirect support for simluation and thus better debugging}
+%
+\noindent Currently \VCPU does not include more aggressive optimization techniques such as constant folding or subexpression elimination that are associated with a  \TAC \IR.
+The, idea is to move the existing \B applications to this new \VCPU format and share the improvements across all tools.
 
 
 % =============================================================================
