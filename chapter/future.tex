@@ -393,13 +393,8 @@ Currently, we have two types of \CPU objects in use:
 	The evaluating \CPU gives us a \PH-like debugging behavior with very little additional implementation costs.
 \end{description}
 
-%\paragraph{Instruction Objects}
-%%\todo{Design overview/flow figure with backends} \\
-%\todo{inject high-level instructions} \\
 
 \paragraph{\VCPU Optimizations}
-\todo{Optimizations required for \B-based applications can be shared} \\
-
 To get to the final native instructions the \VCPU infrastructure compiles the high-level \TAC instructions to the specific backend.
 The current compiler is divided into the following passes:
 %
@@ -412,6 +407,24 @@ The current compiler is divided into the following passes:
 %
 \noindent Currently \VCPU does not include more aggressive optimization techniques such as constant folding or subexpression elimination that are associated with a  \TAC \IR.
 The, idea is to move the existing \B applications to this new \VCPU format and share the improvements across all tools.
+
+\paragraph{Instruction Objects}
+Using first-class machine objects during for the native code format in \VCPU has a secondary application that is not immediately visible.
+At code generation time we can use other machine object than the ones described so far.
+This finds a direct application in the \NB \FFI when working with structs.
+Instead of manually delegating the code generation for accessing fields of a struct to a mirror object we can use it naturally inside \VCPU code.
+The following code example outlines this idea.
+\begin{stcode}{}
+Benzo vcpu x86 generate: [ :cpu |
+	| address struct fieldValue |
+	address    := cpu address: 16r1234.
+	struct     := MyStructure pointer: address.
+	fieldValue := struct field1.
+]
+\end{stcode}
+In this example the \ttt{struct field1} message will create several instructions hidden from the user.
+Typically, this involves dereferencing the pointer and masking out the corresponding bits of \ttt{field1} from the memory location. 
+The only visible artifact from the outside is the returned result.
 
 
 % =============================================================================
