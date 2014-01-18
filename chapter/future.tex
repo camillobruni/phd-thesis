@@ -237,8 +237,7 @@ Benzo vcpu x86 generate: [ :cpu || a b c |
 	c := cpu uint: 3.
 	(a = b and: b = c) 
 		ifTrue:  [ c value: 5  ] 
-		ifFalse: [ c value: 10 ].
-]
+		ifFalse: [ c value: 10 ] ]
 \end{stcode}
 %
 \VCPU benefits from using explicit instruction objects to add a \PH-like \DSL on top.
@@ -344,8 +343,7 @@ Benzo vcpu x86 generate: [ :cpu |
 	| address struct fieldValue |
 	address    := cpu address: 16r1234.
 	struct     := MyStructure pointer: address.
-	fieldValue := struct field1.
-]
+	fieldValue := struct field1 ]
 \end{stcode}
 In this example the \ttt{struct field1} message will create several instructions hidden from the user.
 Typically, this involves dereferencing the pointer and masking out the corresponding bits of \ttt{field1} from the memory location. 
@@ -447,19 +445,12 @@ However, the solution we presented already required certain \VM-level support to
 
 It becomes obvious that a more powerful \B implementation also requires modification at \VM-level.
 We explored the limitations of \B with \NBJ the \B-based \JIT compiler presented in \secref{val-nabujito}.
-I is not possible to build a \JIT compiler purely on top of \B instead we had to fall back on a customized \VM with the necessary modifications.
-The goal of this section is to outline \VM-level improvement to push the envelope on dynamic changes that extend down to the \VM.
+I is not possible to build a \JIT compiler purely on top of \B, instead we had to fall back on a customized \VM with the necessary modifications.
+The goal of this section is to outline \VM-level improvements to push the envelope on dynamic changes that extend down to the \VM.
+We mainly focus on the reification of \VM-level structure beyond compilation time.
+In this sense we follow the findings presented for the \Klein \VM discussed in the related work \secref{future-related-work} of this chapter.
 
 \todo{this has to link back to the introduction / problem statement}\\
-\todo{write outline of the following 4 subsection}\\
-
-
-\todo{Introduction: Lanugage-side is not enough} \\
-\todo{Need to get a obstacle-free VM} \\
-\todo{List of requirements for a new VM Infrastructure} \\ 
-\todo{Small comparison against the current solution we have with COG} \\
-\todo{Follow the \Klein approach}
-
 
 % -----------------------------------------------------------------------------
 \subsection{VM-level Reification}
@@ -470,15 +461,15 @@ Even though this is the basis for generic interaction with the \VM it is too uns
 
 \todo{Resulting from the first law of Inspectors, all VM-level objects are reified} \\
 \todo{List of typical objects that don't have a reification in COG} \\
-\todo{List advantages}\\
 \todo{make concepts explicit and first-class} \\
+\todo{List advantages: ??? see Klein Paper}\\
 \todo{limit the use of raw memory access and string-based programming} \\
 
 % -----------------------------------------------------------------------------
 \subsection{Runtime Reification / Dual Objects}
 % -----------------------------------------------------------------------------
 \todo{Reuse the same objects for the bootstrap and at runtime inspectors/mirrors} \\
-\todo{goes further than the sheer compile-time reification} \\
+\todo{goes further than the sheer compile-time reification of most VM generation frameworks} \\
 \todo{accessible from language-side => leads to the following MOP}
 
 % -----------------------------------------------------------------------------
