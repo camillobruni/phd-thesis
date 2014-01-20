@@ -60,7 +60,19 @@
 \todo{Image different approaches 2 axis: lanugage properties(absorbed / explicit), bootstrap (intermediate, direct)}
 
 \paragraph{Language Property Synthesis}
+\todo{Where does the implemented lanugage properties come from: managed vs. explicit}.
+\todo{Eraly approaches like the \Squeak \VM have no absorption}\\
+\todo{Typical \VM generation framweork, akak. facny C or C++ (mimics their final staticness while being more flexible during pre-compilation)}\\
+\todo{\PyPy gives not direct access to the underlying \JIT implementation, plug and play}\\
+\todo{Very high-level interface}\\
+\todo{Truffle as extreme to that track: Interpreter implementation on \AST basis, not explicit bytecode interpreter (which would be typical in C)}
+
 \paragraph{Bootstrap Process}
+\todo{Early approaches use C as intermeditate representation}\\
+\todo{Implies the whole GCC stack} \\
+\todo{Hard to circumvent GCC's limitations => generate own native code} \\
+\todo{Fluent transition from purely C based bootstrap, over C-kernel + native code to purely native code} 
+
 
 % ---------------------------------------------------------------------------
 \subsection{Compile-time Reified \VMs}
