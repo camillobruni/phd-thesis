@@ -2,12 +2,36 @@
 %% http://bibdesk.sourceforge.net/
 
 
-%% Created for cami at 2014-01-14 17:21:05 +0100 
+%% Created for cami at 2014-01-20 15:59:39 +0100 
 
 
 %% Saved with string encoding Unicode (UTF-8) 
 
 
+
+@inproceedings{Kell12a,
+	Abstract = {Bytecode instrumentation is a preferred technique for building profiling, debugging and monitoring tools targeting the Java Virtual Machine ({JVM}), yet is fundamentally dangerous. We illustrate its dangers with several examples gathered while building the {DiSL} instrumentation framework. We argue that no Java platform mechanism provides simultaneously adequate performance, reliability and expressiveness, but that this weakness is fixable. To elaborate, we contrast internal with external observation, and sketch some approaches and requirements for a hybrid mechanism.},
+	Address = {New York, NY, USA},
+	Author = {Kell, Stephen and Ansaloni, Danilo and Binder, Walter and Marek, Luk\'{a}\v{s}},
+	Booktitle = {Proceedings of the Sixth ACM Workshop on Virtual Machines and Intermediate Languages},
+	Citeulike-Article-Id = {12929005},
+	Citeulike-Linkout-0 = {http://portal.acm.org/citation.cfm?id=2414740.2414747},
+	Citeulike-Linkout-1 = {http://dx.doi.org/10.1145/2414740.2414747},
+	Date-Added = {2014-01-20 14:59:38 +0000},
+	Date-Modified = {2014-01-20 14:59:38 +0000},
+	Doi = {10.1145/2414740.2414747},
+	Isbn = {978-1-4503-1633-0},
+	Location = {Tucson, Arizona, USA},
+	Pages = {33--38},
+	Posted-At = {2014-01-20 14:54:36},
+	Priority = {2},
+	Publisher = {ACM},
+	Series = {VMIL '12},
+	Title = {The {JVM} is Not Observable Enough (and What to Do About It)},
+	Url = {http://dx.doi.org/10.1145/2414740.2414747},
+	Year = {2012},
+	Bdsk-File-1 = {YnBsaXN0MDDUAQIDBAUGJCVYJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoKgHCBMUFRYaIVUkbnVsbNMJCgsMDxJXTlMua2V5c1pOUy5vYmplY3RzViRjbGFzc6INDoACgAOiEBGABIAFgAdccmVsYXRpdmVQYXRoWWFsaWFzRGF0YV8QUi4uLy4uL3BhcGVyL0tlbGwxMmEgVGhlIEpWTSBpcyBOb3QgT2JzZXJ2YWJsZSBFbm91Z2ggKGFuZCBXaGF0IHRvIERvIEFib3V0IEl0KS5wZGbSFwsYGVdOUy5kYXRhTxECMAAAAAACMAACAAADT1NYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAyugn80grAAAADj8MH0tlbGwxMmEgVGhlIEpWTSBpcyAjNzI1QzBGNS5wZGYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAclwPXPAveVAAAAAAAAAAAAAgACAAAJIAAAAAAAAAAAAAAAAAAAAAVwYXBlcgAAEAAIAADK6BnjAAAAEQAIAADPAumFAAAAAQAQAA4/DAALHIoABlHNAALmjAACAEdPU1g6VXNlcnM6AGNhbWktZGF0YToAZWR1Y2F0aW9uOgBwYXBlcjoAS2VsbDEyYSBUaGUgSlZNIGlzICM3MjVDMEY1LnBkZgAADgCOAEYASwBlAGwAbAAxADIAYQAgAFQAaABlACAASgBWAE0AIABpAHMAIABOAG8AdAAgAE8AYgBzAGUAcgB2AGEAYgBsAGUAIABFAG4AbwB1AGcAaAAgACgAYQBuAGQAIABXAGgAYQB0ACAAdABvACAARABvACAAQQBiAG8AdQB0ACAASQB0ACkALgBwAGQAZgAPAAgAAwBPAFMAWAASAGZVc2Vycy9jYW1pLWRhdGEvZWR1Y2F0aW9uL3BhcGVyL0tlbGwxMmEgVGhlIEpWTSBpcyBOb3QgT2JzZXJ2YWJsZSBFbm91Z2ggKGFuZCBXaGF0IHRvIERvIEFib3V0IEl0KS5wZGYAEwABLwAAFQACAAv//wAAgAbSGxwdHlokY2xhc3NuYW1lWCRjbGFzc2VzXU5TTXV0YWJsZURhdGGjHR8gVk5TRGF0YVhOU09iamVjdNIbHCIjXE5TRGljdGlvbmFyeaIiIF8QD05TS2V5ZWRBcmNoaXZlctEmJ1Ryb290gAEACAARABoAIwAtADIANwBAAEYATQBVAGAAZwBqAGwAbgBxAHMAdQB3AIQAjgDjAOgA8AMkAyYDKwM2Az8DTQNRA1gDYQNmA3MDdgOIA4sDkAAAAAAAAAIBAAAAAAAAACgAAAAAAAAAAAAAAAAAAAOS},
+	Bdsk-Url-1 = {http://dx.doi.org/10.1145/2414740.2414747}}
 
 @article{Wimm13a,
 	Abstract = {A highly productive platform accelerates the production of research results. The design of a Virtual Machine ({VM}) written in the Java{\texttrademark} programming language can be simplified through exploitation of interfaces, type and memory safety, automated memory management (garbage collection), exception handling, and reflection. Moreover, modern Java {IDEs} offer time-saving features such as refactoring, auto-completion, and code navigation. Finally, Java annotations enable compiler extensions for low-level  '' systems programming'' while retaining {IDE} compatibility. These techniques collectively make complex system software more  '' approachable'' than has been typical in the past. The Maxine {VM}, a metacircular Java {VM} implementation, has aggressively used these features since its inception. A co-designed companion tool, the Maxine Inspector, offers integrated debugging and visualization of all aspects of the {VM}'s runtime state. The Inspector's implementation exploits advanced Java language features, embodies intimate knowledge of the {VM}'s design, and even reuses a significant amount of {VM} code directly. These characteristics make Maxine a highly approachable {VM} research platform and a productive basis for research and teaching.},
