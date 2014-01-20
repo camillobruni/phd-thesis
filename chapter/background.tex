@@ -71,6 +71,23 @@
 \todo{Does not absorb any properties} \\
 \todo{\ST used as C template engine}
 
+\WF is implemented in \PH which uses the \urlfootnote{\Cog \VM}{http://www.mirandabanda.org/cogblog/}, originating from the \Squeak \VM\cite{Inga97a}.
+The \VM itself is written in a dialect of \ST called \Slang that is essentially limited to the functionality that can be expressed with standard C code.
+\Slang serves for two purposes: a high-level C preprocessor, a interactive simulator of the \VM.
+The first point has severe consequences.
+\Slang basically has the same syntax as \ST but is semantically constrained to expressions that can be resolved statically at compilation or code generation time and are compatible with C.
+Hence \Slang's semantics are closer to C than to \ST.
+This fact is also visible in the simulator for the \VM.
+If \Slang were \ST, separate parts of the \VM could be directly evaluated.
+However, since \Slang is bound to C expressions, the simulator sets up a byte array as memory.
+The simulated \VM then accesses this byte array as if it were the native memory.
+
+In conclusion we see that the \PH \VM has an abstract representation of the \VM available for simulation.
+This abstract representation is then used to generate C sources, already lowering the abstraction level.
+After compiling the C sources the original representation of the \VM is not directly accessible anymore.
+For instance, even debug symbols are usually stripped from the final binary for performance reasons.
+Of course this implies that the \VM can not be changed nor directly inspected from language-side.
+
 
 % ---------------------------------------------------------------------------
 \subsubsection*{\Jikes}
