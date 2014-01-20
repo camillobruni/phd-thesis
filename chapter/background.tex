@@ -65,18 +65,34 @@
 % ---------------------------------------------------------------------------
 \subsection{Compile-time Reified \VMs}
 % ---------------------------------------------------------------------------
-\paragraph{\PyPy}
-\seclabel{background-pypy}
-\todo{Image: Infrastructure Overview}
+\subsubsection*{\Squeak \VM}
+\seclabel{background-squeak}
+% ---------------------------------------------------------------------------
+\todo{Does not absorb any properties} \\
+\todo{\ST used as C template engine}
+
 
 % ---------------------------------------------------------------------------
-\paragraph{\Jikes}
+\subsubsection*{\Jikes}
 \seclabel{background-jikes}
+% ---------------------------------------------------------------------------
 \todo{Image: Infrastructure Overview}
 
+High-level low-level programming \cite{Fram09a} advocates using high-level languages for system programming.
+Frampton et al. present a low-level framework packaged as \ttt{org.vmmagic}, which is used as system interface for Jikes, an experimental Java VM.
+Additionally their framework is successfully used in a separate project, the memory management toolkit (MMTK) \cite{Blac04a} which is used independently in several other projects.
+The \ttt{org.vmmagic} package introduces highly controlled low-level interaction in a statically type context.
+Methods have to be annotated to use low-level functionality. 
+
+The \ttt{org.vmmagic} package is much more elaborate than \NB, notably their type system extensions allow for optimized interaction between several low-level methods.
+\cb{do we need to list more what they do?}
+However as we state in the introduction, it is tailored towards Java with static types.
+Additionally the strong separation between low-level code and runtime does not allow for reflective extensions of the runtime.
+
 % ---------------------------------------------------------------------------
-\paragraph{\Maxine}
+\subsubsection*{\Maxine}
 \seclabel{background-maxine}
+% ---------------------------------------------------------------------------
 \Maxine is a metacircular \Java \VM \cite{Wimm13a} focused on an efficient developer experience.
 The \Maxine \VM stands out as it truly focuses on productivity and developer interaction.
 \Maxine uses abstract and high-level representations of \VM-level concepts and consistently exposes them throughout the development process.
@@ -92,6 +108,19 @@ Hence the live interaction with the \VM is only possible during the development 
 % ---------------------------------------------------------------------------
 \paragraph{\Graal}
 \seclabel{background-graal}
+
+
+
+\subsubsection*{\PyPy}
+\seclabel{background-pypy}
+% ---------------------------------------------------------------------------
+\todo{Image: Infrastructure Overview}\\
+\todo{absorbs a lot of properties, fairly mature}
+
+\PH benefits from Squeak\cite{Inga97a} an early self-hosted VM for \ST.
+More recent self-hosted approaches include Klein~\cite{Unga05a} for Self, PyPy \cite{Rigo06a} for Python, Maxine \cite{Wimm13a} for Java or Tachyon~\cite{Chev11a} for JavaScript.
+%PyPy stands out as it is a complete VM creation toolchain that compiles an abstract description of a bytecode interpreter.
+%With proper hints in the interpreter sources, PyPy is able to generate a specific JIT.
 
 % ---------------------------------------------------------------------------
 \subsection{Runtime Reified \VMs}
@@ -182,6 +211,22 @@ The fact that the language-runtime allows \VM-level reflection to change the \VM
 While we see the practical limitations of changing the \VM at runtime we would like to open the doors to this new form of reflection.
 \todo{reread paper}
 \todo{Image: Infrastructure Overview}
+
+
+\section{Tools Accessing the VM}
+\todo{properly integrate into the rest}
+
+\subsection*{\Quicktalk}
+\Quicktalk \cite{Ball86a} follows a similar path as we do with Waterfall presented in \secref{waterfall}.
+However Ballard et al. focus mostly on the performance aspect.
+They achieve higher performance mostly by eliminating the bytecode dispatch overhead.
+Additionally they type annotate the code for the primitive definitions to benefit from further optimizations.
+\WF however, is a very lightweight approach that provides less optimization opportunities on a general code base.
+\Quicktalk tries to compile generic \ST code, where Waterfall is mainly applied to single limited primitives.
+
+
+\subsection*{\DTrace}
+
 
 % ===========================================================================
 \section{Problem 1: }
