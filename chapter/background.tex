@@ -111,7 +111,7 @@ VM gc addGCSpace: MyCustomGCSpace new.
 % ---------------------------------------------------------------------------
 \subsection{Compile-time Reified \VMs}
 % ---------------------------------------------------------------------------
-\subsubsection*{\Squeak \VM}
+\subsubsection*{\Squeak \ST \VM}
 \seclabel{background-squeak}
 % ---------------------------------------------------------------------------
 \todo{Does not absorb any properties} \\
@@ -136,14 +136,14 @@ Of course this implies that the \VM can not be changed nor directly inspected fr
 
 
 % ---------------------------------------------------------------------------
-\subsubsection*{\Jikes}
+\subsubsection*{High-level low-level Programming in \Jikes with \MMTK}
 \seclabel{background-jikes}
 % ---------------------------------------------------------------------------
 \todo{Image: Infrastructure Overview}
 
 High-level low-level programming \cite{Fram09a} advocates using high-level languages for system programming.
 Frampton et al. present a low-level framework packaged as \ttt{org.vmmagic}, which is used as system interface for Jikes, an experimental Java VM.
-Additionally their framework is successfully used in a separate project, the memory management toolkit (MMTK) \cite{Blac04a} which is used independently in several other projects.
+Additionally their framework is successfully used in a separate project, the memory management toolkit (\MMTK) \cite{Blac04a} which is used independently in several other projects.
 The \ttt{org.vmmagic} package introduces highly controlled low-level interaction in a statically type context.
 Methods have to be annotated to use low-level functionality. 
 
@@ -153,7 +153,7 @@ However as we state in the introduction, it is tailored towards Java with static
 Additionally the strong separation between low-level code and runtime does not allow for reflective extensions of the runtime.
 
 % ---------------------------------------------------------------------------
-\subsubsection*{\Maxine}
+\subsubsection*{\Maxine \Java \VM}
 \seclabel{background-maxine}
 % ---------------------------------------------------------------------------
 \Maxine is a metacircular \Java \VM \cite{Wimm13a} focused on an efficient developer experience.
@@ -168,22 +168,52 @@ However, \Maxine focuses on \Java, a language with inferior reflective capabilit
 Hence the live interaction with the \VM is only possible during the development phase and not exposed to the language-side.
 
 
-% ---------------------------------------------------------------------------
-\paragraph{\Graal}
-\seclabel{background-graal}
-
-
-
 \subsubsection*{\PyPy}
 \seclabel{background-pypy}
 % ---------------------------------------------------------------------------
+\urlfootnote{\PyPy}{http://pypy.org/} is a \Python-based high-level \VM framework.
+\PyPy's major focus lies on an efficient metacircular \Python interpreter.
+However, it has been successfully used to build \VMs for other languages including \ST.
+Interpreters are written in a type-inferable subset of \Python called \RPython.
+The underlying \PyPy infrastructure implicitly provides memory management and \JIT compilation. 
+ 
 \todo{Image: Infrastructure Overview}\\
-\todo{absorbs a lot of properties, fairly mature}
 
-\PH benefits from Squeak\cite{Inga97a} an early self-hosted VM for \ST.
-More recent self-hosted approaches include Klein~\cite{Unga05a} for Self, PyPy \cite{Rigo06a} for Python, Maxine \cite{Wimm13a} for Java or Tachyon~\cite{Chev11a} for JavaScript.
-%PyPy stands out as it is a complete VM creation toolchain that compiles an abstract description of a bytecode interpreter.
-%With proper hints in the interpreter sources, PyPy is able to generate a specific JIT.
+\paragraph{Provided \VM Features}
+\PyPy follows a different approach from the previously presented \VM generation frameworks.
+For instance in the previously presented Squeak\cite{Inga97a} and also the \Jikes \VM framework the final \VM implementation is not much different from C or C++.
+The programmer specifies all the components of the \VM explicitly, either by implementing them directly or using a provided library.
+Compared to the more static C ans C++ these \VM generation frameworks make the compilation phase more tangible.
+\ST in \Squeak or \Java in \Jikes or \Maxine fulfill the purpose of the template system in C++ or the restricted macro system in C.
+For the explicit implementation part \PyPy is no different.
+However, certain features for the final \VM are directly absorbed from the underlying \PyPy infrastructure.
+For instance, the \JIT support or the \GC are not explicitly implemented but provided by the \PyPy framework itself.
+This is a big difference to the other \VM frameworks as it allows programmers to write the \VM in a more high-level fashion.
+For instance in \Squeak memory allocation, even for \VM-level objects, has to be handled in the same way as in C.
+Whereas in \PyPy the garbage collection is left to the underlying infrastructure.
+
+\paragraph{\RPython Interpretation}
+At compile-time the interpretation stack for a newly implemented \VM on top of \PyPy looks as follows.
+%
+\begin{enumerate}
+\item The final language runtime
+\item The \VM written in \RPython
+\item The \PyPy infrastructure (virtual compile-time \RPython interpreter)
+\end{enumerate}
+%
+Unless in debug mode, the bottom-most layer is compiled away by exporting the \RPython sources to C.
+However, before the C export step, all the compile-time reflection statements are evaluated and flattened away.
+This approach allows \RPython \VMs to behave almost like standard \Python programs while still providing excellent performance in the final \VM binary.
+
+
+\paragraph{High-level Tracing \JIT}
+The \JIT is handled in a similar way.
+By default the \VM programmer does not write an explicit \JIT in \PyPy.
+Instead the \VM code is annotated to guide the underlying tracing \JIT generator.
+This means a \VM compilation time a specific tracing \JIT is created for the given meta information.
+As a result, the \JIT can track high-level loops in the final interpreted language.
+
+
 
 % ---------------------------------------------------------------------------
 \subsection{Runtime Reified \VMs}
