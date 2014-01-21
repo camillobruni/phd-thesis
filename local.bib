@@ -2,12 +2,60 @@
 %% http://bibdesk.sourceforge.net/
 
 
-%% Created for cami at 2014-01-21 18:00:26 +0100 
+%% Created for cami at 2014-01-21 18:20:28 +0100 
 
 
 %% Saved with string encoding Unicode (UTF-8) 
 
 
+
+@inproceedings{Lin12b,
+	Abstract = {Program portability is an important software engineering consideration. However, when high-level languages are extended to effectively implement system projects for software engineering gain and safety, portability is compromised--high-level code for low-level programming cannot execute on a stock runtime, and, conversely, a runtime with special support implemented will not be portable across different platforms. We explore the portability pitfall of high-level low-level programming in the context of virtual machine implementation tasks. Our approach is designing a restricted high-level language called {RJava}, with a flexible restriction model and effective low-level extensions, which is suitable for different scopes of virtual machine implementation, and also suitable for a low-level language bypass for improved portability. Apart from designing such a language, another major outcome from this work is clearing up and sharpening the philosophy around language restriction in virtual machine design. In combination, our approach to solving portability pitfalls with {RJava} favors virtual machine design and implementation in terms of portability and robustness.},
+	Address = {New York, NY, USA},
+	Author = {Lin, Yi and Blackburn, Stephen M.},
+	Booktitle = {Proceedings of the Sixth ACM Workshop on Virtual Machines and Intermediate Languages},
+	Citeulike-Article-Id = {12933161},
+	Citeulike-Linkout-0 = {http://portal.acm.org/citation.cfm?id=2414740.2414746},
+	Citeulike-Linkout-1 = {http://dx.doi.org/10.1145/2414740.2414746},
+	Date-Added = {2014-01-21 17:14:54 +0000},
+	Date-Modified = {2014-01-21 17:14:54 +0000},
+	Doi = {10.1145/2414740.2414746},
+	Isbn = {978-1-4503-1633-0},
+	Location = {Tucson, Arizona, USA},
+	Pages = {23--32},
+	Posted-At = {2014-01-21 17:12:40},
+	Priority = {2},
+	Publisher = {ACM},
+	Series = {VMIL '12},
+	Title = {Bypassing Portability Pitfalls of High-level Low-level Programming},
+	Url = {http://dx.doi.org/10.1145/2414740.2414746},
+	Year = {2012},
+	Bdsk-File-1 = {YnBsaXN0MDDUAQIDBAUGJCVYJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoKgHCBMUFRYaIVUkbnVsbNMJCgsMDxJXTlMua2V5c1pOUy5vYmplY3RzViRjbGFzc6INDoACgAOiEBGABIAFgAdccmVsYXRpdmVQYXRoWWFsaWFzRGF0YV8QWS4uLy4uL3BhcGVyL0xpbjEyYiBCeXBhc3NpbmcgUG9ydGFiaWxpdHkgUGl0ZmFsbHMgb2YgSGlnaC1sZXZlbCBMb3ctbGV2ZWwgUHJvZ3JhbW1pbmcucGRm0hcLGBlXTlMuZGF0YU8RAkYAAAAAAkYAAgAAA09TWAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMroJ/NIKwAAAA4/DB9MaW4xMmIgQnlwYXNzaW5nIFBvIzcyOTRDOEQucGRmAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHKUyNzwRpKgAAAAAAAAAAAAIAAgAACSAAAAAAAAAAAAAAAAAAAAAFcGFwZXIAABAACAAAyugZ4wAAABEACAAAzwRbGgAAAAEAEAAOPwwACxyKAAZRzQAC5owAAgBHT1NYOlVzZXJzOgBjYW1pLWRhdGE6AGVkdWNhdGlvbjoAcGFwZXI6AExpbjEyYiBCeXBhc3NpbmcgUG8jNzI5NEM4RC5wZGYAAA4AnABNAEwAaQBuADEAMgBiACAAQgB5AHAAYQBzAHMAaQBuAGcAIABQAG8AcgB0AGEAYgBpAGwAaQB0AHkAIABQAGkAdABmAGEAbABsAHMAIABvAGYAIABIAGkAZwBoAC0AbABlAHYAZQBsACAATABvAHcALQBsAGUAdgBlAGwAIABQAHIAbwBnAHIAYQBtAG0AaQBuAGcALgBwAGQAZgAPAAgAAwBPAFMAWAASAG1Vc2Vycy9jYW1pLWRhdGEvZWR1Y2F0aW9uL3BhcGVyL0xpbjEyYiBCeXBhc3NpbmcgUG9ydGFiaWxpdHkgUGl0ZmFsbHMgb2YgSGlnaC1sZXZlbCBMb3ctbGV2ZWwgUHJvZ3JhbW1pbmcucGRmAAATAAEvAAAVAAIAC///AACABtIbHB0eWiRjbGFzc25hbWVYJGNsYXNzZXNdTlNNdXRhYmxlRGF0YaMdHyBWTlNEYXRhWE5TT2JqZWN00hscIiNcTlNEaWN0aW9uYXJ5oiIgXxAPTlNLZXllZEFyY2hpdmVy0SYnVHJvb3SAAQAIABEAGgAjAC0AMgA3AEAARgBNAFUAYABnAGoAbABuAHEAcwB1AHcAhACOAOoA7wD3A0EDQwNIA1MDXANqA24DdQN+A4MDkAOTA6UDqAOtAAAAAAAAAgEAAAAAAAAAKAAAAAAAAAAAAAAAAAAAA68=},
+	Bdsk-Url-1 = {http://dx.doi.org/10.1145/2414740.2414746}}
+
+@inproceedings{Wimm12a,
+	Abstract = {Modularity is a key concept for large and complex applications and an important enabler for collaborative research. In comparison, virtual machines ({VMs}) are still mostly monolithic pieces of software. Our goal is to significantly reduce to the cost of extending {VMs} to efficiently host and execute multiple, dynamic languages. We are designing and implementing a {VM} following the "everything is extensible" paradigm. Among the novel use cases that will be enabled by our research are: {VM} extensions by third parties, support for multiple languages inside one {VM}, and a universal {VM} for mobile devices. Our research will be based on the existing state of the art. We will reuse an existing metacircular Java {VM} and an existing dynamic language {VM} implemented in Java. We will split the {VMs} into fine-grained modules, define explicit interfaces and extension points for the modules, and finally re-connect them. Performance is one of the most important concerns for {VMs}. Modularity improves flexibility but can introduce an unacceptable performance overhead at the module boundaries, e.g., for inter-module method calls. We will identify this overhead and address it with novel feedback-directed compiler optimizations. These optimizations will also improve the performance of modular applications running on top of our {VM}. The expected results of our research will be not only new insights and a new design approach for {VMs}, but also a complete reference implementation of a modular {VM} where everything is extensible by third parties and that supports multiple languages.},
+	Address = {New York, NY, USA},
+	Author = {Wimmer, Christian and Brunthaler, Stefan and Larsen, Per and Franz, Michael},
+	Booktitle = {Proceedings of the 11th Annual International Conference on Aspect-oriented Software Development},
+	Citeulike-Article-Id = {12933153},
+	Citeulike-Linkout-0 = {http://portal.acm.org/citation.cfm?id=2162049.2162073},
+	Citeulike-Linkout-1 = {http://dx.doi.org/10.1145/2162049.2162073},
+	Date-Added = {2014-01-21 17:09:23 +0000},
+	Date-Modified = {2014-01-21 17:09:23 +0000},
+	Doi = {10.1145/2162049.2162073},
+	Isbn = {978-1-4503-1092-5},
+	Location = {Potsdam, Germany},
+	Pages = {203--214},
+	Posted-At = {2014-01-21 17:08:59},
+	Priority = {2},
+	Publisher = {ACM},
+	Series = {AOSD '12},
+	Title = {Fine-grained Modularity and Reuse of Virtual Machine Components},
+	Url = {http://dx.doi.org/10.1145/2162049.2162073},
+	Year = {2012},
+	Bdsk-File-1 = {YnBsaXN0MDDUAQIDBAUGJCVYJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoKgHCBMUFRYaIVUkbnVsbNMJCgsMDxJXTlMua2V5c1pOUy5vYmplY3RzViRjbGFzc6INDoACgAOiEBGABIAFgAdccmVsYXRpdmVQYXRoWWFsaWFzRGF0YV8QVy4uLy4uL3BhcGVyL1dpbW0xMmEgRmluZS1ncmFpbmVkIE1vZHVsYXJpdHkgYW5kIFJldXNlIG9mIFZpcnR1YWwgTWFjaGluZSBDb21wb25lbnRzLnBkZtIXCxgZV05TLmRhdGFPEQJAAAAAAAJAAAIAAANPU1gAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADK6CfzSCsAAAAOPwwfV2ltbTEyYSBGaW5lLWdyYWluZSM3Mjk0NDJFLnBkZgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABylELs8EaC0AAAAAAAAAAAACAAIAAAkgAAAAAAAAAAAAAAAAAAAABXBhcGVyAAAQAAgAAMroGeMAAAARAAgAAM8EWh0AAAABABAADj8MAAscigAGUc0AAuaMAAIAR09TWDpVc2VyczoAY2FtaS1kYXRhOgBlZHVjYXRpb246AHBhcGVyOgBXaW1tMTJhIEZpbmUtZ3JhaW5lIzcyOTQ0MkUucGRmAAAOAJgASwBXAGkAbQBtADEAMgBhACAARgBpAG4AZQAtAGcAcgBhAGkAbgBlAGQAIABNAG8AZAB1AGwAYQByAGkAdAB5ACAAYQBuAGQAIABSAGUAdQBzAGUAIABvAGYAIABWAGkAcgB0AHUAYQBsACAATQBhAGMAaABpAG4AZQAgAEMAbwBtAHAAbwBuAGUAbgB0AHMALgBwAGQAZgAPAAgAAwBPAFMAWAASAGtVc2Vycy9jYW1pLWRhdGEvZWR1Y2F0aW9uL3BhcGVyL1dpbW0xMmEgRmluZS1ncmFpbmVkIE1vZHVsYXJpdHkgYW5kIFJldXNlIG9mIFZpcnR1YWwgTWFjaGluZSBDb21wb25lbnRzLnBkZgAAEwABLwAAFQACAAv//wAAgAbSGxwdHlokY2xhc3NuYW1lWCRjbGFzc2VzXU5TTXV0YWJsZURhdGGjHR8gVk5TRGF0YVhOU09iamVjdNIbHCIjXE5TRGljdGlvbmFyeaIiIF8QD05TS2V5ZWRBcmNoaXZlctEmJ1Ryb290gAEACAARABoAIwAtADIANwBAAEYATQBVAGAAZwBqAGwAbgBxAHMAdQB3AIQAjgDoAO0A9QM5AzsDQANLA1QDYgNmA20DdgN7A4gDiwOdA6ADpQAAAAAAAAIBAAAAAAAAACgAAAAAAAAAAAAAAAAAAAOn},
+	Bdsk-Url-1 = {http://dx.doi.org/10.1145/2162049.2162073}}
 
 @inproceedings{Chib96a,
 	Abstract = {An abstract is not available.},
