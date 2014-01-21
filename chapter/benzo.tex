@@ -607,7 +607,7 @@ We present the results of this experiment in \tabref{benzo-waterfall-performance
 %
 \WF clearly outperforms a purely reflective solution.
 As explained in \secref{benzo-waterfall}, replacing a crucial primitive with simple language-side is not straight forward.
-If the replacement code triggers the very same primitive again we are trapped in so called meta-recursion.
+If the replacement code triggers the very same primitive again we are trapped in a meta-recursion loop \cite{Chib96a}.
 To avoid this, the \PH code for the replacement of \ttt{$>$} checks that the current activation of the primitive is not recursive.
 This comes at a substantial cost and is the main overhead factor.
 

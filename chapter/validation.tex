@@ -110,7 +110,7 @@ The only way to modify these primitives is by creating wrappers but that brings 
 Imagine that we wrap around the primitive which creates a new object.
 What happens now if the additional wrapper code needs a new object?
 It will call the very same primitive that we just wrapped, without protection this causes infinite recursion.
-Since technically the wrapper code should live at a different abstraction level than the original primitive we have find our selves mixing meta-levels.
+Since technically the wrapper code should live at a different abstraction level than the original primitive we have find our selves mixing meta-levels \cite{Chib96a}.
 
 The most radical approach to avoid this meta-recursion is to change the primitive externally.
 In the case of \PH this means changing the \Slang sources, exporting and compiling the primitive and restarting the \PH environment on top of this changed \VM.
