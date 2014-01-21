@@ -16,30 +16,64 @@
 \subsection{Introspection or Structural Reflection}
 % ---------------------------------------------------------------------------
 \todo{Code Example: Structural Reflection}
+\begin{stcode}{}
+'abc' class.
+\end{stcode}
+\begin{stcode}{}
+#Dictionary asClass methods.
+\end{stcode}
+
+\todo{mirrors}
 
 % ---------------------------------------------------------------------------
 \subsection{Intercession or Behavioral Reflection}
 % ---------------------------------------------------------------------------
 \todo{Code Example: Behavioral Reflection}
+\begin{stcode}{}
+#Dictionary asClass perform: #new
+\end{stcode}
+\begin{stcode}{}
+thisContext restartWithNewReceiver: Object new 
+\end{stcode}
+
+\begin{stcode}{}
+MyProxy >> doesNotUnderstand: aMessage
+	^ destination 
+		perform: aMessage selector
+		withArguments: aMessage arguments
+\end{stcode}
+
+\todo{Typically intercession stops at method-level: see ByteSurgeon for extended reflection down to the AST \cite{Denk06a}}
 
 % ---------------------------------------------------------------------------
 \subsection{Reflection Scope}
 % ---------------------------------------------------------------------------
 \todo{Reflective Scope: How long does the modificaton live?}\\
-\todo{delimited by stack?}\\
-\todo{by objects?}\\
-\todo{see pointcuts}\\
-\todo{Complex reflection might require\VM-level adaptions}\\
+\todo{Mostly interesting for persistend behavior reflection}\\
+\todo{- delimited by time (implicit since we can add/remove reflection dynamically)}\\
+\todo{- delimited by stack (interpreter)?}\\
+\todo{- by objects type (typicall ST reflection)?}\\
+\todo{- by reference...}\\
+\todo{- see pointcuts}\\
+\todo{explain solutions:}
+\todo{- See Interpreter Stack by Toon}\\ 	
 \todo{- See Dynamic Context of Erwann}\\
-\todo{- See first-class links by Jena Baptise}
+\todo{- See first-class links by Jean Baptise}
+
+\todo{They have in common: Complex reflection might require\VM-level adaptions}\\
+
 
 % ---------------------------------------------------------------------------
 \subsection{\VM-level Reflection}
 % ---------------------------------------------------------------------------
-\todo{Mini example / introduction: \JIT}\\
-\todo{limited interface, duplicated framework to allow for low-level access}\\
-\todo{In General: \VM-level reflection does not exist, only compile-time reflection in \VM frameworks!}\\
+\todo{Typically limited to the reflection capabilities of C and C++}\\
+\todo{VM Generation Frameworks change the picture: full reflection at compile-time}\\
 \todo{The 4th Quadrant!}
+
+\todo{Mini example / introduction: \JIT}\\
+\begin{stcode}{}
+VM gc addGCSpace: MyCustomGCSpace new.
+\end{stcode}
 
 
 % ===========================================================================
