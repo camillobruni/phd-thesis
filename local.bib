@@ -2,23 +2,47 @@
 %% http://bibdesk.sourceforge.net/
 
 
-%% Created for cami at 2014-01-21 17:33:50 +0100 
+%% Created for cami at 2014-01-21 17:50:08 +0100 
 
 
 %% Saved with string encoding Unicode (UTF-8) 
 
 
 
+@inproceedings{Wimm10a,
+	Abstract = {The linear scan algorithm for register allocation provides a good register assignment with a low compilation overhead and is thus frequently used for just-in-time compilers. Although most of these compilers use static single assignment ({SSA}) form, the algorithm has not yet been applied on {SSA} form, i.e., {SSA} form is usually deconstructed before register allocation. However, the structural properties of {SSA} form can be used to simplify the algorithm. With only one definition per variable, lifetime intervals (the main data structure) can be constructed without data flow analysis. During allocation, some tests of interval intersection can be skipped because {SSA} form guarantees non-intersection. Finally, deconstruction of {SSA} form after register allocation can be integrated into the resolution phase of the register allocator without much additional code. We modified the linear scan register allocator of the Java {HotSpot} client compiler so that it operates on {SSA} form. The evaluation shows that our simpler and faster version generates equally good or slightly better machine code.},
+	Address = {New York, NY, USA},
+	Author = {Wimmer, Christian and Franz, Michael},
+	Booktitle = {Proceedings of the 8th Annual IEEE/ACM International Symposium on Code Generation and Optimization},
+	Citeulike-Article-Id = {7097611},
+	Citeulike-Linkout-0 = {http://portal.acm.org/citation.cfm?id=1772954.1772979},
+	Citeulike-Linkout-1 = {http://dx.doi.org/10.1145/1772954.1772979},
+	Date-Added = {2014-01-21 16:41:46 +0000},
+	Date-Modified = {2014-01-21 16:41:46 +0000},
+	Doi = {10.1145/1772954.1772979},
+	Isbn = {978-1-60558-635-9},
+	Location = {Toronto, Ontario, Canada},
+	Pages = {170--179},
+	Posted-At = {2014-01-21 16:41:07},
+	Priority = {2},
+	Publisher = {ACM},
+	Series = {CGO '10},
+	Title = {Linear Scan Register Allocation on {SSA} Form},
+	Url = {http://dx.doi.org/10.1145/1772954.1772979},
+	Year = {2010},
+	Bdsk-File-1 = {YnBsaXN0MDDUAQIDBAUGJCVYJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoKgHCBMUFRYaIVUkbnVsbNMJCgsMDxJXTlMua2V5c1pOUy5vYmplY3RzViRjbGFzc6INDoACgAOiEBGABIAFgAdccmVsYXRpdmVQYXRoWWFsaWFzRGF0YV8QQy4uLy4uL3BhcGVyL1dpbW0xMGEgTGluZWFyIFNjYW4gUmVnaXN0ZXIgQWxsb2NhdGlvbiBvbiBTU0EgRm9ybS5wZGbSFwsYGVdOUy5kYXRhTxECBAAAAAACBAACAAADT1NYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAyugn80grAAAADj8MH1dpbW0xMGEgTGluZWFyIFNjYW4jNzI5MjlDMi5wZGYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAcpKcLPBGGcAAAAAAAAAAAAAgACAAAJIAAAAAAAAAAAAAAAAAAAAAVwYXBlcgAAEAAIAADK6BnjAAAAEQAIAADPBFOMAAAAAQAQAA4/DAALHIoABlHNAALmjAACAEdPU1g6VXNlcnM6AGNhbWktZGF0YToAZWR1Y2F0aW9uOgBwYXBlcjoAV2ltbTEwYSBMaW5lYXIgU2NhbiM3MjkyOUMyLnBkZgAADgBwADcAVwBpAG0AbQAxADAAYQAgAEwAaQBuAGUAYQByACAAUwBjAGEAbgAgAFIAZQBnAGkAcwB0AGUAcgAgAEEAbABsAG8AYwBhAHQAaQBvAG4AIABvAG4AIABTAFMAQQAgAEYAbwByAG0ALgBwAGQAZgAPAAgAAwBPAFMAWAASAFdVc2Vycy9jYW1pLWRhdGEvZWR1Y2F0aW9uL3BhcGVyL1dpbW0xMGEgTGluZWFyIFNjYW4gUmVnaXN0ZXIgQWxsb2NhdGlvbiBvbiBTU0EgRm9ybS5wZGYAABMAAS8AABUAAgAL//8AAIAG0hscHR5aJGNsYXNzbmFtZVgkY2xhc3Nlc11OU011dGFibGVEYXRhox0fIFZOU0RhdGFYTlNPYmplY3TSGxwiI1xOU0RpY3Rpb25hcnmiIiBfEA9OU0tleWVkQXJjaGl2ZXLRJidUcm9vdIABAAgAEQAaACMALQAyADcAQABGAE0AVQBgAGcAagBsAG4AcQBzAHUAdwCEAI4A1ADZAOEC6QLrAvAC+wMEAxIDFgMdAyYDKwM4AzsDTQNQA1UAAAAAAAACAQAAAAAAAAAoAAAAAAAAAAAAAAAAAAADVw==},
+	Bdsk-Url-1 = {http://dx.doi.org/10.1145/1772954.1772979}}
+
 @inproceedings{Chis13a,
 	Abstract = {The debugger is an essential tool in any programming environment, as it helps developers understand the dynamic behaviour of software systems. However, traditional debuggers fail in answering domain-specific questions, as the semantics of what they show and do are fixed. In this paper we introduce our work towards a moldable debugger which, unlike traditional debuggers, both adapts itself and can be adapted to a particular debugging context. Thus, it allows developers to answer their questions by using concepts from their own application domains.},
 	Address = {New York, NY, USA},
-	Author = {Chi\c{s}, Andrei and Nierstrasz, Oscar and G^{\i}rba, Tudor},
+	Author = {Chi\c{s}, Andrei and Nierstrasz, Oscar and G\^{i}rba, Tudor},
 	Booktitle = {Proceedings of the 7th Workshop on Dynamic Languages and Applications},
 	Citeulike-Article-Id = {12933109},
 	Citeulike-Linkout-0 = {http://portal.acm.org/citation.cfm?id=2489798.2489801},
 	Citeulike-Linkout-1 = {http://dx.doi.org/10.1145/2489798.2489801},
 	Date-Added = {2014-01-21 16:33:23 +0000},
-	Date-Modified = {2014-01-21 16:33:23 +0000},
+	Date-Modified = {2014-01-21 16:49:52 +0000},
 	Doi = {10.1145/2489798.2489801},
 	Isbn = {978-1-4503-2041-2},
 	Location = {Montpellier, France},
