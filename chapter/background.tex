@@ -11,7 +11,9 @@
 \newpage
 \section{Reflection}
 % ===========================================================================
-\todo{Image 4 Quadrants of reflection}
+\todo{Image 4 Quadrants of reflection}\\
+\todo{Two major distinctions (How): instropection / intercession}\\
+\todo{Several dinstions (When/Where): time / reference / stack}
 % ---------------------------------------------------------------------------
 \subsection{Introspection or Structural Reflection}
 % ---------------------------------------------------------------------------
@@ -56,19 +58,24 @@ MyProxy >> doesNotUnderstand: aMessage
 \todo{- by reference...}\\
 \todo{- see pointcuts}\\
 \todo{explain solutions:}
-\todo{- See Interpreter Stack by Toon}\\ 	
-\todo{- See Dynamic Context of Erwann}\\
-\todo{- See first-class links by Jean Baptise}
+\todo{- See Interpreter Stack by Toon \cite{Verw10a}}\\ 	
+\todo{- See Dynamic Context of Erwann \cite{Wern12a}}\\
+\todo{- See classboxes }\\
+\todo{- See first-class links by Jean Baptise \cite{Arna13a}}
 
+\paragraph{Limiting Reification Effort.}
+\todo{Unanticipated partial behavioral reflection: \cite{Roet07b}}\\
+\todo{Reification is costly: \cite{Male96a}}\\
+\todo{sub-method reflection by marcus: \cite{Denk08b}}\\
 \todo{They have in common: Complex reflection might require\VM-level adaptions}\\
 
 
 % ---------------------------------------------------------------------------
 \subsection{\VM-level Reflection}
 % ---------------------------------------------------------------------------
-\todo{Typically limited to the reflection capabilities of C and C++}\\
-\todo{VM Generation Frameworks change the picture: full reflection at compile-time}\\
-\todo{The 4th Quadrant!}
+\todo{Typically limited to the reflection capabilities of C and C++ (aka. only with external tools like dtrace or when explicitly provided by the programmer)}\\
+\todo{VM Generation Frameworks change the picture partially: full reflection at compile-time}\\
+\todo{The 4th Quadrant! same reflection capabilities of vm framworks at runtime}
 
 \todo{Mini example / introduction: \JIT}\\
 \begin{stcode}{}
@@ -227,7 +234,8 @@ We are now going to present \VMs that behave significantly different.
 These \VMs have direct control over the underlying infrastructure and most concepts
 \cb{yadda yadda yadda}
 \todo{need proper link from static VM to dynamic VM}\\
-\todo{draw parallel to C (classical VM), vs C++ (Maxine / Jikes), Java (PyPy) vs someting like ST}
+\todo{draw parallel to C (classical VM), vs C++ (Maxine / Jikes), Java (PyPy) vs someting like ST} \\
+\todo{probably add table for comparison}
 
 
 % ------------------------------------------------------------------------------
