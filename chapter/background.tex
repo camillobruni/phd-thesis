@@ -131,12 +131,15 @@ Since arbitrary code changes are possible at language-side the boundary level of
 \includegraphics[scale=1.1]{vm-reflection-evolution}
 \figlabel{vm-reflection-evolution}
 \end{figure}
-
-\begin{description}
-\item[Language-side access to the \VM:]
-\item[Language-side modification of the \VM:]
-\item[Self-aware \VM:]
-\end{description}
+%
+\begin{enumerate}[a), nolistsep]
+\item Language-side without reflection:
+\item Language-side with limited reflection:
+\item Language-side extended reflection:
+\item Language-side access to the \VM:
+\item Language-side modification of the \VM:
+\item Self-aware \VM:
+\end{enumerate}
 
 \todo{VM Generation Frameworks change the picture partially: full reflection at compile-time}\\
 \todo{The 4th Quadrant! same reflection capabilities of vm framworks at runtime}
