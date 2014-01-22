@@ -56,25 +56,51 @@ However, especially behavioral reflection is linked to a significant overhead.
 For instance the previous example of the reified execution context in \ST requires restricts the optimizations at \VM-level.
 And more general, most reification comes at great costs \cite{Male96a}.
 Hence already from a performance point of view it is natural to limit the scope of reflective behavior.
+Even so structural reflection can pose an overhead it does not directly influence the evaluation.
+For instance, using wrapped methods to alter execution has a wide-spread effect on the system.
+Thus, there is also a motivation to limit the effect on evaluation introduced by reflection. 
+We will now discuss several axes along which we can limit the use of reflection.
+%
+\begin{description}
+\item[Time:] Of course the most obvious axis is time itself.
+	In the context of \ST, behavioral reflection implies that the reflective properties are accessed or modified dynamically.
+	By dynamically adding or removing the reflective code we have time-delimited reflection.
+	
+\item[Type:] Another natural delimiter for reflection is the type of an object.
+	Again, this is rather natural in terms of \ST reflection since the natural base to modify behavior are the compiled methods.
+	Hence it is possible to use use method wrappers only on one class (and it subclasses) by installed modified methods.
 
+\item[Stack:] A second interesting limitation axis is the stack.
+	An example of that is the concept of tower of interpreters.
+	During the development of \P an intermediate version of the \ST interpreter featured this special execution scheme \cite{Verw10a}.
+	It allows the programmer to switch the current interpreter.
+	This way an expression is evaluated with altered semantics.
+	The solution presented in \P does not globally replace the interpreter but only for the given expression. 
+	Hence once the expression returns, the modifications and the implied overhead are gone.
+	\todo{- See Dynamic Context of Erwann \cite{Wern12a}}\\
+	\todo{- See classboxes \cite{Berg03a}}\\
 
-\todo{Reflective Scope: How long does the modificaton live?}\\
-\todo{Mostly interesting for persistend behavior reflection}\\
-\todo{- delimited by time (implicit since we can add/remove reflection dynamically)}\\
-\todo{- delimited by stack (interpreter)?}\\
-\todo{- by objects type (typicall ST reflection)?}\\
-\todo{- by reference...}\\
-\todo{- see pointcuts \cite{aspects...}}\\
-\todo{explain solutions:}
-\todo{- See Interpreter Stack by Toon \cite{Verw10a}}\\ 	
-\todo{- See Dynamic Context of Erwann \cite{Wern12a}}\\
-\todo{- See classboxes \cite{Berg03a}}\\
-\todo{- See first-class links by Jean Baptise \cite{Arna13a}}
+\item[Reference:] Starting from the concept of a proxy object we find another possibility to limit reflection by reference.
+	Jean-Baptiste Arnaud et al. describe a modified \PH runtime where the concept of a reference is fully reified as a so called handles \cite{Arna13a}.
+	Handles allow programmers to install new behavior and even state on a single reference, without influencing the rest of the system.
+	\todo{proper example: revokable reference... extending proxies}
+	
+\end{description}
+%
 
-\paragraph{Limiting Reification Effort.}
+\noindet
+
 \todo{Unanticipated partial behavioral reflection: \cite{Roet07b}}\\
-\todo{Reification is costly: \cite{Male96a}}\\
 \todo{sub-method reflection by marcus: \cite{Denk08b}}\\
+
+We see similar limitation mechanisms for the applications of aspects \cite{aspectJ}, which in a certain way resembles intercession.
+However, typically the systems using aspects have to prepared statically upfront with little means to change them at runtime.
+Aspects can be used to globally modify a system and introduced code snippets in defined points, for instance before each method invocation.
+Though they share an interesting concepts of limiting the introduced overhead using a pointcuts.
+These are conditionals that are dynamically before evaluating aspects.
+
+
+\todo{Reification is costly: \cite{Male96a}}\\
 \todo{They have in common: Complex reflection might require\VM-level adaptions}\\
 
 
