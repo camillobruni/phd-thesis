@@ -133,29 +133,58 @@ Going one step back we can see a certain evolution in reflection which we would 
 \figlabel{vm-reflection-evolution}
 \end{figure}
 %
+
 \begin{enumerate}[a), nolistsep]
 \item \textbf{Language-side without reflection:} A language in this category requires a virtual machine to run but has no reflective properties.
 	This includes early-stage languages such as the original Pascal-P system.
 	Typically languages without reflection also lack the underlying \VM and are compiled directly to native code.
 	\cb{thus they are one meta-level short of performing reflection}
+	
 \item \textbf{Language-side with limited reflection:}
 	The next step is to support only certain static reflection.
 	This might include structural reflection whose required information can be prepared upfront during the compilation phase.
 	Such a system has no support for unanticipated reflection as there is no support from the \VM to dynamically reify concepts.
+	A \VM with a \JIT in this category can perform strong optimizations and take full advantage of the runtime information.
+	\cb{GO fits here? \Java only partially?}
+	
 \item \textbf{Language-side extended reflection:}
+	The third category of high-level language runtimes has extended reflection with strong support from the underlying \VM.
+	We put \PH, \ST implementations or \Self in this category of languages.
+	The \VM supports complex reification of otherwise non-accessible concepts such as the stack.
+	At this stage the \VM-level optimizations are a balance between restricting the supported language or sacrificing speed.
 	
 \item \textbf{Language-side access to the \VM:}
+	The \VM support for reflection is highly extended compared to the previous category.
+	Instead of a hidden property, certain \VM-level concepts are made explicitly accessible to the running language.
+	Up to some extent this is similar to language-side structural reflection as the \VM only supports only a restricted interface which is defined at compile-time.
+	In this category the language can only read (introspect) \VM properties.
+	To our best knowledge there are no existing language-runtimes that fall into this category.
+
 \item \textbf{Language-side modification of the \VM:}
+	The previous category allows the language-side to safely read \VM-level properties.
+	If we follow the same path as the language-side evolution of reflection the next step is to allow for self-modification.
+	Such a language-runtime has a dynamic interface to change certain properties of the \VM.
+	However, the \VM is still not fully reflective in the sense that not all \VM concepts are reified.
+	This essentially limits the language-side to simple interactions and changes to the \VM itself.
+	At this point the \VM can no longer guarantee safety by isolating the language-side from all the low-level details.
+	Again no systems are known to fit in this category.
+	
+	
 \item \textbf{Self-aware \VM:}
+	We classify in the last category dynamic language-runtimes that have no longer a clear separation of \VM and language-side.
+	The same reflective properties equally apply to language-side and the \VM.
+	The way to achieve this is by flattening out the intermediate \VM
+	\begin{stcode}{}
+	VM gc addGCSpace: MyCustomGCSpace new.
+	\end{stcode}
+
 \end{enumerate}
 
 \todo{VM Generation Frameworks change the picture partially: full reflection at compile-time}\\
 \todo{The 4th Quadrant! same reflection capabilities of vm framworks at runtime}
 
 \todo{Mini example / introduction: \JIT}\\
-\begin{stcode}{}
-VM gc addGCSpace: MyCustomGCSpace new.
-\end{stcode}
+
 
 
 % ===========================================================================
