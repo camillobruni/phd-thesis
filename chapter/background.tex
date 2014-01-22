@@ -125,6 +125,7 @@ One argument in favor of that is that the underlying \VM provides security by is
 This is true for a more static language which restricts the reflective power.
 However, this is clearly not the case in \PH or \ST.
 Since arbitrary code changes are possible at language-side the boundary level of the \VM seems arbitrary.
+Going one step back we can see a certain evolution in reflection which we would like to extend down to the \VM.
 
 \begin{figure}[h]
 \centering
@@ -133,12 +134,19 @@ Since arbitrary code changes are possible at language-side the boundary level of
 \end{figure}
 %
 \begin{enumerate}[a), nolistsep]
-\item Language-side without reflection:
-\item Language-side with limited reflection:
-\item Language-side extended reflection:
-\item Language-side access to the \VM:
-\item Language-side modification of the \VM:
-\item Self-aware \VM:
+\item \textbf{Language-side without reflection:} A language in this category requires a virtual machine to run but has no reflective properties.
+	This includes early-stage languages such as the original Pascal-P system.
+	Typically languages without reflection also lack the underlying \VM and are compiled directly to native code.
+	\cb{thus they are one meta-level short of performing reflection}
+\item \textbf{Language-side with limited reflection:}
+	The next step is to support only certain static reflection.
+	This might include structural reflection whose required information can be prepared upfront during the compilation phase.
+	Such a system has no support for unanticipated reflection as there is no support from the \VM to dynamically reify concepts.
+\item \textbf{Language-side extended reflection:}
+	
+\item \textbf{Language-side access to the \VM:}
+\item \textbf{Language-side modification of the \VM:}
+\item \textbf{Self-aware \VM:}
 \end{enumerate}
 
 \todo{VM Generation Frameworks change the picture partially: full reflection at compile-time}\\
