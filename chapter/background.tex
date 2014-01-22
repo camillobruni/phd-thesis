@@ -116,9 +116,28 @@ For instance the \JIT has to be aware of classes and the methods within.
 And in dynamic system like \PH it has to be made aware of language-side changes to properly update the generated native code.
 What we see is that the \JIT accesses structural information from the language-side.
 However, the language-side is not capable to accessing \VM-level information.
+The closest \VM interaction point typically is the bytecode generated at language-side and handed over to the \VM for execution.
+Yet, this provides only a crude one-way interaction \cite{Kell12a}.
 
+For highly reflective and dynamic languages like \PH we see a certain mismatch.
+While it is possible to virtually change and modify everything at language-side we are locked out of the \VM.
+One argument in favor of that is that the underlying \VM provides security by isolation.
+This is true for a more static language which restricts the reflective power.
+However, this is clearly not the case in \PH or \ST.
+Since arbitrary code changes are possible at language-side the boundary level of the \VM seems arbitrary.
 
-\todo{Typically limited to the reflection capabilities of C and C++ (aka. only with external tools like dtrace or when explicitly provided by the programmer)}\\
+\begin{figure}[h]
+\centering
+\includegraphics[scale=1.1]{vm-reflection-evolution}
+\figlabel{vm-reflection-evolution}
+\end{figure}
+
+\begin{description}
+\item[Language-side access to the \VM:]
+\item[Language-side modification of the \VM:]
+\item[Self-aware \VM:]
+\end{description}
+
 \todo{VM Generation Frameworks change the picture partially: full reflection at compile-time}\\
 \todo{The 4th Quadrant! same reflection capabilities of vm framworks at runtime}
 
@@ -135,7 +154,6 @@ VM gc addGCSpace: MyCustomGCSpace new.
 \todo{Simple History of \VMs: static frames, high abstraction mismatch}\\
 \todo{missign structural refleciton => go towards \VM frameworks} \\
 \todo{At the same time hard requirements which can only be achieved with very low-level programming}\\
-\todo{Induced limitations of the bytecode separation: JVM limited inspection \cite{Kell12a}}
 
 % ---------------------------------------------------------------------------
 \subsection{Metacircular \VMs}
