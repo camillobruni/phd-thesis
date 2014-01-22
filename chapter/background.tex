@@ -49,7 +49,7 @@ MyProxy >> doesNotUnderstand: aMessage
 \todo{Typically intercession stops at method-level: see ByteSurgeon for extended reflection down to the AST \cite{Denk06a}}
 
 % ---------------------------------------------------------------------------
-\subsection{Reflection Scope}
+\subsection{Scoping Reflection: Partial Behavioral Reflection}
 % ---------------------------------------------------------------------------
 Reflection brings great power to a programming language.
 However, especially behavioral reflection is linked to a significant overhead.
@@ -58,7 +58,7 @@ And more general, most reification comes at great costs \cite{Male96a}.
 Hence already from a performance point of view it is natural to limit the scope of reflective behavior.
 Even so structural reflection can pose an overhead it does not directly influence the evaluation.
 For instance, using wrapped methods to alter execution has a wide-spread effect on the system.
-Thus, there is also a motivation to limit the effect on evaluation introduced by reflection. 
+Thus, there is also a motivation to limit the effect on evaluation introduced by reflection.
 We will now discuss several axes along which we can limit the use of reflection.
 %
 \begin{description}
@@ -81,28 +81,31 @@ We will now discuss several axes along which we can limit the use of reflection.
 	\todo{- See classboxes \cite{Berg03a}}\\
 
 \item[Reference:] Starting from the concept of a proxy object we find another possibility to limit reflection by reference.
-	Jean-Baptiste Arnaud et al. describe a modified \PH runtime where the concept of a reference is fully reified as a so called handles \cite{Arna13a}.
+	Arnaud et al. describe a modified \PH runtime where the concept of a reference is fully reified as a so called handles \cite{Arna13a}.
 	Handles allow programmers to install new behavior and even state on a single reference, without influencing the rest of the system.
 	\todo{proper example: revokable reference... extending proxies}
 	
 \end{description}
 %
 
-\noindet
-
-\todo{Unanticipated partial behavioral reflection: \cite{Roet07b}}\\
-\todo{sub-method reflection by marcus: \cite{Denk08b}}\\
-
+\noindent Tanter et. al. describe \textsc{Reflex} \cite{Tant03a} a partial behavioral reflection system on top of \Java.
 We see similar limitation mechanisms for the applications of aspects \cite{aspectJ}, which in a certain way resembles intercession.
 However, typically the systems using aspects have to prepared statically upfront with little means to change them at runtime.
 Aspects can be used to globally modify a system and introduced code snippets in defined points, for instance before each method invocation.
 Though they share an interesting concepts of limiting the introduced overhead using a pointcuts.
 These are conditionals that are dynamically before evaluating aspects.
 
+Both \textsc{Reflex} and aspects require the underlying system to be prepared upfront.
+Unanticipated behavioral reflection is not directly possible.
+Typically it is only possible to enable or disable the reflective features that have been prepared upfront.
+Röthlisberger et al. propose \Gepetto a system \cite{Roet07b} that enables true unanticipated behavioral reflection on top of \ST.
+\Gepetto provides a high-level \API to install behavior reflection.
+\cb{more needed?}
+
 
 \todo{Reification is costly: \cite{Male96a}}\\
 \todo{They have in common: Complex reflection might require\VM-level adaptions}\\
-
+\todo{Iguana/J}
 
 % ---------------------------------------------------------------------------
 \subsection{\VM-level Reflection}
