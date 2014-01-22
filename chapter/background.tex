@@ -169,14 +169,11 @@ Going one step back we can see a certain evolution in reflection which we would 
 	At this point the \VM can no longer guarantee safety by isolating the language-side from all the low-level details.
 	Again no systems are known to fit in this category.
 	
-	
 \item \textbf{Self-aware \VM:}
 	We classify in the last category dynamic language-runtimes that have no longer a clear separation of \VM and language-side.
 	The same reflective properties equally apply to language-side and the \VM.
-	The way to achieve this is by flattening out the intermediate \VM
-	\begin{stcode}{}
-	VM gc addGCSpace: MyCustomGCSpace new.
-	\end{stcode}
+	The way to achieve this is by flattening out the intermediate \VM and let the language-side directly control everything.
+	Currently there are several research \VMs which can be classified as self-aware \VMs: The \P \VM \cite{Verw12a} is partially self-aware but in control of the underlying execution and the \Klein \VM is fully reflective \cite{Unga05a}. 
 
 \end{enumerate}
 
