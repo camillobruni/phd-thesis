@@ -77,19 +77,16 @@ We will now discuss several axes along which we can limit the use of reflection.
 	This way an expression is evaluated with altered semantics.
 	The solution presented in \P does not globally replace the interpreter but only for the given expression. 
 	Hence once the expression returns, the modifications and the implied overhead are gone.
-	\todo{- See Dynamic Context of Erwann \cite{Wern12a}}\\
-	\todo{- See classboxes \cite{Berg03a}}\\
 
 \item[Reference:] Starting from the concept of a proxy object we find another possibility to limit reflection by reference.
 	Arnaud et al. describe a modified \PH runtime where the concept of a reference is fully reified as a so called handles \cite{Arna13a}.
 	Handles allow programmers to install new behavior and even state on a single reference, without influencing the rest of the system.
 	\todo{proper example: revokable reference... extending proxies}
-	
 \end{description}
 %
 
 \noindent Tanter et. al. describe \textsc{Reflex} \cite{Tant03a} a partial behavioral reflection system on top of \Java.
-We see similar limitation mechanisms for the applications of aspects \cite{aspectJ}, which in a certain way resembles intercession.
+We see similar limitation mechanisms for the applications of aspects \cite{Kicz01a}, which in a certain way resembles intercession.
 However, typically the systems using aspects have to prepared statically upfront with little means to change them at runtime.
 Aspects can be used to globally modify a system and introduced code snippets in defined points, for instance before each method invocation.
 Though they share an interesting concepts of limiting the introduced overhead using a pointcuts.
@@ -102,14 +99,25 @@ Röthlisberger et al. propose \Gepetto a system \cite{Roet07b} that enables true
 \Gepetto provides a high-level \API to install behavior reflection.
 \cb{more needed?}
 
-
-\todo{Reification is costly: \cite{Male96a}}\\
-\todo{They have in common: Complex reflection might require\VM-level adaptions}\\
-\todo{Iguana/J}
-
 % ---------------------------------------------------------------------------
 \subsection{\VM-level Reflection}
 % ---------------------------------------------------------------------------
+The basic reflective features have to be provided by the underlying meta-level.
+For high-level languages this is the \VM.
+For instance, simple cases involve giving access to the class of an object or the possibility to reflectively invoke a method at runtime.
+\PH for instance is a more complex case, where the \VM has to provide access to the current execution context for introspection and even modification.
+The latter one has a significant influence on the underlying \VM architecture preventing certain low-level optimization which would shadow the access to certain context information.
+What we see is that the meta-level enables reflection but usually is not reflective by its own.
+
+Following the \ST principle that everything is an object one might assume that this also includes the \VM as it is already highly involved in supporting reflection.
+Typically the \VM is implemented in C or C++ which have no reflection.
+However, the \JIT is common exception as it has to interact dynamically with the language-side.
+For instance the \JIT has to be aware of classes and the methods within.
+And in dynamic system like \PH it has to be made aware of language-side changes to properly update the generated native code.
+What we see is that the \JIT accesses structural information from the language-side.
+However, the language-side is not capable to accessing \VM-level information.
+
+
 \todo{Typically limited to the reflection capabilities of C and C++ (aka. only with external tools like dtrace or when explicitly provided by the programmer)}\\
 \todo{VM Generation Frameworks change the picture partially: full reflection at compile-time}\\
 \todo{The 4th Quadrant! same reflection capabilities of vm framworks at runtime}
