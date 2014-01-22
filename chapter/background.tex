@@ -51,6 +51,13 @@ MyProxy >> doesNotUnderstand: aMessage
 % ---------------------------------------------------------------------------
 \subsection{Reflection Scope}
 % ---------------------------------------------------------------------------
+Reflection brings great power to a programming language.
+However, especially behavioral reflection is linked to a significant overhead.
+For instance the previous example of the reified execution context in \ST requires restricts the optimizations at \VM-level.
+And more general, most reification comes at great costs \cite{Male96a}.
+Hence already from a performance point of view it is natural to limit the scope of reflective behavior.
+
+
 \todo{Reflective Scope: How long does the modificaton live?}\\
 \todo{Mostly interesting for persistend behavior reflection}\\
 \todo{- delimited by time (implicit since we can add/remove reflection dynamically)}\\
@@ -218,6 +225,8 @@ By default the \VM programmer does not write an explicit \JIT in \PyPy.
 Instead the \VM code is annotated to guide the underlying tracing \JIT generator.
 This means a \VM compilation time a specific tracing \JIT is created for the given meta information.
 As a result, the \JIT can track high-level loops in the final interpreted language.
+
+\todo{in that sense maybe also add truffle}
 
 
 % ---------------------------------------------------------------------------
