@@ -220,14 +220,39 @@ In the following sections we are shedding light on metacircular \VMs which are p
 \seclabel{background-metacircular-vms}
 % ---------------------------------------------------------------------------
 The ever growing complexity of \VMs and the abstraction mismatch between the \VM definition language and the final interpreted language lead to a new movement that tried to reduce complexity.
-
-
+Among the \VMs using higher-level languages or frameworks to reduce the development effort the metacircular building process stands out.
+Unlike the classical \VM which is built in C and compiled to the a binary, a metacircular \VM is written in the same language that it provides in the end.
+The following figure highlights the most evident differences between a classical and a metacircular approach.
+%
 \begin{figure}[h]
 	\centering
 	\includegraphics[scale=1.1]{vm-metacircular-building-process}
-	\figlabel{vm-metacircular-building-process}
+%	\figlabel{vm-metacircular-building-process}
 \end{figure}
 %
+\begin{description}
+\item[Classical \VM Compilation] \hfill
+	\begin{enumerate}[a), nolistsep]
+		\item \VM sources typically written in C or C++
+		\item Compilation of the \VM sources using a C or C++ compiler
+		\item Final Binary
+	\end{enumerate}
+
+\item[Metacircular \VM Compilation] \hfill
+	\begin{enumerate}[nolistsep]
+		\item \VM sources written in a high-level language, the same as the final \VM supports
+		\item Compilation of the \VM sources happens by evaluating the \VM sources, allowing for compile-time reflection
+		\item New \VM' binary built using an existing version of the \VM
+		\item The new \VM Binary can be used to compile again a new \VM''
+	\end{enumerate}
+\end{description}
+
+Using the same language for developing the \VM has several advantages.
+Usually the \VM is in great contrast to language-side libraries on the same platform.
+This is due to the low-level nature of the \VM.
+Using a high-level language certain low-level details are hidden.
+Furthermore the metacircular approach provides the \VM developer with the same tools as a language-side programmer.
+Typically this leads to faster development.
 
 \todo{Ultimate Goal: Run the \VM in the same language... what do we improve by that?}\\
 \todo{  lesser abstraction mismatch, known tools, better debugging, faster development }\\
