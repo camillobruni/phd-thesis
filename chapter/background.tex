@@ -202,10 +202,16 @@ On the other hand bytecodes allow to encode complex operations into little space
 Obviously this abstraction gain comes at a cost and ever since the first \VMs were built research and industry strive to reduce the interpretation overhead.
 An efficient way to improve performance is to use a just in time compiler (\JIT) that dynamically generates native code from the bytecode.
 In this case the bytecode becomes an intermediate representation (\IR) for a bigger compiler infrastructure.
-However, \JITs are notoriously complex as they crosscut many \VM components.
+However, \JIT compilers are notoriously complex as they crosscut many \VM components.
 At the same time they crosscut all abstraction layers; they have to access high-level information from the running bytecodes and manage native code at the same time.
+Similar, albeit less low-level oriented complexity applies to the automatic memory management present in most high-level language \VMs.
+Garbage Collectors (\GC) evolved from simple helpers to complex software artifacts that for instance support concurrent garbage collection \cite{azul}.
 
-
+The increased complexity of the \VMs lead to more novel approaches on how to build \VMs.
+\VMs are still build for a big part in C or C++ for performance reasons.
+However, there are more high-level approaches that try to simplify \VMs by using building blocks \cite{??}.
+\todo{1-2 sentences more here}
+In the following sections we are shedding light on metacircular \VMs which are programmed in the same language they in the end support.
 \todo{Simple History of \VMs: static frames, high abstraction mismatch}\\
 \todo{missign structural refleciton => go towards \VM frameworks} \\
 \todo{At the same time hard requirements which can only be achieved with very low-level programming}\\
