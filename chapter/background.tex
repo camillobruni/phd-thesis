@@ -126,14 +126,13 @@ This is true for a more static language which restricts the reflective power.
 However, this is clearly not the case in \PH or \ST.
 Since arbitrary code changes are possible at language-side the boundary level of the \VM seems arbitrary.
 Going one step back we can see a certain evolution in reflection which we would like to extend down to the \VM.
-
+%
 \begin{figure}[h]
-\centering
-\includegraphics[scale=1.1]{vm-reflection-evolution}
-\figlabel{vm-reflection-evolution}
+	\centering
+	\includegraphics[scale=1.1]{vm-reflection-evolution}
+	\figlabel{vm-reflection-evolution}
 \end{figure}
 %
-
 \begin{enumerate}[a), nolistsep]
 \item \textbf{Language-side without reflection:} A language in this category requires a virtual machine to run but has no reflective properties.
 	This includes early-stage languages such as the original Pascal-P system.
@@ -220,6 +219,16 @@ In the following sections we are shedding light on metacircular \VMs which are p
 \subsection{Metacircular \VMs}
 \seclabel{background-metacircular-vms}
 % ---------------------------------------------------------------------------
+The ever growing complexity of \VMs and the abstraction mismatch between the \VM definition language and the final interpreted language lead to a new movement that tried to reduce complexity.
+
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[scale=1.1]{vm-metacircular-building-process}
+	\figlabel{vm-metacircular-building-process}
+\end{figure}
+%
+
 \todo{Ultimate Goal: Run the \VM in the same language... what do we improve by that?}\\
 \todo{  lesser abstraction mismatch, known tools, better debugging, faster development }\\
 \todo{Image different approaches 2 axis: lanugage properties(absorbed / explicit), bootstrap (intermediate, direct)}
