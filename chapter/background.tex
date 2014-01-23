@@ -182,12 +182,30 @@ In general high-level languages are built with a clear distinction of the langua
 However, with further reflective capabilities of the language-side we see that such a separation is no longer a guarantee for security.
 In fact most security aspects have to be addressed already at language-side \cite{??}.
 This we want to focus in this thesis on the reflective aspects of the \VM.
-
+In order to further compare reflection in languages we will now discuss the different \VM building approaches. 
 
 % ===========================================================================
 \section{Open \VMs}
 \seclabel{background-open-vms}
 % ===========================================================================
+
+High-level language \VMs are inherent complex pieces of software.
+They have to combine two rather extreme goals: abstraction and performance.
+We have seen that the required abstraction for the running high-level language has a strong influence on the \VM design.
+At the same time the hard performance requirement requires precise interaction with the underlying hardware.
+This goes even so far that specialized hardware is conceived to match the performance requirements \cite{??,Azul,ST}.
+
+The early \VMs focused on interpreting an abstract instruction set (bytecodes).
+The benefits are twofold.
+On the one hand the bytecodes guarantee certain platform independence by abstracting away from the \CPU specific instruction set.
+On the other hand bytecodes allow to encode complex operations into little space both serving the hard memory constraints of the hardware and simplifying the design of a compiler.
+Obviously this abstraction gain comes at a cost and ever since the first \VMs were built research and industry strive to reduce the interpretation overhead.
+An efficient way to improve performance is to use a just in time compiler (\JIT) that dynamically generates native code from the bytecode.
+In this case the bytecode becomes an intermediate representation (\IR) for a bigger compiler infrastructure.
+However, \JITs are notoriously complex as they crosscut many \VM components.
+At the same time they crosscut all abstraction layers; they have to access high-level information from the running bytecodes and manage native code at the same time.
+
+
 \todo{Simple History of \VMs: static frames, high abstraction mismatch}\\
 \todo{missign structural refleciton => go towards \VM frameworks} \\
 \todo{At the same time hard requirements which can only be achieved with very low-level programming}\\
