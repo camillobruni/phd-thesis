@@ -247,23 +247,37 @@ The following figure highlights the most evident differences between a classical
 	\end{enumerate}
 \end{description}
 
-Using the same language for developing the \VM has several advantages.
+\noindent Using the same language for developing the \VM has several advantages.
 Usually the \VM is in great contrast to language-side libraries on the same platform.
 This is due to the low-level nature of the \VM.
 Using a high-level language certain low-level details are hidden.
 Furthermore the metacircular approach provides the \VM developer with the same tools as a language-side programmer.
 Typically this leads to faster development.
 
-\todo{Ultimate Goal: Run the \VM in the same language... what do we improve by that?}\\
-\todo{  lesser abstraction mismatch, known tools, better debugging, faster development }\\
-\todo{Image different approaches 2 axis: lanugage properties(absorbed / explicit), bootstrap (intermediate, direct)}
+
+Inside the metacircular \VM community we see different approaches with varying levels of abstractions and reuse.
+When compared, we find differences in how metacircular \VMs build \VM components (\GC, \JIT) and how the bootstrap or compilation of the new \VM works.
+We see metacircular \VMs that use the high-level language as an advanced macro systems.
+In a sense an extended version of C++'s templates.
+Other approaches use the full reflective power of the high-level runtime to simplify code.
+And even more advanced system automatically provide the \VM developer with \GC or a \JIT compiler.
+We will now elaborate in more detail how metacircular \VMs are constructed.
+
 
 \paragraph{Language Property Synthesis}
-\todo{Where does the implemented lanugage properties come from: managed vs. explicit}.
-\todo{Eraly approaches like the \Squeak \VM have no absorption}\\
-\todo{Typical \VM generation framweork, akak. facny C or C++ (mimics their final staticness while being more flexible during pre-compilation)}\\
-\todo{\PyPy gives not direct access to the underlying \JIT implementation, plug and play}\\
-\todo{Very high-level interface}\\
+In the classical C-based \VM approach all \VM components have to be explicitly build.
+Each \VM is a one of a kind with custom interpreter and a specialized memory manager.
+Using high-level \VM frameworks it is possible to provide the \VM developer with prefabricated components.
+For instance it is possible to simply parametrize a premade \GC to reduce development effort.
+Looking at the evolution of metacircular \VMs we see both approaches.
+For instance early metacircular solutions like the \Squeak \VM \cite{??} work more like a high-level C macro system.
+The high-level language is used to generate C code which is then further compiled to the final \VM binary.
+\VM components are declared in a very explicit style, again not much different from C++.
+Memory for \VM-level structures has to be managed in the same way as its C++ counterpart by explicitly allocating and freeing objects.
+On the other side we have \VM frameworks like \PyPy for the \Python language that provide automatic \GC and \JIT support.
+Here the developer writes a new \VM in almost the same way as a normal \Python program.
+In the ideal case only certain hints are necessary to create a \JIT.
+
 \todo{Truffle as extreme to that track: Interpreter implementation on \AST basis, not explicit bytecode interpreter (which would be typical in C)}
 
 \paragraph{Bootstrap Process}
