@@ -157,6 +157,7 @@ Going one step back we can see a certain evolution in reflection which we would 
 	Instead of a hidden property, certain \VM-level concepts are made explicitly accessible to the running language.
 	Up to some extent this is similar to language-side structural reflection as the \VM only supports only a restricted interface which is defined at compile-time.
 	In this category the language can only read (introspect) \VM properties.
+	\todo{MIST has a GC mop that fits in this category}
 	To our best knowledge there are no existing language-runtimes that fall into this category.
 
 \item \textbf{Language-side modification of the \VM:}
@@ -250,7 +251,7 @@ The following figure highlights the most evident differences between a classical
 \noindent Using the same language for developing the \VM has several advantages.
 Usually the \VM is in great contrast to language-side libraries on the same platform.
 This is due to the low-level nature of the \VM.
-Using a high-level language certain low-level details are hidden.
+Using a high-level language certain implementation details can be hidden.
 Furthermore the metacircular approach provides the \VM developer with the same tools as a language-side programmer.
 Typically this leads to faster development.
 
