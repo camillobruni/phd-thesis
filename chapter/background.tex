@@ -212,9 +212,6 @@ The increased complexity of the \VMs lead to more novel approaches on how to bui
 However, there are more high-level approaches that try to simplify \VMs by using building blocks \cite{??}.
 \todo{1-2 sentences more here}
 In the following sections we are shedding light on metacircular \VMs which are programmed in the same language they in the end support.
-\todo{Simple History of \VMs: static frames, high abstraction mismatch}\\
-\todo{missign structural refleciton => go towards \VM frameworks} \\
-\todo{At the same time hard requirements which can only be achieved with very low-level programming}\\
 
 % ---------------------------------------------------------------------------
 \subsection{Metacircular \VMs}
@@ -227,7 +224,9 @@ The following figure highlights the most evident differences between a classical
 %
 \begin{figure}[h]
 	\centering
+	\vspace{2mm}
 	\includegraphics[scale=1.1]{vm-metacircular-building-process}
+	\vspace{-5mm}
 %	\figlabel{vm-metacircular-building-process}
 \end{figure}
 %
@@ -282,11 +281,33 @@ In the ideal case only certain hints are necessary to create a \JIT.
 \todo{Truffle as extreme to that track: Interpreter implementation on \AST basis, not explicit bytecode interpreter (which would be typical in C)}
 
 \paragraph{Bootstrap Process}
-\todo{Early approaches use C as intermeditate representation}\\
-\todo{Implies the whole GCC stack} \\
-\todo{Hard to circumvent GCC's limitations => generate own native code} \\
-\todo{Fluent transition from purely C based bootstrap, over C-kernel + native code to purely native code} 
-
+A crucial step during the development with the metacircular \VMs is the bootstrap of the new \VM.
+We distinguish mainly between two approaches, indirect bootstrap and direct bootstrap.
+%
+\begin{figure}[h]
+	\centering
+	\vspace{2mm}
+	\includegraphics[scale=1.1]{vm-metacircular-bootstrap}
+	\vspace{-5mm}
+%	\figlabel{vm-metacircular-building-process}
+\end{figure}
+%
+\begin{description}
+	\item[Indirect Bootstrap:] Metacircular \VMs with an indirect bootstrap use an intermediate language to compile a new \VM binary.
+	A typical example of this approach is \Squeak and \PyPy using C.
+	Both of these system imply a complete C compilation stack.
+	The advantage of this approach is the that C is heavily optimized thus reducing the development effort for the \VM framework.
+	However, C already hides a lot of low-level details away.
+	Typically the \VM framework has to work around these limitations when working directly with native code for instance in the \JIT.
+	\todo{Mention the C introducted limitiations in \P when optimizing message sends}
+	
+	\item[Direct Bootstrap:] Metacircular \VMs with a direct bootstrap are directly in charge of generating the native code for the final binary.
+	We have seen in \P that many C-level optimizations have only limited impact on the final speed.
+	A major speedup is achieved by using a native stack and directly generating native code instead of using a bytecode interpreter.
+	Hence the \VM will probably require an assembler framework which in return can be used for the direct bootstrap.
+	This means that only limited additional efforts are necessary for a direct bootstrap.
+	As a result the direct bootstrap allows full control of how the final binary will look like.
+\end{description}
 
 % ---------------------------------------------------------------------------
 \subsection{Compile-time Reified \VMs}
