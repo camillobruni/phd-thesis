@@ -225,7 +225,7 @@ The following figure highlights the most evident differences between a classical
 %
 \begin{figure}[h]
 	\centering
-	\vspace{2mm}
+	\vspace{1mm}
 	\includegraphics[scale=1.1]{vm-metacircular-building-process}
 	\vspace{-10mm}
 %	\figlabel{vm-metacircular-building-process}
@@ -321,25 +321,30 @@ In \secref{background-reified-vms} we will then focus on a list of \VMs that rei
 \subsubsection*{\Squeak \ST \VM}
 \seclabel{background-squeak}
 % ---------------------------------------------------------------------------
-\todo{Does not absorb any properties} \\
-\todo{\ST used as C template engine}
 
-\WF is implemented in \PH which uses the \urlfootnote{\Cog \VM}{http://www.mirandabanda.org/cogblog/}, originating from the \Squeak \VM\cite{Inga97a}.
-The \VM itself is written in a dialect of \ST called \Slang that is essentially limited to the functionality that can be expressed with standard C code.
-\Slang serves for two purposes: a high-level C preprocessor, a interactive simulator of the \VM.
-The first point has severe consequences.
-\Slang basically has the same syntax as \ST but is semantically constrained to expressions that can be resolved statically at compilation or code generation time and are compatible with C.
+One of the first metacircular \VMs presented is the \Squeak \VM\cite{Inga97a}.
+Its core building system is still in active use for the \urlfootnote{\Cog \VM}{http://www.mirandabanda.org/cogblog/} which extends \Squeak with a \JIT.
+The \Cog \VM is used as default by the \urlfootnote{\PH}{http://pharo.org/} programming language.
+\Squeak is built around a \ST dialect called \Slang that is exported to C to be compiled to the final \VM binary.
+Additionally the \Slang sources can be interpreted to provide an interactive simulator of the \VM, including full graphical support.
+
+The \VM itself is mostly written in a dialect of \ST called \Slang that is essentially limited to the functionality that can be expressed with standard C code.
+\Slang in this case is mostly a high-level C preprocessor.
+Even though \Slang basically has the same syntax as \ST it is semantically constrained to expressions that can be resolved statically at compilation or code generation time and are compatible with C.
 Hence \Slang's semantics are closer to C than to \ST.
-This fact is also visible in the simulator for the \VM.
-If \Slang were \ST, separate parts of the \VM could be directly evaluated.
-However, since \Slang is bound to C expressions, the simulator sets up a byte array as memory.
-The simulated \VM then accesses this byte array as if it were the native memory.
+Unlike later metacircular frameworks \Squeak uses little or no compile-time reflection to simplify the \VM designs.
+However, class composition and traits help structuring the sources.
+Next to the \Slang source which account for the biggest part of the interpreter code some \OS-related code and plugins are written in C.
+To facilitate the interaction with the pure C part \Slang supports inline C expressions and type annotations.
 
-In conclusion we see that the \PH \VM has an abstract representation of the \VM available for simulation.
-This abstract representation is then used to generate C sources, already lowering the abstraction level.
-After compiling the C sources the original representation of the \VM is not directly accessible anymore.
-For instance, even debug symbols are usually stripped from the final binary for performance reasons.
-Of course this implies that the \VM can not be changed nor directly inspected from language-side.
+A great achievement of the \Squeak \VM is a simulator environment that enables programmers to interact dynamically with the running \VM sources.
+The simulator is capable or running a complete \Squeak \ST image including graphical user interface.
+This means that programmers can change the sources of the running \VM and see the immediate effects in the simulator.
+The simulator itself works by setting up a byte array which servers as native memory.
+Then the \VM sources written in \Slang are interpreted by the \VM of the development environment.
+
+We see that \Squeak is an early-stage metacircular \VM that uses an indirect bootstrap process.
+Yet according to long-time \VM programmers the \Squeak infrastructure is more productive than a comparable C++ or pure C project.
 
 
 % ---------------------------------------------------------------------------
