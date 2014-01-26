@@ -125,7 +125,7 @@ One argument in favor of that is that the underlying \VM provides security by is
 This is true for a more static language which restricts the reflective power.
 However, this is clearly not the case in \PH or \ST.
 Since arbitrary code changes are possible at language-side the boundary level of the \VM seems arbitrary.
-Going one step back we can see a certain evolution in reflection which we would like to extend down to the \VM.
+Going one 	step back we can see a certain evolution in reflection which we would like to extend down to the \VM.
 %
 \begin{figure}[h]
 	\centering
@@ -134,6 +134,7 @@ Going one step back we can see a certain evolution in reflection which we would 
 	\caption[High-level Language Reflection Evolution]{Evolution of reflection in high-level language runtimes.}
 \end{figure}
 %
+\cb{recheck that the properties fit to what I told everybody}
 \begin{enumerate}[a), nolistsep]
 \item \textbf{Language-side without reflection:} A language in this category requires a virtual machine to run but has no reflective properties.
 	This includes early-stage languages such as the original Pascal-P system.
@@ -348,10 +349,10 @@ Yet according to long-time \VM programmers the \Squeak infrastructure is more pr
 
 
 % ---------------------------------------------------------------------------
-\subsubsection*{High-level low-level Programming in \Jikes with \MMTK}
+\subsubsection*{\Jikes: High-level low-level Programming in with \MMTK}
 \seclabel{background-jikes}
 % ---------------------------------------------------------------------------
-\todo{Image: Infrastructure Overview}
+\todo{Jikes Overview}
 
 High-level low-level programming \cite{Fram09a} advocates using high-level languages for system programming.
 Frampton et al. present a low-level framework packaged as \ttt{org.vmmagic}, which is used as system interface for Jikes, an experimental Java VM.
@@ -556,7 +557,6 @@ Additionally they type annotate the code for the primitive definitions to benefi
 % ===========================================================================
 \section{Problem 2: }
 % ===========================================================================
-
 
 % ===========================================================================
 \section{Problem 3: }
