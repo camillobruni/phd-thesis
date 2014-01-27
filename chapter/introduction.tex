@@ -33,18 +33,32 @@ The research on partial behavioral reflection shows the real world limitations o
 For many applications the reification overhead is too big.
 The third approach to limit the costs is by providing specific support for a required reification.
 An example for that is the debugging capability of many programming languages.
-Typically programming have special \VM support for this.
+Most programming have special \VM support for this.
 In contrast, \PH or \ST systems the debugger is built on top of the default reflection infrastructure.
+\todo{are there other similar possiblities}
 
-Instead of modifying the 
+In general we require \VM-level support for efficient reflection.
+Intercession is contained at language-side and there is usually no interface present to reach the \VM.
+Hence, custom support is only possible by statically modifying the underlying \VM upfront.
+Even in a theoretical setup where the \VM is open for language-side modification we see that hardly any \VM is self-aware.
+Most \VMs behave at runtime like any other binary and lack most structural information required for reflection.
+A partial exception to this are \VMs written on top of \VM frameworks that use high-level languages to describe the \VM components instead of the prevailing static system programming languages such as C or C++.
+Even though, such \VM frameworks allow for compile-time reflection, the reflective capabilities are lost during compilation.
+
+All these \VMs have in common that they strongly isolate the language running on top.
+Recently several language-runtimes appeared that no longer make this strong separation \cite{Klein, Pino}.
+One such system is the \P \ST \VM.
+Instead of using bytecodes as language-side execution format \P's compiler directly generates native code for execution.
+Essentially \P hoist the \VM-level just-in-time compiler (\JIT) to the language-side.
+At the same time the underlying \VM is reduced to a bootstrap routine that hands over execution to the \P generated native code.
+The direct usage of native code allows us to specify the lookup routine in plain \ST code at language-side.
+
+Another project that follows the same principles as \P is the \Klein \VM.
+Both language-runtimes have a reified base-level, the \VM components are represented as language-side structures.
+This allows us to modify and inspect the \VM.
+The \VM is reflective.
 
 
-\todo{- Possible optimization by directly interacting with the \JIT}\\
-\todo{- only possible with upfront modification of the VM}\\
-\todo{- no direct interaction MOP with the VM}\\
-\todo{=> intercession is contained at language-side}\\
-\todo{- open up new reflection / reification possbilities}\\
-\todo{- however difficult customized interaction necessary}\\
 
 \todo{MISSING VM REIFICATION}\\
 \todo{- typically VMs are not reflective}\\
