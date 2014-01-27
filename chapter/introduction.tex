@@ -6,23 +6,35 @@
 % =============================================================================
 
 \todo{Context: follow structure of problems section by having a pargraph each}\\
+\todo{REFLECTION IS COSTLY}\\
 \todo{- reflection is accepted in many high-level languages (...examples)}\\
 \todo{- thesis focuso \PH \ST language (minor explanation)}\\
-\todo{- reflection is powerful but especially behavioral reflection is costly due to reifcation}\\
+\todo{- reflection is powerful but behavioral reflection is costly due to reifcation}\\
 \todo{- several approaches to limit costs:}\\
-\todo{  - limit reification (partial behavioral reflection)}\\
-\todo{  - limit reflection as such and optimize VM for the left-over cases}\\
-\todo{}\\
-\todo{}\\
-\todo{}\\
-\todo{}\\
+\todo{- 1. limit reification (partial behavioral reflection)}\\
+\todo{- 2. limit reflection as such and optimize VM for the left-over cases}\\
+\todo{- No.1. is the case for \PH, see Gepetto/ByteSurgeon}\\
+\todo{- reification / reflection does not change often => optimise statically}\\
 
-\todo{outline existing work on unifying vms: klein, pinocchio}\\
-\todo{- show contributions}\\
-\todo{require complete modification of the language} \\
-\todo{the basic execution scheme is not altered, only reified}\\
-\todo{is it possible to do a bottom up approach?}\\
-\todo{}
+\todo{INTERCESSION LIMITED TO LANGUAGE-SIDE}\\
+\todo{- Possible optimization by directly interacting with the \JIT}\\
+\todo{- only possible with upfront modification of the VM}\\
+\todo{- no direct interaction MOP with the VM}\\
+\todo{=> intercession is contained at language-side}\\
+\todo{- open up new reflection / reification possbilities}\\
+\todo{- however difficult customized interaction necessary}\\
+
+\todo{MISSING VM REIFICATION}\\
+\todo{- typically VMs are not reflective}\\
+\todo{- metacircular / VM framworks come closes by having compile-time reflection}\\
+\todo{- still not possible to alter the runtime persistently (reflection evolution fig)}\\
+\todo{- only few unified VMs where the base-level is accessible: Klein / Pinocchio}\\
+\todo{- previously collaborate on \P:}\\
+\todo{- - \P directly controls the low-level using normal objects COMPILER == JIT}\\
+
+\todo{NON-INCREMENTAL APPROACHES}
+\todo{- \P and \Klein are whole system appraoches no incremental progress possible}\\
+\todo{- top down approach for migration}
 
 % =============================================================================
 \section{Problems}
