@@ -17,17 +17,15 @@ Orthogonally to the previous categorization we distinguish between introspection
 For introspection we only access a reified concept, whereas for intercession we alter the reified representation.
 
 Especially behavioral reflection is costly, as it does not access the statically defined structure but requires dynamically reified representations of the execution context of a program.
-There two major approaches to limit the costs of reflection and the impact on the whole language runtime.
+There two major approaches to limit the costs of reflection and the impact on the whole language runtime:
 \begin{enumerate}[nolistsep, noitemsep]
-\item Limit the amount of reification performed
-\item Restrict the reflective capabilities 
+	\item Limit the amount of reification performed,
+	\item Restrict the reflective capabilities.
 \end{enumerate}
-
-\todo{- several approaches to limit costs:}\\
-\todo{- 1. limit reification (partial behavioral reflection)}\\
-\todo{- 2. limit reflection as such and optimize VM for the left-over cases}\\
-\todo{- No.1. is the case for \PH, see Gepetto/ByteSurgeon}\\
-\todo{- reification / reflection does not change often => optimise statically}\\
+The latter case allows more optimizations and is typically the path chose for more performance oriented programming languages.
+For \PH only the first option is feasible as the integrated development environment makes ready use of reflection.
+The first approach results in \emph{partial reflection} \cite{} or \emph{partial behavior reflection} \cite{}.
+Typically the code locations where reification is necessary do not change often and can thus by dynamically optimized at runtime \cite{Gepetto}.
 
 \todo{INTERCESSION LIMITED TO LANGUAGE-SIDE}\\
 \todo{- Possible optimization by directly interacting with the \JIT}\\
