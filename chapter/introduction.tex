@@ -39,17 +39,19 @@ The contributions of this are:
 
 \begin{description}
 
-\item[\chapref{background}]
-	\todo{after introduction follows related work \chapref{background}}\\
-	\todo{- reflection (vm-level) and a major focus on high-level language virtual machines}\\
-	\todo{- due to self-awareness further focus on metacircular VMs}
+\item[\chapref{background}] sheds light on the context of this work.
+	We present a quick overview of language-side reflection followed by a development of \VM-level reflection.
+	We find that mostly metacircular \VMs provide limited \VM-level reflection and thus we present several high-level language \VMs falling into this category.
+	We conclude that there is only two research \VM that has a uniform model for \VM and language-side.
+	Among them is \P a research \ST \VM we contributed to previous to working on this thesis.
 
-\item[\chapref{reification}]
-	\todo{following problem number X we first present language-side reification in \chapref{reification}}\\
-	\todo{- inspectors}\\
-	\todo{- first-class object layouts}
+\item[\chapref{reification}] focuses on language-side applications that simplify the interaction with the underlying \VM.
+	We present a custom inspector framework that is now used by default in \PH.
+	As a second part we explain how we introduced first-class layouts and slots to \PH to reify the low-level structural layout of objects.
+	Both projects are crucial for metacircular \VM development and are direct results from the research conducted on the \P \VM.
 
-\item[\chapref{benzo}]
+\item[\chapref{benzo}] describes a high-level low-level programming framework named \B.
+	\B 
 	\todo{main contribution \B in \chapref{benzo}}\\
 	\todo{- adding holes to the VM first primitive low-level interactoin}
 
