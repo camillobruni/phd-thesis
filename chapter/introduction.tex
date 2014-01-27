@@ -5,11 +5,24 @@
 \minitoc
 % =============================================================================
 
-\todo{Context: follow structure of problems section by having a pargraph each}\\
-\todo{REFLECTION IS COSTLY}\\
-\todo{- reflection is accepted in many high-level languages (...examples)}\\
-\todo{- thesis focuso \PH \ST language (minor explanation)}\\
-\todo{- reflection is powerful but behavioral reflection is costly due to reifcation}\\
+\noindent Reflection as common feature has been adopted by several dynamic high-level languages such as \urlfootnote{\Ruby}{http://rubylang.org/}, \urlfootnote{\Python}{http://python.org/} or \urlfootnote{\PH}{http://pharo.org/}.
+Even some less dynamic languages such as \Java support a broad range of reflective features.
+In the context of this dissertation we will mainly refer to the \PH environment which inherited its reflective capability from \ST.
+One major reservation of programming languages over reflection is performance.
+Reflection requires support from the underlying \VM and introduces another level of late-binding which prevent more aggressive static optimizations.
+
+Typically we distinguish two types of reflection: structural and behavioral \cite{maes}.
+Structural reflection is concerned with the static structure of a program, while behavioral reflection focuses on the dynamic part of a running program.
+Orthogonally to the previous categorization we distinguish between introspection and intercession. 
+For introspection we only access a reified concept, whereas for intercession we alter the reified representation.
+
+Especially behavioral reflection is costly, as it does not access the statically defined structure but requires dynamically reified representations of the execution context of a program.
+There two major approaches to limit the costs of reflection and the impact on the whole language runtime.
+\begin{enumerate}[nolistsep, noitemsep]
+\item Limit the amount of reification performed
+\item Restrict the reflective capabilities 
+\end{enumerate}
+
 \todo{- several approaches to limit costs:}\\
 \todo{- 1. limit reification (partial behavioral reflection)}\\
 \todo{- 2. limit reflection as such and optimize VM for the left-over cases}\\
