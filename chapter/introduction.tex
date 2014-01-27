@@ -20,13 +20,28 @@
 % =============================================================================
 \section{Contributions}
 % =============================================================================
-\todo{Sync with Chapter 2}
-The contributions of this are:
+The contributions of this dissertation are:
 
 \begin{description}
-	\item[\B]
-	\item[\B application \FFI]
-	\item[\B validation on prototype application]
+	\item[\B] is a high-level low-level programming framework written in \urlfootnote{\PH}{http://pharo.org/}.
+	The core functionality of \B is to dynamically execute native-code generated at language-side.
+	Our framework requires minimal changes to an existing \VM and three custom primitives to support dynamic code activation, the majority of \B is implemented as accessible language-side code.
+	\B allows us to directly communicate with the low-level world and thus hoist typical \VM-level applications to the language-side.
+		
+	\item[\NB] is a \B-based foreign function interface (\FFI).
+	\NB makes generates customized native code at language-side, both being flexible and efficient at the same time.
+	\NB outperforms other existing \FFI solutions on the \PH platform, making it an ideal evaluation for the \B framework.
+	
+	\item[\NBJ] is a prototype \JIT compiler based on \B.
+	\NBJ generates the same native code as the \VM-level \JIT by compiling the high-level bytecode intermediate format at language-side.
+	Our \B-based \JIT prototype reuses existing \VM-level infrastructure and focuses only on the dynamic code generation.
+	However, since there is no well-defined interface with the \VM \NBJ requires an extended \VM with an improved \JIT interface to dynamically install native code.
+	
+	\item[\Eye] is a high-level inspector framework that has now been adopted in \PH.
+	Inspectors are crucial when interacting with the low-level world which typically lacks the structural abstractions present at language-side.
+	\Eye allows us to rapidly define customized views for \PH objects.
+	Our inspector framework seamlessly integrates into the existing \PH debugger.
+		
 \end{description}
 
 
@@ -34,16 +49,12 @@ The contributions of this are:
 \section{Outline}
 % =============================================================================
 
-
-\todo{mainly structured around }\\
-
 \begin{description}
-
 \item[\chapref{background}] sheds light on the context of this work.
 	We present a quick overview of language-side reflection followed by a development of \VM-level reflection.
 	We find that mostly metacircular \VMs provide limited \VM-level reflection and thus we present several high-level language \VMs falling into this category.
 	We conclude that there is only two research \VM that has a uniform model for \VM and language-side.
-	Among them is \P a research \ST \VM we contributed to previous to working on this thesis.
+	Among them is \P a research \ST \VM we contributed to previous to working on this dissertation.
 
 \item[\chapref{reification}] focuses on language-side applications that simplify the interaction with the underlying \VM.
 	We present a custom inspector framework that is now used by default in \PH.
@@ -52,10 +63,8 @@ The contributions of this are:
 
 \item[\chapref{benzo}] describes a high-level low-level programming framework named \B.
 	The core functionality of \B is to dynamically execute native-code generated at language-side.
-	Our framework requires minimal changes to an existing \VM and three custom primitives to support dynamic code activation, the majority of \B is implemented as accessible language-side code.
 	\B allows us to hoist typical \VM plugins to the language-side.
 	Furthermore we show how code caching makes \B efficient and users essentially only pay a one-time overhead for generating the native code.
-	\todo{something in the direction of relfection is missing here}
 	
 \item[\chapref{ffi}] presents \NB, a stable foreign function interface (\FFI) implementation that is entirely written at language-side using \B.
 	\NB is a real-world validation of \B as it combines both language-side flexibility with \VM-level performance.
