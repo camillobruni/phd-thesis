@@ -17,10 +17,11 @@ Orthogonally to the previous categorization we distinguish between introspection
 For introspection we only access a reified concept, whereas for intercession we alter the reified representation.
 
 Especially behavioral reflection is costly, as it does not access the statically defined structure but requires dynamically reified representations of the execution context of a program.
-There two major approaches to limit the costs of reflection and the impact on the whole language runtime:
+There several approaches to limit the costs of reflection and the impact on the whole language runtime:
 \begin{enumerate}[nolistsep, noitemsep]
 	\item Limit the amount of reification performed,
-	\item Restrict the reflective capabilities.
+	\item Restrict the reflective capabilities,
+	\item Optimize the \VM to lower the reification overhead.
 \end{enumerate}
 The latter case allows more optimizations and is typically the path chose for more performance oriented programming languages.
 For \PH only the first option is feasible as the integrated development environment makes ready use of reflection.
@@ -28,6 +29,16 @@ The first approach results in \emph{partial reflection} \cite{} or \emph{partial
 Typically the code locations where reification is necessary do not change often and can thus by dynamically optimized at runtime \cite{Gepetto}.
 
 \todo{INTERCESSION LIMITED TO LANGUAGE-SIDE}\\
+The research on partial behavioral reflection shows the real world limitations of reflective applications.
+For many applications the reification overhead is too big.
+The third approach to limit the costs is by providing specific support for a required reification.
+An example for that is the debugging capability of many programming languages.
+Typically programming have special \VM support for this.
+In contrast, \PH or \ST systems the debugger is built on top of the default reflection infrastructure.
+
+Instead of modifying the 
+
+
 \todo{- Possible optimization by directly interacting with the \JIT}\\
 \todo{- only possible with upfront modification of the VM}\\
 \todo{- no direct interaction MOP with the VM}\\
