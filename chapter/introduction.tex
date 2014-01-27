@@ -13,9 +13,9 @@
 % =============================================================================
 \todo{Sync with Chapter 2}
 \begin{description}
-	\item[Problem 1]
-	\item[Problem 2]
-	\item[Problem 3]
+	\item[Problem 1] Behavioral reflection comes at a significant cost
+	\item[Problem 2] Intercession is limited to language-side
+	\item[Problem 3] There is no unified reflection model between the VM and the language-side
 \end{description}
 % =============================================================================
 \section{Contributions}
@@ -51,28 +51,29 @@ The contributions of this are:
 	Both projects are crucial for metacircular \VM development and are direct results from the research conducted on the \P \VM.
 
 \item[\chapref{benzo}] describes a high-level low-level programming framework named \B.
-	\B 
-	\todo{main contribution \B in \chapref{benzo}}\\
-	\todo{- adding holes to the VM first primitive low-level interactoin}
+	The core functionality of \B is to dynamically execute native-code generated at language-side.
+	Our framework requires minimal changes to an existing \VM and three custom primitives to support dynamic code activation, the majority of \B is implemented as accessible language-side code.
+	\B allows us to hoist typical \VM plugins to the language-side.
+	Furthermore we show how code caching makes \B efficient and users essentially only pay a one-time overhead for generating the native code.
+	\todo{something in the direction of relfection is missing here}
+	
+\item[\chapref{ffi}] presents \NB, a stable foreign function interface (\FFI) implementation that is entirely written at language-side using \B.
+	\NB is a real-world validation of \B as it combines both language-side flexibility with \VM-level performance.
+	We show in detail how \NB outperforms other existing \FFI solutions on \PH.
 
-\item[\chapref{ffi}]
-	\todo{\B is the main framwork, what follows is a real world validation of \B with \FFI in \chapref{ffi}}\\
-	\todo{- quick 1-2 sentence outline of \NB}\\
-	\todo{- shows that \B is feasible and even fast, even though full control at language-side}
+\item[\chapref{validation}] focuses on two further \B applications.
+	In the first part we present \WF a framework for dynamically generating primitives at runtime.
+	\WF extends the concept of metacircularity to the running language by reusing the same sources for dynamic primitives that were previously used to generate the static \VM artifact.
+	In a first validation we show how \WF outperforms other reflective language-side solutions to instrument primitives.
+	
+	In a second part of \chapref{validation} we present \NBJ a prototype \JIT compiler that is based on \B.
+	\NBJ shows the limitations of the \B approach as it required a customized \VM to communicate with the existing \JIT interface for native code.
+	Our prototype implementation generates the same native code as the existing \VM-level \JIT, however, it is currently limited to simple expressions.
+	\NBJ shows that for certain applications a well-define interface with the low-level components of the \VM is required.
 
-\item[\chapref{validation}]
-	\todo{Secondary / prototype \B validation in \secref{validation}}\\
-	\todo{- \WF outline in \secref{validation-waterfall}}\\
-	\todo{- \NBJ outline in \secref{validation-nabujito}}
+\item[\chapref{future}] summarizes the limitations of \B and its application, furthermore we list undergoing efforts on the \B infrastructure and future work.
 
-\item[\chapref{future}]
-	\todo{From the prototype/application we see certain limitations of \B which means things to improve in \secref{future}}\\
-	\todo{- main debuggin improvement}\\
-	\todo{- use of a high-level platform independent intermediate format}\\
-	\todo{- step back and follow a new kind of \VM wich has less restrictions}
-
-\item[\chapref{conclusion}]
-	\todo{Conclusion in \chapref{conclusion}}
+\item[\chapref{conclusion}] concludes the thesis.
 
 \end{description}
 
