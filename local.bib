@@ -2,12 +2,36 @@
 %% http://bibdesk.sourceforge.net/
 
 
-%% Created for cami at 2014-01-22 17:46:24 +0100 
+%% Created for cami at 2014-01-27 15:27:17 +0100 
 
 
 %% Saved with string encoding Unicode (UTF-8) 
 
 
+
+@inproceedings{Clic05a,
+	Abstract = {Modern transactional response-time sensitive applications have run into practical limits on the size of garbage collected heaps. The heap can only grow until {GC} pauses exceed the response-time limits. Sustainable, scalable concurrent collection has become a feature worth paying {for.Azul} Systems has built a custom system ({CPU}, chip, board, and {OS}) specifically to run garbage collected virtual machines. The custom {CPU} includes a read barrier instruction. The read barrier enables a highly concurrent (no stop-the-world phases), parallel and compacting {GC} algorithm. The Pauseless algorithm is designed for uninterrupted application execution and consistent mutator throughput in every {GC} {phase.Beyond} the basic requirement of collecting faster than the allocation rate, the Pauseless collector is never in a "rush" to complete any {GC} phase. No phase places an undue burden on the mutators nor do phases race to complete before the mutators produce more work. Portions of the Pauseless algorithm also feature a "self-healing" behavior which limits mutator overhead and reduces mutator sensitivity to the current {GC} {state.We} present the Pauseless {GC} algorithm, the supporting hardware features that enable it, and data on the overhead, efficiency, and pause times when running a sustained workload.},
+	Address = {New York, NY, USA},
+	Author = {Click, Cliff and Tene, Gil and Wolf, Michael},
+	Booktitle = {Proceedings of the 1st ACM/USENIX international conference on Virtual execution environments},
+	Citeulike-Article-Id = {3329161},
+	Citeulike-Linkout-0 = {http://portal.acm.org/citation.cfm?id=1064988},
+	Citeulike-Linkout-1 = {http://dx.doi.org/10.1145/1064979.1064988},
+	Date-Added = {2014-01-27 14:26:45 +0000},
+	Date-Modified = {2014-01-27 14:26:45 +0000},
+	Doi = {10.1145/1064979.1064988},
+	Isbn = {1-59593-047-7},
+	Location = {Chicago, IL, USA},
+	Pages = {46--56},
+	Posted-At = {2012-06-01 10:00:39},
+	Priority = {2},
+	Publisher = {ACM},
+	Series = {VEE '05},
+	Title = {The pauseless {GC} algorithm},
+	Url = {http://dx.doi.org/10.1145/1064979.1064988},
+	Year = {2005},
+	Bdsk-File-1 = {YnBsaXN0MDDUAQIDBAUGJCVYJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoKgHCBMUFRYaIVUkbnVsbNMJCgsMDxJXTlMua2V5c1pOUy5vYmplY3RzViRjbGFzc6INDoACgAOiEBGABIAFgAdccmVsYXRpdmVQYXRoWWFsaWFzRGF0YV8QMi4uLy4uL3BhcGVyL0NsaWMwNWEgVGhlIHBhdXNlbGVzcyBHQyBhbGdvcml0aG0ucGRm0hcLGBlXTlMuZGF0YU8RAdAAAAAAAdAAAgAAA09TWAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMroJ/NIKwAAAA4/DB9DbGljMDVhIFRoZSBwYXVzZWxlIzE4RDcyQzkucGRmAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABjXLJy+5RUAAAAAAAAAAAAAIAAgAACSAAAAAAAAAAAAAAAAAAAAAFcGFwZXIAABAACAAAyugZ4wAAABEACAAAy+41MAAAAAEAEAAOPwwACxyKAAZRzQAC5owAAgBHT1NYOlVzZXJzOgBjYW1pLWRhdGE6AGVkdWNhdGlvbjoAcGFwZXI6AENsaWMwNWEgVGhlIHBhdXNlbGUjMThENzJDOS5wZGYAAA4ATgAmAEMAbABpAGMAMAA1AGEAIABUAGgAZQAgAHAAYQB1AHMAZQBsAGUAcwBzACAARwBDACAAYQBsAGcAbwByAGkAdABoAG0ALgBwAGQAZgAPAAgAAwBPAFMAWAASAEZVc2Vycy9jYW1pLWRhdGEvZWR1Y2F0aW9uL3BhcGVyL0NsaWMwNWEgVGhlIHBhdXNlbGVzcyBHQyBhbGdvcml0aG0ucGRmABMAAS8AABUAAgAL//8AAIAG0hscHR5aJGNsYXNzbmFtZVgkY2xhc3Nlc11OU011dGFibGVEYXRhox0fIFZOU0RhdGFYTlNPYmplY3TSGxwiI1xOU0RpY3Rpb25hcnmiIiBfEA9OU0tleWVkQXJjaGl2ZXLRJidUcm9vdIABAAgAEQAaACMALQAyADcAQABGAE0AVQBgAGcAagBsAG4AcQBzAHUAdwCEAI4AwwDIANACpAKmAqsCtgK/As0C0QLYAuEC5gLzAvYDCAMLAxAAAAAAAAACAQAAAAAAAAAoAAAAAAAAAAAAAAAAAAADEg==},
+	Bdsk-Url-1 = {http://dx.doi.org/10.1145/1064979.1064988}}
 
 @inproceedings{Kicz01a,
 	Abstract = {{AspectJ\^{A}}¿ is a simple and practical aspect-oriented extension to Java\^{A}¿. With just a few new constructs, {AspectJ} provides support for modular implementation of a range of crosscutting concerns. In {AspectJ}'s dynamic join point model, join points are well-defined points in the execution of the program; pointcuts are collections of join points; advice are special method-like constructs that can be attached to pointcuts; and aspects are modular units of crosscutting implementation, comprising pointcuts, advice, and ordinary Java member declarations. {AspectJ} code is compiled into standard Java bytecode. Simple extensions to existing Java development environments make it possible to browse the crosscutting structure of aspects in the same kind of way as one browses the inheritance structure of classes. Several examples show that {AspectJ} is powerful, and that programs written using it are easy to understand.},

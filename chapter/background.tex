@@ -14,8 +14,11 @@
 \todo{Image 4 Quadrants of reflection}\\
 \todo{Two major distinctions (How): instropection / intercession}\\
 \todo{Several dinstions (When/Where): time / reference / stack}
+
 % ---------------------------------------------------------------------------
-\subsection{Introspection or Structural Reflection}
+\subsection{Classification of Reflection}
+% ---------------------------------------------------------------------------
+\paragraph{Structural Reflection}
 % ---------------------------------------------------------------------------
 \todo{Code Example: Structural Reflection}
 \begin{stcode}{}
@@ -28,7 +31,7 @@
 \todo{mirrors}
 
 % ---------------------------------------------------------------------------
-\subsection{Intercession or Behavioral Reflection}
+\paragraph{Behavioral Reflection}
 % ---------------------------------------------------------------------------
 \todo{Code Example: Behavioral Reflection}
 \begin{stcode}{}
@@ -46,11 +49,25 @@ MyProxy >> doesNotUnderstand: aMessage
 \end{stcode}
 
 \todo{Some people call aspects in this context, however only a minority of aspect languages/framworks are dynamic like \cite{Assa08a}}\\
-\todo{Typically intercession stops at method-level: see ByteSurgeon for extended reflection down to the AST \cite{Denk06a}}
+\todo{Typically intercession stops at method-level: see ByteSurgeon for extended reflection down to the AST \cite{Denk06a}}\\
+\todo{Default in \ST hard in \Java see \cite{Tant03a}}
 
 % ---------------------------------------------------------------------------
-\subsection{Scoping Reflection: Partial Behavioral Reflection}
+\paragraph{Introspection}
 % ---------------------------------------------------------------------------
+\todo{example + little text}
+
+% ---------------------------------------------------------------------------
+\paragraph{Intercession}
+% ---------------------------------------------------------------------------
+\todo{example + little text}\\
+
+\todo{say that from now one by \emph{reflection} or \emph{dynamic reflection} we usually imply intercession + structural AND behavioral reflection}
+
+% ---------------------------------------------------------------------------
+\subsection{Scoping Reflection: Partial Reflection}
+% ---------------------------------------------------------------------------
+\todo{Do we only focus on behavioral reflection here?}
 Reflection brings great power to a programming language.
 However, especially behavioral reflection is linked to a significant overhead.
 For instance the previous example of the reified execution context in \ST requires restricts the optimizations at \VM-level.
@@ -135,7 +152,7 @@ Going one 	step back we can see a certain evolution in reflection which we would
 \end{figure}
 %
 \cb{recheck that the properties fit to what I told everybody}
-\begin{enumerate}[a), nolistsep]
+\begin{enumerate}[a)]
 \item \textbf{Language-side without reflection:} A language in this category requires a virtual machine to run but has no reflective properties.
 	This includes early-stage languages such as the original Pascal-P system.
 	Typically languages without reflection also lack the underlying \VM and are compiled directly to native code.
@@ -178,7 +195,6 @@ Going one 	step back we can see a certain evolution in reflection which we would
 	Currently there are several research \VMs which can be classified as self-aware \VMs: The \P \VM \cite{Verw12a} is partially self-aware but in control of the underlying execution and the \Klein \VM is fully reflective \cite{Unga05a}. 
 \end{enumerate}
 
-
 \noindent From this overview of reflective evolution of high-level languages we see that there is only little research about self-aware \VMs or reflective \VMs.
 In general high-level languages are built with a clear distinction of the language-side and the \VM.
 However, with further reflective capabilities of the language-side we see that such a separation is no longer a guarantee for security.
@@ -195,19 +211,19 @@ High-level language \VMs are inherent complex pieces of software.
 They have to combine two rather extreme goals: abstraction and performance.
 We have seen that the required abstraction for the running high-level language has a strong influence on the \VM design.
 At the same time the hard performance requirement requires precise interaction with the underlying hardware.
-This goes even so far that specialized hardware is conceived to match the performance requirements \cite{??,Azul,ST}.
+This goes even so far that specialized hardware is conceived to match the performance requirements \cite{Clic05a,??,ST}.
 
 The early \VMs focused on interpreting an abstract instruction set (bytecodes).
 The benefits are twofold.
 On the one hand the bytecodes guarantee certain platform independence by abstracting away from the \CPU specific instruction set.
 On the other hand bytecodes allow to encode complex operations into little space both serving the hard memory constraints of the hardware and simplifying the design of a compiler.
 Obviously this abstraction gain comes at a cost and ever since the first \VMs were built research and industry strive to reduce the interpretation overhead.
-An efficient way to improve performance is to use a just in time compiler (\JIT) that dynamically generates native code from the bytecode.
+An efficient way to improve performance is to use a just in time compiler (\JIT) that dynamically generates native code from the bytecode \cite{??}.
 In this case the bytecode becomes an intermediate representation (\IR) for a bigger compiler infrastructure.
 However, \JIT compilers are notoriously complex as they crosscut many \VM components.
 At the same time they crosscut all abstraction layers; they have to access high-level information from the running bytecodes and manage native code at the same time.
 Similar, albeit less low-level oriented complexity applies to the automatic memory management present in most high-level language \VMs.
-Garbage Collectors (\GC) evolved from simple helpers to complex software artifacts that for instance support concurrent garbage collection \cite{azul}.
+Garbage Collectors (\GC) evolved from simple helpers to complex software artifacts that for instance support concurrent garbage collection \cite{Clic05a}.
 
 The increased complexity of the \VMs lead to more novel approaches on how to build \VMs.
 \VMs are still build for a big part in C or C++ for performance reasons.
