@@ -55,34 +55,39 @@ The direct usage of native code allows us to specify the lookup routine in plain
 
 Another project that follows the same principles as \P is the \Klein \VM.
 Both language-runtimes have a reified base-level, the \VM components are represented as language-side structures.
-This allows us to modify and inspect the \VM.
-The \VM is reflective.
+This allows us to modify and inspect the \VM, it is reflective.
+Both \Klein and \P are whole-system bottom up approaches that add powerful hooks at language-side.
+Is it possible to achieve similar functionality with a simpler interface?
+What are the limiting factors for such an approach?
 
+To answer these questions we propose the high-level low-level programming framework \B written for \PH.
+In the core \B allows us to dynamically activate native code from language-side.
+This adds a primitive yet generic interface to the low-level \VM world.
+To validate \B we describe three distinct applications built on top of it.
+%
+\begin{description}[nolistsep, noitemsep]
+	\item[\FFI:] The first one is an efficient foreign function interface (\FFI) library that is built at language-side without additional \VM support.
+	Our \FFI library outperforms existing solutions on \PH.
+	
+	\item[Dynamic Primitives:] The second applications uses \B to dynamically generate and modify \PH primitives by reusing the metacircular \VM sources.
+	By combining high-level reflection and \B's low-level performance we outperform pure \PH-based primitive instrumentation.
+	
+	\item[Language-side \JIT:] As a third, prototype application we show how \B is used to build a language-side \JIT.
+	Our prototype shows the limits of possible \VM interactions using the \B framework. 
+\end{description}
 
-
-\todo{MISSING VM REIFICATION}\\
-\todo{- typically VMs are not reflective}\\
-\todo{- metacircular / VM framworks come closes by having compile-time reflection}\\
-\todo{- still not possible to alter the runtime persistently (reflection evolution fig)}\\
-\todo{- only few unified VMs where the base-level is accessible: Klein / Pinocchio}\\
-\todo{- previously collaborate on \P:}\\
-\todo{- - \P directly controls the low-level using normal objects COMPILER == JIT}\\
-
-\todo{NON-INCREMENTAL APPROACHES = OUR WORK}\\
-\todo{- \P and \Klein are whole system appraoches no incremental progress possible}\\
-\todo{- top down approach for migration}\\
-\todo{- how much can you eachieve with a very simple interface?}\\
-\todo{- quick overview of \B}\\
-\todo{- we explore the applicability of a partial VM-level intercession}\\
-\todo{- quick outline of the NB / WF / NBJ applications}
 
 % =============================================================================
 \section{Problems}
 % =============================================================================
-\todo{Sync with Chapter 2}
+Following the problem description listed in the above introduction we identified the following main concerns with existing reflective languages and their \VMs.
+%
 \begin{description}
-	\item[Problem 1] Behavioral reflection comes at a significant cost
-	\item[Problem 2] Intercession is limited to language-side
+	\item[Problem 1] Reflection and in special behavioral reflection comes at a significant cost due to reification overhead.
+	
+	\item[Problem 2] Intercession is limited to language-side.
+	\VMs are not accessible from language-side and they are usually have no reflective properties at runtime. 
+	
 	\item[Problem 3] There is no unified reflection model between the VM and the language-side
 \end{description}
 
