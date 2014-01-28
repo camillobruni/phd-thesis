@@ -11,7 +11,7 @@ In the context of this dissertation we will mainly refer to the \PH environment 
 One major reservation of programming languages over reflection is performance.
 Reflection requires support from the underlying \VM and introduces another level of late-binding which prevent more aggressive static optimizations.
 
-Typically we distinguish two types of reflection: structural and behavioral \cite{maes}.
+Typically we distinguish two types of reflection: structural and behavioral \cite{Maes87a}.
 Structural reflection is concerned with the static structure of a program, while behavioral reflection focuses on the dynamic part of a running program.
 Orthogonally to the previous categorization we distinguish between introspection and intercession. 
 For introspection we only access a reified concept, whereas for intercession we alter the reified representation.
@@ -28,7 +28,6 @@ For \PH only the first option is feasible as the integrated development environm
 The first approach results in \emph{partial reflection} \cite{} or \emph{partial behavior reflection} \cite{}.
 Typically the code locations where reification is necessary do not change often and can thus by dynamically optimized at runtime \cite{Gepetto}.
 
-\todo{INTERCESSION LIMITED TO LANGUAGE-SIDE}\\
 The research on partial behavioral reflection shows the real world limitations of reflective applications.
 For many applications the reification overhead is too big.
 The third approach to limit the costs is by providing specific support for a required reification.

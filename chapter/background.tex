@@ -19,56 +19,53 @@ Among them is \P a research \ST \VM we contributed to previous to working on thi
 \newpage
 \section{Reflection}
 % ===========================================================================
-\todo{Image 4 Quadrants of reflection}\\
-\todo{Two major distinctions (How): instropection / intercession}\\
-\todo{Several dinstions (When/Where): time / reference / stack}
 
-% ---------------------------------------------------------------------------
-\subsection{Classification of Reflection}
-% ---------------------------------------------------------------------------
-\paragraph{Structural Reflection}
-% ---------------------------------------------------------------------------
-\todo{Code Example: Structural Reflection}
+I this section we give a quick overview of the core features of reflection.
+A system is said to be reflective if it is capable to reason about itself.
+Typically we distinguish two forms of reflective access: structural and behavioral \cite{Maes87a}.
+Structural reflection is concerned with the static structure of a program, while behavioral reflection focuses on the dynamic part of a running program.
+Orthogonally to the previous categorization we distinguish between introspection and intercession. 
+For introspection we only access a reified concept, whereas for intercession we alter the reified representation.
+
+\begin{description}
+\item[Structural Reflection] means to access the static structure of a program.
+A typical example is to get the class of an object at runtime.
 \begin{stcode}{}
 'abc' class.
 \end{stcode}
-\begin{stcode}{}
-#Dictionary asClass methods.
-\end{stcode}
 
-\todo{mirrors}
-
-% ---------------------------------------------------------------------------
-\paragraph{Behavioral Reflection}
-% ---------------------------------------------------------------------------
-\todo{Code Example: Behavioral Reflection}
+\item[Behavioral Reflection] means to directly interact with the running program.
+For instance this includes reflectively activating a method.
 \begin{stcode}{}
 #Dictionary asClass perform: #new
 \end{stcode}
+%
+Another more complex example to dynamically switch the execution context and resend the current method with another receiver.
 \begin{stcode}{}
 thisContext restartWithNewReceiver: Object new 
 \end{stcode}
+\end{description}
 
+\noindent There is not always a clear separation between the two types of reflection possible.
+For instance it is possible to add new methods which requires structural reflection.
+At the same we alter the future program execution which also implies that the action was behavior reflection.
+Typically we see that behavioral reflection stops at the granularity of a method.
+For instance in \PH by default it is not possible to directly alter execution on a sub-method level \cite{Denk06a}.
+
+Additional to separating reflection upon the representation it accesses, we distinguish what actions are performed on the reified representations.
+Both of the following properties can apply for structural and behavioral reflection.
+%
+\begin{description}
+\item[Introspection] is the form of reflection that does not alter the reified 	representation.
+And example of this is the previous example where we access the class of an object.
+	
+\item[Intercession] implies that the underlying representation is altered.
+Going back to the previous example that would for instance mean to change the class of an existing object.
 \begin{stcode}{}
-MyProxy >> doesNotUnderstand: aMessage
-	^ destination 
-		perform: aMessage selector
-		withArguments: aMessage arguments
+MyClass adoptInstance: anObject.
 \end{stcode}
-
-\todo{Some people call aspects in this context, however only a minority of aspect languages/framworks are dynamic like \cite{Assa08a}}\\
-\todo{Typically intercession stops at method-level: see ByteSurgeon for extended reflection down to the AST \cite{Denk06a}}\\
-\todo{Default in \ST hard in \Java see \cite{Tant03a}}
-
-% ---------------------------------------------------------------------------
-\paragraph{Introspection}
-% ---------------------------------------------------------------------------
-\todo{example + little text}
-
-% ---------------------------------------------------------------------------
-\paragraph{Intercession}
-% ---------------------------------------------------------------------------
-\todo{example + little text}\\
+\end{description}
+%
 
 \todo{say that from now one by \emph{reflection} or \emph{dynamic reflection} we usually imply intercession + structural AND behavioral reflection}
 
