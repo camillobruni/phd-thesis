@@ -18,7 +18,7 @@ For introspection we only access a reified concept, whereas for intercession we 
 
 Especially behavioral reflection is costly, as it does not access the statically defined structure but requires dynamically reified representations of the execution context of a program.
 There several approaches to limit the costs of reflection and the impact on the whole language runtime:
-\begin{enumerate}[nolistsep, noitemsep]
+\begin{enumerate}[nolistsep]
 	\item Limit the amount of reification performed,
 	\item Restrict the reflective capabilities,
 	\item Optimize the \VM to lower the reification overhead.
@@ -64,7 +64,7 @@ In the core \B allows us to dynamically activate native code from language-side.
 This adds a primitive yet generic interface to the low-level \VM world.
 To validate \B we describe three distinct applications built on top of it.
 %
-\begin{description}[nolistsep, noitemsep]
+\begin{description}
 	\item[\FFI:] The first one is an efficient foreign function interface (\FFI) library that is built at language-side without additional \VM support.
 	Our \FFI library outperforms existing solutions on \PH.
 	
@@ -77,22 +77,29 @@ To validate \B we describe three distinct applications built on top of it.
 
 
 % =============================================================================
-\section{Problems}
+\section{Problems / Questions to solve...}
 % =============================================================================
 Following the problem description listed in the above introduction we identified the following main concerns with existing reflective languages and their \VMs.
 %
+\todo{two step lowering: 1st theoretical problems, 2nd problems we solve}
 \begin{description}
-	\item[Problem 1] Reflection and in special behavioral reflection comes at a significant cost due to reification overhead.
-	
+	%\item[Problem 1] Reflection and in special behavioral reflection comes at a significant cost due to reification overhead.
+	\item[XXX]
+	\todo{make reflection problem less specific}
+	\todo{No dynamic high-levle low-level programming framework}
+		
 	\item[Problem 2] Intercession is limited to language-side.
 	\VMs are not accessible from language-side and they are usually have no reflective properties at runtime. 
 	
 	\item[Problem 3] Existing approaches to a unified model between the VM and the language-side are holistic, there is no intermediate solution available.
 \end{description}
 
+
 % =============================================================================
 \section{Contributions}
 % =============================================================================
+\todo{maybe one paragraph: lowerinf from the high-level problem to the real solution / engineering implementation}
+
 The contributions of this dissertation are:
 \todo{maybe separate the abstract findings from the real software artifacts}
 \begin{description}
@@ -109,6 +116,8 @@ The contributions of this dissertation are:
 	\NBJ generates the same native code as the \VM-level \JIT by compiling the high-level bytecode intermediate format at language-side.
 	Our \B-based \JIT prototype reuses existing \VM-level infrastructure and focuses only on the dynamic code generation.
 	However, since there is no well-defined interface with the \VM \NBJ requires an extended \VM with an improved \JIT interface to dynamically install native code.
+	
+	\item[\AsmJIT 64] \todo{outline}	
 	
 	\item[\Eye] is a high-level inspector framework that has now been adopted in \PH.
 	Inspectors are crucial when interacting with the low-level world which typically lacks the structural abstractions present at language-side.

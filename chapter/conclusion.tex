@@ -7,12 +7,43 @@
 \introduction 
 
 \todo{Address the problem statements from the introduction/background}\\
-\todo{summary chapter 2: background}\\
-\todo{summary chapter 3: language-side reification / inspectors}\\
-\todo{summary chapter 4: benzo}\\
-\todo{summary chapter 5: benzo ffi}\\
-\todo{summary chapter 6: benzo validation}\\
-\todo{summary chapter 7: future work}\\
+\todo{Shorten / Change chapter summary to be more result orient + in the past}
+
+\begin{description}
+\item[\chapref{background}] sheds light on the context of this work.
+	We present a quick overview of language-side reflection followed by a development of \VM-level reflection.
+	We find that mostly metacircular \VMs provide limited \VM-level reflection and thus we present several high-level language \VMs falling into this category.
+	We conclude that there is only two research \VM that has a uniform model for \VM and language-side.
+	Among them is \P a research \ST \VM we contributed to previous to working on this dissertation.
+
+\item[\chapref{reification}] focuses on language-side applications that simplify the interaction with the underlying \VM.
+	We present a custom inspector framework that is now used by default in \PH.
+	As a second part we explain how we introduced first-class layouts and slots to \PH to reify the low-level structural layout of objects.
+	Both projects are crucial for metacircular \VM development and are direct results from the research conducted on the \P \VM.
+
+\item[\chapref{benzo}] describes a high-level low-level programming framework named \B.
+	The core functionality of \B is to dynamically execute native-code generated at language-side.
+	\B allows us to hoist typical \VM plugins to the language-side.
+	Furthermore we show how code caching makes \B efficient and users essentially only pay a one-time overhead for generating the native code.
+	
+\item[\chapref{ffi}] presents \NB, a stable foreign function interface (\FFI) implementation that is entirely written at language-side using \B.
+	\NB is a real-world validation of \B as it combines both language-side flexibility with \VM-level performance.
+	We show in detail how \NB outperforms other existing \FFI solutions on \PH.
+
+\item[\chapref{validation}] focuses on two further \B applications.
+	In the first part we present \WF a framework for dynamically generating primitives at runtime.
+	\WF extends the concept of metacircularity to the running language by reusing the same sources for dynamic primitives that were previously used to generate the static \VM artifact.
+	In a first validation we show how \WF outperforms other reflective language-side solutions to instrument primitives.
+	
+	In a second part of \chapref{validation} we present \NBJ a prototype \JIT compiler that is based on \B.
+	\NBJ shows the limitations of the \B approach as it required a customized \VM to communicate with the existing \JIT interface for native code.
+	Our prototype implementation generates the same native code as the existing \VM-level \JIT, however, it is currently limited to simple expressions.
+	\NBJ shows that for certain applications a well-define interface with the low-level components of the \VM is required.
+
+\item[\chapref{future}] summarizes the limitations of \B and its application, furthermore we list undergoing efforts on the \B infrastructure and future work.
+	\todo{more here}
+
+\end{description}
 
 % =============================================================================
 \section{Contributions}
@@ -82,7 +113,9 @@ This paper served as the basis for \chapref{ffi} and discusses the \B-based \FFI
 \section{Software Artifacts}
 % =============================================================================
 \todo{make proper subsections/paragraphs} \\
-\todo{make sure there is a proper link (arxiv.org... figshare) for each artifact}
+\todo{make sure there is a proper link (arxiv.org... figshare) for each artifact} \\
+\todo{Who uses my artifact}\\
+
 \begin{description}
 	\item[Collaboration on First-class Layouts and Slots:]
 		In a collaboration with To\-on Verwaest (\SCG, Switzerland) we built a first implementation of first-class layouts and slots in a \ST system \cite{Verw11a}.
@@ -122,16 +155,19 @@ This paper served as the basis for \chapref{ffi} and discusses the \B-based \FFI
 	\item[Command Line Test Interface for \PH:]
 		In order to perform continuous integration in a maintainable fashion we developed a new modular command line interface for \PH. 
 		It is used in production on the \urlfootnote{\PH build server}{http://ci.inria.fr/pharo/} alongside with simple \urlfootnote{installer scripts}{http://get.pharo.org/}.
+		
+	\item[Validation Framework:] \todo{}
+	
 \end{description}
 
 
 % =============================================================================
-\section{Future Work}
+\section{Future Work / Impact / Effect of the Thesis}
 % =============================================================================
-\todo{Sync Problem section of each chapter} \\
-\todo{- Benzo Improvements} \\
-\todo{- VM Improvements (Mate)} \\
-\todo{- New Reflection}
+\todo{Sync Problem section of each chapter}\\
+\todo{- Benzo Improvements}\\
+\todo{- VM Improvements (Mate)}\\
+\todo{- New Reflection}\\
 
 
 % =============================================================================
