@@ -216,7 +216,7 @@ High-level language \VMs are inherent complex pieces of software.
 They have to combine two rather extreme goals: abstraction and performance.
 We have seen that the required abstraction for the running high-level language has a strong influence on the \VM design.
 At the same time the hard performance requirement requires precise interaction with the underlying hardware.
-This goes even so far that specialized hardware is conceived to match the performance requirements \cite{Clic05a,??,ST}.
+This goes even so far that specialized hardware is conceived to match the performance requirements \cite{Clic05a,??}.
 
 The early \VMs focused on interpreting an abstract instruction set (bytecodes).
 The benefits are twofold.
@@ -293,7 +293,7 @@ Each \VM is a one of a kind with custom interpreter and a specialized memory man
 Using high-level \VM frameworks it is possible to provide the \VM developer with prefabricated components.
 For instance it is possible to simply parametrize a premade \GC to reduce development effort.
 Looking at the evolution of metacircular \VMs we see both approaches.
-For instance early metacircular solutions like the \Squeak \VM \cite{??} work more like a high-level C macro system.
+For instance early metacircular solutions like the \Squeak \VM \cite{Inga97a} work more like a high-level C macro system.
 The high-level language is used to generate C code which is then further compiled to the final \VM binary.
 \VM components are declared in a very explicit style, again not much different from C++.
 Memory for \VM-level structures has to be managed in the same way as its C++ counterpart by explicitly allocating and freeing objects.
@@ -557,7 +557,7 @@ While we see the practical limitations of changing the \VM at runtime we would l
 \todo{properly integrate into the rest}
 
 \subsection*{\Quicktalk}
-\Quicktalk \cite{Ball86a} follows a similar path as we do with Waterfall presented in \secref{waterfall}.
+\Quicktalk \cite{Ball86a} follows a similar path as we do with Waterfall presented in \secref{validation-waterfall}.
 However Ballard et al. focus mostly on the performance aspect.
 They achieve higher performance mostly by eliminating the bytecode dispatch overhead.
 Additionally they type annotate the code for the primitive definitions to benefit from further optimizations.

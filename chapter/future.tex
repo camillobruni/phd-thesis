@@ -191,7 +191,7 @@ We are used from \PH that any code snipped is executable, a property that we wou
 
 \paragraph{\VCPU: A Low-level Intermediate Format}
 To reduce the aforementioned platform dependency of \B we developed a intermediate low-level representation called \VCPU.
-It is based on a three-address-code (\TAC) \cite{??} to simplify the adoption of optimizations such as static single assignment (\SSA) \cite{??}.
+It is based on a three-address-code (\TAC) to simplify the adoption of optimizations such as static single assignment (\SSA) \cite{Cytr91a}.
 Additionally we chose to postpone register allocation to the final code generation phase.
 By using a \TAC-based format and rewiring the internals we are even able to make the \VCPU code directly executable in \PH.
 
