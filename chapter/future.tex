@@ -181,7 +181,6 @@ A much better solution is to provide a more abstract and platform independent lo
 Ideally we can push the platform specific code generation fully to the native backends in \B itself.
 \B-based applications only have to focus on a single low-level instruction format reducing the development effort.
 
-
 We also noticed that for actual testing the native instruction set is not optimal.
 For instance the x86 instruction with all its modifier codes and variable width instructions makes it tedious to implement a proper simulator.
 Writing bindings for an existing simulator such as \urlfootnote{\Bochs}{http://bochs.sourceforge.net/} is a better choice.
@@ -256,7 +255,6 @@ c := 3.
 %
 The \DSL is transparently implemented by adding \PH methods on the corresponding \VCPU instructions.
 Under the hood \VCPU will lower the \TAC instructions to low-level \ASM instructions for the \AsmJIT backend.
-
 
 \paragraph{\VCPU Implementation Overview}
 So far we presented the external interface of the \VCPU format which works similar to the existing \B assembler format.
