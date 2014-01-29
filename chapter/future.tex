@@ -210,7 +210,7 @@ For instance the x86 instructions which sometimes have a predefined result regis
 The following code example outlines the basic usage of \VCPU:
 %
 \begin{stcode}[
-	label={lst:benzo-problem-vcpu}, 
+	label={lst:future-benzo-problem-vcpu}, 
 	caption={Basic \VCPU Example}
 ]{}
 Benzo vcpu x86 generate: [ :cpu | | temp1 temp2 |
@@ -387,13 +387,13 @@ The major problem is the serious implications of a low-level error.
 Unlike user-level errors they are not well-defined or even contained.
 It is astonishingly simple to corrupt the \VM memory while writing low-level code and thus breaking any contract with the \VM code.
 However, it is more common to access protected memory due to a wrongly dereferenced pointer.
-Hence, the \B should focus on this most common bug by following the solution outlined in \figref{benzo-debugger}.
+Hence, the \B should focus on this most common bug by following the solution outlined in \figref{future-benzo-debugger}.
 %
 \begin{figure}[h]
 	\centering
 	\includegraphics[scale=\imagescale]{benzo-debugger}
 	\caption{\B Debugger Outline}
-	\figlabel{benzo-debugger}
+	\figlabel{future-benzo-debugger}
 \end{figure}
 %
 \begin{enumerate}

@@ -25,8 +25,8 @@ There several approaches to limit the costs of reflection and the impact on the 
 \end{enumerate}
 The latter case allows more optimizations and is typically the path chose for more performance oriented programming languages.
 For \PH only the first option is feasible as the integrated development environment makes ready use of reflection.
-The first approach results in \emph{partial reflection} \cite{} or \emph{partial behavior reflection} \cite{}.
-Typically the code locations where reification is necessary do not change often and can thus by dynamically optimized at runtime \cite{Gepetto}.
+The first approach results in \emph{partial reflection} or \emph{partial behavior reflection} \cite{Tant03a}.
+Typically the code locations where reification is necessary do not change often and can thus by dynamically optimized at runtime \cite{Roet07b}.
 
 The research on partial behavioral reflection shows the real world limitations of reflective applications.
 For many applications the reification overhead is too big.
@@ -45,7 +45,7 @@ A partial exception to this are \VMs written on top of \VM frameworks that use h
 Even though, such \VM frameworks allow for compile-time reflection, the reflective capabilities are lost during compilation.
 
 All these \VMs have in common that they strongly isolate the language running on top.
-Recently several language-runtimes appeared that no longer make this strong separation \cite{Klein, Pino}.
+Recently several language-runtimes appeared that no longer make this strong separation \cite{Unga05a, Verw12a}.
 One such system is the \P \ST \VM.
 Instead of using bytecodes as language-side execution format \P's compiler directly generates native code for execution.
 Essentially \P hoist the \VM-level just-in-time compiler (\JIT) to the language-side.
