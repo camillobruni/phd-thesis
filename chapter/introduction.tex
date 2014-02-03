@@ -5,12 +5,14 @@
 \minitoc
 % =============================================================================
 
+\todo{Recheck intro}
 \noindent Reflection as common feature has been adopted by several dynamic high-level languages such as \urlfootnote{\Ruby}{http://rubylang.org/}, \urlfootnote{\Python}{http://python.org/} or \urlfootnote{\PH}{http://pharo.org/}.
 Even some less dynamic languages such as \Java support a broad range of reflective features.
 In the context of this dissertation we will mainly refer to the \PH environment which inherited its reflective capability from \ST.
 One major reservation of programming languages over reflection is performance.
 Reflection requires support from the underlying \VM and introduces another level of late-binding which prevent more aggressive static optimizations.
 
+\todo{probably drop this paragraph}
 Typically we distinguish two types of reflection: structural and behavioral \cite{Maes87a}.
 Structural reflection is concerned with the static structure of a program, while behavioral reflection focuses on the dynamic part of a running program.
 Orthogonally to the previous categorization we distinguish between introspection and intercession. 
@@ -77,21 +79,35 @@ To validate \B we describe three distinct applications built on top of it.
 
 
 % =============================================================================
-\section{Problems / Questions to solve...}
+\section{Problem Statement}
 % =============================================================================
-Following the problem description listed in the above introduction we identified the following main concerns with existing reflective languages and their \VMs.
+Following the problem description listed in the above introduction we identified the following abstract concerns with existing reflective languages and their \VMs.
 %
 \todo{two step lowering: 1st theoretical problems, 2nd problems we solve}
 \begin{description}
-	%\item[Problem 1] Reflection and in special behavioral reflection comes at a significant cost due to reification overhead.
-	\item[XXX]
-	\todo{make reflection problem less specific}
-	\todo{No dynamic high-levle low-level programming framework}
+	\item[Problem 1] Reflection and in special behavioral reflection comes at a significant cost due to reification overhead.
 		
 	\item[Problem 2] Intercession is limited to language-side.
 	\VMs are not accessible from language-side and they are usually have no reflective properties at runtime. 
 	
 	\item[Problem 3] Existing approaches to a unified model between the VM and the language-side are holistic, there is no intermediate solution available.
+\end{description}
+
+\noindent Out of these general problems concerning reflection in high-level languages we see that they have a low-level root.
+To address the unification of the language-side and \VM-side we have to grant more access to the language-side.
+This includes interacting directly with low-level native instructions.
+A similar problem has been solved by applying high-level low-level programming in a more static environment \cite{Fram09a}.
+The approach outlined by Frampton et al. uses a high-level framework to generate native code at compile-time.
+We see that their approach has not yet been applied in a more dynamic environment where native code has to be generated at runtime.
+Hence we focus on the following concrete problems we wish to solve in this thesis.
+
+\begin{description}
+	\item[Problem 1] High-level low-level programming is not available at runtime.
+	
+	\item[Problem 2] Intercession is limited to language-side.
+	\VMs are not accessible from language-side and they are usually have no reflective properties at runtime.
+	
+	\item[Problem 3] High-level low-level programming has not yet been applied to implement \VM-level components at language-side.
 \end{description}
 
 
@@ -117,7 +133,9 @@ The contributions of this dissertation are:
 	Our \B-based \JIT prototype reuses existing \VM-level infrastructure and focuses only on the dynamic code generation.
 	However, since there is no well-defined interface with the \VM \NBJ requires an extended \VM with an improved \JIT interface to dynamically install native code.
 	
-	\item[\AsmJIT 64] \todo{outline}	
+	\item[\AsmJIT] is a assembler framework written in \PH.
+	\AsmJIT is the low-level backend for the previously mentioned \B framework.
+	We extended the existing assembler framework to support the full 64-bit x86 instruction set.
 	
 	\item[\Eye] is a high-level inspector framework that has now been adopted in \PH.
 	Inspectors are crucial when interacting with the low-level world which typically lacks the structural abstractions present at language-side.
