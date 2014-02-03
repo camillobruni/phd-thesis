@@ -311,8 +311,9 @@ We distinguish mainly between two approaches, indirect bootstrap and direct boot
 	\centering
 	\vspace{2mm}
 	\includegraphics[scale=1.1]{vm-metacircular-bootstrap}
+	\caption{Metacircular \VM Bootstrap Types}
 	\vspace{-5mm}
-%	\figlabel{vm-metacircular-building-process}
+	\figlabel{background-metacircular-bootstrap}
 \end{figure}
 %
 \begin{description}
@@ -373,36 +374,37 @@ Yet according to long-time \VM programmers the \Squeak infrastructure is more pr
 \subsubsection*{\Jikes: High-level low-level Programming in with \MMTK}
 \seclabel{background-jikes}
 % ---------------------------------------------------------------------------
-\todo{Jikes Overview}
-
 \todo{reread + more problem oriented}
-High-level low-level programming \cite{Fram09a} advocates using high-level languages for system programming.
+
+High-level low-level programming \cite{Fram09a} is mentioned the first time in the context of the \Jikes \VM project.
+\Jikes itself is a research oriented \Java-based \VM framwork that provides signification infrastructure to facilitate \VM building.
+The goal of high-level low-level programming is to the abstractions provided by high-level programming languages to simplify low-level programming specifically.
+In the core this are the same motivations that drives the metacircular \VM community.
+
 Frampton et al. present a low-level framework packaged as \ttt{org.vmmagic}, which is used as system interface for Jikes, an experimental Java VM.
 Additionally their framework is successfully used in a separate project, the memory management toolkit (\MMTK) \cite{Blac04a} which is used independently in several other projects.
 The \ttt{org.vmmagic} package introduces highly controlled low-level interaction in a statically type context.
-Methods have to be annotated to use low-level functionality. 
+In their framework, methods have to be annotated to enable the use of low-level functionality.
 
-The \ttt{org.vmmagic} package is much more elaborate than \NB, notably their type system extensions allow for optimized interaction between several low-level methods.
-\cb{do we need to list more what they do?}
-However as we state in the introduction, it is tailored towards Java with static types.
-Additionally the strong separation between low-level code and runtime does not allow for reflective extensions of the runtime.
+In a direct metacircular \VM building process (see \figref{background-metacircular-bootstra}) it is inevitable to directly manage native-code.
+Using a high-level low-level framework provides the necessary abstraction at this level.
 
 % ---------------------------------------------------------------------------
 \subsubsection*{\Maxine \Java \VM}
 \seclabel{background-maxine}
 % ---------------------------------------------------------------------------
-\todo{reread + more problem oriented}
 \Maxine is a metacircular \Java \VM \cite{Wimm13a} focused on an efficient developer experience.
-The \Maxine \VM stands out as it truly focuses on productivity and developer interaction.
+Typically \VM frameworks focus on abstract at the code-level which should yield simpler code and thus help reducing development efforts.
+However, in most situations the programmer is still forced to use existing unspecific tools for instance to debug the \VM.
+In contrast to that, the \Maxine \VM provides first-hand tools to interact with the \VM in development.
 \Maxine uses abstract and high-level representations of \VM-level concepts and consistently exposes them throughout the development process.
 Inspectors at multiple abstraction levels are readily available while debugging, giving insights to the complete \VM state.
 \Maxine provides and excellent navigation for generated native code by providing links back to language-side objects as well as other native code and symbols.
 
-Compared to \Maxine, the \B infrastructure currently lacks the debugging tools which would enable a truly seamless interaction with the low-level world.
-Namely, \B does not support low-level debugging and does not support facilities to inspect low-level native code directly.
-However, \Maxine focuses on \Java, a language with inferior reflective capabilities compared to \PH.
-Hence the live interaction with the \VM is only possible during the development phase and not exposed to the language-side.
-
+Even though the \Maxine projects follows an approach where reflection is only used at compile-time, the development tools themselves provide a live interaction with the running \VM artifact.
+This means that when debugging the \VM it behaves almost like a life \ST image where a complete interaction with the underlying system is possible.
+We identify this as crucial, as most of the time is spent debugging, notably on inadequate tools like \ttt{gdb} due to lack of alternatives.
+Hence having a specific debuggers and inspectors greatly improve the interaction with the \VM artifact.
 
 \subsubsection*{\PyPy}
 \seclabel{background-pypy}
