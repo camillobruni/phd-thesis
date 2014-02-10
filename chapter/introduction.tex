@@ -12,11 +12,11 @@ In the context of this dissertation we will mainly refer to the \PH environment 
 One major reservation of programming languages over reflection is performance.
 Reflection requires support from the underlying \VM and introduces another level of late-binding which prevent more aggressive static optimizations.
 
-\todo{probably drop this paragraph}
-Typically we distinguish two types of reflection: structural and behavioral \cite{Maes87a}.
-Structural reflection is concerned with the static structure of a program, while behavioral reflection focuses on the dynamic part of a running program.
-Orthogonally to the previous categorization we distinguish between introspection and intercession. 
-For introspection we only access a reified concept, whereas for intercession we alter the reified representation.
+%\todo{probably drop this paragraph}
+%Typically we distinguish two types of reflection: structural and behavioral \cite{Maes87a}.
+%Structural reflection is concerned with the static structure of a program, while behavioral reflection focuses on the dynamic part of a running program.
+%Orthogonally to the previous categorization we distinguish between introspection and intercession. 
+%For introspection we only access a reified concept, whereas for intercession we alter the reified representation.
 
 Especially behavioral reflection is costly, as it does not access the statically defined structure but requires dynamically reified representations of the execution context of a program.
 There several approaches to limit the costs of reflection and the impact on the whole language runtime:
@@ -84,14 +84,14 @@ To validate \B we describe three distinct applications built on top of it.
 Following the problem description listed in the above introduction we identified the following abstract concerns with existing reflective languages and their \VMs.
 %
 \todo{two step lowering: 1st theoretical problems, 2nd problems we solve}
-\begin{description}
-	\item[Problem 1] Reflection and in special behavioral reflection comes at a significant cost due to reification overhead.
+\begin{enumerate}
+	\item Reflection and in special behavioral reflection comes at a significant cost due to reification overhead.
 		
-	\item[Problem 2] Intercession is limited to language-side.
+	\item Intercession is limited to language-side.
 	\VMs are not accessible from language-side and they are usually have no reflective properties at runtime. 
 	
-	\item[Problem 3] Existing approaches to a unified model between the VM and the language-side are holistic, there is no intermediate solution available.
-\end{description}
+	\item Existing approaches to a unified model between the VM and the language-side are holistic, there is no intermediate solution available.
+\end{enumerate}
 
 \noindent Out of these general problems concerning reflection in high-level languages we see that they have a low-level root.
 To address the unification of the language-side and \VM-side we have to grant more access to the language-side.
