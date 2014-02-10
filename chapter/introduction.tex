@@ -20,11 +20,11 @@ Reflection requires support from the underlying \VM and introduces another level
 
 Especially behavioral reflection is costly, as it does not access the statically defined structure but requires dynamically reified representations of the execution context of a program.
 There several approaches to limit the costs of reflection and the impact on the whole language runtime:
-\begin{enumerate}[nolistsep]
+\begin{itemize}[nolistsep]
 	\item Limit the amount of reification performed,
 	\item Restrict the reflective capabilities,
 	\item Optimize the \VM to lower the reification overhead.
-\end{enumerate}
+\end{itemize}
 The latter case allows more optimizations and is typically the path chose for more performance oriented programming languages.
 For \PH only the first option is feasible as the integrated development environment makes ready use of reflection.
 The first approach results in \emph{partial reflection} or \emph{partial behavior reflection} \cite{Tant03a}.
@@ -83,15 +83,14 @@ To validate \B we describe three distinct applications built on top of it.
 % =============================================================================
 Following the problem description listed in the above introduction we identified the following abstract concerns with existing reflective languages and their \VMs.
 %
-\todo{two step lowering: 1st theoretical problems, 2nd problems we solve}
-\begin{enumerate}
+\begin{itemize}
 	\item Reflection and in special behavioral reflection comes at a significant cost due to reification overhead.
 		
 	\item Intercession is limited to language-side.
 	\VMs are not accessible from language-side and they are usually have no reflective properties at runtime. 
 	
 	\item Existing approaches to a unified model between the VM and the language-side are holistic, there is no intermediate solution available.
-\end{enumerate}
+\end{itemize}
 
 \noindent Out of these general problems concerning reflection in high-level languages we see that they have a low-level root.
 To address the unification of the language-side and \VM-side we have to grant more access to the language-side.
@@ -102,12 +101,12 @@ We see that their approach has not yet been applied in a more dynamic environmen
 Hence we focus on the following concrete problems we wish to solve in this thesis.
 
 \begin{description}
-	\item[Problem 1] High-level low-level programming is not available at runtime.
+	\item[Problem 1:] High-level low-level programming is not available at runtime.
 	
-	\item[Problem 2] Intercession is limited to language-side.
+	\item[Problem 2:] Intercession is limited to language-side.
 	\VMs are not accessible from language-side and they are usually have no reflective properties at runtime.
 	
-	\item[Problem 3] High-level low-level programming has not yet been applied to implement \VM-level components at language-side.
+	\item[Problem 3:] High-level low-level programming has not yet been applied to implement \VM-level components at language-side.
 \end{description}
 
 
