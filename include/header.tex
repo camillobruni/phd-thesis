@@ -268,28 +268,35 @@
 % =============================================================================
 \newboolean{showcomments}
 \setboolean{showcomments}{true}
+\newcommand\ifshowcomment[2]{\ifthenelse{\boolean{showcomments}}{#1}{#2}}
 
-% define review shortcuts, once...
-\ifthenelse{\boolean{showcomments}} {
-	%... enabled (showcomments == true) ...
-	\newcommand{\ugh}[1] {\textcolor{red}{\uwave{#1}}}	% please rephrase
-	\newcommand{\ins}[1] {\textcolor{blue}{\uline{#1}}}	% please insert
-	\newcommand{\del}[1] {\textcolor{red}{\sout{#1}}}	% please delete
-	\newcommand{\chg}[2] {								% please change
-		\textcolor{red}{\sout{#1}}{\ra}
+% please rephrase
+\newcommand\ugh[1]{
+	\ifshowcomment
+		{\textcolor{red}{\uwave{#1}}}
+		{#1}}
+% please insert
+\newcommand\ins[1]{
+	\ifshowcomment
+		{\textcolor{blue}{\uline{#1}}}
+		{#1}}
+% please delete							
+\newcommand\del[1]{
+	\ifshowcomment
+		{\textcolor{red}{\sout{#1}}}
+		{}}
+% please change
+\newcommand\chg[2]{
+	\ifshowcomment
+		{\textcolor{red}{\sout{#1}}{\ra}
 		\textcolor{blue}{\uline{#2}}}
-	\newcommand{\nbc}[3]{								% comment
-		{\colorbox{#3}{\bfseries\sffamily\scriptsize\textcolor{white}{#1}}}
+		{}}
+% comment
+\newcommand\nbc[3]{
+	\ifshowcomment
+		{{\colorbox{#3}{\bfseries\sffamily\scriptsize\textcolor{white}{#1}}}
 		{\textcolor{#3}{\sf\small$\blacktriangleright$\textit{#2}$\blacktriangleleft$}}}
-
-}{
-	%... and once disbled (showcomments == false)
-	\newcommand{\ugh}[1]{#1}							% please rephrase
-	\newcommand{\ins}[1]{#1}							% please insert
-	\newcommand{\del}[1]{}								% please delete
-	\newcommand{\chg}[2]{#2}							% please change
-	\newcommand{\nbc}[3]{}								% comment
-}
+		{}}
 
 % =============================================================================
 \usepackage[pagebackref,hyperindex=true]{hyperref}
@@ -346,9 +353,10 @@
 \renewcommand{\epsilon}{\varepsilon}
 
 
-\newcommand{\nb}[2]{\nbc{#1}{#2}{orange}}
+\newcommand\nb[2]  {\nbc{#1}{#2}{orange}}
 \newcommand\fix[1] {\nb{FIX}{#1}}
 \newcommand\todo[1]{\nb{TO DO}{#1}}
+
 \newcommand\cb[1]  {\nbc{CB}{#1}{purple}}
 \newcommand\sd[1]  {\nbc{SD}{#1}{orange}}
 \newcommand\is[1]  {\nbc{IS}{#1}{gray}}
