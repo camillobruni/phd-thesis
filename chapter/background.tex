@@ -561,11 +561,15 @@ While we see the practical limitations of changing the \VM at runtime we would l
 \section{Problem 1: Dynamic High-level Low-level Programming}
 % ===========================================================================
 \todo{show limitations}
+\todo{HL-LL programming only avaialble at compile time}
+\todo{at runtime, partially in the \JIT}
 
 % ===========================================================================
 \section{Problem 2: Extended Intercession}
 % ===========================================================================
 \todo{show limitations}
+\todo{Intercession, if available only to language-side}
+\todo{very little possibility to alter the \VM from language-side}
 
 
 % ===========================================================================
@@ -583,28 +587,28 @@ While we see the practical limitations of changing the \VM at runtime we would l
 \todo{rewrite more problem oriented}
 \begin{description}	
 	\item[\chapref{reification}] focuses on language-side applications that simplify the interaction with the underlying \VM.
-		We present a custom inspector framework that is now used by default in \PH.
-		As a second part we explain how we introduced first-class layouts and slots to \PH to reify the low-level structural layout of objects.
-		Both projects are crucial for metacircular \VM development and are direct results from the research conducted on the \P \VM.
+	We present a custom inspector framework that is now used by default in \PH.
+	As a second part we explain how we introduced first-class layouts and slots to \PH to reify the low-level structural layout of objects.
+	Both projects are crucial for metacircular \VM development and are direct results from the research conducted on the \P \VM.
 	
 	\item[\chapref{benzo}] describes a high-level low-level programming framework named \B.
-		The core functionality of \B is to dynamically execute native-code generated at language-side.
-		\B allows us to hoist typical \VM plugins to the language-side.
-		Furthermore we show how code caching makes \B efficient and users essentially only pay a one-time overhead for generating the native code.
+	The core functionality of \B is to dynamically execute native-code generated at language-side.
+	\B allows us to hoist typical \VM plugins to the language-side.
+	Furthermore we show how code caching makes \B efficient and users essentially only pay a one-time overhead for generating the native code.
 		
 	\item[\chapref{ffi}] presents \NB, a stable foreign function interface (\FFI) implementation that is entirely written at language-side using \B.
-		\NB is a real-world validation of \B as it combines both language-side flexibility with \VM-level performance.
-		We show in detail how \NB outperforms other existing \FFI solutions on \PH.
+	\NB is a real-world validation of \B as it combines both language-side flexibility with \VM-level performance.
+	We show in detail how \NB outperforms other existing \FFI solutions on \PH.
 	
 	\item[\chapref{validation}] focuses on two further \B applications.
-		In the first part we present \WF a framework for dynamically generating primitives at runtime.
-		\WF extends the concept of metacircularity to the running language by reusing the same sources for dynamic primitives that were previously used to generate the static \VM artifact.
-		In a first validation we show how \WF outperforms other reflective language-side solutions to instrument primitives.
+	In the first part we present \WF a framework for dynamically generating primitives at runtime.
+	\WF extends the concept of metacircularity to the running language by reusing the same sources for dynamic primitives that were previously used to generate the static \VM artifact.
+	In a first validation we show how \WF outperforms other reflective language-side solutions to instrument primitives.
 		
-		In a second part of \chapref{validation} we present \NBJ a prototype \JIT compiler that is based on \B.
-		\NBJ shows the limitations of the \B approach as it required a customized \VM to communicate with the existing \JIT interface for native code.
-		Our prototype implementation generates the same native code as the existing \VM-level \JIT, however, it is currently limited to simple expressions.
-		\NBJ shows that for certain applications a well-define interface with the low-level components of the \VM is required.
+	In a second part of \chapref{validation} we present \NBJ a prototype \JIT compiler that is based on \B.
+	\NBJ shows the limitations of the \B approach as it required a customized \VM to communicate with the existing \JIT interface for native code.
+	Our prototype implementation generates the same native code as the existing \VM-level \JIT, however, it is currently limited to simple expressions.
+	\NBJ shows that for certain applications a well-define interface with the low-level components of the \VM is required.
 	
 	\item[\chapref{future}] summarizes the limitations of \B and its application, furthermore we list undergoing efforts on the \B infrastructure and future work.
 \end{description}
