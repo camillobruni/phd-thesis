@@ -558,29 +558,6 @@ While we see the practical limitations of changing the \VM at runtime we would l
 
 
 % ===========================================================================
-\section{Other \VMs}
-% ===========================================================================
-
-\subsection*{\Quicktalk}
-\Quicktalk \cite{Ball86a} follows a similar path as we do with Waterfall presented in \secref{validation-waterfall}.
-However Ballard et al. focus mostly on the performance aspect.
-They achieve higher performance mostly by eliminating the bytecode dispatch overhead.
-Additionally they type annotate the code for the primitive definitions to benefit from further optimizations.
-\WF however, is a very lightweight approach that provides less optimization opportunities on a general code base.
-\Quicktalk tries to compile generic \ST code, where Waterfall is mainly applied to single limited primitives.
-
-
-% ===========================================================================
-\section{Tools}
-\todo{properly integrate into the rest}
-% ===========================================================================
-
-\subsection*{\DTrace}
-\cb{maybe remove the dtrace discussion from here and move it into the waterfall section and cite \cite{Cant04a} there}
-\todo{see \cite{Cant04a}}
-
-
-% ===========================================================================
 \section{Problem 1: Dynamic High-level Low-level Programming}
 % ===========================================================================
 \todo{show limitations}
