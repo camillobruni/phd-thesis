@@ -76,12 +76,11 @@ MyClass adoptInstance: anObject.
 \end{description}
 %
 
-\todo{say that from now one by \emph{reflection} or \emph{dynamic reflection} we usually imply intercession + structural AND behavioral reflection}
+\noindent Unless specified otherwise we refer by \emph{reflection} to dynamic behavior reflection, where it is possible to perform intercession, hence altering the behavior at runtime.
 
 % ---------------------------------------------------------------------------
 \subsection{Scoping Reflection: Partial Reflection}
 % ---------------------------------------------------------------------------
-\todo{Do we only focus on behavioral reflection here?}
 Reflection brings great power to a programming language.
 However, especially behavioral reflection is linked to a significant overhead.
 For instance the previous example of the reified execution context in \ST requires restricts the optimizations at \VM-level.
@@ -212,7 +211,7 @@ Going one 	step back we can see a certain evolution in reflection which we would
 \noindent From this overview of reflective evolution of high-level languages we see that there is only little research about self-aware \VMs or reflective \VMs.
 In general high-level languages are built with a clear distinction of the language-side and the \VM.
 However, with further reflective capabilities of the language-side we see that such a separation is no longer a guarantee for security.
-In fact most security aspects have to be addressed already at language-side \cite{??}.
+In fact many security aspects have to be addressed already at language-side \cite{??}.
 This we want to focus in this thesis on the reflective aspects of the \VM.
 In order to further compare reflection in languages we will now discuss the different \VM building approaches. 
 
@@ -225,7 +224,7 @@ High-level language \VMs are inherent complex pieces of software.
 They have to combine two rather extreme goals: abstraction and performance.
 We have seen that the required abstraction for the running high-level language has a strong influence on the \VM design.
 At the same time the hard performance requirement requires precise interaction with the underlying hardware.
-This goes even so far that specialized hardware is conceived to match the performance requirements \cite{Clic05a,??}.
+This goes even so far that specialized hardware is conceived to match the performance requirements \cite{Clic05a}.
 
 The early \VMs focused on interpreting an abstract instruction set (bytecodes).
 The benefits are twofold.
@@ -241,8 +240,7 @@ Garbage Collectors (\GC) evolved from simple helpers to complex software artifac
 
 The increased complexity of the \VMs lead to more novel approaches on how to build \VMs.
 \VMs are still build for a big part in C or C++ for performance reasons.
-However, there are more high-level approaches that try to simplify \VMs by using building blocks \cite{??}.
-\todo{1-2 sentences more here}
+However, there are more high-level approaches that try to simplify creating \VMs by using building blocks \cite{Geof10a}.
 In the following sections we are shedding light on metacircular \VMs which are programmed in the same language they in the end support.
 
 % ---------------------------------------------------------------------------
@@ -332,7 +330,7 @@ We distinguish mainly between two approaches, indirect bootstrap and direct boot
 	The advantage of this approach is the that C is heavily optimized thus reducing the development effort for the \VM framework.
 	However, C already hides a lot of low-level details away.
 	Typically the \VM framework has to work around these limitations when working directly with native code for instance in the \JIT.
-	\todo{Mention the C introducted limitiations in \P when optimizing message sends}
+	We have explicitly seen these limitations while working on the \P \VM.
 	
 	\item[Direct Bootstrap:] Metacircular \VMs with a direct bootstrap are directly in charge of generating the native code for the final binary.
 	We have seen in \P that many C-level optimizations have only limited impact on the final speed.
@@ -383,10 +381,11 @@ Yet according to long-time \VM programmers the \Squeak infrastructure is more pr
 \subsubsection*{\Jikes: High-level low-level Programming in with \MMTK}
 \seclabel{background-jikes}
 % ---------------------------------------------------------------------------
-\todo{reread + more problem oriented}
+\Jikes (former \textsc{Jalapeño})is an early metacircular research \VM for \Java \cite{Alpe00a}.
+The \Jikes \VM features several different garbage collectors and does not execute bytecodes but directly compiles to native code.
 
+The \Jikes \VM had performance as a major goal, hence direct unobstructed interaction with the low-level world is necessary using a specialized framework.
 High-level low-level programming \cite{Fram09a} is mentioned the first time in the context of the \Jikes \VM project.
-\Jikes itself is a research oriented \Java-based \VM framwork that provides signification infrastructure to facilitate \VM building.
 The goal of high-level low-level programming is to the abstractions provided by high-level programming languages to simplify low-level programming specifically.
 In the core this are the same motivations that drives the metacircular \VM community.
 
@@ -395,7 +394,7 @@ Additionally their framework is successfully used in a separate project, the mem
 The \ttt{org.vmmagic} package introduces highly controlled low-level interaction in a statically type context.
 In their framework, methods have to be annotated to enable the use of low-level functionality.
 
-In a direct metacircular \VM building process (see \figref{background-metacircular-bootstra}) it is inevitable to directly manage native-code.
+In a direct metacircular \VM building process (see \figref{background-metacircular-bootstrap}) it is inevitable to directly manage native-code.
 Using a high-level low-level framework provides the necessary abstraction at this level.
 
 % ---------------------------------------------------------------------------
@@ -403,7 +402,7 @@ Using a high-level low-level framework provides the necessary abstraction at thi
 \seclabel{background-maxine}
 % ---------------------------------------------------------------------------
 \Maxine is a metacircular \Java \VM \cite{Wimm13a} focused on an efficient developer experience.
-Typically \VM frameworks focus on abstract at the code-level which should yield simpler code and thus help reducing development efforts.
+Typically \VM frameworks focus on abstraction at the code-level which should yield simpler code and thus help reducing development efforts.
 However, in most situations the programmer is still forced to use existing unspecific tools for instance to debug the \VM.
 In contrast to that, the \Maxine \VM provides first-hand tools to interact with the \VM in development.
 \Maxine uses abstract and high-level representations of \VM-level concepts and consistently exposes them throughout the development process.
