@@ -7,12 +7,21 @@
 \introduction
 % ===========================================================================
 In this chapter we present the related work to this dissertation.
-\todo{reflection paragraph}\\
-\todo{VM paragraph}\\
-We present a quick overview of language-side reflection followed by a development of \VM-level reflection.
-We find that mostly metacircular \VMs provide limited \VM-level reflection and thus we present several high-level language \VMs falling into this category.
-We conclude that there is only two research \VM that has a uniform model for \VM and language-side.
+We first present a quick overview of language-side reflection followed by a description how reflection developed for \VMs.
+
+In the context of this thesis we are mainly interested in behavioral reflection that requires strong support from the underlying \VM.
+We identify that this form of reflection is rather costly, namely due to its late binding that does not allow for static optimizations.
+Following to this, we present how different techniques of partial behavior reflection are used to limit the cost of reflection.
+We see that reflection can be more efficient with more \VM support available.
+At this point we outline the evolution of reflection in high-level languages with an ultimate goal being a language that has full control over its own \VM and thus blurring the line between language-side and \VM-side.
+
+The second part of this background chapter focuses on different kinds of \VMs and how they are built.
+We find that metacircular \VMs provide a good match to our idea of unified language runtime. 
+After presenting several recent metacircular \VM projects we conclude that most of them limit reflection at the \VM-level to compile time.
+Only a couple of research \VMs have a uniform model that spans across all abstraction levels.
 Among them is \P a research \ST \VM we contributed to previous to working on this dissertation.
+
+This chapter finishes by presenting a detailed description of the problem statement and a final outlook of the upcoming chapters in the light of the found problems.
 	
 	
 % ===========================================================================
