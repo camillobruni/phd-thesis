@@ -414,10 +414,9 @@ This means that when debugging the \VM it behaves almost like a life \ST image w
 We identify this as crucial, as most of the time is spent debugging, notably on inadequate tools like \ttt{gdb} due to lack of alternatives.
 Hence having a specific debuggers and inspectors greatly improve the interaction with the \VM artifact.
 
-\subsubsection*{\PyPy}
+\subsubsection*{\PyPy Toolchain}
 \seclabel{background-pypy}
 % ---------------------------------------------------------------------------
-\todo{reread + more problem oriented}
 \urlfootnote{\PyPy}{http://pypy.org/} is a \Python-based high-level \VM framework \cite{Rigo06a}.
 \PyPy's major focus lies on an efficient metacircular \Python interpreter.
 However, it has been successfully used to build \VMs for other languages including \ST \cite{Bolz08a}.
@@ -459,7 +458,7 @@ As a result, the \JIT can track high-level loops in the final interpreted langua
 
 
 % ---------------------------------------------------------------------------
-\subsection{Runtime Reified \VMs}
+\subsection{Runtime Reified or Self-aware \VMs}
 \seclabel{background-reified-vms}
 % ---------------------------------------------------------------------------
 

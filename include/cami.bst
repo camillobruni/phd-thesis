@@ -7,6 +7,9 @@
 	% btxbst.doc, plain.bst, unsrt.bst, alpha.bst, and abbrv.bst.
 	% This restriction helps ensure that all standard styles are identical.
 	% The file btxbst.doc has the documentation for this style.
+%
+% Extended by Camillo Bruni to include doi / url as links when using pdftex
+%
 
 ENTRY
   { address
@@ -30,6 +33,7 @@ ENTRY
     series
     title
     type
+	url
     volume
     year
   }
@@ -74,18 +78,22 @@ FUNCTION {output}
     'output.nonnull
   if$
 }
+
 % this function extracts the doi and wraps the current item on the stack 
 % in an \href pointing to http://dx.doi.org/$DOI
-% To use this function add "doi" to the ENTRY list and inject "doilink"
+% To use this function add "doi" or "url" to the ENTRY list and inject "doilink"
 % after each item you want make clickable
 FUNCTION {doilink}
 { duplicate$ empty$
   { pop$ "" }
   { doi empty$
-    { skip$ }
-    { "\href{http://dx.doi.org/" doi * "}{" * swap$ * "}" * 
-  }
-  if$
+	    { url empty$
+	      	{ skip$ }
+	      	{ "\href{" url * "}{" * swap$ * "}" * }
+	    	if$
+	    }
+    	{ "\href{http://dx.doi.org/" doi * "}{" * swap$ * "}" * }
+  	if$
   }
   if$
 }
