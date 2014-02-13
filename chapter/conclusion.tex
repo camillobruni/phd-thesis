@@ -112,9 +112,8 @@ This paper served as the basis for \chapref{ffi} and discusses the \B-based \FFI
 % =============================================================================
 \section{Software Artifacts}
 % =============================================================================
-\todo{make proper subsections/paragraphs} \\
-\todo{make sure there is a proper link (arxiv.org... figshare) for each artifact} \\
-\todo{Who uses my artifact}\\
+During the work on this dissertation we produced several software artifacts.
+Many projects emerged out of improving the infrastructure around the \PH development required to implement the core artifacts presented in this thesis.
 
 \begin{description}
 	\item[Collaboration on First-class Layouts and Slots:]
@@ -156,7 +155,11 @@ This paper served as the basis for \chapref{ffi} and discusses the \B-based \FFI
 		In order to perform continuous integration in a maintainable fashion we developed a new modular command line interface for \PH. 
 		It is used in production on the \urlfootnote{\PH build server}{http://ci.inria.fr/pharo/} alongside with simple \urlfootnote{installer scripts}{http://get.pharo.org/}.
 		
-	\item[Validation Framework:] \todo{}
+	\item[Validation Framework:]
+		In order to improve the integration life cycle of \PH we developed a validation framework.
+		Many changes in the core \PH were required to support the previously presented tools.
+		To encourage faster integration we validate each proposed change by running lint rules and all unit tests.
+		The tool generates a validation report as separate website and interacts with the issue tracker.
 	
 \end{description}
 
