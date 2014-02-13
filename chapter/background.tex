@@ -76,7 +76,7 @@ MyClass adoptInstance: anObject.
 \end{description}
 %
 
-\noindent Unless specified otherwise we refer by \emph{reflection} to dynamic behavior reflection, where it is possible to perform intercession, hence altering the behavior at runtime.
+\noindent Unless specified otherwise we refer by \emph{reflection} to dynamic or unanticipated behavioral reflection, where it is possible to perform intercession, hence altering the behavior at runtime.
 
 % ---------------------------------------------------------------------------
 \subsection{Scoping Reflection: Partial Reflection}
@@ -558,20 +558,30 @@ While we see the practical limitations of changing the \VM at runtime we would l
 % ===========================================================================
 \section{Problem 1: Dynamic High-level Low-level Programming}
 % ===========================================================================
-\todo{show limitations}
-\todo{HL-LL programming only avaialble at compile time}
-\todo{at runtime, partially in the \JIT}
+We have seen in the presented \VMs that a tight integration with the low-level code is indispensable.
+Relying on an intermediate solution such as C with inlined assembler expressions does not scale well.
+Typically it is troublesome to circumvent the aggressive optimizations applied by the C compiler in order to get the desired native code.
+
+When working with metacircular \VMs it is natural to implement a framework for maintaining the low-level code.
+Such high-level low-level programming \cite{Fram09a} is used at compile time or \VM generation time to create the necessary native code.
+However, we have seen that the same frameworks are not directly available in the final language-runtime.
+The \JIT might make use of such a framework at runtime, though that part is hidden in the \VM itself.
+Hence we see an opportunity to use high-level low-level programming in a dynamic context and at language-side to implement new functionality.
+
 
 % ===========================================================================
 \section{Problem 2: Extended Intercession}
 % ===========================================================================
-\todo{show limitations}
-\todo{Intercession, if available only to language-side}
-\todo{very little possibility to alter the \VM from language-side}
+Intercession is typically only applied at language-side to reflectively alter behavior or structure.
+In the case of the classical separation of the \VM from the language-side, this functionality stays isolated at language-side.
+
+However, this is different in a self-aware \VM or language-runtime supporting a reflective language.
+Due to the lack of clear separation between language-side and \VM-side, the same or almost the same reflective properties should apply to both sides.
+Though this is a rather idealistic goal, as we have identified only few research \VMs that have a unified model and thus are self-aware.
 
 
 % ===========================================================================
-\section{Problem 3: Dynamic Changing \VM Components}
+\section{Problem 3: Dynamically Changing \VM Components}
 % ===========================================================================
 \todo{show limitations}
 
