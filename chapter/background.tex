@@ -480,21 +480,21 @@ These \VMs have direct control over the underlying infrastructure and most conce
 % ------------------------------------------------------------------------------
 \subsubsection*{\DwarfPython}
 
-\todo{see \cite{Kell11a}}
-\todo{Do we mention Dwarf Python? using dwarf debugging information to reify the low-level part of the \VM}
-\todo{History based on \Parathon + \Dwarf}\\
-\todo{explain unified \VM runtime model}\\
-\todo{language-runtime controls everything}\\
-\todo{user for better low-level interaction}\\
-\todo{shared infrastructure for \FFI callout generation}\\
-
+\DwarfPython \cite{Kell11a is a \Python implementation that aims at a barrier-free low-level interaction.
+It emerged from an earlier \textsc{Parathon} which used \Dwarf debugging information from external libraries to facilitate foreign function interfaces.
+\DwarfPython takes this idea further.
+Additionally to describe low-level code, \DwarfPython uses the \Dwarf metamodel to describe \Python code and data.
+This is depicted in \figref{background-dwarf-python}.
+%
 \begin{figure}[h]
 	\centering
 	\includegraphics[scale=1.1]{vm-dwarf-python}
-	\caption{\DwarfPython Low-level Reification}
+	\caption[\DwarfPython Low-level Reification]{\DwarfPython reifies the low-level \VM by using the \Dwarf Debugging information at language-side.}
 	\figlabel{background-dwarf-python}
 \end{figure}
-
+%
+This approach has the advantage that the very same debugging mechanism applies for low-level code, for instance written in C, and for high-level \Python code.
+Thus \DwarfPython essentially unifies the previously decoupled \VM with the language-side.
 
 % ------------------------------------------------------------------------------
 \subsubsection*{\Pinocchio \VM}
