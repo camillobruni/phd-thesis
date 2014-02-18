@@ -6,6 +6,15 @@
 % ===========================================================================
 \introduction
 % ===========================================================================
+
+In the previous chapter we identified certain problems and limitations when using high-level low-level programming in a dynamic environment.
+One immediate problem is to cope with the difference in abstractions.
+On one side we have the high-level language world where it is natural to interact with first-class objects.
+However, this is not given for the low-level part.
+For instance, during the development of \P we experienced the direct effect of not having specialized tools to debug and inspect at native-code level.
+Typically \VM developers have to fall back on generic C debuggers.
+While this works fairly well with static C code, it is a poor match for the dynamic internals of the \VM.
+
 \todo{reification is important for reflection}\\
 \todo{compare to \P}\\
 \todo{- \P missed proper inspector}\\
