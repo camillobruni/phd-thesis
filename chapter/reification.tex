@@ -12,17 +12,12 @@ One immediate problem is to cope with the difference in abstractions.
 On one side we have the high-level language world where it is natural to interact with first-class objects.
 However, this is not given for the low-level part.
 For instance, during the development of \P we experienced the direct effect of not having specialized tools to debug and inspect at native-code level.
-Typically \VM developers have to fall back on generic C debuggers.
+Typically \VM developers have to fall back on generic debuggers such as \ttt{gdb}.
 While this works fairly well with static C code, it is a poor match for the dynamic internals of the \VM.
 
-\todo{reification is important for reflection}\\
-\todo{compare to \P}\\
-\todo{- \P missed proper inspector}\\
-\todo{- \P missed proper debugger}\\
-\todo{- \P hard-coded object layouts directly in the native compiler (as most \JIT do)}\\
-\todo{This chapter contains variety of minor work that ease development}\\
-\todo{- inspectors (list usage)}\\
-\todo{- first-class slots}\\
+In this chapter we present several language-side improvements which pave the way for a barrier-free low-level development.
+We present an inspector framework for \PH that is successfully used in a \VM prototype for inspecting the low-level \VM internals.
+Following this, we show how first-class object layouts are used to bridge the gap between high-level objects and low-level memory. 
 
 % ===========================================================================
 \newpage
