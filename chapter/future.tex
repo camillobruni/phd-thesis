@@ -444,29 +444,25 @@ This is counter-intuitive to the default \PH development workflow.
 However, the solution we presented already required certain \VM-level support to become feasible.
 
 It becomes obvious that a more powerful \B implementation also requires modification at \VM-level.
-We explored the limitations of \B with \NBJ the \B-based \JIT compiler presented in \secref{val-nabujito}.
-I is not possible to build a \JIT compiler purely on top of \B, instead we had to fall back on a customized \VM with the necessary modifications.
+We explored the limitations of \B with \NBJ \JIT compiler presented in \secref{val-nabujito}.
+It is not possible to build a \JIT compiler purely on top of \B, instead we had to fall back on a customized \VM with the necessary modifications.
 The goal of this section is to outline \VM-level improvements to push the envelope on dynamic changes that extend down to the \VM.
 We mainly focus on the reification of \VM-level structure beyond compilation time.
 In this sense we follow the findings presented for the \Klein \VM discussed in the related work \secref{future-related-work} of this chapter.
-\todo{make obivious that this is the path towards a barrier-free \VM / accessing the 4th quadrant}.
-\todo{Tools (NBJ) need access to \VM structures => }\\
-\todo{VM structures have to be fully present (conter example is the lack thereof in \P)} \\
-\todo{Reifications have to made available to the runtime (introspection / mirror-like)} \\
-\todo{Enable dynamic \VM-level intercession by enabling the 4th quadrant} \\
-\todo{hand ober FULL control, means that we have to go native at language-side}
 
-\todo{this has to link back to the introduction / problem statement}\\
-\todo{high-level low-level programming opens the door to the low-level world}\\
-\todo{little security can be ensured}\\
-\todo{from a reflection evoltion point of view the VM will become reflective too}
 
 % -----------------------------------------------------------------------------
 \subsection{VM-level Reification}
 % -----------------------------------------------------------------------------
-\B is a compatible approach to make the low-level power accessible to the language-side.
-Yet, it only provides access to native code execution.
+With \B we chose a rather non-invasive approach to make the low-level power accessible to the language-side.
+\B is built around the simple capability to dynamically invoke native code.
 Even though this is the basis for generic interaction with the \VM it is too unstructured.
+
+\todo{\B is mainly restrictred due to the missing reification}
+\begin{description}
+\item[Static Reification:] \todo{vm level structures, partially done with the VM proxy objects}
+\item[Dynamic Reification:] \todo{Dynamic structures are mostly reified hidden in the VM, for instance in the JIT}
+\end{description}
 
 \todo{use the findings from \VM generation frameworks => limits reflection to compilation time => next subsection}\\
 
@@ -476,19 +472,13 @@ Even though this is the basis for generic interaction with the \VM it is too uns
 \todo{List advantages: ??? see Klein Paper}\\
 \todo{limit the use of raw memory access and string-based programming} \\
 
-% -----------------------------------------------------------------------------
-\subsection{Runtime Reification / Dual Objects}
-% -----------------------------------------------------------------------------
+\todo{combining vm-level reification with language-side reflection we wnd up having dual objects}\\
+\todo{put the evolution of reflection picture again}
+\paragraph{Runtime Reification / Dual Objects}
 \todo{Learn from the limitiations of \VM generation frameworks} \\
 \todo{Reuse the same objects for the bootstrap and at runtime inspectors/mirrors} \\
 \todo{goes further than the sheer compile-time reification of most VM generation frameworks} \\
 \todo{accessible from language-side => leads to the following MOP}
-
-% -----------------------------------------------------------------------------
-\subsection{Mate Object Model and Runtime MOP}
-% -----------------------------------------------------------------------------
-\todo{consequence of the runtime reification of the VM introspection => intercession}\\
-\todo{Rough Overview of all the Objects currently present in Mate (UMLish)}
 
 % -----------------------------------------------------------------------------
 \subsection{Be Native}
@@ -503,6 +493,8 @@ Even though this is the basis for generic interaction with the \VM it is too uns
 \section{\Mate a Reflective \VM Prototype}
 \seclabel{mate}
 % =============================================================================
+\todo{consequence of the runtime reification of the VM introspection => intercession}\\
+\todo{Rough Overview of all the Objects currently present in Mate (UMLish)}
 
 \begin{figure*}[h]
 	\begin{adjustwidth}{-10.0in}{-10.0in}
