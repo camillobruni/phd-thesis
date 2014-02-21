@@ -4,10 +4,10 @@
 \chaplabel{conclusion}
 \minitoc
 % =============================================================================
-\introduction 
+\introduction
 
-\todo{Address the problem statements from the introduction/background}\\
-\todo{Shorten / Change chapter summary to be more result orient + in the past}
+In this chapter we summarize this dissertation.
+We list the contributions, the published papers and the created software artifacts and their impact.
 
 \begin{description}
 \item[\chapref{background}] listed related work for this dissertation.
@@ -43,7 +43,7 @@
 	We conclude that the \B approach for \VM interaction requires more support at \VM-level.
 	Namely, missing dynamically accessible \VM-level reification make it hard to communicate with \VM internal components.
 	Based on this observation we present a summary of another research \VM which also tries to overcome the limitations identified with the \B framework itself.
-	Namely, the project is built around inspection and outside interaction during the complete development process.
+	Namely, the project is built around inspection and outside interaction during the complete development process.	
 \end{description}
 
 % =============================================================================
@@ -168,12 +168,15 @@ Many projects emerged out of improving the infrastructure around the \PH develop
 
 
 % =============================================================================
-\section{Future Work / Impact / Effect of the Thesis}
+\section{Impact of the Thesis}
 % =============================================================================
-\todo{Sync Problem section of each chapter}\\
-\todo{- Benzo Improvements}\\
-\todo{- VM Improvements (Mate)}\\
-\todo{- New Reflection}\\
+Many engineering artifacts built during this dissertation are used in production for \PH.
+The inspector framework allowed us to create many specific views on common objects in \PH, improving the development in \PH.
+For instance the inspectors are tightly integrated into the debugger.
+Outside the image, we have contributed to improve the \PH continuous integration work-flow.
+Identifying the limitations of the \B framework will trigger more specific development efforts to improve the debugging capabilities.
+
+Our dissertation helped to bootstrap the \MATE research \VM which eventually will cope with the limitations of the \B approach.
 
 
 % =============================================================================
