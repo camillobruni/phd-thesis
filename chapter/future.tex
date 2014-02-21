@@ -452,33 +452,31 @@ In this sense we follow the findings presented for the \Klein \VM discussed in t
 
 
 % -----------------------------------------------------------------------------
-\subsection{VM-level Reification}
+\subsection{Missing VM-level Reification}
 % -----------------------------------------------------------------------------
-With \B we chose a rather non-invasive approach to make the low-level power accessible to the language-side.
+With \B we chose a non-invasive approach to make the low-level power accessible to the language-side.
 \B is built around the simple capability to dynamically invoke native code.
 Even though this is the basis for generic interaction with the \VM it is too unstructured.
+We have seen that for many \B applications this is not a serious restriction.
+Yet, in the case where we want to interact with the \VM internals without modifying the \VM we need better access.
+We roughly distinct between two types of \VM-level access that require proper reification. 
 
-\todo{\B is mainly restrictred due to the missing reification}
 \begin{description}
-\item[Static Reification:] \todo{vm level structures, partially done with the VM proxy objects}
-\item[Dynamic Reification:] \todo{Dynamic structures are mostly reified hidden in the VM, for instance in the JIT}
+	\item[Static Part:] 
+	When building metacircular \VMs using an intermediate language such as C, the original high-level structure is lost.
+	It is possible to partially reconstruct the internal structures from the low-level debugging information, such as \Dwarf.
+	
+	\item[Dynamic Part:]
+	Next to the static part of the \VM there is a more dynamic aspect linked to the language-side.
+	In the case of C-based \VM these are all the places where native code and memory is used directly.
 \end{description}
 
-\todo{use the findings from \VM generation frameworks => limits reflection to compilation time => next subsection}\\
-
-\todo{Resulting from the first law of Inspectors, all VM-level objects are reified} \\
-\todo{List of typical objects that don't have a reification in COG} \\
-\todo{make concepts explicit and first-class} \\
-\todo{List advantages: ??? see Klein Paper}\\
-\todo{limit the use of raw memory access and string-based programming} \\
-
-\todo{combining vm-level reification with language-side reflection we wnd up having dual objects}\\
-\todo{put the evolution of reflection picture again}
-\paragraph{Runtime Reification / Dual Objects}
-\todo{Learn from the limitiations of \VM generation frameworks} \\
-\todo{Reuse the same objects for the bootstrap and at runtime inspectors/mirrors} \\
-\todo{goes further than the sheer compile-time reification of most VM generation frameworks} \\
-\todo{accessible from language-side => leads to the following MOP}
+We addressed some of the access earlier in this thesis.
+For instance \NB features a \VM proxy objects that exposes a public interface to the \VM.
+However, this does not cover real reflective access of the \VM internal structures.
+In \chapref{validation-waterfall} we have shown how \WF reuses the sources of the metacircular \VM to generate primitives.
+This immediately makes structural information accessible at runtime.
+For a truly self-aware system the situation we found in the \PH \VM is not sufficient.
 
 % -----------------------------------------------------------------------------
 \subsection{Be Native}
@@ -507,7 +505,7 @@ Even though this is the basis for generic interaction with the \VM it is too uns
 \todo{for reasearch mainly but possible long term solution to our \VM problems}
 
 % -----------------------------------------------------------------------------
-\subsection{Mate Compiler Outline}
+\paragraph{Mate Compiler Outline}
 \seclabel{future-mate-compiler}
 % -----------------------------------------------------------------------------
 \todo{Small Intro: Reuse the bootstrap infrastrucutre at runtime (FFI, JIT...)}
@@ -518,14 +516,14 @@ Even though this is the basis for generic interaction with the \VM it is too uns
 \end{figure}
 
 % -----------------------------------------------------------------------------
-\subsection{Mate Bootstrap Outline}
+\paragraph{Mate Bootstrap Outline}
 \todo{Small Intro: Why Bootstrap and how to use the reified objects}\\
 \todo{Compare to Pinocchio (manual approach)}\\
 \todo{Work in Progress: Envision the trace-based Bootstrap}
 
 
 % -----------------------------------------------------------------------------
-\subsection{Mate Towards Complete Reflection}
+\paragraph{Mate Towards Complete Reflection}
 \todo{list possible paths between the 4 quadrants of reflection}\\
 \todo{usecase: dynamic gc change}\\
 \todo{usecase: dynamic object format influence}\\
@@ -542,7 +540,7 @@ Even though this is the basis for generic interaction with the \VM it is too uns
 \section{Reflective Future}
 % =============================================================================
 % NEW concepts
-\todo{Check with GUIDO} \\
+\todo{Following out of the VM-level reification we can change VM components, KLEIN evolution}\\
 \todo{List 3 to 4 different Examples entering the 4th quadrant:}
 
 % -----------------------------------------------------------------------------
