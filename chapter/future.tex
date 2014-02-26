@@ -474,17 +474,17 @@ We roughly distinct between two types of \VM-level access that require proper re
 We addressed some of the access earlier in this thesis.
 For instance \NB features a \VM proxy objects that exposes a public interface to the \VM.
 However, this does not cover real reflective access of the \VM internal structures.
-In \chapref{validation-waterfall} we have shown how \WF reuses the sources of the metacircular \VM to generate primitives.
+In \secref{validation-waterfall} we have shown how \WF reuses the sources of the metacircular \VM to generate primitives.
 This immediately makes structural information accessible at runtime.
 For a truly self-aware system the situation we found in the \PH \VM is not sufficient.
 
 % -----------------------------------------------------------------------------
-\subsection{Be Native}
+%\subsection{Missing Native}
 % -----------------------------------------------------------------------------
-\todo{out of the intercession capabilities follows that we need native support at runtime (see \B)}\\
-\todo{that means we need to have decent / better infrasrtucture for native code}\\
-\todo{need to be able to achieve what \NBJ didn't manage: compile native methods and hand them over to the \VM}\\
-\todo{step towards our implementation in \Mate}
+%\todo{out of the intercession capabilities follows that we need native support at runtime (see \B)}\\
+%\todo{that means we need to have decent / better infrasrtucture for native code}\\
+%\todo{need to be able to achieve what \NBJ didn't manage: compile native methods and hand them over to the \VM}\\
+%\todo{step towards our implementation in \Mate}
 
 
 % =============================================================================
