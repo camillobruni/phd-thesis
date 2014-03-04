@@ -837,7 +837,7 @@ Rewriting \NB's explicit assembler routines in the platform independent intermed
 Currently \NB is used on three operating system: \Linux, \textsc{Mac OS X} and \Windows.
 Internally \NB already deals with different calling conventions C-functions on the different platforms.
 Nevertheless, from a user point of view it is mandatory to have a well defined way to deal with platform specific \FFI callouts.
-The current approach as outlined for the \PH \OS environment variables object in \secref{reification-simple} is to create a specific subclass for each platform.
+The current approach is to create a specific subclass for each platform.
 A simple extension to \NB to allow callout definitions for multiple platforms in a single method would greatly improve this case.
 The following code example illustrates a possible solution:
 %
@@ -922,7 +922,7 @@ Starting with \PH 3.0 we tried to slowly replace \VM plugin functionality with d
 This is an attempt to make language more open and shift a part of the development done in C at \VM-level to \PH.
 The driving motivation is the same as for \NB itself: accessible and flexible code.
 
-The \OS environment implementation based on \NB described earlier in \secref{reification-simple} was such an attempt.
+The \OS environment implementation based on \NB described earlier was such an attempt.\todo{check where mentioned}
 In return it allowed us to add functionality to access to known directory locations under \Linux by directly or indirectly querying environment variables such as \ttt{HOME}.
 In a second refactoring the functionality for opening the changes-file in \PH containing the changelog was made more flexible supporting more file locations.
 This last change introduced a recursive dependency that is not visible on the first sight and illustrated in the following figure.
