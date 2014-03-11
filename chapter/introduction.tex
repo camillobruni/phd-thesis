@@ -22,21 +22,20 @@ To validate \B we describe three distinct applications built on top of it.
 	
 	\item[Language-side \JIT:] As a third, prototype application we show how \B is used to build a language-side \JIT.
 	Our prototype shows the limits of possible \VM interactions using the \B framework. 
+	
+	\sm{With your story, and the way you put it, I would expect here a complete language-level reflective interface, not just native code compilation.
+	
+	Which hocks does the JIT need to adapt language semantics? Which hooks does the native code include to get information about execution?
+	
+	Those questions come to mind with your introduction. If that is only the final goal, which you are working towards, then, you'll need to make that explicit, and cut down expectations.
+	
+	With guessing, I think, you want to explore the notion of language-side JITs as main goal of this thesis?}
 \end{description}
 
 
 % =============================================================================
 \section{Problem Statement}
 % =============================================================================
-
-\sm{With your story, and the way you put it, I would expect here a complete language-level reflective interface, not just native code compilation.
-
-Which hocks does the JIT need to adapt language semantics? Which hooks does the native code include to get information about execution?
-
-Those questions come to mind with your introduction. If that is only the final goal, which you are working towards, then, you'll need to make that explicit, and cut down expectations.
-
-With guessing, I think, you want to explore the notion of language-side JITs as main goal of this thesis?}
-
 Following the problem description listed in the above introduction we identified the following abstract concerns with existing reflective languages and their \VMs.
 %
 \begin{itemize}
@@ -52,6 +51,7 @@ Following the problem description listed in the above introduction we identified
 To address the unification of the language-side and \VM-side we have to grant more access to the language-side.
 This includes interacting directly with low-level native instructions.
 A similar problem has been solved by applying high-level low-level programming in a more static environment \cite{Fram09a}.
+\sm{Laurie knows a little about Graal (Oracle labs), so, as another language-side JIT, I would mention it}
 The approach outlined by Frampton et al. uses a high-level framework to generate native code at compile-time.
 We see that their approach has not yet been applied in a more dynamic environment where native code has to be generated at runtime.
 Hence we focus on the following concrete problems we wish to solve in this thesis.
@@ -69,7 +69,15 @@ Hence we focus on the following concrete problems we wish to solve in this thesi
 % =============================================================================
 \section{Contributions}
 % =============================================================================
+\sm{Artefacts are note the contributions of a thesis, they might be 'technical contributions'.
 
+Contributions are ideas/designs in combination with what you learned about them in the evaluation}
+
+% =============================================================================
+\section{Artifacts}
+% =============================================================================
+
+\todo{rewrite intro paragraph}
 We present now our contributions of this dissertation addressing the previously identified problems concerning high-level low-level programming in a dynamic language:
 
 \todo{maybe separate the abstract findings from the real software artifacts}
@@ -78,6 +86,7 @@ We present now our contributions of this dissertation addressing the previously 
 	The core functionality of \B is to dynamically execute native-code generated at language-side.
 	Our framework requires minimal changes to an existing \VM and three custom primitives to support dynamic code activation, the majority of \B is implemented as accessible language-side code.
 	\B allows us to directly communicate with the low-level world and thus hoist typical \VM-level applications to the language-side.
+	\sm{Just a shift of implementation language, opens up opportunities, but in itself, doesn't give more reflective power, it is still 'a runtime', no? }
 		
 	\item[\NB] is a \B-based foreign function interface (\FFI).
 	\NB makes generates customized native code at language-side, both being flexible and efficient at the same time.
@@ -91,18 +100,28 @@ We present now our contributions of this dissertation addressing the previously 
 	\item[\AsmJIT] is a assembler framework written in \PH.
 	\AsmJIT is the low-level backend for the previously mentioned \B framework.
 	We extended the existing assembler framework to support the full 64-bit x86 instruction set.
+	\sm{None of these talks about reflection.
+	
+	I think, I am expecting something very different than what you want to sell, you got me in the wrong direction.
+	
+	Again, I would try to make it more explicit that the high level low level programming is what you are interested in evaluating. Reflection is only the bigger picture motivation}
 	
 	\item[\Eye] is a high-level inspector framework that has now been adopted in \PH.
 	Inspectors are crucial when interacting with the low-level world which typically lacks the structural abstractions present at language-side.
 	\Eye allows us to rapidly define customized views for \PH objects.
 	Our inspector framework seamlessly integrates into the existing \PH debugger.
-		
+	\sm{Eye is very different, the introspection aspect is very important for low level programming, I think you'll need to adapt your story line to include that aspect explicitly, if you want to include eye/emphasise it}
+	
 \end{description}
 
 
 % =============================================================================
 \section{Outline}
 % =============================================================================
+
+\sm{This dissertation structure is different to what I am used to. At least the way you announce the purpose of the chapters is not what I would expect.
+
+In my diss, everything revolves around one thesis, here, it is a number of things listed one after another, don't see the central motive I would expect}
 
 \begin{description}
 \item[\chapref{background}] sheds light on the context of this work.
