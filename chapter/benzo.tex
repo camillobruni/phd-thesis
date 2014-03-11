@@ -103,7 +103,7 @@ Unlike typical implementations that would focus on writing them as \VM extension
 %----------------------------------------------------------------------------
 \PH emerged from the Squeak project \cite{Inga97a}.
 The \PH \VM (Cog) implementation \cite{Mira11a} also evolved from the original Squeak bytecode interpreter.
-The current \VM uses a moving Garbage Collector (\GC) with two generations\gc{ref?} and uses a \JIT that applies basic register allocation to reduce stack load. 
+The current \VM uses a moving Garbage Collector (\GC) with two generations \sm{ref?} and uses a \JIT that applies basic register allocation to reduce stack load. 
 This situation is not a direct requirement for \B but it is assumed as given and thus not further discussed in detail.
 However, \B requires certain features that were not supported in the existing \VM implementation.
 Mainly our requirement is being able to generate executable code and activate it at runtime.

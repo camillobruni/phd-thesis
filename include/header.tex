@@ -298,8 +298,12 @@
 \newcommand\nbc[3]{
 	\ifshowcomment
 		{{\colorbox{#3}{\bfseries\sffamily\scriptsize\textcolor{white}{#1}}}
-		{\textcolor{#3}{\sf\small$\blacktriangleright$\textit{#2}$\blacktriangleleft$}}}
+		{\color{#3}
+			\sf\small$\blacktriangleright$
+			{\itshape #2}
+			$\blacktriangleleft$}}
 		{}}
+
 
 
 \newcommand\nb[2]  {\nbc{#1}{#2}{orange}}
@@ -310,7 +314,7 @@
 \newcommand\cb[1]  {\nbc{CB}{#1}{purple}}
 \newcommand\sd[1]  {\nbc{SD}{#1}{orange}}
 \newcommand\is[1]  {\nbc{IS}{#1}{gray}}
-\newcommand\gc[1]  {\nbc{GC}{#1}{olive}}
+\newcommand\sm[1]  {\nbc{SM}{#1}{olive}}
 \newcommand\ct[1]  {\nbc{CT}{#1}{teal}}
 \newcommand\md[1]  {\nbc{MD}{#1}{blue}}
 \newcommand\dc[1]  {\nbc{DC}{#1}{green}}
