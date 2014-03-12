@@ -38,11 +38,14 @@ For introspection we only access a reified concept, whereas for intercession we 
 
 \begin{description}
 \item[Structural Reflection] means to access the static structure of a program.
-A typical example is to get the class of an object at runtime.
+A typical example is to access the class of an object at runtime.
 \begin{stcode}{}
-'abc' class.
+'a string' class.
 \end{stcode}
-\sm{No intercession example here?}
+An example of structural intercession is to reflectively modify an instance variable of an object.
+\begin{stcode}{}
+aCar instVarNamed: #driver put: Person new.
+\end{stcode}
 
 \item[Behavioral Reflection] means to directly interact with the running program.
 For instance this includes reflectively activating a method.
@@ -54,7 +57,11 @@ Another more complex example to dynamically switch the execution context and res
 \begin{stcode}{}
 thisContext restartWithNewReceiver: Object new 
 \end{stcode}
-\sm{No introspection example here?}
+
+Accessing the receiver of the current method through the execution context is an example of behavioral introspection.
+\begin{stcode}{}
+thisContext receiver. 
+\end{stcode}
 \end{description}
 
 \noindent There is not always a clear separation between the two types of reflection possible.
@@ -136,14 +143,13 @@ Unanticipated behavioral reflection is not directly possible.
 Typically it is only possible to enable or disable the reflective features that have been prepared upfront.
 Röthlisberger et al. propose \Gepetto a system \cite{Roet07b} that enables true unanticipated behavioral reflection on top of \ST.
 \Gepetto provides a high-level \API to install behavior reflection.
-\cb{more needed?}
 
 % ---------------------------------------------------------------------------
 \subsection{\VM-level Reflection}
 \seclabel{background-vm-reflection}
 % ---------------------------------------------------------------------------
 \sm{Connection to scoping unclear}
-The basic reflective features have to be provided by the \ugh{underlying meta-level}.
+The basic reflective features have to be provided by the underlying base-level.
 For high-level languages this is the \VM.
 For instance, simple cases involve giving access to the class of an object or the possibility to reflectively invoke a method at runtime.
 \PH for instance is a more complex case, where the \VM has to provide access to the current execution context for introspection and even modification.
@@ -681,7 +687,6 @@ However, this is different in a self-aware language-runtime supporting a reflect
 Due to the lack of clear separation between language-side and \VM-side, the same or almost the same reflective properties should apply to both sides.
 Though this is a rather idealistic goal, as we have identified only few research \VMs that have a unified model and thus are self-aware.
 \sm{Strict? Be careful with your wording, clear also implies something positive.
-
 I want a clear separation, but not a strict one!!!}
 
 We have identified that for instance the \Klein \VM would be perfectly capable of performing reflection on components that typically belong to the \VM.
