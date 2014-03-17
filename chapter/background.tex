@@ -119,7 +119,6 @@ We will now discuss several axes along which we can limit the use of reflection.
 	The solution presented in \P does not globally replace the interpreter but only for the given expression. 
 	Hence once the expression returns, the modifications and the implied overhead are gone.
 	\sm{Stack? Your terminology doesn't really seem to be informed by literature, I would have expected something like 'dynamic scope' here.
-	
 	my point being that this section should be independent and only preparing the main parts of your thesis. Here, I would expect you to show of everything you know about related work, including standard terminology}
 
 \item[Reference:] Starting from the concept of a proxy object we find another possibility to limit reflection by reference.
@@ -160,14 +159,14 @@ Following the \ST principle that everything is an object one might assume that t
 Typically the \VM is implemented in C or C++ which have no reflection.
 However, the \JIT is common exception as it has to interact dynamically with the language-side.
 For instance the \JIT has to be aware of classes and the methods within.
-And in dynamic system like \PH \sm{Like Pharo? I always dislike that kind of stuff in papers from Lille, come on, there are plenty of systems that have those needs. Singling out on, is bad style in my perspective } it has to be made aware of language-side changes to properly update the generated native code.
+And in dynamic system \ugh{like \PH} \sm{Like Pharo? I always dislike that kind of stuff in papers from Lille, come on, there are plenty of systems that have those needs. Singling out on, is bad style in my perspective } it has to be made aware of language-side changes to properly update the generated native code.
 What we see is that the \JIT accesses structural information from the language-side.
 However, the language-side is not capable to accessing \VM-level information.
 The closest \VM interaction point typically is the bytecode generated at language-side and handed over to the \VM for execution.
 Yet, this provides only a crude one-way interaction \cite{Kell12a}.
 \sm{What about debugging interfaces? Code maintenance interfaces? For me, the statement you make is way to strong?}
 
-For highly reflective and dynamic languages like \PH we see a certain mismatch.
+For highly reflective and dynamic languages \ugh{like \PH} we see a certain mismatch.
 While it is possible to virtually change and modify everything at language-side we are locked out of the \VM.
 \sm{Are we? What does locked out even mean? Don't say such things, enumerate the missing features explicitly. This is the bases to evaluate your contribution, no? Or, reference the place where you listed them.}
 One argument in favor of that is that the underlying \VM provides security by isolation.
@@ -232,7 +231,6 @@ Going one 	step back we can see a certain evolution in reflection which we would
 	The way to achieve this is by flattening out the intermediate \VM and let the language-side directly control everything.
 	Currently there are several research \VMs which can be classified as self-aware \VMs: The \P \VM \cite{Verw12a} is partially self-aware but in control of the underlying execution and the \Klein \VM is fully reflective \cite{Unga05a}. 
 	\sm{What's with meta circular VMs, how do they fit in here? Some, I would say by accident, have properties that could be considered 'self-aware'.
-	
 	Further, I don't think those categories are disjunct. So, something that is self-aware is probably also in the previous categories}
 \end{enumerate}
 
@@ -292,7 +290,6 @@ The following figure highlights the most evident differences between a classical
 	\vspace{1mm}
 	\includegraphics[scale=1.1]{vm-metacircular-building-process}
 	\vspace{-5mm}
-	\sm{Right to left? Strange order}
 %	\figlabel{vm-metacircular-building-process}
 \end{figure}
 %
