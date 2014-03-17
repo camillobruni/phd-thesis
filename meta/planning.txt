@@ -1,0 +1,45 @@
+==========
+Now
+Week 11
+==========
+- Complete thesis review
+- Chapter 1: Introduction [Major rewrite needed]
+- Chapter 2: Background Chapter [Substantial changes needed]
+- Chapter 3: Benzo [minor changes in the intro + conclusion]
+- Chapter 4: FFI [minor corrections]
+- Chapter 5: Validation [Some Retro Fitting]
+- Chapter 6: Future Work [Compress Sista + Mate descrption, Substantial changes needed]
+- Chapter 7: Conclusion [Minor Work]
+
+==========
+T-7 Weeks:
+==========
+Week 13
+March 24
+==========
+- Jury complete
+- Thesis complete for external review (non )
+- Jury ready for reviewing
+- Thesis on CD submitted to the university (+keywords form)
+
+
+==========
+T-4 Weeks:
+==========
+Week 16
+April 14
+==========
+- final jury members set
+- final defense date set
+- final defense location/room set
+- thesis summary in french and in english
+- completed keywords form
+
+
+==========
+T-4 Weeks:
+==========
+Week 20
+May 16
+==========
+-  Defense
