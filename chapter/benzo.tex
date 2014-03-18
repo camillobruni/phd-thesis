@@ -284,6 +284,7 @@ For this reason we extend the \VM to support inlining of native code in the \JIT
 \figref{benzo-nabujitoInline} shows how the native code from a \B enabled method is inlined into the JIT infrastructure.
 The \B prologue and epilogue used for managing the low-level stack are replaced by an adapted version for the JIT.
 The performance boost of this optimization is further discussed in \secref{benzo-issues-performance}.
+\sm{Motivation first, why are you talking about this? Classic primitives have overhead, and you provide solution? Might not be novel,but in the context of your thesis goals it is necessary to achieve acceptable performance}
 
 
 %----------------------------------------------------------------------------
@@ -292,6 +293,7 @@ The performance boost of this optimization is further discussed in \secref{benzo
 
 \B provides an error handling facility that allows to return high-level error messages from the low-level code.
 The native code builder provides a helper method called \ttt{failWithMessage:} that generates the proper assembler instructions to return a full error message. The following code shows an example application of this behavior.
+\sm{Should you discuss the design of the native code builder? Is there anything relevant in there? I would expect it to be nicely designed to fit with your goals?}
 %
 \begin{stcode}[emph={asm}]{5}
 failWithErrorMessage
@@ -304,6 +306,8 @@ failWithErrorMessage
 Under the hood, \B reuses the existing built-in error mechanism of \PH primitives.
 However, primitives only allow for error number to be returned which limits the expressiveness of the error messages.
 To circumvent this limitation \B assigns a unique error number for each error message pass to \ttt{failWithMessage:}.
+\sm{It isn't a proper object that can be returned?
+Shouldn't it be one in a nice clean design?}
 The mapping between the two error message representation, its error number and the message string itself, happens at language-side.
 \B simply reuses the existing infrastructure to improve the debugging tasks and promote a better interaction with developers.
 
@@ -312,6 +316,7 @@ The mapping between the two error message representation, its error number and t
 \seclabel{benzo-language-side}
 %----------------------------------------------------------------------------
 As a key design decision, we determine to keep the interface to the low-level world minimal.
+\sm{Goal!}
 The following describes the features of \B at the high-level language-side.
 
 %----------------------------------------------------------------------------
@@ -326,7 +331,9 @@ Benzo x86 generate: [ :asm |
 \end{stcode}
 %
 The implementation first creates a slightly more abstract intermediate format.
-The abstract operations can be extended by custom operations that may expand to several native instructions. For pragmatic reasons current implementation only supports \textsc{x86} and \textsc{x86-64}.
+The abstract operations can be extended by custom operations that may expand to several native instructions. 
+\del{For pragmatic reasons current implementation only supports \textsc{x86} and \textsc{x86-64}.}
+\sm{Bottom up vs. top down discussion, in a thesis, I would expect top down,derived from goals and problems, I.e. By design, instead of an incidental solution that came to being without taking the overall goal into account. You need to tell me what you learned, not how you learned it/how you got to your solution}
 The full features of the high-level environment are available when generating native code.
 Hence complex instruction sequences can easily be delegated to other objects.
 In the following example we use a \VM helper to instantiate an array. It is worth noting that all are standard message sends:
@@ -340,6 +347,11 @@ Benzo x86 generate: [ :asm :helper | | register |
 	asm mov: register to: asm resultRegister ].
 \end{stcode}
 %
+\sm{Is that really high level? One thing here that's debatable is the API design, seems rather procedural. Instead of object oriented, the other thing, is is that really reflective or meta circular? How many places encode how an array is represented? The VM? Your library? Other things?
+
+Superficially, it is just a code generation library that has nothing to do with the language it is implemented in, is that relevant? Do you need to defend such criticism? Or is that outside of the scope of your thesis?
+
+That's why you need to get the problem statement very precise}
 The \VM helper exposes a basic, low-level interface to access objects and its properties.
 Additional methods cover the access to the external roots described in \secref{benzo-gc-interaction}.
 In this case the \ttt{\#instantiateClass:\-in\-dex\-able\-Size:} will generate the proper native code to call to a \VM function and make sure that the side-effects of a possible \GC run are handled properly.
@@ -456,6 +468,9 @@ Each language-side library can define its own highly efficient conversion routin
 \end{figure}
 
 \noindent The second \B-based application we present takes the concept of our \FFI solution further.
+\sm{Don't imply! Be explicit! The second is something... You neither name it nor give me clues what you are going to talk about.
+
+And also, start out with telling my what waterfall is concretely, you are now telling me what it ain't, by telling me what native boost doesn't do. That can come later, first, I want to know why I should read this section}
 \NB allows us to call external functions by generating the callout code at language-side.
 From an abstract point of view we replace language-side methods with native routines.
 \NB does not directly synthesize new features but only makes external functionality available to the language itself.
@@ -469,18 +484,27 @@ Hence, the complete definition of the \VM including the primitives can be made a
 \WF then takes the primitive definition written in \Slang and compiles it to native-code.
 
 As \figref{benzo-waterfall-overview} illustrates, \WF extends the lifetime of the metacircular \VM definition to the actual language runtime.
+\sm{Why does this paragraph sound like it is going to talk about something very different? I first want to know how the compilation is done, do you have a slang interpreter or something?}
 By default the primitive definitions written in \Slang are only used to generate the \VM source in an intermediate step.
 A C-compiler such as \GCC generates the final binary.
 By doing so the high-level primitive definition are absorbed by the intermediate compiler infrastructure.
 The final binary has no reflective capabilities anymore.
 From within \PH we can only activate primitives but the abstract definition is no longer accessible.
 Hence, we can not directly modify primitives directly without the original \VM sources loaded.
+\sm{Are you sure you are fixing this, I.e., that the original code doesn't have to be present? Are you de compiling native code?
+
+And, I still don't know how waterfall does the compilation, does it also use the c compiler?}
 
 \WF provides a complete metacircular infrastructure for primitives.
+\sm{Bla Bla, that doesn't tell me anything, because I don't know what that means in this context}
 We use \WF to modify primitives on the fly.
 For instance it becomes possible to instrument the crucial \ttt{basicNew} primitive, something that is almost impossible to achieve with pure language-side reflection.
+\sm{I intercepted basicNew on the language side in my OMOP, no VM support necessary! I think you want to say something different.
+
+(I did not change allocation, but I set the owner of each object by 'wrapping around' basicNew and basicNew:) }
 Since this primitive is used for object creation, each attempt to monitor this primitive is doomed.
 If the monitoring code itself would create a new object, infinite recursion would be inevitable.
+\sm{True, but what's your point? Your solution ain't solving that either}
 In \secref{val-waterfall} we explain in more detail the difficulty of such a task along with promising performance evaluations.
 
 
@@ -492,6 +516,7 @@ In \secref{val-waterfall} we explain in more detail the difficulty of such a tas
 \todo{Adapt to the findings of \NBJ that it is currently not possible to implement on top of the \VM}
 In this section we present \NBJ, a \B-based approach for a language-side \JIT compiler.
 \NBJ goes even further than \WF using almost the same techniques.
+\sm{I still have not even an intuition what waterfall does :(}
 However, instead of focusing on primitives, \NBJ generates native executable code for standard \PH methods.
 Primitives tend to be more low-level, whereas \NBJ focuses on high-level \PH code. 
 
@@ -507,32 +532,41 @@ It transforms \PH methods into slightly optimized native code at runtime.
 The most complex logic of the \JIT infrastructure deals with the dynamic nature of the \PH environment.
 Methods and classes can be changed at runtime and that has to be addressed by the \JIT infrastructure.
 This implies that an efficient \JIT infrastructure needs substantial access to language-side structures; in our case classes, methods.
+\sm{Really? I don't believe that. That only means you need to be able to invalidate code, something that ever speculative JIT does, and you said before that there aren't any VMs fulfilling your criteria. So, be more precise here, this is too sloppy and too broad of a statement}
 This information is readily accessible in \PH through the standard reflective \API.
 However, at \VM-level this requires more effort, and thus imposes strong requirements on the design of classes and methods at language-side.
 The \JIT infrastructure is a hybrid between \VM logic and language-side reflection.
 
 The \JIT compiler, by which we refer in this context to the transformation of bytecodes to native code, represents a small part of the whole \JIT infrastructure.
-There exists more important stages as an additional register allocation pass to reduce the number of stack operations \cite{Mira99a,Mira11a}.
+There exists more important stages \sm{Reference unclear, what is more important than what?} as an additional register allocation pass to reduce the number of stack operations \cite{Mira99a,Mira11a}.
 The existing \JIT infrastructure is implemented in \Slang \cite[Ch.\ 5]{Blac09a} as the rest of the \VM.
 We believe that a hard-coded static and low-level implementation is not optimal for several reasons:
 
 \begin{itemize}
 	\item Optimizing \PH code requires strong interactions with the dynamic environment.
+	\sm{Why? Java proves you wrong by your own criteria, I believe, as does Self most probably}
+	
 	\item Accessing language-side properties from the \VM-side is hard.
+	\sm{Hard? Or impossible? And why is that? Just because the interface isn't well defined?
+	This criterion is not useful as it is phrased now}
+	
 	\item Changing the \JIT compiler requires changes at \VM-level.
+	\sm{So what? You are implying here assumptions about development approach, stuff you discussed earlier, I think. So, changing the VM takes a lot of effort, which you outlined earlier? That's your point? You want that to be possible much more interactively? Then say that, instead of broad phrases}
+	
 	\item The \JIT reimplements primitives for optimization reasons resulting in code duplication.
+	\sm{This problem is now noted down on the list of things your reviewers are expecting you to solve, I hope you do...}
 \end{itemize}
 
 \paragraph{Implementing \NBJ with \B}
-Motivated by the aforementioned implications of a \VM-level \JIT we conceived \NB a prototype \JIT compiler based on \B.
+Motivated by the aforementioned implications of a \VM-level \JIT we conceived \B a prototype \JIT compiler based on \B.
 \NBJ is an experimental \JIT implementation which replaces the bytecode to native code translation of the existing \JIT infrastructure with a dynamic language-side implementation.
 \NBJ is implemented as a visitor over the existing intermediate bytecode representation. 
-Additionally we reimplemented vital native routines for the \JIT which are not directly exported by the \VM using \B. 
+Additionally we reimplemented \sm{Oh oh, didn't you say reimplementing stuff is evil? Perhaps make this more clear, and avoid the word, you just put on the list of things you want to solve...} vital native routines for the \JIT which are not directly exported by the \VM using \B. 
 \NBJ relies on the following \VM-level infrastructure to manage and run native code for any \PH method:
 
 \begin{itemize}[noitemsep]
 	\item Fixed native code memory segments.
-	\item Routines for switching contexts.
+	\item Routines for switching execution contexts.
 	\item Native stack management.
 \end{itemize}
 
@@ -558,10 +592,12 @@ A more detailed validation is presented later in \secref{ffi-performance} (\FFI)
 
 \paragraph{One-time Code Generation Overhead} 
 \B allows the generation of specific and thus efficient native code.
+\sm{Specific vs. specialised, also, not clear enough what that really means here }
 In \secref{benzo-benzo} we explained how \B causes only a one-time overhead for native code generation. 
 Thereafter it is cached for later activations.
 The three use case presented in \secref{benzo-usecase} heavily benefit from this fact.
 Even though the code generation at language-side is generally slower than a C-level implementation, the overhead can mostly be neglected.
+\sm{Slower, why? And why generally? I believe proper language side JITs will optimize themselves, and be as fast, or faster than naive C implementations}
 Even better, for instance the \B-based \FFI implementation presented in \secref{benzo-ffi} outperforms a \VM-level \FFI-plugin due to a more flexible language-side implementation. 
 These results are shown in the following \tabref{benzo-ffi-performance-simple}.
 
@@ -574,9 +610,11 @@ The first mini performance evaluation we present is for \NB the \B-based \FFI.
 Compared to a static plugin-based \FFI implementation \NB has only a one-time startup overhead with its numbers shown in \secref{benzo-issues-performance}.
 Generating the native code at language-side is substantially slower than directly setting up all the conversions and calling the external functions from C code. 
 In some cases the penalty for some compilation effort on \NB is as high as a factor of 100 compared to classic approaches.
+\sm{Approaches, to what do you compare exactly? Be more precise with those comparisons, you are slower than what exactly? Otherwise, I stop reading, because you are just saying the your whole approach is doomed...}
 Under the assumption that the method is called several times this overhead may be considered negligible.
 An in-depth evaluation of \NB comparing against other solutions is presented later in \chapref{ffi}.
 The following table contains a performance comparison of three different \FFI implementations for \PH that represents the typical showcase.
+\sm{Use case, not show case, showcase is something specifically selected that shines, nothing typical about that}
 
 \begin{table}[!ht]
     \centering
@@ -584,7 +622,7 @@ The following table contains a performance comparison of three different \FFI im
                    					& {Call Time [ms]} & {Relative Time} \\\midrule
         \NB         				& 10.53(35)        &        1.0 \\
         \Alien, language-side \FFI  & 31.09(94)        & \approx3.0 \\
-        C-\FFI, plugin-based \FFI   &  9.55(64)        & \approx1.9
+        C-\FFI, plugin-based \FFI   &  9.55(64)        & \approx0.9
     \end{tabular}
     \caption[Basic \B-based \FFI Performance]{Different \FFI implementations in \PH evaluating \ttt{abs(int)}. \Alien does marshalling at language-side while \FFI does everything in \VM plugin written in C.}
     \tablabel{benzo-ffi-performance-simple}
@@ -599,6 +637,7 @@ However, converting \PH objects from and into low-level data is comparably expen
 In \NB this happens directly in custom generated native code and is thus significantly faster.
 The plugin-based \FFI is also slower than \NB since it still has generic conversion function for \PH objects, albeit written in C and thus faster than in \Alien.
 However, \NB custom tailored \ASM code is still faster than the hard-coded C counterpart.
+\sm{There something wrong with either the number so the text, the CFFI is faster according to call time}
 
 This simple \FFI evaluation already highlights the core benefit of \B to generate very customized native code when needed.
 Yet we have to emphasize that \NB is based on the \B infrastructure whereas the other solutions require both a \VM plugin whose sole purpose is to enable the \FFI functionality.
@@ -610,7 +649,7 @@ This optimization is especially an important optimization factor when calling ou
 \seclabel{benzo-wf-performance}
 % ---------------------------------------------------------------------------
 
-As the second mini performance evaluation of \B we present a simple use case of dynamically implementing a primitive with \WF.
+As the second performance evaluation of \B we present a simple use case of dynamically implementing a primitive with \WF.
 For comparing performance we implement a very simple integer operation primitive (\ttt{$>$}) using three different approaches.
 The first approach is the implementation with \WF.
 The second is to run the language-side implementation that is triggered whenever the standard primitive failed.
@@ -627,7 +666,10 @@ We present the results of this experiment in \tabref{benzo-waterfall-performance
 		\WF             &  22.80(17)          & \approx 3.6 \\
         Reflective	    & 195.00(16)          & \approx30.0
     \end{tabular}
-    \caption[Basic \B-based Dynamic Primitive Performance]{Comparing running time of different implementations of integer arithmetic primitive.}
+    \caption[Basic \B-based Dynamic Primitive Performance]{Comparing running time of different implementations of integer arithmetic primitive.
+    \sm{While it might not matter for the numbers, for a clear setup it would be advisable to not include the failing of the primitive in the measurement.
+    
+    From the text it is not clear whether you do or don't }}
     \tablabel{benzo-waterfall-performance}
 \end{table}
 %
@@ -640,55 +682,21 @@ This comes at a substantial cost and is the main overhead factor.
 \WF is a factor $3.6$ slower than the standard implementation.
 First we have to state that \WF uses a very simplistic compilation strategy with many optimizations opportunities left out.
 Second, the optimized \VM primitive is also reimplemented in the \JIT to avoid the overhead of switching execution context (see \secref{benzo-vm-interaction}).
+\sm{I don't get the second part}
 
 This results thus makes a whole new set of runtime extensions feasible that were previously limited by their strong performance penalty.
 Furthermore the performance penalty over a completely optimized \VM solution that has extreme optimization techniques, such as inlining and register allocation, is less than a factor of $4$.
 A more detailed analysis of \WF is available later in \secref{val-waterfall-performance}.
-
-% ---------------------------------------------------------------------------
-\subsection{\B-based \JIT compiler}
-\seclabel{benzo-nabujito-performance}
-% ---------------------------------------------------------------------------
-
-The performance evaluation for our \B-based \JIT compiler is focused on the language-side code-generation part a more detailed discussion is given in \secref{val-nabujito-performance}.
-
-\NBJ essentially generates the same native code as the \VM-level \JIT, hence there is no performance difference at evaluation time.
-However, \NBJ is clearly slower during the warm-up phase.
-Compilation of the native instructions will take considerably more time compared to the \VM-level implementation of the same bytecode to assembler transformation.
-The cost of transforming the bytecodes to native code at \VM-level can be measured in native instructions, whereas the unit at language-side is bytecodes.
-However, we point out again, that this is a one-time overhead.
-From the in-production experience of \NB, the \B-based \FFI (see \secref{benzo-nb-performance}), we know that these costs amortized, especially for long-term applications.
-Instead of focusing on the final performance of the generated code, we present the compilation time compared to the normal \PH bytecode compiler, which also resides at language-side.
-
-\begin{table}[!ht]
-    \centering
-    \begin{tabular}{rS}
-                      & {Compilation Time [ms]} \\\midrule
-        \PH Compiler  & 71(1) \\
-        \NBJ          & 73(1)
-    \end{tabular}
-    \caption[Basic \B-based \JIT Performance]{Compilation efforts of the standard \PH compiler in \PH and \NBJ for the a simple method returning the constant \ttt{nil}.}
-    \tablabel{benzo-nabujito-performance-small}
-\end{table}
-
-\noindent In \tabref{benzo-nabujito-performance-small} we compare the compilation speed of the standard \PH compiler and \NBJ.
-We measure the accumulated time spent to compile the method 1000 times.
-The average and deviation are taken over 100 runs. 
-The \PH compiler takes source code as input and outputs \PH bytecodes.
-\NBJ takes bytecodes as input and outputs native code.
-
-We see that in the simple case displayed in \tabref{benzo-nabujito-performance-small} \NBJ's compilation speed lies within the same range as the standard \PH compiler.
-We expect that in the future we apply more low-level optimizations and thus increase the compilation time of \NBJ.
-However, we have shown in the performance evaluation for \NB, the \B-based \FFI, in \secref{benzo-nb-performance} that even a rather high one-time overhead is quickly amortized.
-Furthermore with \PH's image approach the generated native code is persistent over several sessions.
-A subsequent restart of the same runtime will not cause the \JIT to compile the same methods it did during the last launch.
-Hence our approach is even valid for short-lived applications as most of the methods will already be available in optimized native code from a previous run.
+\sm{If you do detailed stuff later, I would drop this 'mini' stuff here. One evaluation is enough, this section/chapter can stand on its own and should make the ideas clear}
 
 
 % ===========================================================================
 \section{Related Work}
 \seclabel{benzo-related}
 % ===========================================================================
+\sm{This chapter needs work, I don't think the structure works integrated in your thesis.
+
+And, well, I find related work here at this place, a little strange}
 In the context of \B we have to respect a variety of related work spawning different abstraction levels.
 On a more abstract scale \B allows for a new way of extending the complete language runtime, hence we classify the related work according the following categories show in \figref{benzo-extensionComparison}: general language-side extensions, extensions using reflection, \VM-level extensions, and hybrid approaches.
 
@@ -699,6 +707,7 @@ In most cases the \VM is considered as a black box.
 Additionally the \VM is written in a completely different language using another abstraction level than the one it supports.
 Typically high-level language \VMs are written in C or C++.
 To address extensions in this context there exist some known approaches:
+\sm{All the introduction stuff should be done in the proper chapter, 2, I guess }
 
 \begin{description}[noitemsep]
 	\item[Language-side Library] based on implementing a new or existing library. 
@@ -780,6 +789,7 @@ Reflective capabilities are not enough for general extensions. Even when suitabl
 \subsection{\VM Extensions / Plugins}
 \seclabel{benzo-vm-extensions}
 %----------------------------------------------------------------------------
+\sm{Yes, I think all that needs to be folded into chapter 2}
 Another approach to extend add new features to a programming language is to extend the \VM.
 At this level we differentiate between two extension mechanisms: \VM plugins and modified \VMs itself.
 Plugins are direct bindings to external libraries described at \VM-side or libraries linked to the \VM executable \cite[Ch.\ 5]{Blac09a}. 
@@ -893,7 +903,7 @@ However, most existing solutions target only specific use cases and can not be r
 
 
 % ===========================================================================
-\section{Problems of Benzo}
+\section{Limitations of Benzo}
 \seclabel{benzo-problems}
 % ===========================================================================
 In this section we will point out the current limitations of the \B framework.
@@ -901,6 +911,9 @@ As we outlined in \secref{benzo-performance} \B is a promising alternative to bu
 Our prototype use cases, the dynamic primitives and the language-side \JIT compiler, even suggest that \B can replace certain \VM modifications.
 However, throughout the development of these tools we also noticed certain drawbacks and limitations of the current \B implementation.
 We will now discuss the following three main issues in more detail: robustness, debuggability and portability.
+\sm{Be specific: for example...
+
+You are making a claim here, you want that one to be verifiable and precise}
 
 % -----------------------------------------------------------------------------
 \subsection{Robustness}
@@ -930,8 +943,12 @@ thisContext instVarNamed: #closureOrNil put: 1.
 \end{stcode}
 %
 However, it is not very common to directly modify the current context in \PH and it requires rather deep knowledge of the system to break the stack explicitly.
+\sm{Really? You showed me in one line how to do it}
 
 In \B the standard developer will most probably be more familiar with \PH than with C or even Assembler, which will easily lead to the aforementioned errors.
+\sm{So, it is not the right tool for the job, because it is too low level?
+
+I would just leave out the 'standard developer', even experts make mistakes}
 Which means that we have to be prepared for these common errors.
 Currently the active operating system process will be killed when the misaligned stack eventually lead to an invalid memory access.
 From a \PH point of view this is unacceptable behavior.
@@ -942,6 +959,7 @@ As a first step we should provided a debug mode for \B where the low-level error
 The most simple way to achieve this is by forking the whole \VM process at the moment the native \B code is activated.
 However, the current implementation of the \PH \VM does not support clean forking, even so close implementations such as \Squeak supports forking with a specific \urlfootnote{\VM plugin}{http://wiki.squeak.org/squeak/708/}.
 Implementing a debugging version of the \B plugin to activate native code in a forked process would solve this issue, though at the cost of an additional primitive.
+\sm{Why can't you do it in benzo?}
 
 Addressing faulty stack management requires more effort.
 One possibility is to use an existing \ASM simulation framework and run the code in there and check for unbalanced stack operations.
@@ -953,12 +971,14 @@ This difficulty leads us the second issue with \B.
 % -----------------------------------------------------------------------------
 The second main limitation of \B is the lack of a dedicated debugger.
 \PH inherits the long standing tradition of \ST to provide an excellent debug interaction for programmers.
+\sm{What is with the bochs plugin? That should provide you with everything you need to make debugging native code }
 The \PH debugger shows the stack, the current receiver along with the temporary variables and argument.
 However when working with \B this important tool is no longer available.
 Currently the only way to debug \B code is to launch the \VM upfront in a C debugger such as \GDB or \LLDB.
 However, the debug interaction is rather limited compared to \PH.
 Not only does the programmer have to resort to an external tool, but there are only a handful mostly proprietary standalone debuggers available.
 For a better low-level debugging experience we have to rely on a complete \textsc{ide} such as \textsc{Eclipse} or \textsc{Xcode}, a rather cumbersome overhead to standard \PH programming.
+\sm{Cut all the Pharo related assessment, just discuss that you want to debug on the same high level you are programming in and give examples of functionality you desire. Pharo is not essential here}
 
 Besides using these external tools there is no simple alternative.
 The only way to provide a seamless debugger is to either build on the fork solution presented in the previous \secref{benzo-problems-robustness} or a separate simulator.
@@ -968,6 +988,9 @@ It would be possible to write bindings to this library with an \FFI from within 
 Even so this would be a great step forward compared to the current infrastructure it implies that the programmer anticipates debugging.
 Something that is very uncommon in \PH as the debugger is tightly integrated into the standard development environment.
 A potential solution to this problem would be to install low-level signal handlers which try to backtrack from signals triggered by memory access violations such as \ttt{SIGBUS} and \ttt{SIGSEGV} under Linux.
+\sm{Pfff, again, your writing style makes that look like an undesirable afterthought, no, use the OS to do the right thing. That's exactly what you want to do.
+
+And present it like that: here, a sketch for a possible solution. Complete debugging support is outside the scope for this thesis, but if you want, that's how you could continue our work...}
 
 \begin{figure}[h]
 	\centering
@@ -988,6 +1011,7 @@ The following list explains the detailed steps of \figref{benzo-debugger}.
 However, since there is no real protection in the native code, there is no guarantee that the main \PH \VM can continue working.
 Faulty native code might have corrupted the main \PH stack or heap beyond repair.
 Nevertheless, this scheme could bring approximate a \PH like user experience for native \B code.
+\sm{Instead of Pharo -> high level (again, this is one of your thesis goals, your thesis goal is not improving Pharo, but to contribute to the global set of knowledge)}
 
 
 % -----------------------------------------------------------------------------
@@ -1000,7 +1024,7 @@ This third issue on the other hand is related to the system integration: platfor
 The \textsc{Intel x86} instruction set is widely distributed and supported by a variety of operating systems and thus the primary choice as native backend for \B.
 Since the generated code is independent of C functions it works on all platforms with x86 support.
 However, other architectures such as \ARM start to be more widespread and inevitable \B has to be ported on other platforms.
-A prominent example are \textsc{Apple}'s tablets and mobile phones running iOS.
+%A prominent example are \textsc{Apple}'s tablets and mobile phones running iOS.
 In contrast to \PH itself, \B does not work on \ARM platform since all the low-level code is written in terms of x86 instructions.
 While there is no way around a \ARM version of the underlying assembler, we think that porting all existing \B routines is too costly.
 Instead we suggest to use an intermediate format that is platform independent more high-level than direct assembler instructions.
@@ -1012,6 +1036,9 @@ We call this intermediate format \VCPU and it has the following properties:
 \end{itemize}
 %
 Along with the ongoing work for this thesis we already started implementing \VCPU as a fork of the original compiler infrastructure of the \P \VM.
+\sm{What is this? Why is that discussed here, and not integrated with the whole benzo story? If you got the design, and a more or less working solution sell it as key aspect!
+
+That is eh solution you envision, in the limitations section you can then clarify that virtualcpu is buggy, or only partially implemented, so that you bypass it for many things...(well, if virtualcpu has sufficient maturity, but i }
 
 \paragraph{\VCPU}
 \seclabel{benzo-problems-vcpu}
