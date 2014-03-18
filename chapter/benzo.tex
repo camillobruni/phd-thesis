@@ -7,11 +7,17 @@
 \introduction
 % ===========================================================================
 
+\sm{For me, this is not an artefact show, it is a thesis, so, I would expect to read something relating the artifact to the problem statement, and using precise terminology as devised in sec. 2}
+
 In this chapter we present \B a framework that connects the low-level \VM world with a reflective and dynamic language-side library.
 Unlike more classical approaches \B does not resort to vast set of customized \VM primitives or plugins.
+\sm{Do you really want to talk about  1 generic vs. many specific things that are exposed to facilitate low level programming? I would think the point you are trying to make here conflates again multiple aspects. Take the things apart, and make one argument at a time
+
+I see at least the question of the VM interface here, and then the question how low level functionality is provided, that's two very different things}
 Instead it relies on a generic primitive to activated native code that is generated at language-side.
 
 \B provides a unique experience of being extremely low-level yet using high-level concepts at the same time.
+\sm{Bla Bla, you are not saying anything here}
 This is possible since the framework is implemented at language-side and tightly integrated into the \PH development environment.
 In this chapter we present in detail how \B interacts with \PH and what the difficulties are.
 The key components of \B are:
@@ -20,6 +26,7 @@ The key components of \B are:
 	\item \AsmJIT A language-side assembler
 	\item A language-side library for installing and activating native code
 \end{itemize}
+\sm{Don't Bla Bla, be specific from the start, perhaps in more general terms, but not just with empty phrases: native code activation, native code generation, all on the language level}
 
 \noindent Based on \B we outline 3 unique applications in \secref{benzo-usecase}:
 \begin{itemize}[noitemsep]
@@ -40,10 +47,12 @@ Frampton et al. present a framework that is biased towards a statically typed hi
 Their approach promotes to address low-level system programming tasks with the tools and abstractions of high-level languages.
 However, their solution has reduced applicability in a dynamic and reflective context.
 By reflective, we refer to the combined capabilities to inspect (introspection) and change (intercession) the same execution concepts at runtime \cite{Maes87a}.
+\sm{No place for definitions, back ref to sec 2. At most.}
 
 From a reflective point of view it seems natural to dynamically modify the \VM at runtime and not just at compile-time.
 If we are able to modify the \VM from language-side we blur the line between these two distinct worlds, becoming indistinguishable to talk about the \VM or the language-side.
 Hence throughout this chapter we use the term language runtime to refer to the running \VM combined with the language-side application.
+\sm{Be very careful with your language, and the aspect that is novel to your approach, you don't want to imply false}
 
 
 % ---------------------------------------------------------------------------
@@ -58,6 +67,7 @@ A solution that crosses these barriers requires the following properties:
 \begin{enumerate}
 	\item It must be \emph{reflective} in the sense it must support \emph{dynamic} changes of the language runtime (\VM) without requiring a system restart.
 	\item It should imply minimal changes to the existing low-level runtime to \emph{considerably reduce development efforts}.
+	\sm{Should only be a recap of previously stated thesis goals}
 \end{enumerate}
 
 
@@ -67,6 +77,7 @@ A solution that crosses these barriers requires the following properties:
 
 High-level low-level programming is a powerful technique for system programming without resorting to static low-level environments \cite{Fram09a,Wimm13a} that almost fulfills our requirements.
 However, in a reflective setup it fails to comply with the first requirement mentioned in the previous paragraph: it does not allow reflective changes at runtime.
+\sm{See limitations should be made very clear and referencable in chapter 2, and here you should reference them again.}
 Our approach for overcoming this limitation consists of \B, a lightweight and reflective framework that dynamically generates native code from language-side and allows its execution on the fly.
 It relies only on a small set of generic \VM extensions described in \secref{benzo-vm-requirements}, whereas the vast majority of the framework is implemented as a language-side library.
 
@@ -75,6 +86,7 @@ It relies only on a small set of generic \VM extensions described in \secref{ben
 % ---------------------------------------------------------------------------
 In \secref{benzo-usecase} we advocate the contribution of \B by providing three different incremental examples that heavily use the framework.
 Unlike typical implementations that would focus on writing them as \VM extensions, we implement them completely at language-side using \B:
+\sm{I think, here your structure of the thesis breaks down. After intro and related work, I would do a requirements chapter (perhaps part of 2), and then, this chapter here would be a conceptual analysis of the problem, and the proposal of the solution. (What's the minimal solution to make a VM self-aware? Explain the problems, reason about designs, and justify the choice of a 'one primitive to activates native code' solution (I guess, plus high level representation of concepts in terms of language side frameworks) then, afterwards, you can split out the discussion of benzo as your specific experiment, and all the validation is nicely separated in their respective }
 
 \begin{description}
 	\item[Language-side \FFI] A complete language-side Foreign Function Interface (\FFI) implementation, described in \secref{benzo-ffi} and in more detail in \chapref{ffi}.
@@ -93,7 +105,7 @@ Unlike typical implementations that would focus on writing them as \VM extension
 \section{The \B Framework}
 \seclabel{benzo-benzo}
 % ===========================================================================
-\B is implemented in \urlfootnote{\PH}{http://pharo.org/}, a \ST inspired language.
+\B is implemented in \urlfootnote{\PH}{http://pharo.org/}\sm{You introduced Pharo before as your platform, no?}, a \ST inspired language.
 \PH comes with all the reflective capabilities known from \ST where most lan\-guage-side components can be altered dynamically.
 \B is implemented at lan\-guage-side and only requires the help of two simple and generic primitives to activate native code and resolve the entry point address position of referenced C functions.
 
@@ -101,6 +113,7 @@ Unlike typical implementations that would focus on writing them as \VM extension
 \subsection{\VM Context}
 \seclabel{benzo-vm-requirements}
 %----------------------------------------------------------------------------
+\sm{Him, I would have put all that into a separated thing, all the technical details, assumptions, and considerations }
 \PH emerged from the Squeak project \cite{Inga97a}.
 The \PH \VM (Cog) implementation \cite{Mira11a} also evolved from the original Squeak bytecode interpreter.
 The current \VM uses a moving Garbage Collector (\GC) with two generations \sm{ref?} and uses a \JIT that applies basic register allocation to reduce stack load. 
@@ -108,6 +121,7 @@ This situation is not a direct requirement for \B but it is assumed as given and
 However, \B requires certain features that were not supported in the existing \VM implementation.
 Mainly our requirement is being able to generate executable code and activate it at runtime.
 This is general and essential so it applies to any \VM that wants to support dynamic code execution managed at language-side.
+\sm{This is not novel, I would guess, the overall story, perhaps with minimalism as a property should probably be the selling point, so, make clear that this is existing stuff, and not part of he contribution you claim}
 
 %----------------------------------------------------------------------------
 \paragraph{Executable Memory}
@@ -116,10 +130,14 @@ This is general and essential so it applies to any \VM that wants to support dyn
 We chose to follow a very lightweight approach to dynamically execute native code at runtime. 
 Since we use \PH as our host language it is a natural choice to manage the native code at language-side and use as little VM features as possible.
 Hence we use normal \PH objects to hold the generated native code.
+\sm{This is your thesis goal, no? Motivate it like that, don't just put it here as incidental!}
 
 However, by default the object memory is not executable.
 This leaves two choices, either mark the whole object memory executable or move the objects with the native code to a special executable memory region.
-We took the path of least resistance and marked the whole object memory as executable.
+We took the \ugh{path of least resistance} and marked the whole object memory as executable.
+\sm{This argumentation is problematic, need to have a better argument, relate decision to thesis goals and scope, security is no concern, or something like that.
+
+Might also be better discussed in alter discussion and limitation section instead, here it's mostly distracting}
 The other solution requires substantial changes for memory management. 
 
 The \GC of the \PH \VM uses a moving semi-space approach with two generations.
@@ -129,15 +147,18 @@ This also means that the \JIT space does not hold normal \PH objects but special
 As mentioned before, the \JIT space is limited in size and eventually fills up, causing the \JIT to spill older code structures from there. 
 
 All in all the \JIT-space does not seem to be the right place for storing persistent \PH objects holding native code.
+\sm{Really? This ain't a blog post...}
 Instead we opt for the completely executable object memory option and store all the executable code in standard \PH objects.
 As the \VM has a moving \GC, it gives us certain restrictions on what kind of native code we can run directly from the language-side. 
 As we will describe in \secref{benzo-platform-interaction}, we can access high-level \PH objects only via an indirection from low-level code.
+\sm{Come on, be a little creative, this is the obvious design decision derived from your vision and thesis goals, no discussion, just stating it here, discussion goes into the discussion section}
 
 %----------------------------------------------------------------------------
 \paragraph{\VM Interaction}
 \seclabel{benzo-vm-interaction}
 
 The standard way in \PH to execute low-level code is to use a tag in the method definition. The following example shows such a method on the \ttt{Float} class.
+\sm{Avoid implicit and indirect statements, it is not 'a' method, it is the multiplication method}
 %
 \begin{stcode}[label={lst:benzo-basic-primitive}]{5}
 * aNumber 
@@ -178,6 +199,7 @@ A marker at the end of the compiled method called trailer type is used to flag m
 \noindent Since compiled methods are first-class objects it is possible to modify them at runtime and append the native code.
 The primitive \ttt{primitiveNativeCall}, which is implemented by \B, is the responsible of running the native instructions in a \PH method.
 The code example \ttt{interrupt3} shows a very basic application of our infrastructure.
+\sm{Interrupt 3, really? That's the best name? You could also tell me that it is the standard interrupt for debuggers}
 %
 \begin{stcode}[label={lst:benzo-basic-native-code}, caption={\PH method using \B for very basic low-level debugging.}, escapeinside={@}{@}]{5}
 interrupt3
@@ -189,7 +211,7 @@ interrupt3
 The primitive named \ttt{primitiveNativeCall} on the first line tries to run the native instructions appended to the compiled method.
 When there is no native code yet the primitive fails and on return it evaluate the rest of the \PH code in the method.
 In \secref{benzo-language-side}, through more detailed examples, we describe how \B uses \PH code to generate the native instructions
-Figure \figref{nativeCodeMethodDetail} shows the resulting compiled method in full detail..
+Figure \figref{nativeCodeMethodDetail} shows the resulting compiled method in full detail.
 %
 \begin{figure}[ht]
     \centering
@@ -204,9 +226,10 @@ Figure \figref{nativeCodeMethodDetail} shows the resulting compiled method in fu
 
 To ensure that the code is compatible with the current platform a \VM specific marker is expected at the beginning of the native code on the compiled method.
 Upon activation \B compares this marker with the one from the current \VM.
-If they don't match, \B signals a failure that causes the \VM to evaluate the fallback \PH code.
+If they do not match, \B signals a failure that causes the \VM to evaluate the fallback \PH code.
 With this elegant approach \B regenerates native code lazily on new platforms.
 Moreover, it does not have to flush the native code when the application is restarted on the same platform.
+\sm{Reexecute vs. restart}
 
 %----------------------------------------------------------------------------
 \paragraph{Garbage Collector Interaction}
@@ -214,6 +237,7 @@ Moreover, it does not have to flush the native code when the application is rest
 \seclabel{benzo-external-roots}
 
 Compiled methods in \PH have a special section, the literal frame, which stores objects referenced in the bytecodes.
+\sm{Did you introduce compiled methods as representing smalltalk methods? Because you use it in a way that's only unambiguous if you are a smalltalker}
 Bytecodes then only have indirect access to these objects by indexing into the literal frame.
 This simplifies the implementation of the garbage collector as it only has to scan the beginning of each method for possible references to objects. 
 So the \GC only tracks \PH objects when they are in the method literal frame. 
@@ -226,7 +250,7 @@ However, we chose to minimize the number of low-level \VM modification necessary
 	\centering
 	\includegraphics[scale=\imagescale]{externalRoots}
 	\caption[Benzo External Roots]{Pointers to objects registered as external roots are pinpointed at fixed offset in global \VM-level object.
-	}
+	\sm{You can argue differently here, GC depends on VM, (you are doing stuff that is supposed to be applicable in wider context) so, you are looking for a more general solution, one that doesn't put constraints on the type of GC... Voila, your laziness becomes something positive)}}
 	\figlabel{benzo-externalRoots}
 \end{figure}
 
@@ -238,12 +262,13 @@ Hence we have the static address of the external roots object as an entry point 
 Summarizing, for accessing \PH objects within native code we first register it as an external root object and access it only indirectly.
 This means that for native code, instead of a method-local literal array we share a global literal array as shown in \figref{benzo-externalRoots}. 
 \B only adds an \ttt{Array} to the external root objects which is managed from language-side and administers all references.
+\sm{Close to classic object table}
 
 %----------------------------------------------------------------------------
 \paragraph{\JIT Interaction}
 \seclabel{benzo-jit-interaction}
 
-A special case worth being mentioned is the interaction of \B and the JIT.
+The interaction of \B and the JIT.
 When the \PH \VM starts the execution of dynamic generated code the execution environment changes slightly.
 Similarly, when entering primitives or plugin code, the managed execution mode is left and a normal C-level execution environment is reestablished until the primitive finishes and the \VM jumps back to the jitted code.
 These context switches impose an overhead and can be avoided in the case of calling native code.
