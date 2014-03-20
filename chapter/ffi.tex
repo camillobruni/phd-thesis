@@ -24,7 +24,7 @@ We propose \NB a language-side approach to \FFIs that only requires minimal chan
 \section{Background}
 \seclabel{ffi-background}
 % ===========================================================================
-
+\sm{Background should go into chapter 2}
 Currently, more and more code is produced and available through reusable libraries such as \urlfootnote{OpenGL}{http://www.opengl.org/} or \urlfootnote{Cairo}{http://cairographics.org/}.
 While working on your own projects using dynamic languages, it is crucial to be able to use such existing libraries with little effort.
 Multiple solutions exist to achieve access to an external library from dynamic languages that are executed on the top of a virtual machine (\VM) such as \urlfootnote{\PH}{http://pharo.org/}, \urlfootnote{\Lua}{http://lua.org/} or \urlfootnote{\Python}{http://python.org/}.
@@ -72,6 +72,7 @@ The main contributions of \NBFFI are:
 \begin{description}
 	\item[Extensibility.] \NBFFI relies on as few \VM primitives as possible (5 primitives), essentially to call native code. 
 	Therefore, most of the implementation resides at language-side, even low-level mechanisms.
+	\sm{Why does it need more than benzo, why is it not presented as building on benzo, why is it presented again at all?}
 	That makes \NBFFI easily extensible because its implementation can be changed at any time, without needing to update the runtime (\VM).
 	It also presents a noticeable philosophical shift, how we want to extend our language in future.
 	A traditional approach is to implement most low-level features at \VM-side and provide interfaces to the language-side.
@@ -89,6 +90,7 @@ The main contributions of \NBFFI are:
 \seclabel{ffi-nutshell}
 % ===========================================================================
 
+\sm{I think you should postpone the whole nativeboost stuff until here, and then do it properly}
 This section gives an overview of the code that should be written at language-side
 to enable interactions with external libraries.
 
@@ -285,6 +287,13 @@ primCreate: cairoSurface
                   AthensCairoSurface cairoSurface))
 \end{stcode}
 
+\sm{I am not reading this, you didn't tell me why I should care about all those details
+
+Ok, you implemented that stuff, cool, but he concrete nativeboost design seems to be only vaguely related to your thesis goal.
+
+This is something you'll need to discuss with your thesis promotor, but, for me, this does not belong into this text
+
+You can leave it in, but I would suggest to make clear with headings and section naming that I can safely skip all of it, without missing any essential thesis related discussions }
 
 \paragraph{Accessing structure fields}
 In \NB, one can directly access the fields of a structure if needed, even if it is not a good practice from the data encapsulation point of view.
@@ -491,6 +500,7 @@ In \NBFFI, doing most of the \FFI call processing at language-side makes easier 
 \seclabel{ffi-performance}
 % ===========================================================================
 
+\sm{I don't like the split into multiple benchmark sections... All evaluation belongs into this chapter}
 In this section we compare \NB with other \FFI implementations.
 \begin{description}
 	\item[\Alien \FFI:] An \FFI implementation for \Squeak/\PH that focuses on the lan\-guage-side. All marshalling happens transparently at language-side.
@@ -512,6 +522,8 @@ Hence much care has been taken to closely integrate \Lua into C and C++ environm
 \paragraph{Evaluation Procedure}
 To compare the different \FFI approaches we measure 100 times the accumulative time spent to perform $1'000'000$ callouts of the given function.
 From the 100 probes we show the average and the standard deviation for a $68\%$ confidence interval in a gaussian distribution.
+\sm{First, how do you know the results are normally distributed?
+Second, 68\% really, why? That will raise a lot of red flags!!!!!}
 To exclude the calling and loop overhead we subtract from each evaluation the time spent in the same setup, but without the \FFI call.
 The final deviation displayed is the arithmetic average of the measured deviation of the base and the callout measurement.
 
@@ -519,6 +531,7 @@ The three \FFI solutions that work in \PH (\NB, \Alien, C-\FFI) are evaluated on
 For the \Lua benchmarks we use \LuaJIT 2.0.1.
 The benchmarks are performed under the constant conditions on a MacBook Pro.
 Even though a standalone machine could improve the performance we are only interested in the relative performance of each implementation.
+\sm{What about the noise you get from measuring on a end user used machine? I would worry more about that than anything else}
 
 
 \paragraph{Choice of Callouts}
@@ -533,6 +546,7 @@ Later we measure more complex C functions that return complex types and thus str
 The first set of \FFI callouts show mainly the overhead of the \FFI infrastructure to perform the callout.
 
 For the first \FFI evaluation we measure the execution time for a \ttt{clock()} callout.
+\sm{Clock? Really? Are you sure that one doesn't do any kind of kernel calls, introduces scheduling points or what ever the OS is feeling like?}
 The C function takes no argument and returns an integer thus guaranteeing a minimal overhead for marshalling and performing the callout.
 %
 \begin{table}[H]
@@ -549,6 +563,9 @@ The C function takes no argument and returns an integer thus guaranteeing a mini
 \end{table}
 %
 \noindent \ttt{abs} is a about the same complexity as the \ttt{clock} function, however accepting a single integer as argument.
+\sm{Same complexity, really? Most of the time it is not even a function, and it certainly does not involve a system call.
+
+Look at the numbers, it doesn't look like being the same to me...}
 %
 \begin{table}[h!]
     \centering
@@ -579,6 +596,7 @@ Yet \LuaJIT outperform \NB by an impressive factor 30.
 
 The third example calls \ttt{getenv('PWD')} expecting a string as result:  the path of the current working directory.
 Both argument and result have to be converted from high-level strings to C-level zero-terminated strings.
+\sm{I find those choices all questionable, why don't you call stuff under your control? A little C library, compiled with no, or predictable optimization, of which you actually know the execution cost?}
 %
 \begin{table}[h!]
     \centering
@@ -587,7 +605,7 @@ Both argument and result have to be converted from high-level strings to C-level
         \NB         &  105.29(24)      &          1.0 \\
         \Alien      & 1058.7 (20)      & \approx 10.1 \\
         C-\FFI      &  282.94(24)      & \approx  2.7 \\
-        \LuaJIT\tablefootnote{Downsampled from increased loop size by a factor $10$ to guarantee accuracy.}
+        \LuaJIT\tablefootnote{Downsampled from increased loop size by a factor $10$ to guarantee accuracy.\sm{You assume that runtime increases linear, is that reasonable? What about nondeternemism in memory management, etc?}}
                     & 97.3(51)         & \approx 0.9
     \end{tabular}
     \caption[\ttt{getenv} \FFI Callout Speed]{Speed comparison of an \ttt{char * getenv(char *name)} \FFI call (see Code \lstref{ffi-getenv}).}
@@ -680,7 +698,7 @@ We do not argue here that callbacks should be implemented in native code but tha
 \section{Implementation Details}
 \seclabel{ffi-internals}
 % ===========================================================================
-
+\sm{Why does that come here, after evaluation?}
 The following subsections will first focus on the high-level, language-side aspects of \NB, such as native code generation and marshalling.
 As a second part we describe the low-level interaction of \NB with \B.
 
@@ -829,6 +847,7 @@ In best case we could provide a \GDB-like debugging experience with source code 
 \subsection{Platform Independence}
 \seclabel{ffi-problems-platform}
 % ---------------------------------------------------------------------------
+\sm{What does that have to do with your thesis?}
 The second problem we would like to address is platform independence.
 This is certainly a crucial issue for any framework that deals with native code and as such a main concern of \B (see \secref{benzo-problems-platform-independence}).
 However, the instruction-level architecture support is of secondary importance for \NB as it interacts mostly on operating system level.

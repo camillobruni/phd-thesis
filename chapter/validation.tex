@@ -12,6 +12,9 @@ In \chapref{ffi} we presented \NB, a mature language-side \FFI implementation th
 \NB is only one of three applications that are based on \B that were initially outlined in \secref{benzo-usecase}.
 While \NB is considered stable, the two other applications are currently only prototypes: dynamic primitives and a language-side \JIT.
 Hence we will present the two solutions combined in this chapter.
+\sm{I would sell and phrase that differently. The prototype is the standard thing, you aren't getting any less points just because it is a prototype. Instead, you might have points in your favour for the fact that nativeboost is stable enough for use in production.
+
+So, instead of presenting the other ones as 'less worthy' present NB as more awesome...}
 
 As first we will present \WF, dynamic primitives based on \B.
 \WF takes advantage of the metacircular approach of \PH's \VM and makes the primitive definition available at runtime.
@@ -25,6 +28,8 @@ The second prototype, \NB a language-side \JIT compiler takes the core idea of \
 However, this is what happens in jitted methods: it is possible to switch seamlessly between native methods and standard \PH methods using bytecode evaluation.
 Much like the primitives, the \JIT can not be changed from language-side and this is where we bring \NBJ into play.
 \NBJ reimplements the \VM-level \JIT compiler at language-side and uses \B to install the native code.
+\sm{To tears, don't follow, to many points discussed.
+High level intuition and distinction between approaches, (and remind me that I read something about it before...)}
 
 
 % ===========================================================================
@@ -88,6 +93,7 @@ This abstract representation is then used to generate C sources, already lowerin
 After compiling the C sources the original representation of the \VM is not directly accessible anymore.
 For instance, even debug symbols are usually stripped from the final binary for performance reasons.
 Of course this implies that the \VM can not be changed nor directly inspected from language-side.
+\sm{Much of that as discussed before... At least link back}
 
 
 \paragraph{Primitives in \PH}
@@ -386,18 +392,18 @@ Unlike for the simpler "greater than" primitive \WF is slower: factor $25$ inste
 This shows that there is certainly room for performance improvements for \WF.
 
 % -----------------------------------------------------------------------------
-\subsubsection*{Validation of Dynamic Plugins}
-\seclabel{val-waterfall-plugins}
+%\subsubsection*{Validation of Dynamic Plugins}
+%\seclabel{val-waterfall-plugins}
 
-In this second part of the \WF performance evaluation we focus on whole plugins.
-Even so we already mentioned that from a language-side point of view there is no difference in plugins and primitives there typically is a significant difference in code size.
-While primitives tend to be small and do simple tasks very efficiently (like arithmetic operations) plugins follow a different approach where larger more complex tasks are solved externally.
+%In this second part of the \WF performance evaluation we focus on whole plugins.
+%Even so we already mentioned that from a language-side point of view there is no difference in plugins and primitives there typically is a significant difference in code size.
+%While primitives tend to be small and do simple tasks very efficiently (like arithmetic operations) plugins follow a different approach where larger more complex tasks are solved externally.
  
-\paragraph{\WF Compiled File Plugin}
-\todo{performance overview}
-\paragraph{\WF Compiled ??? Plugin}
-\todo{Write about the File Plugin Validation}\\
-\todo{Possibly Validate other plugin}
+%\paragraph{\WF Compiled File Plugin}
+%\todo{performance overview}
+%\paragraph{\WF Compiled ??? Plugin}
+%\todo{Write about the File Plugin Validation}\\
+%\todo{Possibly Validate other plugin}
 
 
 % -----------------------------------------------------------------------------
@@ -406,6 +412,8 @@ While primitives tend to be small and do simple tasks very efficiently (like ari
 % -----------------------------------------------------------------------------
 
 \WF is still a research prototype and thus there are several issues that problems that require attention with the most obvious one being performance.
+\sm{Of course it is a prototype, that's not a problem
+And it is not problems, but limitations}
 We have shown that \WF is fast enough to compete against dynamic primitive instrumentation written at language-side, but when compared to native solutions we are still up to two magnitudes slower.
 For simplicity \WF currently does not apply any optimizations which still leaves room for improvements.
 For instance we do not apply register allocation yet.
@@ -422,6 +430,9 @@ Even though \WF would add a lot of flexibility for such plugins, we believe that
 Nevertheless, this still leaves the big field of instrumentation open for \WF.
 Additionally, for documentation purposes it makes sense to load the \Slang definition of all the essential primitives into the \PH image.
 In this case \WF would be a perfect way to bring these primitives to live for exploration purposes.
+\sm{This is not clear, because the distinction is not clear to me here: back reference? Where did you make it clear?
+
+Also, the paragraph is again reversed to what I would expect, start also with something positive.}
 
 \todo{better \JIT interaction (leading to the following \NBJ section)}
 
