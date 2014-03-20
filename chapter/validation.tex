@@ -479,6 +479,13 @@ The original \ST-80 blue book implementation foresees a spa\-ghet\-ti-stack wher
 This design simplifies the \VM implementation significantly since there is no special treatment necessary for blocks.
 Also this makes it rather easy to implement \PH's feature to access the current context using the special \ttt{thisContext} variable.
 However, the obvious down side of this implementation is the massive stress on the \GC.
+\sm{GC is not the problem, because contexts are recycled 
+
+Without the JIT using the C stack gives. 30\% or so, if I remember correctly. There is some GC benefit in it, but I guess mostly locality and more efficient encoding. 
+
+For the JIT it is much better because you can encode the stack much more in line with normal native code.
+
+I think... Should be checked, but it is not just the GC}
 For each message send a new context has to be allocated and on each return contexts have to be reclaimed.
 It would naturally be more efficient to use the native stack which allows for cheap allocation and precise reclaiming of method context.
 While this mapping can be done rather easily there are three properties of \PH that make this hard: blocks, non-local returns and the mentioned \ttt{thisContext}.
@@ -531,10 +538,11 @@ The limit the stress on the \CPU cache only the most used methods are jitted.
 \Cog uses a hierarchy of inline caches to avoid the costly method lookup and checks if a method is already jitted or not.
 Message sends from one jitted method to another hence happen with a very low overhead.
 However, due to the limited size of the \JIT space that still means that infrequently used methods are evaluated using the existing bytecode interpreter.
+\sm{Why is all of this important? Where are you going? Tell me!}
 \cb{the previous paragraph might be a bit dense, depending on the knowledge of the reader}
 Since \Cog uses stack mapping this means that the C-based bytecode interpreter runs on the same native stack with two slightly different strategies.
 For instance, typically the C stack depth is limited to a predefined constant, whereas the \PH stack can grow as big as the whole heap.
-Which means that recursion in a \PH program is not a direct threat.
+Which means that recursion in a \PH program is not a \ugh{direct threat}.
 In the bytecode interpreter the language-side recursion is not directly present, since the interpreter only fetches and evaluates bytecodes in a loop.
 Thus, switching from \JIT-mode to bytecode interpretation requires some additional work to avoid negative side-effects.
 Essentially, \Cog separates the native stack for the \JIT and the bytecode interpreter.
@@ -557,6 +565,7 @@ With \NBJ we move the \JIT compiler,the part that generates native code at runti
 	\item Accessing language-side properties from the \VM-side is hard.
 	\item Changing the \JIT compiler requires changes at \VM-level.
 	\item The \JIT reimplements primitives for optimization reasons resulting in code duplication.
+	\sm{That's the problems you are setting out to solve}
 \end{itemize}
 
 \paragraph{Optimization Limitations for \PH}
@@ -565,6 +574,7 @@ This implies that several common optimization techniques for static languages do
 Dynamic method activation does not provide enough context for a static compiler to optimize methods.
 Hence after inline caches and register allocation the next optimization technique is inlining.
 However, inlining in a dynamic context is difficult and requires hooks at \VM-level to invalidate native code when the language-side changes.
+\sm{Or when the inlined method is polymorphic you are starting to hit another code path....}
 Since in \PH, compiling a method to bytecode is handled completely with language-side code most of the infrastructure to get notified about method changes is already present.
 
 \paragraph{Primitives in the Existing \JIT}
@@ -643,6 +653,7 @@ mov  EBX, 0x1f500004<nil>
 push EBX
 push EBX
 \end{numstcode} 
+\sm{How about commenting the code?}
 %
 After finishing executing these setup instructions the stack frame looks as depicted in \figref{val-nabujito-cog-stack-frame}.
 %
@@ -789,6 +800,7 @@ Hence our approach is even valid for short-timed script-like applications as mos
 \subsection{Related Work}
 \seclabel{val-nabujito-related-work}
 % -----------------------------------------------------------------------------
+\sm{Really????? That's all work that is related?}
 There is a vast amount of scientific literature when it comes to \JIT optimizers.
 However, they focus on the optimization opportunities itself such as different compilation strategies or an efficient \GC interaction.
 In the context of our work the compiler-based optimization are of second importance since we focus on the hybrid nature of a system that interacts with the low-level \VM world.
