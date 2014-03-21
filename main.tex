@@ -61,6 +61,13 @@ Both of them require a tight interaction with the underlying \VM
 % =============================================================================
 \cleardoublepage
 \chapter*{Résumé}
+Les langages de haut-niveau supportent des operations réflectives qui permettent à l’ environment d’exécution d’un langage d’inspecter et de changer son propre état et sa propre exécution. Ces langages de haut-niveau s’exécutent normalement sur une machine virtuelle (MVs) qui ajoute une couche d’abstraction au-dessus du matériel. À cause de cette séparation, peu d’opération réflectives sont disponibles pour inspecter et modifier la MV. Plusieurs MVs expérimentales offrent de telles opérations réflectives en proposant un modèle unifié qui ne distingue pas la couche MV de la couche langage. 
+
+Dans cette thèse, nous suivons une approche similaire qui propose un environment d’exécution unifié et auto-décrit. Nous nous intéressons à une solution minimale. Au lieu de dépendre de modifications d’une MV, nous générons dynamiquement du code natif depuis la couche langage. 
+
+Nous présentons Benzo, un framework pour la génération dynamique de code natif. Benzo fournit une interface générique et de bas-niveau pour accéder aux fonctionnalités fondamentales de la MV.
+
+Grâce à Benzo, nous analysons plusieurs applications qui nécessitent un accès direct à la MV. Nous montrons comment Benzo peut être utilisé pour implémenter une librairie de Foreign Function Interfaces, permettant de faciliter l’accès aux fonctionnalités bas-niveau de la MV. Pour évaluer les limitations de Benzo, nous visons deux autres applications: la génération dynamique de primitive et un compilateur JIT (Just-In-Time). Ces deux applications doivent changer le comportement de la MV. Pour cela, elles ont besoin d’une interaction poussée avec la MV.
 
 \paragraph{Mot clés:}
  
