@@ -40,15 +40,22 @@
 \chapter*{Abstract}
 
 Virtual Machines (VMs) have been built to create an abstraction layer over hardware.
-VMs for high-level languages provide automatic garbage collection and use abstract execution formats such as bytecodes for platform independence.
+VMs for high-level languages for instance provide automatic garbage collection and use abstract execution formats such as bytecodes for platform independence.
+%These features separate and decouple the VM from the underlying hardware.
+At the same time high-level languages implement reflection which allows a language runtime to inspect and alter its own execution and state.
+Due to the isolating nature of the VM, reflection is generally limited to the language-side.
+Several research VMs overcome this isolation and provide a unified model where there is no more a clear distinction between language-side and VM-side.
+In such a language runtime it is possible to reflectively modify VM components from language-side as they reside on the same abstraction layer.
 
-\subsubsection*{Keywords:} Virtual machine, high-level low-level programming, high-level language, dynamic native code generation.
+
+
+\paragraph{Keywords:} Virtual machine, high-level low-level programming, high-level language, dynamic native code generation.
 
 % =============================================================================
 \cleardoublepage
 \chapter*{Résumé}
 
-\subsubsection*{Mot clés:}
+\paragraph{Mot clés:}
  
 % =============================================================================
 \renewcommand{\baselinestretch}{1}\normalsize
