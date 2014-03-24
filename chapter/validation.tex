@@ -791,40 +791,6 @@ Furthermore with \ST's image approach the generated native code is persistent ov
 A subsequent restart of the same runtime will not cause the \JIT to nativize the same methods it did during the last launch.
 Hence our approach is even valid for short-timed script-like applications as most of the methods will already be available in optimized native code from a previous run.
 
-% -----------------------------------------------------------------------------
-\subsubsection*{Per Method Comparison}
-\todo{choose simple enough methods that we can compile with nabujito: currently only + works}
-
-
-% -----------------------------------------------------------------------------
-\subsection{Related Work}
-\seclabel{val-nabujito-related-work}
-% -----------------------------------------------------------------------------
-\sm{Really????? That's all work that is related?}
-There is a vast amount of scientific literature when it comes to \JIT optimizers.
-However, they focus on the optimization opportunities itself such as different compilation strategies or an efficient \GC interaction.
-In the context of our work the compiler-based optimization are of second importance since we focus on the hybrid nature of a system that interacts with the low-level \VM world.
-
-Jan Vran\'{y} et al. present a \ST with an explicit meta-object-protocol allowing for method lookup customization at language-side\cite{Vran12a}.
-Their customized \ST/X \VM has an extended lookup mechanism where each class can specialize the lookup with a user definable \ttt{LookupObject}.
-Hence for each message send the \VM first checks if the receiver's class provides a \ttt{LookupObject}.
-By default this is not the case and the \VM falls back to the standard hierarchical \ST method lookup which is hard-coded in the \VM.
-However, if the receiver class returns a proper \ttt{LookupObject} the \VM delegates the lookup to this user-defined object.
-The \ttt{LookupObject} is invoked with context information about the message send including access to the low-level lookup cache.
-While the other context information is important for new lookup schemes, the exposed cache provides an simplistic interface for the \JIT.
-If the language-side lookup uses the provided cache it is still possible to implement efficient caching at \VM-level.
-\todo{I don't think there is anything closer?}
-
-
-A similar, albeit simpler approach, was provided in the research \ST \VM \P \cite{Verw12a}.
-There the message lookup is fully implemented at language-side, but unlike the \ST/X solution only the context information required for a standard \ST lookup is provided.
-More explicitly, \P does not provide access to an internal cache which could be used for speeding up more elaborate lookup customizations.
-
-The two projects presented only implicitly deal with the \JIT interaction.
-However, they provide evidence about high-level customizations for a part of the execution.
-In both projects it is possible to dynamically customize a static core \VM concept.
-While it is possible to modify the lookup mechanism in many \VM generation frameworks, this does not extend to the runtime.
-
 
 % -----------------------------------------------------------------------------
 \subsection{\NBJ Limitations and Future Work}
