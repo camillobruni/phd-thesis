@@ -658,6 +658,51 @@ While we see the practical limitations of changing the \VM at runtime we would l
 
 
 % ===========================================================================
+\newpage
+\section{High-level Low-Level Applications}
+\seclabel{background-high-level-low-leve-application}
+% ===========================================================================
+% ---------------------------------------------------------------------------
+\subsection{Foreign Function Interfaces (\FFI)}
+\seclabel{background-ffi}
+% ---------------------------------------------------------------------------
+
+Typical \ST system are isolated from the low-level world and provide only limited interoperability with C libraries.
+However there are notable exceptions: \textsc{Étoilé} and \ST/X.
+
+Chisnall presents the Pragmatic \ST Compiler \cite{Chis12a}, part of the \textsc{Étoilé} project, which focuses on close interaction with the C world.
+The main goal of this work is to reuse existing libraries and thus reduce duplicated effort.
+The author highlights the expressiveness of \ST to support this goal.
+In this \ST implementation multiple languages can be mixed efficiently.
+It is possible to mix Objective-C, \ST code.
+All these operations can be performed dynamically at runtime.
+Unlike our approach, \textsc{Étoilé} aims at a complete new style of runtime environment without a \VM.
+Compared to that, \NB is a very lightweight solution.
+
+Other dynamic high-level languages such as \Lua leverage \FFI performance by using a close interaction with the \JIT.
+\urlfootnote{\LuaJIT}{https://github.com/jmckaskill/luaffi/} for instance is an efficient \Lua implementation that inlines \FFI calls directly into the \JIT compiled code.
+Similar to \NB this allows one to minimize the constant overhead by generating custom-made native code.
+The \LuaJIT runtime is mainly written in C which has clearly different semantics than \Lua itself.
+
+On a more abstract level, high-level low-level programming \cite{Fram09a} encourage to use high-level languages for system programming.
+Frampton et al. present a low-level framework  which is used as system interface for \Jikes, an experimental \Java \VM.
+However their approach focuses on a static solution.
+Methods have to be annotated to use low-level functionality.
+Additionally the strong separation between low-level code and runtime does not allow for reflective extensions of the runtime.
+Finally, they do not support the execution and not even generation of custom assembly code on the fly.
+
+Kell and Irwin \cite{Kell11a} take a different look at interacting with external libraries.
+They advocate a Python \VM that allows for dynamically shared objects with external libraries.
+It uses the low-level \textsc{dwarf} debugging information present in the external libraries to gather enough metadata to automatically generate \FFIs.
+
+
+% ---------------------------------------------------------------------------
+\subsection{Just-in-time Compilation}
+\seclabel{background-jit}
+% ---------------------------------------------------------------------------
+
+
+% ===========================================================================
 %\newpage
 \section{Problem 1: Dynamic High-level Low-level Programming}
 % ===========================================================================
