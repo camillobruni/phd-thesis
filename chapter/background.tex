@@ -149,26 +149,35 @@ In very reflective languages the \VM provides access to the current execution co
 The latter one has a significant influence on the underlying \VM architecture preventing certain low-level optimization which would shadow the access to certain context information.
 What we see is that the meta-level enables reflection but usually is not reflective by its own.
 
-Following the \ST principle that everything is an object one might assume that this also includes the \VM as it is already highly involved in supporting reflection.
+Following the principle that everything is an object one might assume that this also includes the \VM as it is already highly involved in supporting reflection.
 Typically the \VM is implemented in C or C++ which have no reflection.
 However, the \JIT is common exception as it has to interact dynamically with the language-side.
 For instance the \JIT has to be aware of classes and the methods within.
-In dynamic and reflective system the \JIT has to be made aware of language-side changes to properly update the generated native code.
+In dynamic and reflective system the \JIT has to be made aware of language-side changes to properly update or invalidate the generated native code.
 What we see is that the \JIT accesses structural information from the language-side.
-However, the language-side is not capable to accessing \VM-level information.
+However, the language-side is not capable of accessing \VM-level information.
 The closest \VM interaction point typically is the bytecode generated at language-side and handed over to the \VM for execution.
 Yet, this provides only a crude one-way interaction \cite{Kell12a}.
-\sm{What about debugging interfaces? Code maintenance interfaces? For me, the statement you make is way to strong?}
+Certain \VMs provide debugging or inspection interfaces which are used by external tools to access or modify the \VM internals.
+Technically the same \VM debugging interface can be used by the language itself it is not common.
 
 For highly reflective and dynamic languages we see a certain mismatch.
-While it is possible to virtually change and modify everything at language-side we are locked out of the \VM.
-\sm{Are we? What does locked out even mean? Don't say such things, enumerate the missing features explicitly. This is the bases to evaluate your contribution, no? Or, reference the place where you listed them.}
-One argument in favor of that is that the underlying \VM provides security by isolation.
-This is true for a more static language which restricts the reflective power.
+On the one hand, it is possible to virtually change and modify everything at language-side.
+On the other hand, it is generally not possible to reflectively alter the \VM from language side.
+The underlying \VM tends to ensure security by isolation for instance by using a defined bytecode set as execution base.
+%In this case the \VM is as a black box.
+However, the border to the \VM can be crossed in several ways.
+For instance, not all operations are implemented with safety in mind but performance, and thus might expose the \VM.
+Another edge-case is the use of external native libraries which are used for performance critical functionality and tend to be run without the same protection as bytecode-based code.
+
+Thus we see that the boundary to the \VM can be crossed in several ways.
+Proper separation is possible for a static language which restricts the reflective power or prohibits the use of custom external libraries.
 However, this is clearly not the case in \PH or \ST.
-Since arbitrary code changes are possible at language-side the boundary level of the \VM seems arbitrary.
-\sm{And unclear what that boundary even is, and it is not a safe boundary either, you can, with enough effort access random stuff in the memory. Not all operations/byte codes are safe, for performance reasons.}
-Going one 	step back we can see a certain evolution in reflection which we would like to extend down to the \VM.
+Since arbitrary code changes are possible at language-side the \VM-level boundary for reflection seems incidental.
+
+To further analyze this hypothesis we need to track the evolution of reflection in combination with the \VM.
+
+Going one step back we can see a certain evolution in reflection which we would like to extend down to the \VM.
 \sm{What's a VM? When does a runtime system become a VM?}
 	
 %
