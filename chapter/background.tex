@@ -421,21 +421,18 @@ Yet according to long-time \VM programmers the \Squeak infrastructure is more pr
 % ---------------------------------------------------------------------------
 \Jikes (former \textsc{Jalapeño})is an early metacircular research \VM for \Java \cite{Alpe00a}.
 The \Jikes \VM features several different garbage collectors and does not execute bytecodes but directly compiles to native code.
-\sm{Why is that relevant? Think, you are implying something here?}
+With metacircularity in mind \Jikes does not resort to a low-level programming language such as C for these typically low-level \VM components.
+Instead they are written in \Java as well using a high-level low-level programming framework.
 
 The \Jikes \VM had performance as a major goal, hence direct unobstructed interaction with the low-level world is necessary using a specialized framework.
 High-level low-level programming \cite{Fram09a} is mentioned the first time in the context of the \Jikes \VM project.
-The goal of high-level low-level programming \ugh{is to the} abstractions provided by high-level programming languages to simplify low-level programming specifically.
-\ugh{In the core this are} the same motivations that drives the metacircular \VM community.
+The goal of high-level low-level programming is to provide high-level abstractions to simplify low-level programming.
+Essentially this is the same motivation that drives the metacircular \VM community.
 
 Frampton et al. present a low-level framework packaged as \ttt{org.vmmagic}, which is used as system interface for Jikes, an experimental \Java \VM.
 Additionally their framework is successfully used in a separate project, the memory management toolkit (\MMTK) \cite{Blac04a} which is used independently in several other projects.
 The \ttt{org.vmmagic} package introduces highly controlled low-level interaction in a statically type context.
 In their framework, methods have to be annotated to enable the use of low-level functionality.
-
-In a direct metacircular \VM building process (see \figref{background-metacircular-bootstrap}) it is inevitable to directly manage native-code.
-Using a high-level low-level framework provides the necessary abstraction at this level.
-\sm{Shouldn't that go with the motivation paragraph? One paragraph up?}
 
 % ---------------------------------------------------------------------------
 \subsubsection*{\Maxine \Java \VM}
