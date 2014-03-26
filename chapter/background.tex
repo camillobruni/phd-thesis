@@ -447,7 +447,7 @@ Inspectors at multiple abstraction levels are readily available while debugging,
 \Maxine provides and excellent navigation for generated native code by providing links back to language-side objects as well as other native code and symbols.
 
 Even though the \Maxine projects follows an approach where reflection is only used at compile-time, the development tools themselves provide a live interaction with the running \VM artifact.
-\sm{And this distinction is important, reflection != the ability to observe and interact with (cf. JVM tooling }
+However, the \VM itself is not reflective as it is not directly built to reason about itself.
 This means that when debugging the \VM it behaves almost like a life \ST image where a complete interaction with the underlying system is possible.
 We identify this as crucial, as most of the time is spent debugging, notably on inadequate tools like \ttt{gdb} due to lack of alternatives.
 \sm{Connect this to your problem statement (back reference) and, make sure your problem statement does not mix up reflection and observability/interactivity }
@@ -462,7 +462,6 @@ However, it has been successfully used to build \VMs for other languages includi
 Interpreters are written in a type-inferable subset of \Python called \RPython.
 The underlying \PyPy infrastructure implicitly provides memory management and \JIT compilation.
 
-\paragraph{Provided \VM Features}
 \PyPy follows a different approach from the previously presented \VM generation frameworks.
 For instance, in Squeak and \Jikes the final \VM implementation is not much different from C or C++.
 \sm{C/c++ has nothing to do with this
@@ -479,12 +478,10 @@ For instance in \Squeak memory allocation, even for \VM-level objects, has to be
 Whereas in \PyPy the garbage collection is left to the underlying infrastructure.
 \sm{This paragraph needs to be revised, your line of argumentation is confusing/conflating many different aspects, and that does leave a bitter taste to me as a reader}
 
-
-\paragraph{\RPython Interpretation}
 At compile-time the interpretation stack for a newly implemented \VM on top of \PyPy looks as follows.
 \sm{Why do I care for those details?}
 %
-\begin{enumerate}
+\begin{enumerate}[noitemsep,nolistsep]
 \item The final language runtime
 \item The \VM written in \RPython
 \item The \PyPy infrastructure (virtual compile-time \RPython interpreter)
@@ -495,7 +492,6 @@ Unless in debug mode, the bottom-most layer is compiled away by exporting the \R
 However, before the C export step, all the compile-time reflection statements are evaluated and flattened away.
 This approach allows \RPython \VMs to behave almost like standard \Python programs while still providing excellent performance in the final \VM binary.
 
-\paragraph{High-level Tracing \JIT}
 Much like the automatic memory management, \PyPy provides a tracing \JIT generator \cite{Bolz09a}.
 By default the \VM programmer does not write an explicit \JIT in \PyPy.
 Instead the \VM code is annotated to guide the underlying tracing \JIT generator.
@@ -652,7 +648,6 @@ While we see the practical limitations of changing the \VM at runtime we would l
 
 
 % ===========================================================================
-\newpage
 \section{High-level Low-Level Applications}
 \seclabel{background-high-level-low-leve-application}
 % ===========================================================================

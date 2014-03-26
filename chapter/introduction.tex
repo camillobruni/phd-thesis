@@ -5,6 +5,24 @@
 \minitoc
 % =============================================================================
 
+High-level languages implement reflection which allows a language runtime to inspect and alter its own execution and state.
+These high-level languages typically run on top of virtual machines (\VMs) have been built to create an abstraction layer over hardware.
+Due to the isolating nature of the VM, reflection is generally limited to the language-side.
+Several research \VMs overcome this separation and provide a unified model where there is no more a clear distinction between language-side and VM-side.
+In such a language runtime it is possible to reflectively modify VM components from language-side as they reside on the same abstraction layer.
+
+In this dissertation we follow the same global direction towards a unified language-runtime or self-aware \VM.
+However, instead of looking for a holistic solution we focus on a minimal approach.
+Instead of using a custom tailored language runtime we use dynamic native code activation from language-side on top of an existing \VM.
+
+We first present \B our framework for dynamic native code activation.
+\B provides a generic but low-level interface to the \VM internals.
+
+Based on this framework we then evaluate several applications that typically require direct \VM support.
+We show first how \B is used to build an efficient \FFI interface, allowing for a more structured access to \VM internal functions.
+To evaluate the limitations of \B we target two more applications: dynamic primitives and a language-side \JIT compiler.
+Both of them require a tight interaction with the underlying \VM
+
 \todo{intro to high-level low-level programming}\\
 \todo{intro to klein VM}\\
 
