@@ -206,22 +206,25 @@ We are interested in language runtimes that are built around a \VM which introdu
 \item \textbf{Language-side extended reflection:}
 	The third category of high-level language runtimes has extended reflection with strong support from the underlying \VM.
 	We put \PH, \ST implementations or \Self in this category of languages.
-	The \VM supports complex reification of otherwise non-accessible concepts \ugh{such as the stack}.
-	\sm{The stack? What else, what distinguishes those systems? I have the feeling you want to define those distinctions for some purpose later on, which I don't know yet.}
+	The \VM supports complex reification of otherwise non-accessible concepts.
+	Additionally we see 
+	These language runtime support extended behavioral reflection for instance accessing and modifying the execution context.
+	The supported reflective capabilities can not be anticipated, and thus require strong support from the underlying \VM.
 	At this stage the \VM-level optimizations are a balance between restricting the supported language or sacrificing speed.
 	
-\item \textbf{Language-side access to the \VM:}
+\item \textbf{Language-side introspection of the \VM:}
 	The \VM support for reflection is highly extended compared to the previous category.
 	Instead of a hidden property, certain \VM-level concepts are made explicitly accessible to the running language.
 	Up to some extent this is similar to language-side structural reflection as the \VM only supports only a restricted interface which is defined at compile-time.
-	\sm{What does that mean? Reading out performance counters? Doing VM level tracing, debugging? I can imagine plenty of examples that fit into this category}
 	In this category the language can only read (introspect) \VM properties.
-	\todo{MIST has a GC mop that fits in this category}
-	To our best knowledge there are no existing language-runtimes that fall into this category.
+	This might include reading out \JIT related properties such as performance counters or type annotations.
+	Typically these operations are support by \VMs running in debug mode, which enables remote introspection.
+	However, this does not imply that the language-runtime is capable of doing so reflectively.
 
-\item \textbf{Language-side modification of the \VM:}
+
+\item \textbf{Limited language-side intercession of the \VM:}
 	The previous category allows the language-side to safely read \VM-level properties.
-	If we follow the same path as the language-side evolution of reflection the next step is to allow for self-modification.
+	If we follow the same path as the language-side evolution of reflection the next step is to allow for modification at \VM-level.
 	Such a language-runtime has a dynamic interface to change certain properties of the \VM.
 	However, the \VM is still not fully reflective in the sense that not all \VM concepts are reified.
 	This essentially limits the language-side to simple interactions and changes to the \VM itself.
@@ -234,12 +237,16 @@ We are interested in language runtimes that are built around a \VM which introdu
 	The same reflective properties equally apply to language-side and the \VM.
 	The way to achieve this is by flattening out the intermediate \VM and let the language-side directly control everything.
 	Currently there are several research \VMs which can be classified as self-aware \VMs: The \P \VM \cite{Verw12a} is partially self-aware but in control of the underlying execution and the \Klein \VM is fully reflective \cite{Unga05a}. 
-	\sm{What's with meta circular VMs, how do they fit in here? Some, I would say by accident, have properties that could be considered 'self-aware'.
-	Further, I don't think those categories are disjunct. So, something that is self-aware is probably also in the previous categories}
+	Unsurprisingly we find that these \VMs are built metacircularly, they are written in the same language they support.
 \end{enumerate}
 
+\todo{recap initial statement of incidental reflective locjout}
+\todo{we further focus on metacircular VMs, close match with the reflective approach, or close metacircular VMs}
 \noindent From this overview of reflective evolution of high-level languages we see that there is only little research about self-aware \VMs or reflective \VMs.
 In general high-level languages are built with a clear distinction of the language-side and the \VM.
+However, for certain applications such as interaction with external native libraries this proves to be a limitation \cite{Kell11a}.
+
+
 \sm{Where does the VMIL2011 paper fit in? Stephen Kell, I believe?}
 However, with further reflective capabilities of the language-side we see that such a separation is no longer a guarantee for security.
 In fact many security aspects have to be addressed already at language-side \cite{??}.
