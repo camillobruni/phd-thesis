@@ -110,21 +110,17 @@ We will now discuss several axes along which we can limit the use of reflection.
 	Methods are implemented on different classes which themselves define the type of their instances. 
 	Custom methods that are added to a class alter the behavior of all its instances.
 
-\item[Invocation Chain:] A second interesting limitation axis is the stack.
+\item[Control Flow:] A second interesting limitation axis is the control flow or invocation chain.
 	An example of that is the concept of tower of interpreters.
 	During the development of \P an intermediate version of the \ST interpreter featured this special execution scheme \cite{Verw10a}.
 	It allows the programmer to switch the current interpreter.
 	This way an expression is evaluated with altered semantics.
 	The solution presented in \P does not globally replace the interpreter but only for the given expression. 
 	Hence once the expression returns, the modifications and the implied overhead are gone.
-	\sm{Stack? Your terminology doesn't really seem to be informed by literature, I would have expected something like 'dynamic scope' here.
-	my point being that this section should be independent and only preparing the main parts of your thesis. Here, I would expect you to show of everything you know about related work, including standard terminology}
 
-\item[Reference:] Starting from the concept of a proxy object we find another possibility to limit reflection by reference.
+\item[Reference:] Starting from the concept of a proxy object \todo{ref??} we find another possibility to limit reflection by reference.
 	Arnaud et al. describe a modified \PH runtime where the concept of a reference is fully reified as a so called handles \cite{Arna13a}.
-	Handles allow programmers to install new behavior and even state on a single reference, without influencing the rest of the system.
-	\sm{Meta objects, proxies,... Your reference isn't the one of who invented that stuff originally. I would expect primary literature references, not extension, and secondary literature}
-	
+	Handles allow programmers to install new behavior and even state on a single reference, without influencing the rest of the system.	
 \end{description}
 %
 
@@ -142,14 +138,14 @@ Röthlisberger et al. propose \Gepetto a system \cite{Roet07b} that enables true
 \Gepetto provides a high-level \API to install behavior reflection.
 
 % ---------------------------------------------------------------------------
-\subsection{\VM-level Reflection}
+\subsection{\VMs and Reflection}
 \seclabel{background-vm-reflection}
 % ---------------------------------------------------------------------------
-\sm{Connection to scoping unclear}
-The basic reflective features have to be provided by the underlying base-level.
-For high-level languages this is the \VM.
+
+So far we have given a basic introduction to the different types of reflection and how the effects of reflection can be limited by certain properties.
+We omitted how reflection is provided in the first place in a language runtime.
 For instance, simple cases involve giving access to the class of an object or the possibility to reflectively invoke a method at runtime.
-\PH for instance is a more complex case, where the \VM has to provide access to the current execution context for introspection and even modification.
+In very reflective languages the \VM provides access to the current execution context for introspection and even modification.
 The latter one has a significant influence on the underlying \VM architecture preventing certain low-level optimization which would shadow the access to certain context information.
 What we see is that the meta-level enables reflection but usually is not reflective by its own.
 
@@ -157,14 +153,14 @@ Following the \ST principle that everything is an object one might assume that t
 Typically the \VM is implemented in C or C++ which have no reflection.
 However, the \JIT is common exception as it has to interact dynamically with the language-side.
 For instance the \JIT has to be aware of classes and the methods within.
-And in dynamic system \ugh{like \PH} \sm{Like Pharo? I always dislike that kind of stuff in papers from Lille, come on, there are plenty of systems that have those needs. Singling out on, is bad style in my perspective } it has to be made aware of language-side changes to properly update the generated native code.
+In dynamic and reflective system the \JIT has to be made aware of language-side changes to properly update the generated native code.
 What we see is that the \JIT accesses structural information from the language-side.
 However, the language-side is not capable to accessing \VM-level information.
 The closest \VM interaction point typically is the bytecode generated at language-side and handed over to the \VM for execution.
 Yet, this provides only a crude one-way interaction \cite{Kell12a}.
 \sm{What about debugging interfaces? Code maintenance interfaces? For me, the statement you make is way to strong?}
 
-For highly reflective and dynamic languages \ugh{like \PH} we see a certain mismatch.
+For highly reflective and dynamic languages we see a certain mismatch.
 While it is possible to virtually change and modify everything at language-side we are locked out of the \VM.
 \sm{Are we? What does locked out even mean? Don't say such things, enumerate the missing features explicitly. This is the bases to evaluate your contribution, no? Or, reference the place where you listed them.}
 One argument in favor of that is that the underlying \VM provides security by isolation.
@@ -173,6 +169,8 @@ However, this is clearly not the case in \PH or \ST.
 Since arbitrary code changes are possible at language-side the boundary level of the \VM seems arbitrary.
 \sm{And unclear what that boundary even is, and it is not a safe boundary either, you can, with enough effort access random stuff in the memory. Not all operations/byte codes are safe, for performance reasons.}
 Going one 	step back we can see a certain evolution in reflection which we would like to extend down to the \VM.
+\sm{What's a VM? When does a runtime system become a VM?}
+	
 %
 \begin{figure}[h]
 	\centering
@@ -181,13 +179,11 @@ Going one 	step back we can see a certain evolution in reflection which we would
 	\caption[High-level Language Reflection Evolution]{Evolution of reflection in high-level language runtimes.}
 \end{figure}
 %
-\cb{recheck that the properties fit to what I told everybody}
 \begin{enumerate}[a)]
 \item \textbf{Language-side without reflection:} A language in this category requires a virtual machine to run but has no reflective properties.
-	This includes early-stage languages such as the original Pascal-P system.
+	This includes early-stage languages such as the original Pascal-P system \cite{Nels79a}.
 	Typically languages without reflection also lack the underlying \VM and are compiled directly to native code.
 	\cb{thus they are one meta-level short of performing reflection}
-	\sm{What's a VM? When does a runtime system become a VM?}
 	
 \item \textbf{Language-side with limited reflection:}
 	The next step is to support only certain static reflection.
