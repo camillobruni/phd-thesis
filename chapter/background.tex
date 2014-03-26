@@ -174,12 +174,14 @@ Thus we see that the boundary to the \VM can be crossed in several ways.
 Proper separation is possible for a static language which restricts the reflective power or prohibits the use of custom external libraries.
 However, this is clearly not the case in \PH or \ST.
 Since arbitrary code changes are possible at language-side the \VM-level boundary for reflection seems incidental.
+Reflection down to the \VM level is possible if we leave security and performance concerns aside.
 
-To further analyze this hypothesis we need to track the evolution of reflection in combination with the \VM.
-
-Going one step back we can see a certain evolution in reflection which we would like to extend down to the \VM.
-\sm{What's a VM? When does a runtime system become a VM?}
-	
+To further analyze this hypothesis we need to track the evolution of dynamic reflection in programming languages.
+In our analysis we omit languages that do not run on top of a \VM.
+Typically low-level or system programming languages fall into this category which implies unrestricted operations.
+For instance C or even assembler is used to generate self-modifying programs.
+Another example might be C++ which supports compile-time reflection, but again does not run on top of a \VM. 
+We are interested in language runtimes that are built around a \VM which introduces the aforementioned separation of high-level language-side and low-level \VM.
 %
 \begin{figure}[h]
 	\centering
@@ -187,20 +189,19 @@ Going one step back we can see a certain evolution in reflection which we would 
 	\figlabel{vm-reflection-evolution}
 	\caption[High-level Language Reflection Evolution]{Evolution of reflection in high-level language runtimes.}
 \end{figure}
-%
+
 \begin{enumerate}[a)]
-\item \textbf{Language-side without reflection:} A language in this category requires a virtual machine to run but has no reflective properties.
+\item \textbf{Language-side without reflection:}
+	A language in this category requires a \VM to run but has no reflective properties.
 	This includes early-stage languages such as the original Pascal-P system \cite{Nels79a}.
-	Typically languages without reflection also lack the underlying \VM and are compiled directly to native code.
-	\cb{thus they are one meta-level short of performing reflection}
+	This is rather an exception, since typically languages without reflection also lack the underlying \VM and are compiled to native code.
+	Even with portability in mind it is possible to use for instance C as intermediate language which compiles under most platforms.
 	
 \item \textbf{Language-side with limited reflection:}
-	The next step is to support only certain static reflection.
+	The next step in the evolution of reflection is a language runtime with a \VM that support only certain static reflection.
 	This might include structural reflection whose required information can be prepared upfront during the compilation phase.
-	\sm{What do you do with C++ and RTTI and direct access to memory? Isn't that what you want? Or is C++ OO programming not high-level enough? (You criteria are unclear)}
 	Such a system has no support for unanticipated reflection as there is no support from the \VM to dynamically reify concepts.
 	A \VM with a \JIT in this category can perform strong optimizations and take full advantage of the runtime information.
-	\cb{GO fits here? \Java only partially?}
 	
 \item \textbf{Language-side extended reflection:}
 	The third category of high-level language runtimes has extended reflection with strong support from the underlying \VM.
