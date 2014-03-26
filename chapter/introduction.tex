@@ -5,8 +5,11 @@
 \minitoc
 % =============================================================================
 
-\todo{Recheck intro}\\
-\todo{- follow non-intrusive Klein Story}
+\todo{intro to high-level low-level programming}\\
+\todo{intro to klein VM}\\
+
+\todo{intro to our problem: identifying minimal interface}
+
 \noindent Reflection as common feature has been adopted by several dynamic high-level languages s
 To answer these questions we propose the high-level low-level programming framework \B written for \PH.
 In the core \B allows us to dynamically activate native code from language-side.
@@ -50,8 +53,8 @@ Following the problem description listed in the above introduction we identified
 \noindent Out of these general problems concerning reflection in high-level languages we see that they have a low-level root.
 To address the unification of the language-side and \VM-side we have to grant more access to the language-side.
 This includes interacting directly with low-level native instructions.
-A similar problem has been solved by applying high-level low-level programming in a more static environment \cite{Fram09a}.
-\sm{Laurie knows a little about Graal (Oracle labs), so, as another language-side JIT, I would mention it}
+A similar problem has been solved by applying high-level low-level programming in a more static environment \cite{Fram09a,Graal}.
+%\sm{Laurie knows a little about Graal (Oracle labs), so, as another language-side JIT, I would mention it}
 The approach outlined by Frampton et al. uses a high-level framework to generate native code at compile-time.
 We see that their approach has not yet been applied in a more dynamic environment where native code has to be generated at runtime.
 Hence we focus on the following concrete problems we wish to solve in this thesis.
@@ -69,18 +72,17 @@ Hence we focus on the following concrete problems we wish to solve in this thesi
 % =============================================================================
 \section{Contributions}
 % =============================================================================
-\sm{Artefacts are note the contributions of a thesis, they might be 'technical contributions'.
 
-Contributions are ideas/designs in combination with what you learned about them in the evaluation}
+\todo{Identify simple interface for high-level owo-level programming}\\
+\todo{identify limiitiations thereof} \\
+\todo{suggest ways to integrate a direct code execution framework better in the development process}
 
 % =============================================================================
 \section{Artifacts}
 % =============================================================================
 
-\todo{rewrite intro paragraph}
 We present now our contributions of this dissertation addressing the previously identified problems concerning high-level low-level programming in a dynamic language:
 
-\todo{maybe separate the abstract findings from the real software artifacts}
 \begin{description}
 	\item[\B] is a high-level low-level programming framework written in \urlfootnote{\PH}{http://pharo.org/}.
 	The core functionality of \B is to dynamically execute native-code generated at language-side.
@@ -100,17 +102,12 @@ We present now our contributions of this dissertation addressing the previously 
 	\item[\AsmJIT] is a assembler framework written in \PH.
 	\AsmJIT is the low-level backend for the previously mentioned \B framework.
 	We extended the existing assembler framework to support the full 64-bit x86 instruction set.
-	\sm{None of these talks about reflection.
-	
-	I think, I am expecting something very different than what you want to sell, you got me in the wrong direction.
-	
-	Again, I would try to make it more explicit that the high level low level programming is what you are interested in evaluating. Reflection is only the bigger picture motivation}
-	
-	\item[\Eye] is a high-level inspector framework that has now been adopted in \PH.
-	Inspectors are crucial when interacting with the low-level world which typically lacks the structural abstractions present at language-side.
-	\Eye allows us to rapidly define customized views for \PH objects.
-	Our inspector framework seamlessly integrates into the existing \PH debugger.
-	\sm{Eye is very different, the introspection aspect is very important for low level programming, I think you'll need to adapt your story line to include that aspect explicitly, if you want to include eye/emphasise it}
+
+%	\item[\Eye] is a high-level inspector framework that has now been adopted in \PH.
+%	Inspectors are crucial when interacting with the low-level world which typically lacks the structural abstractions present at language-side.
+%	\Eye allows us to rapidly define customized views for \PH objects.
+%	Our inspector framework seamlessly integrates into the existing \PH debugger.
+%	\sm{Eye is very different, the introspection aspect is very important for low level programming, I think you'll need to adapt your story line to include that aspect explicitly, if you want to include eye/emphasise it}
 	
 \end{description}
 

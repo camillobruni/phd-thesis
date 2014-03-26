@@ -102,16 +102,15 @@ We will now discuss several axes along which we can limit the use of reflection.
 %
 \begin{description}
 \item[Time:] Of course the most obvious axis is time itself.
-	In the context of \ST, behavioral reflection implies that the reflective properties are accessed or modified dynamically.
+	Behavioral reflection implies that the reflective properties are accessed or modified dynamically.
 	By dynamically adding or removing the reflective code we have time-delimited reflection.
-	\sm{I would not discuss smalltalk more than any other language here, yes you are using smalltalk, but these ideas transcend a specific system, no?}
 	
 \item[Type:] Another natural delimiter for reflection is the type of an object.
-	Again, this is rather natural in terms of \ST reflection since the natural base to modify behavior are the compiled methods.
-	Hence it is possible to use use method wrappers only on one class (and it subclasses) by installed modified methods.
-	\sm{Method wrappers? Way to specific for my taste, that's just one possible technique, meta classes would be another one, no?}
+	In an typical object-oriented system this is the common case.
+	Methods are implemented on different classes which themselves define the type of their instances. 
+	Custom methods that are added to a class alter the behavior of all its instances.
 
-\item[Stack:] A second interesting limitation axis is the stack.
+\item[Invocation Chain:] A second interesting limitation axis is the stack.
 	An example of that is the concept of tower of interpreters.
 	During the development of \P an intermediate version of the \ST interpreter featured this special execution scheme \cite{Verw10a}.
 	It allows the programmer to switch the current interpreter.
@@ -124,14 +123,13 @@ We will now discuss several axes along which we can limit the use of reflection.
 \item[Reference:] Starting from the concept of a proxy object we find another possibility to limit reflection by reference.
 	Arnaud et al. describe a modified \PH runtime where the concept of a reference is fully reified as a so called handles \cite{Arna13a}.
 	Handles allow programmers to install new behavior and even state on a single reference, without influencing the rest of the system.
-	\todo{proper example: revokable reference... extending proxies}
 	\sm{Meta objects, proxies,... Your reference isn't the one of who invented that stuff originally. I would expect primary literature references, not extension, and secondary literature}
 	
 \end{description}
 %
 
 \noindent Tanter et. al. describe \textsc{Reflex} \cite{Tant03a} a partial behavioral reflection system on top of \Java.
-We see similar limitation mechanisms for the applications of aspects \cite{Kicz01a}, which in a certain way resembles intercession.
+We see similar limitation mechanisms for the applications of aspects \cite{Kicz01a}, which resembles intercession.
 However, typically the systems using aspects have to prepared statically upfront with little means to change them at runtime.
 Aspects can be used to globally modify a system and introduced code snippets in defined points, for instance before each method invocation.
 Though they share an interesting concepts of limiting the introduced overhead using a pointcuts.
@@ -295,7 +293,7 @@ The following figure highlights the most evident differences between a classical
 %
 \begin{description}
 \item[Classical \VM Compilation] \hfill
-	\sm{Why is the compilation process the thing you focus on? Isn't that incidental? }
+%	\sm{Why is the compilation process the thing you focus on? Isn't that incidental? }
 	\begin{enumerate}[a), nolistsep]
 		\item \VM sources typically written in C or C++
 		\item Compilation of the \VM sources using a C or C++ compiler
@@ -390,19 +388,18 @@ In \secref{background-reified-vms} we will then focus on a list of \VMs that rei
 \seclabel{background-squeak}
 % ---------------------------------------------------------------------------
 \sm{I still don't take squeak as metacircular in the strict sense. For me, that means  implemented in itself. Java with java, lisp with lisp, smalltalk with small talk, squeak is implemented in slang, that's C with smalltalk syntax, which is barely executable as smalltalk, PyPy is implemented with RPython, also restricted subset, and with its type system, I would say, a very different language. You can however make the point that RPython is a strict subset of Python, and thus, without changes directly executable. That's not true for Slang...}
-One of the first metacircular \VMs presented is the \Squeak \VM\cite{Inga97a}.
+\ugh{One of the first metacircular} \VMs presented is the \Squeak \VM\cite{Inga97a}.
 Its core building system is still in active use for the \urlfootnote{\Cog \VM}{http://www.mirandabanda.org/cogblog/} which extends \Squeak with a \JIT.
 The \Cog \VM is used as default by the \urlfootnote{\PH}{http://pharo.org/} programming language.
 \Squeak is built around a \ST dialect called \Slang that is exported to C to be compiled to the final \VM binary.
 Additionally the \Slang sources can be interpreted to provide an interactive simulator of the \VM, including full graphical support.
 
-The \VM itself is mostly written in a dialect of \ST \sm{You just said that} called \Slang that is essentially limited to the functionality that can be expressed with standard C code.
+\Slang is limited to the functionality that can be expressed with standard C code.
 \Slang in this case is mostly a high-level C preprocessor.
 Even though \Slang basically has the same syntax as \ST it is semantically constrained to expressions that can be resolved statically at compilation or code generation time and are compatible with C.
 Hence \Slang's semantics are closer to C than to \ST.
 Unlike later metacircular frameworks \Squeak uses little or no compile-time reflection to simplify the \VM designs.
-However, class composition and traits help structuring the sources.
-\sm{Traits aren't used, are they?}
+However, class composition help structuring the sources.
 Next to the \Slang source which account for the biggest part of the interpreter code some \OS-related code and plugins are written in C.
 To facilitate the interaction with the pure C part \Slang supports inline C expressions and type annotations.
 \sm{Why is all of this important here? Does not seem to contribute to your discussion }
