@@ -258,21 +258,20 @@ High-level language \VMs are inherent complex pieces of software.
 They have to combine two rather extreme goals: abstraction and performance.
 We have seen that the required abstraction for the running high-level language has a strong influence on the \VM design.
 At the same time the hard performance requirement requires precise interaction with the underlying hardware.
-This goes even so far that specialized hardware is conceived to match the performance requirements \cite{Clic05a}.
-\sm{I don't like the way you cite. Ok, the cliff paper, good. Not a really good example thought, what about lisp machines, smalltalk, or java processors, or David Ungar's work in determining the benefit of processor support for high level languages?}
+This goes even so far that specialized hardware is conceived to match the performance requirements \cite{Unga84a,Stef84a,Clic05a}.
+\todo{ref to java processor}
 
 The early \VMs focused on interpreting an abstract instruction set (bytecodes).
 The benefits are twofold.
 On the one hand the bytecodes guarantee certain platform independence by abstracting away from the \CPU specific instruction set.
 On the other hand bytecodes allow to encode complex operations into little space both serving the hard memory constraints of the hardware and simplifying the design of a compiler.
 Obviously this abstraction gain comes at a cost and ever since the first \VMs were built research and industry strive to reduce the interpretation overhead.
-An efficient way to improve performance is to use a just in time compiler (\JIT) that dynamically generates native code from the bytecode \cite{??}.
+An efficient way to improve performance is to use a just in time compiler (\JIT) that dynamically generates native code from the bytecode \cite{Deut84a}.
 In this case the bytecode becomes an intermediate representation (\IR) for a bigger compiler infrastructure.
 However, \JIT compilers are notoriously complex as they crosscut many \VM components.
 At the same time they crosscut all abstraction layers; they have to access high-level information from the running bytecodes and manage native code at the same time.
-Similar, albeit less low-level oriented complexity applies to the automatic memory management present in most high-level language \VMs.
+Similar complexity applies to the automatic memory management present in most high-level language \VMs.
 Garbage Collectors (\GC) evolved from simple helpers to complex software artifacts that for instance support concurrent garbage collection \cite{Clic05a}.
-\sm{Say what? GC less low-level complexity? Really? Pffff}
 
 The increased complexity of the \VMs lead to more novel approaches on how to build \VMs.
 \VMs are still build for a big part in C or C++ for performance reasons.
@@ -284,7 +283,6 @@ In the following sections we are shedding light on metacircular \VMs which are p
 \subsection{Metacircular \VMs}
 \seclabel{background-metacircular-vms}
 % ---------------------------------------------------------------------------
-\sm{Ok, a little late? I would have liked to know upfront that you are getting here as well.}
 The ever growing complexity of \VMs and the abstraction mismatch between the \VM definition language and the final interpreted language lead to a new movement that tried to reduce complexity.
 Among the \VMs using higher-level languages or frameworks to reduce the development effort the metacircular building process stands out.
 Unlike the classical \VM which is built in C and compiled to the a binary, a metacircular \VM is written in the same language that it provides in the end.
@@ -339,8 +337,7 @@ Each \VM is a one of a kind with custom interpreter and a specialized memory man
 Using high-level \VM frameworks it is possible to provide the \VM developer with prefabricated components.
 For instance it is possible to simply parametrize a premade \GC to reduce development effort.
 Looking at the evolution of metacircular \VMs we see both approaches.
-For instance early metacircular solutions like the \Squeak \VM \cite{Inga97a} work more like a high-level C macro system.
-\sm{I would not categorize squeak as metacircular, neither PyPy, which I missed so far in your discussion}
+For instance pseudo metacircular solutions like the \Squeak \VM \cite{Inga97a} work more like a high-level C macro system.
 The high-level language is used to generate C code which is then further compiled to the final \VM binary.
 \VM components are declared in a very explicit style, again not much different from C++.
 Memory for \VM-level structures has to be managed in the same way as its C++ counterpart by explicitly allocating and freeing objects.
@@ -351,7 +348,7 @@ In the ideal case only certain hints are necessary to create a \JIT.
 \todo{Truffle as extreme to that track: Interpreter implementation on \AST basis, not explicit bytecode interpreter (which would be typical in C)}
 
 \paragraph{Bootstrap Process}
-\sm{And bye the way, I forgot where you are going with all this. Why do I care about the bootstrap process?}
+\sm{And by the way, I forgot where you are going with all this. Why do I care about the bootstrap process?}
 A crucial step during the development with the metacircular \VMs is the bootstrap of the new \VM.
 We distinguish mainly between two approaches, indirect bootstrap and direct bootstrap.
 %
@@ -365,7 +362,8 @@ We distinguish mainly between two approaches, indirect bootstrap and direct boot
 \end{figure}
 %
 \begin{description}
-	\item[Indirect Bootstrap:] Metacircular \VMs with an indirect bootstrap use an intermediate language to compile a new \VM binary.
+\item[Indirect Bootstrap:]
+	Metacircular \VMs with an indirect bootstrap use an intermediate language to compile a new \VM binary.
 	A typical example of this approach is \Squeak and \PyPy using C.
 	Both of these system imply a complete C compilation stack.
 	The advantage of this approach is the that C is heavily optimized thus reducing the development effort for the \VM framework.
@@ -373,7 +371,8 @@ We distinguish mainly between two approaches, indirect bootstrap and direct boot
 	Typically the \VM framework has to work around these limitations when working directly with native code for instance in the \JIT.
 	We have explicitly seen these limitations while working on the \P \VM.
 	
-	\item[Direct Bootstrap:] Metacircular \VMs with a direct bootstrap are directly in charge of generating the native code for the final binary.
+\item[Direct Bootstrap:]
+	Metacircular \VMs with a direct bootstrap are directly in charge of generating the native code for the final binary.
 	We have seen in \P that many C-level optimizations have only limited impact on the final speed.
 	A major speedup is achieved by using a native stack and directly generating native code instead of using a bytecode interpreter.
 	Hence the \VM will probably require an assembler framework which in return can be used for the direct bootstrap.
@@ -395,7 +394,7 @@ In \secref{background-reified-vms} we will then focus on a list of \VMs that rei
 \seclabel{background-squeak}
 % ---------------------------------------------------------------------------
 \sm{I still don't take squeak as metacircular in the strict sense. For me, that means  implemented in itself. Java with java, lisp with lisp, smalltalk with small talk, squeak is implemented in slang, that's C with smalltalk syntax, which is barely executable as smalltalk, PyPy is implemented with RPython, also restricted subset, and with its type system, I would say, a very different language. You can however make the point that RPython is a strict subset of Python, and thus, without changes directly executable. That's not true for Slang...}
-\ugh{One of the first metacircular} \VMs presented is the \Squeak \VM\cite{Inga97a}.
+The pseudo metacircular \Squeak \VM\cite{Inga97a} is of importance in the context of this work.
 Its core building system is still in active use for the \urlfootnote{\Cog \VM}{http://www.mirandabanda.org/cogblog/} which extends \Squeak with a \JIT.
 The \Cog \VM is used as default by the \urlfootnote{\PH}{http://pharo.org/} programming language.
 \Squeak is built around a \ST dialect called \Slang that is exported to C to be compiled to the final \VM binary.
@@ -417,10 +416,9 @@ This means that programmers can change the sources of the running \VM and see th
 The simulator itself works by setting up a byte array which servers as native memory.
 Then the \VM sources written in \Slang are interpreted by the \VM of the development environment.
 
-We see that \Squeak is an early-stage metacircular \VM that uses an indirect bootstrap process.
+We see that \Squeak is a pseudo metacircular \VM that uses an indirect bootstrap process.
+The newly created \VM does not absorb any features from the host environment.
 Yet according to long-time \VM programmers the \Squeak infrastructure is more productive than a comparable C++ or pure C project.
-\sm{Early stage? Common, true metacircular implementations are much older, squeak is a step back in terms of pure ness of concepts}
-
 
 % ---------------------------------------------------------------------------
 \subsubsection*{\Jikes: High-level low-level Programming in with \MMTK}
