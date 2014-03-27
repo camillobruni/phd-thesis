@@ -757,15 +757,14 @@ Also, make the problem and goal discussion distinguishable, otherwise, you got a
 
 
 % ===========================================================================
-\section{Problem 3: Dynamically Changing \VM Components}
+\section{Problem 3: Minimal Interface for High-level Low-level Programming}
 % ===========================================================================
-Following from the previous problem statement, we can use the reflective capabilities, namely intercession, to alter the \VM itself.
+We have seen in this chapter that several research \VMs provide a unified model where there is no longer a distinction between language-side and \VM-side.
+In these systems \VM components can be changed with the same reflective tools as language-side objects.
+These are whole language-runtime solutions, typically this is not a feature that can be added to an existing \VM without big changes to the runtime.
 
-\todo{moar}\\
-\todo{How far can we go with this?}\\
-\todo{Not even the \Klein VM talks about changing / interacting with \VM components}\\
-\todo{What are the possible components to attack?}\\
-\todo{The \JIT already naturally lives a hybrid live between VM and language-side reflection (especially in Pharo)}
+In the context of this thesis we identify a minimal interface for high-level low-level programming.
+Instead of providing a new \VM we want an incremental solution that extends the existing language-runtime.
 
 
 % ===========================================================================
