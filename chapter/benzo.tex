@@ -589,14 +589,13 @@ In this section we discuss the general performance characteristics of \B for the
 A more detailed validation is presented later in \secref{ffi-performance} (\FFI), \secref{val-waterfall-performance} (\WF) and \secref{val-nabujito-performance} respectively.
 
 \paragraph{One-time Code Generation Overhead} 
-\B allows the generation of specific and thus efficient native code.
-\sm{Specific vs. specialised, also, not clear enough what that really means here }
+\B allows the generation of specialized and thus efficient native code.
 In \secref{benzo-benzo} we explained how \B causes only a one-time overhead for native code generation. 
 Thereafter it is cached for later activations.
 The three use case presented in \secref{benzo-usecase} heavily benefit from this fact.
-Even though the code generation at language-side is generally slower than a C-level implementation, the overhead can mostly be neglected.
-\sm{Slower, why? And why generally? I believe proper language side JITs will optimize themselves, and be as fast, or faster than naive C implementations}
-Even better, for instance the \B-based \FFI implementation presented in \secref{benzo-ffi} outperforms a \VM-level \FFI-plugin due to a more flexible language-side implementation. 
+Generating code at language-side poses a significant overhead compared to invoking a precompiled native implementation.
+However, this is only a one time overhead.
+For instance the \B-based \FFI implementation presented in \secref{benzo-ffi} outperforms a \VM-level \FFI-plugin due to a more flexible language-side implementation which generates specialized code for each \FFI callout. 
 These results are shown in the following \tabref{benzo-ffi-performance-simple}.
 
 % ---------------------------------------------------------------------------
@@ -695,7 +694,7 @@ A more detailed analysis of \WF is available later in \secref{val-waterfall-perf
 \sm{This chapter needs work, I don't think the structure works integrated in your thesis.
 
 And, well, I find related work here at this place, a little strange}
-In the context of \B we have to respect a variety of related work spawning different abstraction levels.
+In the context of \B we see a variety of related work spawning different abstraction levels.
 On a more abstract scale \B allows for a new way of extending the complete language runtime, hence we classify the related work according the following categories show in \figref{benzo-extensionComparison}: general language-side extensions, extensions using reflection, \VM-level extensions, and hybrid approaches.
 
 We present now an overview of the approaches used to extend a language runtime and expose their limits.
@@ -906,7 +905,7 @@ However, most existing solutions target only specific use cases and can not be r
 % ===========================================================================
 In this section we will point out the current limitations of the \B framework.
 As we outlined in \secref{benzo-performance} \B is a promising alternative to building \VM-plugins.
-Our prototype use cases, the dynamic primitives and the language-side \JIT compiler, even suggest that \B can replace certain \VM modifications.
+Our prototype use cases, the dynamic primitives and the language-side \JIT compiler, even suggest that \B can be used as a replacement for certain \VM-level modifications.
 However, throughout the development of these tools we also noticed certain drawbacks and limitations of the current \B implementation.
 We will now discuss the following three main issues in more detail: robustness, debuggability and portability.
 \sm{Be specific: for example...
@@ -953,7 +952,7 @@ From a \PH point of view this is unacceptable behavior.
 Typically every error is revealed in \PH by opening a debugger, giving the programmer a chance to figure out the problem at hand.
 Enabling debugging support for the low-level \B code is not that easy as we will show in the following \secref{benzo-problems-debugging}.
 
-As a first step we should provided a debug mode for \B where the low-level errors do not terminate the main process.
+As a first step we should provide a debug mode for \B where the low-level errors do not terminate the main process.
 The most simple way to achieve this is by forking the whole \VM process at the moment the native \B code is activated.
 However, the current implementation of the \PH \VM does not support clean forking, even so close implementations such as \Squeak supports forking with a specific \urlfootnote{\VM plugin}{http://wiki.squeak.org/squeak/708/}.
 Implementing a debugging version of the \B plugin to activate native code in a forked process would solve this issue, though at the cost of an additional primitive.
@@ -970,11 +969,13 @@ This difficulty leads us the second issue with \B.
 The second main limitation of \B is the lack of a dedicated debugger.
 \PH inherits the long standing tradition of \ST to provide an excellent debug interaction for programmers.
 \sm{What is with the bochs plugin? That should provide you with everything you need to make debugging native code }
+
 The \PH debugger shows the stack, the current receiver along with the temporary variables and argument.
 However when working with \B this important tool is no longer available.
 Currently the only way to debug \B code is to launch the \VM upfront in a C debugger such as \GDB or \LLDB.
 However, the debug interaction is rather limited compared to \PH.
 Not only does the programmer have to resort to an external tool, but there are only a handful mostly proprietary standalone debuggers available.
+
 For a better low-level debugging experience we have to rely on a complete \textsc{ide} such as \textsc{Eclipse} or \textsc{Xcode}, a rather cumbersome overhead to standard \PH programming.
 \sm{Cut all the Pharo related assessment, just discuss that you want to debug on the same high level you are programming in and give examples of functionality you desire. Pharo is not essential here}
 
@@ -999,6 +1000,7 @@ And present it like that: here, a sketch for a possible solution. Complete debug
 
 The following list explains the detailed steps of \figref{benzo-debugger}.
 \begin{enumerate}
+	\todo{missing link from the text}
 	\item Standard \PH method activating a \B-enabled method through the \ttt{primitiveNativeCall} primitive.
 	\item Native code causing a memory access violation (for example \ttt{SIGSEV}) which can not be handled by \PH directly.
 	\item Low-level signal handler is activated by the operating system and tries to walk back the native stack up to the \ttt{primitiveNativeCall} activation.
@@ -1040,9 +1042,9 @@ That is eh solution you envision, in the limitations section you can then clarif
 
 \paragraph{\VCPU}
 \seclabel{benzo-problems-vcpu}
-In this following paragraph we are going to highlight the benefits and usage of this intermediate format.
+In this following paragraph we are going to highlight the benefits and usage of \ugh{this intermediate format}.
 \VCPU is based on a \TAC to simplify the adoption of optimizations such as \SSA.
-These \TAC instruction take the following form:
+These \TAC instructions take the following form:
 %
 \begin{stcode}{}
 result := argument1 OP argument2
@@ -1102,6 +1104,7 @@ A more detailed motivation and implementation details of this compiler are given
 
 In this chapter we presented \B, an integral approach for reflective high-level low-level programming.
 \B consists of three core parts: \AsmJIT a language-side assembler, a set of primitives to activate native code and language-side library to handle dynamic code installation and activation.
+
 \B promotes a smooth and powerful interaction with the low-level world by dynamically generating native code from language-side.
 This enables to exploit the underlying platform capabilities when strongly needed without leaving the host development platform.
 Most of the \B infrastructure is implemented at language-side and thus susceptible to modification. 
@@ -1122,7 +1125,6 @@ Our mature \FFI implementation outperforms an existing C-\FFI implementation by 
 
 By combining high-level reflection capabilities with efficient low-level code we manage to do dynamic primitive instrumentation and reuse the code for primitive operations which is duplicated on the standard \JIT approach.
 We also show that since our \JIT compiler poses only a one-time overhead when generating native code. 
-Finally, we also show how 
 
 \paragraph{\B's Limitiations}
 Even though \B allows us to implement the three example applications at language-side, the complete development interaction requires improvement.
