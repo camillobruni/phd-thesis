@@ -446,7 +446,7 @@ In their framework, methods have to be annotated to enable the use of low-level 
 \Maxine is a metacircular \Java \VM \cite{Wimm13a} focused on an efficient developer experience.
 Typically \VM frameworks focus on abstraction at the code-level which should yield simpler code and thus help reducing development efforts.
 However, in most situations the programmer is still forced to use existing unspecific tools for instance to debug the \VM.
-In contrast to that, the \Maxine \VM provides \ugh{first-hand tools} to interact with the \VM in development.
+In contrast to that, the \Maxine \VM provides dedicated tools to interact with the \VM in development.
 \Maxine uses abstract and high-level representations of \VM-level concepts and consistently exposes them throughout the development process.
 Inspectors at multiple abstraction levels are readily available while debugging, giving insights to the complete \VM state.
 \Maxine provides and excellent navigation for generated native code by providing links back to language-side objects as well as other native code and symbols.
@@ -469,9 +469,7 @@ The underlying \PyPy infrastructure implicitly provides memory management and \J
 
 \PyPy follows a different approach from the previously presented \VM generation frameworks.
 For instance, in Squeak and \Jikes the final \VM implementation is not much different from C or C++.
-\sm{C/c++ has nothing to do with this
-
-It is about direct implementation vs. composition by a tool chain or something similar. At least that's my understanding here}
+\sm{C/c++ has nothing to do with this. It is about direct implementation vs. composition by a tool chain or something similar. At least that's my understanding here}
 The programmer specifies all the components of the \VM explicitly, either by implementing them directly or using a provided library.
 Compared to the more static C ans C++ these \VM generation frameworks make the compilation phase more tangible.
 \ST in \Squeak or \Java in \Jikes or \Maxine fulfill the purpose of the template system in C++ or the restricted macro system in C.
@@ -634,10 +632,9 @@ Hence \Klein does not use an intermediate low-level language to bootstrap the sy
 
 It is an exchange format, a serialization, what ever, I think you want to make the point that it is not being executed? Well, I am not to sure about that for Klein...}
 
-It is important to point out that the \VM-level structures and objects are not compiled away as it is usually the case.
+It is important to point out that the reification of the \VM-level survives the code generation or compilation time.
 Instead the \VM structures are represented as real \Self objects.
 Hence the \Klein \VM supports true \VM-level reflection since there is only a single code base.
-\sm{I don't like the 'compiled away'. In hotspot, everything is a C++ object! no? I think, you'll probably have clarified that point in text that comes earlier, so, I would avoid such 'sloppy' language here and use the precise criterion/terminology from earlier}
 
 Additionally to the advances in reflection and metacircularity, \Klein focuses on fast compilation turnarounds to allow for a responsive development process.
 Which is unlike for instance the \Squeak \VM where a full \VM bootstrap takes an order of minutes on modern hardware.
@@ -645,8 +642,7 @@ Which is unlike for instance the \Squeak \VM where a full \VM bootstrap takes an
 
 Development on the \Klein \VM seized in 2009 and left the \Klein \VM in fairly usable state.
 Like \P it currently lacks a dedicated \GC.
-Yet, it proved that it is possible and build a language-runtime without a proper separation of the language-side and the \VM or base-level.
-\sm{Proper is the wrong word here, proper has a positive connotation, also implying it is necessary}
+Yet, it proved that it is possible and build a language-runtime without the classical separation of the language-side and the \VM.
 From the literature presented about the \Klein project we see a strong focus on the improvements of the development tools.
 The fact that the language-runtime allows \VM-level reflection to change the \VM dynamically is not directly mentioned in the literature.
 While we see the practical limitations of changing the \VM at runtime we would like to open the doors to this new form of reflection.
