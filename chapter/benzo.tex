@@ -40,6 +40,7 @@ The key components of \B are:
 \section{Background}
 \seclabel{benzo-background}
 % ===========================================================================
+\sd{Maybe you need a stronger analysis in a previous chapter}
 High-level low-level programming \cite{Fram09a} encourages to use high-level languages such as \Java to build low-level execution infrastructures or to do system programming. 
 It is successfully used in experimental high-level self-hosted virtual machines (\VMs) such as \Jikes~\cite{Alpe99a}.  
 Frampton et al. present a framework that is biased towards a statically typed high-level language, taking strict security aspects into account.
@@ -74,6 +75,7 @@ A solution that crosses these barriers requires the following properties:
 \subsection{\B a Framework for Reflective Low-level Programming}
 % ---------------------------------------------------------------------------
 
+\sd{repetition with below}
 High-level low-level programming is a powerful technique for system programming without resorting to static low-level environments \cite{Fram09a,Wimm13a} that almost fulfills our requirements.
 However, in a reflective setup it fails to comply with the first requirement mentioned in the previous paragraph: it does not allow reflective changes at runtime.
 \sm{See limitations should be made very clear and referencable in chapter 2, and here you should reference them again.}
@@ -999,8 +1001,8 @@ And present it like that: here, a sketch for a possible solution. Complete debug
 \end{figure}
 
 The following list explains the detailed steps of \figref{benzo-debugger}.
+\todo{missing link from the text}
 \begin{enumerate}
-	\todo{missing link from the text}
 	\item Standard \PH method activating a \B-enabled method through the \ttt{primitiveNativeCall} primitive.
 	\item Native code causing a memory access violation (for example \ttt{SIGSEV}) which can not be handled by \PH directly.
 	\item Low-level signal handler is activated by the operating system and tries to walk back the native stack up to the \ttt{primitiveNativeCall} activation.
