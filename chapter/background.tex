@@ -172,9 +172,10 @@ Another edge-case is the use of external native libraries which are used for per
 
 Thus we see that the boundary to the \VM can be crossed in several ways.
 Proper separation is possible for a static language which restricts the reflective power or prohibits the use of custom external libraries.
-However, this is clearly not the case in \PH or \ST.
+However, this is clearly not the case contemporary dynamic programming languages.
 Since arbitrary code changes are possible at language-side the \VM-level boundary for reflection seems incidental.
-Reflection down to the \VM level is possible if we leave security and performance concerns aside.
+Furthermore, research suggests that this separation is a limiting factor when focusing on low-level interaction with external functionality \cite{Kell11a}.
+Reflection down to the \VM level is possible if we leave certain security and performance concerns aside.
 
 To further analyze this hypothesis we need to track the evolution of dynamic reflection in programming languages.
 In our analysis we omit languages that do not run on top of a \VM.
@@ -221,7 +222,6 @@ We are interested in language runtimes that are built around a \VM which introdu
 	Typically these operations are support by \VMs running in debug mode, which enables remote introspection.
 	However, this does not imply that the language-runtime is capable of doing so reflectively.
 
-
 \item \textbf{Limited language-side intercession of the \VM:}
 	The previous category allows the language-side to safely read \VM-level properties.
 	If we follow the same path as the language-side evolution of reflection the next step is to allow for modification at \VM-level.
@@ -240,19 +240,13 @@ We are interested in language runtimes that are built around a \VM which introdu
 	Unsurprisingly we find that these \VMs are built metacircularly, they are written in the same language they support.
 \end{enumerate}
 
-\todo{recap initial statement of incidental reflective locjout}
-\todo{we further focus on metacircular VMs, close match with the reflective approach, or close metacircular VMs}
-\noindent From this overview of reflective evolution of high-level languages we see that there is only little research about self-aware \VMs or reflective \VMs.
-In general high-level languages are built with a clear distinction of the language-side and the \VM.
-However, for certain applications such as interaction with external native libraries this proves to be a limitation \cite{Kell11a}.
+From this overview of the evolution of reflection in high-level languages and their \VMs we see that there certain language runtimes that provide a form of \VM-level reflection.
+Which is a clear indicator that the clear separation between language-side and \VM-side is mostly incidental.
+However, we see that there is only little research about self-aware \VMs or reflective \VMs.
+According to our overview, only a few research language runtimes would classify as self-aware.
+Combined with the previous two categories d and e, we see that metacircular \VMs encourage extended reflection.
+In the following section we are now going to describe in more detail how metacircular \VMs are built and what their contribution to the high-level low-level interaction is.
 
-
-\sm{Where does the VMIL2011 paper fit in? Stephen Kell, I believe?}
-However, with further reflective capabilities of the language-side we see that such a separation is no longer a guarantee for security.
-In fact many security aspects have to be addressed already at language-side \cite{??}.
-\sm{Why do you talk about security at all? Are you doing anything about it? If not, remove those discussions, and put them in future work, and the beginning somewhere needs to state that it is out of scope.}
-This we want to focus in this thesis on the reflective aspects of the \VM.
-In order to further compare reflection in languages we will now discuss the different \VM building approaches. 
 
 
 % ===========================================================================
