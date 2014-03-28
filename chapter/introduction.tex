@@ -14,24 +14,22 @@ In an extended form, reflection allows a program to alter its own structures and
 Originally \VMs are built in performance oriented low-level programming languages such as C which on their own support little or no reflection at runtime.
 Hence, rather incidentally, reflection is limited to the language-side.
 
-However, there are \VMs that are implemented using high-level languages which support reflection themselves.
+However, there are other \VMs that are implemented using high-level languages which support reflection themselves.
 More specifically we see that metacircular \VMs encourage advanced reflective features and new ways of interacting with the low-level \VM world.
 Metacircular \VMs are implemented in the same language they support.
+Typically this enables a more flexible building process where more high-level structures survive the compilation process.
+The final language-runtime can profit from this and support high-level low-level programming.
+In several research \VMs this concept is used to implement typically isolated \VM components at language-side.
+But instead of generating a native version at \VM generation time, these components are evaluated at language-side, with the only difference that they have the capability to directly interact with low-level code.
+This means that the original separation of language-side and \VM is no longer evident.
 
-\todo{Sate of the art:}\\
-\todo{- new vms and vm building processes overcome this limitations}\\
-\todo{- high-level low-level programming}\\
-\todo{- metacircular vms match well..}\\
-\todo{- klein and Co}\\
-\todo{- diffferent levels...}
+A language-runtime where \VM components are implemented at language-side also enables extended forms of reflection.
+With the same reflective tools it is now possible to inspect and alter \VM-level objects.
+However, this approach requires substantial effort as the \VM has to be designed from ground up in a new way.
+In this thesis we would like to follow a different approach with the same goals in mind.
+Instead of a holistic approach, we want to identify a minimal interface for performing high-level low-level programming or even extend reflection down to the \VM.
+We look for an approach which works on top of an existing high-level language \VM.
 
-\todo{Problem / Plant:}\\
-\todo{- overcome separation of refelction}\\
-\todo{- minimal approach using minimal interface}\\
-\todo{- incremental approach runing on top of an existing solution}\\
-\todo{- what is the tradeoff of using a simpler approach?}
-
-\todo{Solution}
 To answer these questions we propose the high-level low-level programming framework \B written for \PH.
 In the core \B allows us to dynamically activate native code from language-side.
 This adds a primitive yet generic interface to the low-level \VM world.
