@@ -128,7 +128,7 @@ This is general and essential so it applies to any \VM that wants to support dyn
 \seclabel{benzo-exeutable-memory}
  
 We chose to follow a very lightweight approach to dynamically execute native code at runtime. 
-Since we use \PH as our host language it is a natural choice to manage the native code at language-side and use as little VM features as possible.
+Since we use \PH as our host language it is a natural choice to manage the native code at language-side and use as few \VM features as possible.
 Hence we use normal \PH objects to hold the generated native code.
 \sm{This is your thesis goal, no? Motivate it like that, don't just put it here as incidental!}
 
@@ -268,7 +268,6 @@ This means that for native code, instead of a method-local literal array we shar
 \paragraph{\JIT Interaction}
 \seclabel{benzo-jit-interaction}
 
-The interaction of \B and the JIT.
 When the \PH \VM starts the execution of dynamic generated code the execution environment changes slightly.
 Similarly, when entering primitives or plugin code, the managed execution mode is left and a normal C-level execution environment is reestablished until the primitive finishes and the \VM jumps back to the jitted code.
 These context switches impose an overhead and can be avoided in the case of calling native code.
@@ -281,8 +280,8 @@ For this reason we extend the \VM to support inlining of native code in the \JIT
 	\figlabel{benzo-nabujitoInline}
 \end{figure}
 %
-\figref{benzo-nabujitoInline} shows how the native code from a \B enabled method is inlined into the JIT infrastructure.
-The \B prologue and epilogue used for managing the low-level stack are replaced by an adapted version for the JIT.
+\figref{benzo-nabujitoInline} shows how the native code from a \B enabled method is inlined into the \JIT infrastructure.
+The \B prologue and epilogue used for managing the low-level stack are replaced by an adapted version for the \JIT.
 The performance boost of this optimization is further discussed in \secref{benzo-issues-performance}.
 \sm{Motivation first, why are you talking about this? Classic primitives have overhead, and you provide solution? Might not be novel,but in the context of your thesis goals it is necessary to achieve acceptable performance}
 
@@ -532,7 +531,7 @@ It transforms \PH methods into slightly optimized native code at runtime.
 The most complex logic of the \JIT infrastructure deals with the dynamic nature of the \PH environment.
 Methods and classes can be changed at runtime and that has to be addressed by the \JIT infrastructure.
 This implies that an efficient \JIT infrastructure needs substantial access to language-side structures; in our case classes, methods.
-\sm{Really? I don't believe that. That only means you need to be able to invalidate code, something that ever speculative JIT does, and you said before that there aren't any VMs fulfilling your criteria. So, be more precise here, this is too sloppy and too broad of a statement}
+\sm{Really? I don't believe that. That only means you need to be able to invalidate code, something that ever speculative \JIT does, and you said before that there aren't any VMs fulfilling your criteria. So, be more precise here, this is too sloppy and too broad of a statement}
 This information is readily accessible in \PH through the standard reflective \API.
 However, at \VM-level this requires more effort, and thus imposes strong requirements on the design of classes and methods at language-side.
 The \JIT infrastructure is a hybrid between \VM logic and language-side reflection.
@@ -838,7 +837,7 @@ Presumably it would be easier to port the back-in-time debugger to a new \PH ver
 
 \paragraph{High-level Low-level Programming}
 High-level low-level programming \cite{Fram09a} encourage to use high-level languages for system programming.
-Frampton et al. present a low-level framework packaged as \textsc{org.vmmagic}, which is used as system interface for Jikes, an experimental \Java \VM.
+Frampton et al. present a low-level framework packaged as \textsc{org.vmmagic}, which is used as system interface for \Jikes, an experimental \Java \VM.
 Additionally their framework is successfully used in \textsc{mmtk} \cite{Blac04a} which is used independently in several other projects.
 The \textsc{org.vmmagic} package is much more elaborate than \B but it is tailored towards \Java with static types.
 Methods have to be annotated to use low-level functionality.

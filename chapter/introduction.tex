@@ -5,12 +5,12 @@
 \minitoc
 % =============================================================================
 
-\todo{extend}
+\todo{extend abstract}
 High-level languages implement reflection which allows a language runtime to inspect and alter its own execution and state.
 These high-level languages typically run on top of virtual machines (\VMs) have been built to create an abstraction layer over hardware.
-Due to the isolating nature of the VM, reflection is generally limited to the language-side.
-Several research \VMs overcome this separation and provide a unified model where there is no more a clear distinction between language-side and VM-side.
-In such a language runtime it is possible to reflectively modify VM components from language-side as they reside on the same abstraction layer.
+Due to the isolating nature of the \VM, reflection is generally limited to the language-side.
+Several research \VMs overcome this separation and provide a unified model where there is no more a clear distinction between language-side and \VM-side.
+In such a language runtime it is possible to reflectively modify \VM components from language-side as they reside on the same abstraction layer.
 
 In this dissertation we follow the same global direction towards a unified language-runtime or self-aware \VM.
 However, instead of looking for a holistic solution we focus on a minimal approach.
@@ -66,7 +66,7 @@ Following the problem description listed in the above introduction we identified
 	\item Intercession is limited to language-side.
 	\VMs are not accessible from language-side and they are usually have no reflective properties at runtime. 
 	
-	\item Existing approaches to a unified model between the VM and the language-side are holistic, there is no intermediate solution available.
+	\item Existing approaches to a unified model between the \VM and the language-side are holistic, there is no intermediate solution available.
 \end{itemize}
 
 \noindent Out of these general problems concerning reflection in high-level languages we see that they have a low-level root.
@@ -84,9 +84,8 @@ Hence we focus on the following concrete problems we wish to solve in this thesi
 	\item[Problem 2:] Intercession is limited to language-side.
 	\VMs are not accessible from language-side and they are usually have no reflective properties at runtime.
 	
-	\item[Problem 3:] High-level low-level programming has not yet been applied to implement \VM-level components at language-side.
+	\item[Problem 3:] High-level low-level programming has not yet been provided as an incremental extension to an existing language runtime.
 \end{description}
-
 
 % =============================================================================
 \section{Contributions}
