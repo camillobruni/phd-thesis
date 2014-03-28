@@ -96,13 +96,13 @@ Using this framework we identify the limitation of such an approach by evaluatin
 We present now our contributions of this dissertation addressing the previously identified problems concerning high-level low-level programming in a dynamic language:
 
 \begin{description}
-	\item[\B] is a high-level low-level programming framework written in \urlfootnote{\PH}{http://pharo.org/}. \todo{by Igor Sasenko}
+	\item[\B] is a high-level low-level programming framework written in \urlfootnote{\PH}{http://pharo.org/}.
 	The core functionality of \B is to dynamically execute native-code generated at language-side.
 	Our framework requires minimal changes to an existing \VM and three custom primitives to support dynamic code activation, the majority of \B is implemented as accessible language-side code.
 	\B allows us to directly communicate with the low-level world and thus hoist typical \VM-level applications to the language-side.
 	\sm{Just a shift of implementation language, opens up opportunities, but in itself, doesn't give more reflective power, it is still 'a runtime', no? }
 		
-	\item[\NB] is a \B-based foreign function interface (\FFI).  \todo{by Igor Sasenko}
+	\item[\NB] is a \B-based foreign function interface (\FFI).
 	\NB makes generates customized native code at language-side, both being flexible and efficient at the same time.
 	\NB outperforms other existing \FFI solutions on the \PH platform, making it an ideal evaluation for the \B framework.
 	
@@ -127,10 +127,8 @@ We present now our contributions of this dissertation addressing the previously 
 % =============================================================================
 \section{Outline}
 % =============================================================================
-
-\sm{This dissertation structure is different to what I am used to. At least the way you announce the purpose of the chapters is not what I would expect.
-
-In my diss, everything revolves around one thesis, here, it is a number of things listed one after another, don't see the central motive I would expect}
+%\sm{This dissertation structure is different to what I am used to. At least the way you announce the purpose of the chapters is not what I would expect.
+%In my diss, everything revolves around one thesis, here, it is a number of things listed one after another, don't see the central motive I would expect}
 
 \begin{description}
 \item[\chapref{background}] sheds light on the context of this work.
