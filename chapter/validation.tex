@@ -480,7 +480,7 @@ A successful and fast \JIT implies a \VM that uses the native stack.
 The original \ST-80 blue book implementation foresees a spa\-ghet\-ti-stack where all contexts are normal objects on the heap.
 This design simplifies the \VM implementation significantly since there is no special treatment necessary for blocks.
 Also this makes it rather easy to implement \PH's feature to access the current context using the special \ttt{thisContext} variable.
-However, the obvious down side of this implementation is the massive stress on the \GC.
+However, the down side of this implementation is that it puts stress on the \GC and prevents more aggressive optimizations on the stack.
 \sm{GC is not the problem, because contexts are recycled 
 
 Without the JIT using the C stack gives. 30\% or so, if I remember correctly. There is some GC benefit in it, but I guess mostly locality and more efficient encoding. 
