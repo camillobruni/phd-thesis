@@ -5,12 +5,12 @@
 \minitoc
 % =============================================================================
 
-\noindent Many high-level programming languages run on top of a virtual machine (\VM) which provides certain advantages from running directly on the underlying hardware.
+\noindent Several high-level languages support dynamic reflection, the capability of a language to reason about itself.
+In an extended form, reflection allows a program to alter its own structures and execution at runtime.
+Many high-level programming languages run on top of a virtual machine (\VM) which provides certain advantages from running directly on the underlying hardware.
 Many high-level language \VMs pursue a strict separation between language-side and \VM-side.
 \VMs for instance provide automatic memory management or use platform agnostic instructions such as bytecodes.
 These properties allow a programming language to develop independently from the underlying hardware.
-One such feature is dynamic reflection, the capability of a language to reason about itself.
-In an extended form, reflection allows a program to alter its own structures and execution.
 Originally \VMs are built in performance oriented low-level programming languages such as C which on their own support little or no reflection at runtime.
 Hence, rather incidentally, reflection is limited to the language-side.
 
@@ -71,7 +71,7 @@ We see that their approach has not yet been applied in a more dynamic environmen
 Hence we focus on the following concrete problems we wish to solve in this thesis.
 
 \begin{description}
-	\item[Problem 1:] High-level low-level programming is not available at runtime.
+	\item[Problem 1:] High-level low-level programming is not available at runtime and from language-side.
 	
 	\item[Problem 2:] Intercession is limited to language-side.
 	\VMs are not accessible from language-side and they are usually have no reflective properties at runtime.
@@ -83,9 +83,11 @@ Hence we focus on the following concrete problems we wish to solve in this thesi
 \section{Contributions}
 % =============================================================================
 
-\todo{Identify simple interface for high-level owo-level programming}\\
-\todo{identify limiitiations thereof} \\
-\todo{suggest ways to integrate a direct code execution framework better in the development process}
+To support high-level low-level programming from language-side we provide a identify that native code generation at language-side is essential.
+Hence we validate this concept by implementing a language-side framework for native code generation and execution with minimal \VM changes.
+Using this framework we identify the limitation of such an approach by evaluating several typical \VM-level applications.
+
+
 
 % =============================================================================
 \section{Artifacts}
