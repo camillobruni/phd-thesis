@@ -467,8 +467,7 @@ Interpreters are written in a type-inferable subset of \Python called \RPython.
 The underlying \PyPy infrastructure implicitly provides memory management and \JIT compilation.
 
 \PyPy follows a different approach from the previously presented \VM generation frameworks.
-For instance, in Squeak and \Jikes the final \VM implementation is not much different from C or C++.
-\sm{C/c++ has nothing to do with this. It is about direct implementation vs. composition by a tool chain or something similar. At least that's my understanding here}
+For instance, in Squeak and \Jikes the final \VM implementation is not much different from an implementation done directly in a low-level language.
 The programmer specifies all the components of the \VM explicitly, either by implementing them directly or using a provided library.
 Compared to the more static C ans C++ these \VM generation frameworks make the compilation phase more tangible.
 \ST in \Squeak or \Java in \Jikes or \Maxine fulfill the purpose of the template system in C++ or the restricted macro system in C.
@@ -651,6 +650,8 @@ While we see the practical limitations of changing the \VM at runtime we would l
 \section{High-level Low-Level Applications}
 \seclabel{background-high-level-low-leve-application}
 % ===========================================================================
+\todo{linking introduction paragraph}
+
 % ---------------------------------------------------------------------------
 \subsection{Foreign Function Interfaces (\FFI)}
 \seclabel{background-ffi}
@@ -691,7 +692,6 @@ It uses the low-level \textsc{dwarf} debugging information present in the extern
 \seclabel{background-jit}
 \seclabel{val-nabujito-related-work}
 % -----------------------------------------------------------------------------
-\todo{check for reference to \NBJ}
 There is a vast amount of scientific literature when it comes to \JIT optimizers.
 However, they focus on the optimization opportunities itself such as different compilation strategies or an efficient \GC interaction.
 In the context of our work compiler-based optimizations are of second importance since we focus on the hybrid nature of a system that interacts with the low-level \VM world.

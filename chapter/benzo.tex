@@ -9,6 +9,7 @@
 
 \sm{For me, this is not an artefact show, it is a thesis, so, I would expect to read something relating the artifact to the problem statement, and using precise terminology as devised in sec. 2}
 
+\todo{by Igor Stasenko}
 In this chapter we present \B a framework that connects the low-level \VM world with a reflective and dynamic language-side library.
 Unlike more classical approaches \B does not resort to vast set of customized \VM primitives or plugins.
 \sm{Do you really want to talk about  1 generic vs. many specific things that are exposed to facilitate low level programming? I would think the point you are trying to make here conflates again multiple aspects. Take the things apart, and make one argument at a time
@@ -205,7 +206,7 @@ The code example \ttt{interrupt3} shows a very basic application of our infrastr
 interrupt3
 	<primitive: 'primitiveNativeCall' 
 	 module: 'Benzo' >
-	Benzo generate: [ :asm | asm int3 ]
+	Benzo generate: [ :asm | asm interrupt3 ]
 \end{stcode}
 %
 The primitive named \ttt{primitiveNativeCall} on the first line tries to run the native instructions appended to the compiled method.
@@ -299,7 +300,7 @@ failWithErrorMessage
 	<primitive: 'primitiveNativeCall' 
 	 module: 'Benzo' >
 	 Benzo x86 generate: [ :asm :helper |
-		helper failWithMessage: 'Value is not 0'.].
+		helper failWithMessage: 'Value is not 0' ].
 \end{stcode}
 %
 Under the hood, \B reuses the existing built-in error mechanism of \PH primitives.
@@ -326,7 +327,7 @@ The following describes the features of \B at the high-level language-side.
 %
 \begin{stcode}{4}
 Benzo x86 generate: [ :asm |
-	asm mov: 1 asUImm to: asm EAX ].
+	asm mov: 1 asUImm to: asm registers EAX ].
 \end{stcode}
 %
 The implementation first creates a slightly more abstract intermediate format.
@@ -689,12 +690,10 @@ A more detailed analysis of \WF is available later in \secref{val-waterfall-perf
 
 
 % ===========================================================================
-\section{Related Work}
+\section{Extending the Language Runtime}
 \seclabel{benzo-related}
 % ===========================================================================
-\sm{This chapter needs work, I don't think the structure works integrated in your thesis.
-
-And, well, I find related work here at this place, a little strange}
+\todo{try to push to background chapter}
 In the context of \B we see a variety of related work spawning different abstraction levels.
 On a more abstract scale \B allows for a new way of extending the complete language runtime, hence we classify the related work according the following categories show in \figref{benzo-extensionComparison}: general language-side extensions, extensions using reflection, \VM-level extensions, and hybrid approaches.
 
