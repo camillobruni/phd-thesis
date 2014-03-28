@@ -159,7 +159,7 @@ However, the language-side is not capable of accessing \VM-level information.
 The closest \VM interaction point typically is the bytecode generated at language-side and handed over to the \VM for execution.
 Yet, this provides only a crude one-way interaction \cite{Kell12a}.
 Certain \VMs provide debugging or inspection interfaces which are used by external tools to access or modify the \VM internals.
-Technically the same \VM debugging interface can be used by the language itself it is not common.
+Even though technically the same \VM debugging interface can be used by the language itself it is not common.
 
 For highly reflective and dynamic languages we see a certain mismatch.
 On the one hand, it is possible to virtually change and modify everything at language-side.
@@ -172,7 +172,7 @@ Another edge-case is the use of external native libraries which are used for per
 
 Thus we see that the boundary to the \VM can be crossed in several ways.
 Proper separation is possible for a static language which restricts the reflective power or prohibits the use of custom external libraries.
-However, this is clearly not the case contemporary dynamic programming languages.
+However, this is clearly not the case for contemporary dynamic programming languages.
 Since arbitrary code changes are possible at language-side the \VM-level boundary for reflection seems incidental.
 Furthermore, research suggests that this separation is a limiting factor when focusing on low-level interaction with external functionality \cite{Kell11a}.
 Reflection down to the \VM level is possible if we leave certain security and performance concerns aside.
@@ -208,8 +208,7 @@ We are interested in language runtimes that are built around a \VM which introdu
 	The third category of high-level language runtimes has extended reflection with strong support from the underlying \VM.
 	We put \PH, \ST implementations or \Self in this category of languages.
 	The \VM supports complex reification of otherwise non-accessible concepts.
-	Additionally we see 
-	These language runtime support extended behavioral reflection for instance accessing and modifying the execution context.
+	These language runtime support extended behavioral reflection, for instance accessing and modifying the execution context.
 	The supported reflective capabilities can not be anticipated, and thus require strong support from the underlying \VM.
 	At this stage the \VM-level optimizations are a balance between restricting the supported language or sacrificing speed.
 	
@@ -219,7 +218,7 @@ We are interested in language runtimes that are built around a \VM which introdu
 	Up to some extent this is similar to language-side structural reflection as the \VM only supports only a restricted interface which is defined at compile-time.
 	In this category the language can only read (introspect) \VM properties.
 	This might include reading out \JIT related properties such as performance counters or type annotations.
-	Typically these operations are support by \VMs running in debug mode, which enables remote introspection.
+	Typically these operations are supported by \VMs running in debug mode, which enables remote introspection.
 	However, this does not imply that the language-runtime is capable of doing so reflectively.
 
 \item \textbf{Limited language-side intercession of the \VM:}
@@ -695,7 +694,7 @@ It uses the low-level \textsc{dwarf} debugging information present in the extern
 \todo{check for reference to \NBJ}
 There is a vast amount of scientific literature when it comes to \JIT optimizers.
 However, they focus on the optimization opportunities itself such as different compilation strategies or an efficient \GC interaction.
-In the context of our work the compiler-based optimization are of second importance since we focus on the hybrid nature of a system that interacts with the low-level \VM world.
+In the context of our work compiler-based optimizations are of second importance since we focus on the hybrid nature of a system that interacts with the low-level \VM world.
 
 Jan Vran\'{y} et al. present a \ST with an explicit meta-object-protocol allowing for method lookup customization at language-side\cite{Vran12a}.
 Their customized \ST/X \VM has an extended lookup mechanism where each class can specialize the lookup with a user definable \ttt{LookupObject}.
