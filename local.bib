@@ -2,12 +2,39 @@
 %% http://bibdesk.sourceforge.net/
 
 
-%% Created for cami at 2014-03-29 11:00:02 +0100 
+%% Created for cami at 2014-03-29 11:49:14 +0100 
 
 
 %% Saved with string encoding Unicode (UTF-8) 
 
 
+
+@article{McGh98a,
+	Abstract = {Key to the central promise inherent in Java technology-"write once, run anywhere"-is the fact that Java programs run on the Java virtual machine, insulating them from any contact with the underlying hardware. Consequently, Java programs must execute indirectly through a translation layer built into the Java virtual machine. Translation essentially converts Java virtual machine instructions (called byte-codes) into corresponding machine-specific binary instructions. Bytecode is a single image of a program that will execute identically (in principle) on any system equipped with a {JVM}. The first step toward the development of a new class of Java processors was the creation of the bytecode execution engine itself, called the {picoJava} core. {PicoJava} directly executes Java bytecode instructions and provides hardware support for other essential functions of the {JVM}. Executing bytecode instructions in hardware eliminates the need for dynamic translation, thus extending the useful range of Java bytecode programs to embedded environments. By the end of 1998, Java processors like Sun's {microJava} 701 should be available for evaluation from several licensees of the {picoJava} core technology},
+	Address = {Los Alamitos, CA, USA},
+	Author = {McGhan, Harlan and O'Connor, Mike},
+	Booktitle = {Computer},
+	Citeulike-Article-Id = {4017931},
+	Citeulike-Linkout-0 = {http://portal.acm.org/citation.cfm?id=621089},
+	Citeulike-Linkout-1 = {http://dx.doi.org/10.1109/2.722273},
+	Citeulike-Linkout-2 = {http://ieeexplore.ieee.org/xpls/abs\_all.jsp?arnumber=722273},
+	Date-Added = {2014-03-29 10:49:13 +0000},
+	Date-Modified = {2014-03-29 10:49:13 +0000},
+	Doi = {10.1109/2.722273},
+	Issn = {0018-9162},
+	Journal = {Computer},
+	Month = oct,
+	Number = {10},
+	Pages = {22--30},
+	Posted-At = {2014-03-29 10:48:11},
+	Priority = {2},
+	Publisher = {IEEE Computer Society Press},
+	Title = {{PicoJava}: A Direct Execution Engine For Java Bytecode},
+	Url = {http://dx.doi.org/10.1109/2.722273},
+	Volume = {31},
+	Year = {1998},
+	Bdsk-File-1 = {YnBsaXN0MDDUAQIDBAUGJCVYJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoKgHCBMUFRYaIVUkbnVsbNMJCgsMDxJXTlMua2V5c1pOUy5vYmplY3RzViRjbGFzc6INDoACgAOiEBGABIAFgAdccmVsYXRpdmVQYXRoWWFsaWFzRGF0YV8QTC4uLy4uL3BhcGVyL01jR2g5OGEgUGljb0phdmEgQSBEaXJlY3QgRXhlY3V0aW9uIEVuZ2luZSBGb3IgSmF2YSBCeXRlY29kZS5wZGbSFwsYGVdOUy5kYXRhTxECHgAAAAACHgACAAADT1NYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAyugn80grAAAADj8MH01jR2g5OGEgUGljb0phdmEgQSAjN0M1NENGOS5wZGYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAfFTPnPXGOkAAAAAAAAAAAAAgACAAAJIAAAAAAAAAAAAAAAAAAAAAVwYXBlcgAAEAAIAADK6BnjAAAAEQAIAADPXFWUAAAAAQAQAA4/DAALHIoABlHNAALmjAACAEdPU1g6VXNlcnM6AGNhbWktZGF0YToAZWR1Y2F0aW9uOgBwYXBlcjoATWNHaDk4YSBQaWNvSmF2YSBBICM3QzU0Q0Y5LnBkZgAADgCCAEAATQBjAEcAaAA5ADgAYQAgAFAAaQBjAG8ASgBhAHYAYQAgAEEAIABEAGkAcgBlAGMAdAAgAEUAeABlAGMAdQB0AGkAbwBuACAARQBuAGcAaQBuAGUAIABGAG8AcgAgAEoAYQB2AGEAIABCAHkAdABlAGMAbwBkAGUALgBwAGQAZgAPAAgAAwBPAFMAWAASAGBVc2Vycy9jYW1pLWRhdGEvZWR1Y2F0aW9uL3BhcGVyL01jR2g5OGEgUGljb0phdmEgQSBEaXJlY3QgRXhlY3V0aW9uIEVuZ2luZSBGb3IgSmF2YSBCeXRlY29kZS5wZGYAEwABLwAAFQACAAv//wAAgAbSGxwdHlokY2xhc3NuYW1lWCRjbGFzc2VzXU5TTXV0YWJsZURhdGGjHR8gVk5TRGF0YVhOU09iamVjdNIbHCIjXE5TRGljdGlvbmFyeaIiIF8QD05TS2V5ZWRBcmNoaXZlctEmJ1Ryb290gAEACAARABoAIwAtADIANwBAAEYATQBVAGAAZwBqAGwAbgBxAHMAdQB3AIQAjgDdAOIA6gMMAw4DEwMeAycDNQM5A0ADSQNOA1sDXgNwA3MDeAAAAAAAAAIBAAAAAAAAACgAAAAAAAAAAAAAAAAAAAN6},
+	Bdsk-Url-1 = {http://dx.doi.org/10.1109/2.722273}}
 
 @inproceedings{Tant08a,
 	Abstract = {Context-oriented programming proposes to treat execution context explicitly and to provide means for context-dependent adaptation at runtime. There are many mechanisms that can be used to make either variable bindings or application code adapt dynamically, like dynamically-scoped variables, dynamic layer activation, and contextual dispatch. There are no means however, to make actual values be context-dependent. This means that side effects engendered by dynamically-activated adaptations are potentially global. We propose contextual values: values that actually depend on the context in which they are looked at and modified. We explore how contextual values can be provided, either as a simple library or directly into the language through different designs, for which we provide the operational semantics in the form of Scheme interpreters. Being able to scope side effects to certain contexts is a step forward for context-oriented programming, and can have interesting applications in other areas like security and dynamic software evolution.},
@@ -30,7 +57,7 @@
 	Title = {Contextual Values},
 	Url = {http://dx.doi.org/10.1145/1408681.1408684},
 	Year = {2008},
-	Bdsk-File-1 = {YnBsaXN0MDDUAQIDBAUGJCVYJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoKgHCBMUFRYaIVUkbnVsbNMJCgsMDxJXTlMua2V5c1pOUy5vYmplY3RzViRjbGFzc6INDoACgAOiEBGABIAFgAdccmVsYXRpdmVQYXRoWWFsaWFzRGF0YV8QKS4uLy4uL3BhcGVyL1RhbnQwOGEgQ29udGV4dHVhbCBWYWx1ZXMucGRm0hcLGBlXTlMuZGF0YU8RAbQAAAAAAbQAAgAAA09TWAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMroJ/NIKwAAAA4/DB1UYW50MDhhIENvbnRleHR1YWwgVmFsdWVzLnBkZgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHxS1ez1xX3QAAAAAAAAAAAAIAAgAACSAAAAAAAAAAAAAAAAAAAAAFcGFwZXIAABAACAAAyugZ4wAAABEACAAAz1xJzQAAAAEAEAAOPwwACxyKAAZRzQAC5owAAgBFT1NYOlVzZXJzOgBjYW1pLWRhdGE6AGVkdWNhdGlvbjoAcGFwZXI6AFRhbnQwOGEgQ29udGV4dHVhbCBWYWx1ZXMucGRmAAAOADwAHQBUAGEAbgB0ADAAOABhACAAQwBvAG4AdABlAHgAdAB1AGEAbAAgAFYAYQBsAHUAZQBzAC4AcABkAGYADwAIAAMATwBTAFgAEgA9VXNlcnMvY2FtaS1kYXRhL2VkdWNhdGlvbi9wYXBlci9UYW50MDhhIENvbnRleHR1YWwgVmFsdWVzLnBkZgAAEwABLwAAFQACAAv//wAAgAbSGxwdHlokY2xhc3NuYW1lWCRjbGFzc2VzXU5TTXV0YWJsZURhdGGjHR8gVk5TRGF0YVhOU09iamVjdNIbHCIjXE5TRGljdGlvbmFyeaIiIF8QD05TS2V5ZWRBcmNoaXZlctEmJ1Ryb290gAEACAARABoAIwAtADIANwBAAEYATQBVAGAAZwBqAGwAbgBxAHMAdQB3AIQAjgC6AL8AxwJ/AoEChgKRApoCqAKsArMCvALBAs4C0QLjAuYC6wAAAAAAAAIBAAAAAAAAACgAAAAAAAAAAAAAAAAAAALt},
+	Bdsk-File-1 = {YnBsaXN0MDDUAQIDBAUGJCVYJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoKgHCBMUFRYaIVUkbnVsbNMJCgsMDxJXTlMua2V5c1pOUy5vYmplY3RzViRjbGFzc6INDoACgAOiEBGABIAFgAdccmVsYXRpdmVQYXRoWWFsaWFzRGF0YV8QKS4uLy4uL3BhcGVyL1RhbnQwOGEgQ29udGV4dHVhbCBWYWx1ZXMucGRm0hcLGBlXTlMuZGF0YU8RAbQAAAAAAbQAAgAAA09TWAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMroJ/NIKwAAAA4/DB1UYW50MDhhIENvbnRleHR1YWwgVmFsdWVzLnBkZgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHxS6lz1xX3VBERiAAAAAAAAIAAgAACSAAAAAAAAAAAAAAAAAAAAAFcGFwZXIAABAACAAAyugZ4wAAABEACAAAz1xJzQAAAAEAEAAOPwwACxyKAAZRzQAC5owAAgBFT1NYOlVzZXJzOgBjYW1pLWRhdGE6AGVkdWNhdGlvbjoAcGFwZXI6AFRhbnQwOGEgQ29udGV4dHVhbCBWYWx1ZXMucGRmAAAOADwAHQBUAGEAbgB0ADAAOABhACAAQwBvAG4AdABlAHgAdAB1AGEAbAAgAFYAYQBsAHUAZQBzAC4AcABkAGYADwAIAAMATwBTAFgAEgA9VXNlcnMvY2FtaS1kYXRhL2VkdWNhdGlvbi9wYXBlci9UYW50MDhhIENvbnRleHR1YWwgVmFsdWVzLnBkZgAAEwABLwAAFQACAAv//wAAgAbSGxwdHlokY2xhc3NuYW1lWCRjbGFzc2VzXU5TTXV0YWJsZURhdGGjHR8gVk5TRGF0YVhOU09iamVjdNIbHCIjXE5TRGljdGlvbmFyeaIiIF8QD05TS2V5ZWRBcmNoaXZlctEmJ1Ryb290gAEACAARABoAIwAtADIANwBAAEYATQBVAGAAZwBqAGwAbgBxAHMAdQB3AIQAjgC6AL8AxwJ/AoEChgKRApoCqAKsArMCvALBAs4C0QLjAuYC6wAAAAAAAAIBAAAAAAAAACgAAAAAAAAAAAAAAAAAAALt},
 	Bdsk-Url-1 = {http://dx.doi.org/10.1145/1408681.1408684}}
 
 @inproceedings{Unga84a,
