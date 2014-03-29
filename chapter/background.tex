@@ -564,7 +564,8 @@ The important property of inline caches is that they bypass the slow language-si
 This is exactly the behavior we need to prevent recursion during the startup.
 Hence, when generating the native code for the bootstrap, we prefill all the inline caches of the methods required to perform a full method lookup.
 As a result, when running requiring the first real method lookup, the lookup code itself is running perfectly on the prefilled inline caches.
-\sm{Ok, cool, how is that relevant in this context?}
+What we achieve is a flexible connection between the low-level world and the high-level language-side.
+During execution the \VM jumps freely between what previously was native \VM-level code and interpretation of language-side code.
 
 From an architectural point of view, \P is performing almost a direct bootstrap.
 Besides the small C kernel, the language-side code is directly compiled to native code.
@@ -573,23 +574,15 @@ Hence, a separate \JIT implementation is not required.
 
 The most obvious shortcoming of \P is the lack of its own garbage collector.
 Instead of investing time into a separate well-defined \GC \P relies on the conservative \urlfootnote{Boehm \GC}{http://www.hpl.hp.com/personal/Hans_Boehm/gc/} built for C programs.
-The Boehm \GC is sufficiently fast to run \P as a prototype, however, due to its generic nature it is not as efficient as a specific \GC.
-However, \P lacks the necessary reification at level of the object layout to properly implement a \GC.
-\sm{Why does that matter? And why is 'efficiency' relevant  here?}
+The Boehm \GC is sufficiently fast to run \P as a prototype.
+\P lacks the necessary reification at level of the object layout to properly implement a \GC.
 All the notion about the object layout in memory are hard-coded in the compiler in several places.
 Work was undertaken to put first-class object layouts in place and delegate memory allocation and field access to these meta objects.
 Yet, at the current state \P has not incorporated this in the compiler core.
-\sm{The whole section over and over again, you are first talking about something that's on its own only barely relevant, and then afterwards you make it relevant to me as a reader. Your writing could improve a lot by following classic paragraph structure: title sentence, main argument,mans then details and/or examples + supporting arguments.
-
-To proof your thesis is your only goal, I would prefer if everything is explicit or at least implicitly written to make }
 
 \P is self-aware in the sense that it controls  native code generation and lookup at a single abstraction level.
 There is no distinction between \VM-level code and language-side code.
-\sm{What does generation and modify ability of inline cache content have to do with self-awareness? his is still unclear to me, generation especially, reflecting on inline caches, I do understand. 
 
-I have the feeling the conceptual model you outline in the beginning needs more elaboration and details.
-
-And the criteria then could benefit this discussion to make it more precise (a few back references)}
 
 % ------------------------------------------------------------------------------
 \subsubsection*{\MIST a C-less \ST Implementation}
@@ -632,7 +625,12 @@ While we see the practical limitations of changing the \VM at runtime we would l
 \section{High-level Low-Level Applications}
 \seclabel{background-high-level-low-leve-application}
 % ===========================================================================
-\todo{linking introduction paragraph}
+
+In a high-level language and its \VM we find several applications that span across multiple abstraction levels.
+We are discussing now two applications, Foreign Function Interfaces and the \JIT compiler in more detail.
+Both explicitly require strong low-level interactions to perform their task.
+For instance, the \Maxine \VM presented in \secref{background-maxine} explicitly implements these applications using high-level low-level programming.
+This makes these two applications an interesting target for the evaluation of our dynamic approach to high-level low-level programming.
 
 % ---------------------------------------------------------------------------
 \subsection{Foreign Function Interfaces (\FFI)}
