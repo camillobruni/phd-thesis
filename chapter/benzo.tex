@@ -643,51 +643,6 @@ Yet we have to emphasize that \NB is based on the \B infrastructure whereas the 
 Furthermore \NB benefits from the \JIT interaction described in \secref{benzo-jit-interaction}.
 This optimization is especially an important optimization factor when calling out small helper routines where the context switch from jitted mode is no longer negligible.
 
-% ---------------------------------------------------------------------------
-\subsection{\B-based Dynamic Primitives}
-\seclabel{benzo-wf-performance}
-% ---------------------------------------------------------------------------
-
-As the second performance evaluation of \B we present a simple use case of dynamically implementing a primitive with \WF.
-For comparing performance we implement a very simple integer operation primitive (\ttt{$>$}) using three different approaches.
-The first approach is the implementation with \WF.
-The second is to run the language-side implementation that is triggered whenever the standard primitive failed.
-Finally the fast standard primitive provided by the \VM.
-We run the three approaches by measuring the cumulative time over one million primitive activations averaged over 100 runs.
-The absolute numbers are less important than the relative factor between them.
-We present the results of this experiment in \tabref{benzo-waterfall-performance}.
-%
-\begin{table}[!ht]
-    \centering
-    \begin{tabular}{rSS}
-		Primitive Type  & {Running Time [ms]} & {Relative Time} \\\midrule
-		\VM			    &   6.40(14)          &         1.0 \\
-		\WF             &  22.80(17)          & \approx 3.6 \\
-        Reflective	    & 195.00(16)          & \approx30.0
-    \end{tabular}
-    \caption[Basic \B-based Dynamic Primitive Performance]{Comparing running time of different implementations of integer arithmetic primitive.
-    \sm{While it might not matter for the numbers, for a clear setup it would be advisable to not include the failing of the primitive in the measurement.
-    
-    From the text it is not clear whether you do or don't }}
-    \tablabel{benzo-waterfall-performance}
-\end{table}
-%
-\WF clearly outperforms a purely reflective solution.
-As explained in \secref{benzo-waterfall}, replacing a crucial primitive with simple language-side is not straight forward.
-If the replacement code triggers the very same primitive again we are trapped in a meta-recursion loop \cite{Chib96a}.
-To avoid this, the \PH code for the replacement of \ttt{$>$} checks that the current activation of the primitive is not recursive.
-This comes at a substantial cost and is the main overhead factor.
-
-\WF is a factor $3.6$ slower than the standard implementation.
-First we have to state that \WF uses a very simplistic compilation strategy with many optimizations opportunities left out.
-Second, the optimized \VM primitive is also reimplemented in the \JIT to avoid the overhead of switching execution context (see \secref{benzo-vm-interaction}).
-\sm{I don't get the second part}
-
-This results thus makes a whole new set of runtime extensions feasible that were previously limited by their strong performance penalty.
-Furthermore the performance penalty over a completely optimized \VM solution that has extreme optimization techniques, such as inlining and register allocation, is less than a factor of $4$.
-A more detailed analysis of \WF is available later in \secref{val-waterfall-performance}.
-\sm{If you do detailed stuff later, I would drop this 'mini' stuff here. One evaluation is enough, this section/chapter can stand on its own and should make the ideas clear}
-
 
 % ===========================================================================
 \section{Extending the Language Runtime}
