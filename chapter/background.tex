@@ -248,6 +248,215 @@ Combined with the previous two categories d and e, we see that metacircular \VMs
 In the following \secref{background-open-vms} we are now going to describe in more detail how metacircular \VMs are built and what their contribution to the high-level low-level interaction is.
 
 
+% ===========================================================================
+\section{Extending the Language Runtime}
+\seclabel{benzo-related}
+% ===========================================================================
+\todo{try to push to background chapter}
+In the context of \B we see a variety of related work spawning different abstraction levels.
+On a more abstract scale \B allows for a new way of extending the complete language runtime, hence we classify the related work according the following categories show in \figref{benzo-extensionComparison}: general language-side extensions, extensions using reflection, \VM-level extensions, and hybrid approaches.
+
+We present now an overview of the approaches used to extend a language runtime and expose their limits.
+High-level languages are in general sustained by a \VM and a vast set of libraries written in the language itself. 
+Extending or improving the existing language runtimes is a difficult task.
+In most cases the \VM is considered as a black box.
+Additionally the \VM is written in a completely different language using another abstraction level than the one it supports.
+Typically high-level language \VMs are written in C or C++.
+To address extensions in this context there exist some known approaches:
+\sm{All the introduction stuff should be done in the proper chapter, 2, I guess }
+
+\begin{description}[noitemsep]
+	\item[Language-side Library] based on implementing a new or existing library. 
+	\item[Reflective Extension] relying on reflective features of the language. 
+	\item[\VM Extension] by writing plugins or changing the core of the \VM.
+	\item[Hybrid Extension] by accessing external libraries using \FFI.  
+\end{description}
+%
+The relation between the side concerning the abstraction and implementation levels (\VM vs. language) of these extensions is illustrated in \figref{benzo-extensionComparison}.
+
+\begin{figure}[h]
+	\centering
+	\begin{subfigure}[t]{0.45\textwidth}
+		\centering
+		\includegraphics[scale=\imagescale]{extension-language}
+		\caption{Language running on a standard, unmodified \VM.}
+	\end{subfigure}\hspace{0.09\textwidth}
+	\begin{subfigure}[t]{0.45\textwidth}
+		\centering
+		\includegraphics[scale=\imagescale]{extension-language-library}
+		\caption{Language-side implementation of an extension.}
+	\end{subfigure} \\
+	\vspace{\baselineskip}
+	\begin{subfigure}[b]{0.45\textwidth}
+		\centering
+		\includegraphics[scale=\imagescale]{extension-vm}
+		\caption{Language using features from a \VM extension.}
+	\end{subfigure}\hspace{0.09\textwidth}
+	\begin{subfigure}[b]{0.45\textwidth}
+		\centering
+		\includegraphics[scale=\imagescale]{extension-plugin}
+		\caption{Language using features from a separate \VM plugin.}
+	\end{subfigure}
+	
+	\caption[Language Extension Mechanisms]{Comparison of different extension mechanisms}
+	\figlabel{benzo-extensionComparison}
+\end{figure}
+
+%----------------------------------------------------------------------------
+\subsection{Language-side Library}
+%----------------------------------------------------------------------------
+
+The most straight forward solution for extending a language is to write libraries within the language itself. 
+This option provides the advantage that the aggregate behavior is accessible and evolvable for any language developer.
+However, language-side libraries are constrained by the underlying managed language runtime.
+The \VM separates the language from the low-level internal details.
+As a consequence language-side libraries are not feasible for all feature requirements.
+For instance the previously mentioned example of instrumenting the language runtime is not possible as a standard language-side extension without a considerable performance loss.
+So, even though we prefer extensions and optimizations at language-side, there are certain limitations of a managed language runtime that can not be circumvented.
+If all language-side optimization opportunities have been exhausted it is exposing the need to resort to lower level approaches.
+
+\begin{quote}
+Language-side libraries are constrained to the capabilities of the underlying \VM and thus not general enough. 
+Additionally not all performance bottlenecks can be addressed at language-side.
+\end{quote}
+
+%----------------------------------------------------------------------------
+\subsection{Language-side Reflective Extensions}
+%----------------------------------------------------------------------------
+
+This is a specialization of the previous approach but in the context of reflective environments.
+For instance, Meta Object Protocols (\MOP) \cite{Kicz91a} based on reflection \cite{Maes87a} are used to define certain control points in the system to change the language.
+By composing meta objects it is possible to even modify the semantics of the language. 
+Several languages such as \PH, \ST, \urlfootnote{\Python}{http://python.org/}, \urlfootnote{Ruby}{http://www.ruby-lang.org/}, and others provide reflective capabilities with different depths \cite{Ande98a,Van10a}.
+However, most modern programming languages only have very limited support for intercession.
+Hence the possibilities for dynamically changing language semantics or features are limited. 
+Furthermore reflective capabilities are hard to implement efficiently.
+Reflection imposes substantial performance penalties on most computations by postponing bindings \cite{Male96a}. 
+Nevertheless, there are exceptions for a subset of reflective behavior which are implemented efficiently using a high-level MOP \cite{Vran12a}.
+Though these approaches remain as a few exceptions.
+In the typical low-level \VM it is difficult to gain reflective access to language-side objects.
+Similar to the previous case, our goal is to extend language features in a general way and it was shown that this is only partially possible by reflective extensions. 
+
+\begin{quote}
+Reflective capabilities are not enough for general extensions. Even when suitable, they usually pose a significant performance overhead up to the point where they become unfeasible.
+\end{quote}
+
+%----------------------------------------------------------------------------
+\subsection{\VM Extensions / Plugins}
+\seclabel{benzo-vm-extensions}
+%----------------------------------------------------------------------------
+\sm{Yes, I think all that needs to be folded into chapter 2}
+Another approach to extend add new features to a programming language is to extend the \VM.
+At this level we differentiate between two extension mechanisms: \VM plugins and modified \VMs itself.
+Plugins are direct bindings to external libraries described at \VM-side or libraries linked to the \VM executable \cite[Ch.\ 5]{Blac09a}. 
+They provide a performance boost in comparison to pure language-side solutions.
+Using highly optimized native libraries it is straightforward to outperform code written at language-side.
+Typically, even very complex \VMs such as the \Self \VM \cite{Unga07a} provide a clean interface to write plugins.
+Missing high-level concepts make them harder to maintain than language-side code.
+Depending on the added feature the plugin interface may prove to be too inflexible and the only choice is an modified \VM.
+Such a fork comes at an even higher cost of maintenance.
+In the following paragraph we will explain the these two main limitations we found when working with plugins: a certain abstraction mismatch compared to host language and the limitations imposed by a clean plugin interface.
+
+
+\subsubsection*{Problem: Abstraction Mismatch}
+Plugins are commonly written in the same language as the \VM, at a low abstraction level.
+The abstraction difference compared to a language-side extensions makes it difficult for standard programmers to modify or write \VM plugins.
+Few exceptions are self-hosted languages \cite{Unga05a,Wimm13a,Rigo06a}.
+To support a fluent development process, \VMs should come with an infrastructure for building extensions at same abstraction level as the provided language.
+Instead \VMs tend to be rather complex which includes the whole development cycle.
+For example, only a few \VMs have high-level debugging facilities \cite{Inga97a,Unga05a,Wimm13a}.
+It is more common to be stuck in the compilation step waiting for the debugging binary to be ready.
+
+\paragraph{\VM Generation Framworks}
+The lack of abstraction for \VM-level extensions can is addressed by \VM generation frameworks in general.
+They try to abstract away the complexity of the \VM and use high-level languages as compiler infrastructure.
+A very successful research project is \urlfootnote{\textsc{Jikes} Research \VM}{http://jikesrvm.org/} (former \textsc{Jalapeño})~\cite{Alpe99a}.
+It uses \Java to metacircularly define a \Java environment which then generates the final \VM.
+A similar framework is \urlfootnote{\PyPy}{http://pypy.org/} \cite{Rigo06a} a \VM framework including an efficient \JIT. 
+\PyPy uses a restricted subset of the  \textsc{Python} language named \textsc{RPython} which is then translated to various low-level backends such as C or \textsc{llvm} code.
+There exist several different high-level language \VM implementations on top of \PyPy such as \ST \cite{Bolz08a} or \textsc{Prolog}.
+However, its main focus lies on an efficient \JIT generator mainly for a \Python interpreter, and not on a direct, language-side assembler interface.
+\PyPy encourages to use reflection at compile-time which helps to write a maintainable code base.
+
+\subsubsection*{Problem: Plugin Limitations}
+Once a programmer is fluent at \VM-level a clean plugin interface is a big aid in terms of maintenance.
+However, certain functionality can not be added by simply creating a separate plugin that encapsulates the new feature.
+Prominent examples are \JIT support, immutability or first-class handles \cite{Arna13a}.
+In all these examples core pieces of the \VM have to be modified: the \VM has to be forked.
+From a \VM maintenance point of view, forks have to be avoided if possible and should only be used for critical performance issues that can not be properly addressed at language-side or with plugins.
+
+From our experience with \PH, even promising \VM experiments are not maintained for a long time.
+An example for that is the modified \VM supporting back-in-time debugging implemented for an early version of \PH and \Squeak \cite{Lien08b}.
+The features would improve debugging without a doubt.
+However, the \VM evolved in the mean time adding new features required by newer versions of \PH.
+As a result the back-in-time enabled \VM is no longer compatible with \PH.
+Presumably it would be easier to port the back-in-time debugger to a new \PH version if it were implemented purely at language-side.
+
+
+\paragraph{High-level Low-level Programming}
+High-level low-level programming \cite{Fram09a} encourage to use high-level languages for system programming.
+Frampton et al. present a low-level framework packaged as \textsc{org.vmmagic}, which is used as system interface for \Jikes, an experimental \Java \VM.
+Additionally their framework is successfully used in \textsc{mmtk} \cite{Blac04a} which is used independently in several other projects.
+The \textsc{org.vmmagic} package is much more elaborate than \B but it is tailored towards \Java with static types.
+Methods have to be annotated to use low-level functionality.
+Additionally the strong separation between low-level code and language-side application does not allow for reflective extensions of the language runtime.
+Finally, they do not support the execution nor generation of custom assembly code in the fly.
+
+
+\begin{quote}
+VM extensions provide good performance at the cost of maintainability. 
+Moreover this approach implies resorting to pure low-level development where tools and abstraction advantages from high-level languages are restricted.
+\end{quote}
+
+%----------------------------------------------------------------------------
+\subsection{Hybrid Extensions}
+%----------------------------------------------------------------------------
+
+The last approach is to reuse an existing library usually implemented in a foreign language.
+The languages interact through a well-defined Foreign Function Interface (\FFI).
+\FFI-based extensions are a hybrid approach between pure language-side extensions and \VM-side ones.
+Interaction with native libraries is supported by a dedicated \VM functionality for calling external functions.
+This allows for a smooth interaction of external code and language-side code.
+\FFI-based extensions share the benefits of a maintainable and efficient lan\-guage-side library with modest implementation efforts.
+However, \FFI is only a bridge or interface for allowing the interaction of different languages. 
+It is not possible to directly synthesize new native features from language-side.
+For this purpose we have to interact with a custom-made native library.
+From an extension point of view this is close to the \VM extensions discussed previously.
+
+Additionally to the interface limitations, there exists a performance overhead in \FFI for making the interaction between different languages possible. 
+This is due to marshalling arguments and types between both languages \cite{Fish00a,Repp06b}.
+
+
+Other high-level languages such as \Lua leverage \FFI performance by using a close interaction with the \JIT.
+\textsc{Luaffi}\footnote{\url{https://github.com/jmckaskill/luaffi/}} for instance is an efficient \Lua implementation that inlines \FFI calls directly into the \JIT compiled code.
+Similar to \B this allows us to minimize the constant overhead by generating custom-made native code.
+\Luajit is mainly written in C which has clearly different semantics than \Lua itself.
+Compared to our approach the efficient \VM implementation suffers from the shortcomings described in \secref{benzo-vm-extensions}. 
+
+Kell and Irwin \cite{Kell11a} take a different look at interacting with external libraries.
+They advocate a \Python \VM that allows for dynamically shared objects with external libraries.
+It uses the low-level \textsc{Dwarf} debugging information present in the external libraries to gather enough metadata to automatically generate \FFIs.
+However, they do not focus on the reflective interaction with low-level code and the resulting benefits. 
+
+\textsc{Quicktalk} \cite{Ball86a} follows a similar approach as the dynamic primitives in \WF.
+However, Ballard et al. focus mostly on the development of a complex compiler for a new \ST dialect.
+Using type annotations \textsc{Quicktalk} allows for statically typing methods.
+By inlining methods and eliminating the bytecode dispatch overhead by generating native code \textsc{Quicktalk} outperforms interpreted bytecode methods.
+Compared to \WF \textsc{Quicktalk} does not allow to leave the language-side environment and interact closely with the \VM.
+Hence it is not possible to use \textsc{Quicktalk} to modify essential primitives.
+
+A notable exception to the metacircular \VMs mentioned earlier is the \Self implementation \textsc{Klein} \cite{Unga05a}.
+Unlike typical other metacircular approaches it does not strictly separate compile-time and runtime.
+The reified \VM concepts are available at runtime, which is a result from implementing the typical \VM pieces at language-side.
+Compared to our approach, \textsc{Klein}'s bridging efforts are much more complete.
+However, \textsc{Klein} is built on a completely new \VM infrastructure, whereas \B requires only few changes to achieve its functionality.
+
+\begin{quote}
+Hybrid extension are the most promising.
+They allow for a seamless interaction from high-level language-side to low-level functionality.
+However, most existing solutions target only specific use cases and can not be reused for other applications.
+\end{quote}
+
 
 % ===========================================================================
 \section{Open \VMs}
