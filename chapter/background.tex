@@ -110,17 +110,18 @@ We will now discuss several axes along which we can limit the use of reflection.
 	Methods are implemented on different classes which themselves define the type of their instances. 
 	Custom methods that are added to a class alter the behavior of all its instances.
 
-\item[Control Flow:] A second interesting limitation axis is the control flow or invocation chain.
+\item[Reference:] Starting from the concept of a proxy object \todo{ref??} we find another possibility to limit reflection by reference.
+	Arnaud et al. describe a modified \PH runtime where the concept of a reference is fully reified as a so called handles \cite{Arna13a}.
+	Handles allow programmers to install new behavior and even state on a single reference, without influencing the rest of the system.
+	
+	
+\item[Context:] The effects of reflection can also be limited by the dynamic execution context \cite{Tant08a}.
 	An example of that is the concept of tower of interpreters.
 	During the development of \P an intermediate version of the \ST interpreter featured this special execution scheme \cite{Verw10a}.
 	It allows the programmer to switch the current interpreter.
 	This way an expression is evaluated with altered semantics.
 	The solution presented in \P does not globally replace the interpreter but only for the given expression. 
-	Hence once the expression returns, the modifications and the implied overhead are gone.
-
-\item[Reference:] Starting from the concept of a proxy object \todo{ref??} we find another possibility to limit reflection by reference.
-	Arnaud et al. describe a modified \PH runtime where the concept of a reference is fully reified as a so called handles \cite{Arna13a}.
-	Handles allow programmers to install new behavior and even state on a single reference, without influencing the rest of the system.	
+	Hence once the expression returns, the modifications and the implied overhead are gone.	
 \end{description}
 %
 
@@ -347,7 +348,6 @@ In the ideal case only certain hints are necessary to create a \JIT.
 \todo{Truffle as extreme to that track: Interpreter implementation on \AST basis, not explicit bytecode interpreter (which would be typical in C)}
 
 \paragraph{Bootstrap Process}
-\sm{And by the way, I forgot where you are going with all this. Why do I care about the bootstrap process?}
 A crucial step during the development with the metacircular \VMs is the bootstrap of the new \VM.
 We distinguish mainly between two approaches, indirect bootstrap and direct bootstrap.
 %
@@ -383,7 +383,6 @@ We distinguish mainly between two approaches, indirect bootstrap and direct boot
 % ---------------------------------------------------------------------------
 \subsection{Compile-time Reified \VMs}
 % ---------------------------------------------------------------------------
-\sm{My questions at a beginning of a section are: why do I read it? What am I going to learn? And how does it fit with/supports the thesis goal?}
 After presented the technical background of metacircular \VMs we are presenting several concrete implementations in more detail.
 In this first part present \VMs that focus on compile-time reflection.
 In \secref{background-reified-vms} we will then focus on a list of \VMs that reify their components and allow for a more close interaction with the language-side.
@@ -393,7 +392,7 @@ In \secref{background-reified-vms} we will then focus on a list of \VMs that rei
 \seclabel{background-squeak}
 % ---------------------------------------------------------------------------
 \sm{I still don't take squeak as metacircular in the strict sense. For me, that means  implemented in itself. Java with java, lisp with lisp, smalltalk with small talk, squeak is implemented in slang, that's C with smalltalk syntax, which is barely executable as smalltalk, PyPy is implemented with RPython, also restricted subset, and with its type system, I would say, a very different language. You can however make the point that RPython is a strict subset of Python, and thus, without changes directly executable. That's not true for Slang...}
-The pseudo metacircular \Squeak \VM\cite{Inga97a} is of importance in the context of this work.
+The \Squeak \VM\cite{Inga97a} is of importance in the context of this work.
 Its core building system is still in active use for the \urlfootnote{\Cog \VM}{http://www.mirandabanda.org/cogblog/} which extends \Squeak with a \JIT.
 The \Cog \VM is used as default by the \urlfootnote{\PH}{http://pharo.org/} programming language.
 \Squeak is built around a \ST dialect called \Slang that is exported to C to be compiled to the final \VM binary.
@@ -407,7 +406,6 @@ Unlike later metacircular frameworks \Squeak uses little or no compile-time refl
 However, class composition help structuring the sources.
 Next to the \Slang source which account for the biggest part of the interpreter code some \OS-related code and plugins are written in C.
 To facilitate the interaction with the pure C part \Slang supports inline C expressions and type annotations.
-\sm{Why is all of this important here? Does not seem to contribute to your discussion }
 
 A great achievement of the \Squeak \VM is a simulator environment that enables programmers to interact dynamically with the running \VM sources.
 The simulator is capable or running a complete \Squeak \ST image including graphical user interface.
@@ -457,6 +455,7 @@ We identify this as crucial, as most of the time is spent debugging, notably on 
 \sm{Connect this to your problem statement (back reference) and, make sure your problem statement does not mix up reflection and observability/interactivity }
 Hence having a specific debuggers and inspectors greatly improve the interaction with the \VM artifact.
 
+
 \subsubsection*{\PyPy Toolchain}
 \seclabel{background-pypy}
 % ---------------------------------------------------------------------------
@@ -475,34 +474,17 @@ For the explicit implementation part \PyPy is no different.
 However, certain features for the final \VM are directly absorbed from the underlying \PyPy infrastructure.
 For instance, the \JIT support or the \GC are not explicitly implemented but provided by the \PyPy framework itself.
 This is a big difference to the other \VM frameworks as it allows programmers to write the \VM in a more high-level fashion.
-For instance in \Squeak memory allocation, even for \VM-level objects, has to be handled in the same way as in C.
-Whereas in \PyPy the garbage collection is left to the underlying infrastructure.
-\sm{This paragraph needs to be revised, your line of argumentation is confusing/conflating many different aspects, and that does leave a bitter taste to me as a reader}
-
-At compile-time the interpretation stack for a newly implemented \VM on top of \PyPy looks as follows.
-\sm{Why do I care for those details?}
-%
-\begin{enumerate}[noitemsep,nolistsep]
-\item The final language runtime
-\item The \VM written in \RPython
-\item The \PyPy infrastructure (virtual compile-time \RPython interpreter)
-\sm{These terms don't mean anything to me? Which part is which? What's the implemented language? Concrete example?}
-\end{enumerate}
-%
-Unless in debug mode, the bottom-most layer is compiled away by exporting the \RPython sources to C.
-However, before the C export step, all the compile-time reflection statements are evaluated and flattened away.
-This approach allows \RPython \VMs to behave almost like standard \Python programs while still providing excellent performance in the final \VM binary.
+For instance in \Squeak memory allocation, even for \VM-level objects, has to be performed explicitly.
+Whereas in \PyPy the garbage collection is left to the underlying \VM building infrastructure.
+This approach allows \RPython \VMs to behave like standard \Python programs.
 
 Much like the automatic memory management, \PyPy provides a tracing \JIT generator \cite{Bolz09a}.
 By default the \VM programmer does not write an explicit \JIT in \PyPy.
 Instead the \VM code is annotated to guide the underlying tracing \JIT generator.
 This means a \VM compilation time a specific tracing \JIT is created for the given meta information.
 As a result, the \JIT can track high-level loops in the final interpreted language.
-\sm{What's the similarity between GC and tracing JIT? One traces object graphs the other traces operations, two totally different things
-
-Aaaaah, it is provided as a service, implicitly, ...
-Ok, make that explicit, say something like that}
-
+Again, this is similar to \PyPy's \GC, both are provided as a service and do not have to be programmed explicitly.
+Instead, the \VM programmer tweaks parameters of the \JIT or \GC.
 
 % ---------------------------------------------------------------------------
 \subsection{Runtime Reified or Self-aware \VMs}

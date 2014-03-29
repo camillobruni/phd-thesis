@@ -2,12 +2,36 @@
 %% http://bibdesk.sourceforge.net/
 
 
-%% Created for cami at 2014-03-27 11:37:25 +0100 
+%% Created for cami at 2014-03-29 11:00:02 +0100 
 
 
 %% Saved with string encoding Unicode (UTF-8) 
 
 
+
+@inproceedings{Tant08a,
+	Abstract = {Context-oriented programming proposes to treat execution context explicitly and to provide means for context-dependent adaptation at runtime. There are many mechanisms that can be used to make either variable bindings or application code adapt dynamically, like dynamically-scoped variables, dynamic layer activation, and contextual dispatch. There are no means however, to make actual values be context-dependent. This means that side effects engendered by dynamically-activated adaptations are potentially global. We propose contextual values: values that actually depend on the context in which they are looked at and modified. We explore how contextual values can be provided, either as a simple library or directly into the language through different designs, for which we provide the operational semantics in the form of Scheme interpreters. Being able to scope side effects to certain contexts is a step forward for context-oriented programming, and can have interesting applications in other areas like security and dynamic software evolution.},
+	Address = {New York, NY, USA},
+	Author = {Tanter, \'{E}ric},
+	Booktitle = {Proceedings of the 2008 Symposium on Dynamic Languages},
+	Citeulike-Article-Id = {6414706},
+	Citeulike-Linkout-0 = {http://portal.acm.org/citation.cfm?id=1408681.1408684},
+	Citeulike-Linkout-1 = {http://dx.doi.org/10.1145/1408681.1408684},
+	Date-Added = {2014-03-29 10:00:00 +0000},
+	Date-Modified = {2014-03-29 10:00:00 +0000},
+	Doi = {10.1145/1408681.1408684},
+	Isbn = {978-1-60558-270-2},
+	Location = {Paphos, Cyprus},
+	Pages = {1--10},
+	Posted-At = {2014-03-29 09:58:15},
+	Priority = {2},
+	Publisher = {ACM},
+	Series = {DLS '08},
+	Title = {Contextual Values},
+	Url = {http://dx.doi.org/10.1145/1408681.1408684},
+	Year = {2008},
+	Bdsk-File-1 = {YnBsaXN0MDDUAQIDBAUGJCVYJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoKgHCBMUFRYaIVUkbnVsbNMJCgsMDxJXTlMua2V5c1pOUy5vYmplY3RzViRjbGFzc6INDoACgAOiEBGABIAFgAdccmVsYXRpdmVQYXRoWWFsaWFzRGF0YV8QKS4uLy4uL3BhcGVyL1RhbnQwOGEgQ29udGV4dHVhbCBWYWx1ZXMucGRm0hcLGBlXTlMuZGF0YU8RAbQAAAAAAbQAAgAAA09TWAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMroJ/NIKwAAAA4/DB1UYW50MDhhIENvbnRleHR1YWwgVmFsdWVzLnBkZgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHxS1ez1xX3QAAAAAAAAAAAAIAAgAACSAAAAAAAAAAAAAAAAAAAAAFcGFwZXIAABAACAAAyugZ4wAAABEACAAAz1xJzQAAAAEAEAAOPwwACxyKAAZRzQAC5owAAgBFT1NYOlVzZXJzOgBjYW1pLWRhdGE6AGVkdWNhdGlvbjoAcGFwZXI6AFRhbnQwOGEgQ29udGV4dHVhbCBWYWx1ZXMucGRmAAAOADwAHQBUAGEAbgB0ADAAOABhACAAQwBvAG4AdABlAHgAdAB1AGEAbAAgAFYAYQBsAHUAZQBzAC4AcABkAGYADwAIAAMATwBTAFgAEgA9VXNlcnMvY2FtaS1kYXRhL2VkdWNhdGlvbi9wYXBlci9UYW50MDhhIENvbnRleHR1YWwgVmFsdWVzLnBkZgAAEwABLwAAFQACAAv//wAAgAbSGxwdHlokY2xhc3NuYW1lWCRjbGFzc2VzXU5TTXV0YWJsZURhdGGjHR8gVk5TRGF0YVhOU09iamVjdNIbHCIjXE5TRGljdGlvbmFyeaIiIF8QD05TS2V5ZWRBcmNoaXZlctEmJ1Ryb290gAEACAARABoAIwAtADIANwBAAEYATQBVAGAAZwBqAGwAbgBxAHMAdQB3AIQAjgC6AL8AxwJ/AoEChgKRApoCqAKsArMCvALBAs4C0QLjAuYC6wAAAAAAAAIBAAAAAAAAACgAAAAAAAAAAAAAAAAAAALt},
+	Bdsk-Url-1 = {http://dx.doi.org/10.1145/1408681.1408684}}
 
 @inproceedings{Unga84a,
 	Abstract = {Smalltalk on a {RISC} ({SOAR}) is a simple, Von Neumann computer that is designed to execute the Smalltalk-80 system much faster than existing {VLSI} microcomputers. The Smalltalk-80 system is a highly productive programming environment but poses tough challenges for implementors: dynamic data typing, a high level instruction set, frequent and expensive procedure calls, and object-oriented storage management. {SOAR} compiles programs to a low level, efficient instruction set. Parallel tag checks permit high performance for the simple common cases and cause traps to software routines for the complex cases. Parallel register initialization and multiple on-chip register windows speed procedure calls. Sophisticated software techniques relieve the hardware of the burden of managing objects. We have initial evaluations of the effectiveness of the {SOAR} architecture by compiling and simulating benchmarks, and will prove {SOAR}'s feasibility by fabricating a 35,000-transistor {SOAR} chip. These early results suggest that a Reduced Instruction Set Computer can provide high performance in an exploratory programming environment.},
