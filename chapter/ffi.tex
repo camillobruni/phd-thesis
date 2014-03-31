@@ -7,7 +7,6 @@
 \introduction
 % ===========================================================================
 
-\todo{by Igor Stasenko}
 In the previous \chapref{benzo} we presented \B, a framework that spans over several abstraction layers to enable low-level programming.
 \B is the generic backend for a variety of applications we outlined in the previous chapter: a Foreign-Function-Interface \FFI, a prototype for dynamic primitives and a prototype for a language-side \JIT compiler.
 In this chapter we present the most mature \B application, the \FFI which is success	fully used in production in \PH 2.0 and newer.
@@ -16,7 +15,7 @@ In this chapter we present the most mature \B application, the \FFI which is suc
 With \FFIs the high-level environment interacts with low-level functions allowing for a unique combination of features.
 This need to interconnect high-level (Objects) and low-level (C functions) has a strong impact on the implementation of a FFI: it has to be flexible and fast at the same time.
 
-We propose \NB a language-side approach to \FFIs that only requires minimal changes to the \VM.
+\NB is a language-side approach to \FFIs developed by Igor Stasenko that only requires minimal changes to the \VM.
 \NB directly creates specific native code at language-side and thus combines the flexibility of a language-side library with the performance of a native plugin.
 \todo{probably write a bit more...}
 

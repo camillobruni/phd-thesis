@@ -34,7 +34,7 @@ This will lead to a description of required \VM-level improvements to make appli
 \todo{recheck to be in sync with the chapter structure}
 
 % =============================================================================
-\section{Background and Related Work}
+\section{Background}
 \seclabel{future-related-work}
 \seclabel{future-background}
 % =============================================================================
@@ -79,55 +79,6 @@ The second negative point of \P is its dependence from C.
 During the course of the \P development we greatly reduced the quantity of C code.
 However, for simplicity we relied on a small C Kernel for the complete bootstrap of the language.
 Additionally some crucial primitives that required system calls were implemented in C.
-
-% -----------------------------------------------------------------------------
-\subsection{MIST: A C-less \ST Implementation}
-% -----------------------------------------------------------------------------
-\urlfootnote{\MIST}{http://mist-project.org/} is another prototype \ST \VM that follows similar goals as the \P \VM.
-It not longer uses bytecode interpreter but only relies on native code.
-However, it goes one step further than \P by not relying on any C-based infrastructure.
-\MIST implements its own linker to build the final executable.
-And unlike \P it does not require kernel primitives written in C.
-\MIST brings its own implementation to directly perform system calls from within the language.
-
-
-% -----------------------------------------------------------------------------
-\subsection{\Maxine \VM}
-% -----------------------------------------------------------------------------
-\Maxine is a metacircular \Java \VM \cite{Wimm13a} focused on an efficient developer experience.
-The \Maxine \VM stands out as it truly focuses on productivity and developer interaction.
-\Maxine uses abstract and high-level representations of \VM-level concepts and consistently exposes them throughout the development process.
-Inspectors at multiple abstraction levels are readily available while debugging, giving insights to the complete \VM state.
-\Maxine provides and excellent navigation for generated native code by providing links back to language-side objects as well as other native code and symbols.
-
-Compared to \Maxine, the \B infrastructure currently lacks the debugging tools which would enable a truly seamless interaction with the low-level world.
-Namely, \B does not support low-level debugging and does not support facilities to inspect low-level native code directly.
-However, \Maxine focuses on \Java, a language with inferior reflective capabilities compared to \PH.
-Hence the live interaction with the \VM is only possible during the development phase and not exposed to the language-side.
-
-% -----------------------------------------------------------------------------
-\subsection{\Klein \VM}
-% -----------------------------------------------------------------------------
-\urlfootnote{\Klein}{http://kleinvm.sourceforge.net/} is a metacircular \VM for the \Self programming language that has no separation into \VM and language \cite{Unga05a}.
-The \VM is entirely written in \Self but takes the concept of metacircular beyond the compile-time.
-For instance, unlike many other metacircular \VMs, including \Cog and \Squeak, \Klein does not use an intermediate low-level language to bootstrap the system.
-It generates directly a binary image, much like the aforementioned \P or \MIST \VM.
-However, it is important to note that the \VM-level structures and objects are not compiled away as it is usually the case.
-Instead the \VM structures are represented as real \Self objects.
-Hence the \Klein \VM supports true \VM-level reflection since there is only a single code base.
-
-Additionally to the advances in reflection and metacircularity, \Klein focuses on fast compilation turnarounds to allow for a responsive development process.
-Which is unlike the \Squeak \VM where a full \VM bootstrap takes a order of minutes on modern hardware.
-\Klein also supports advanced mirror-based debugging tools to inspect and modify a remote \VM.
-
-Development on the \Klein \VM seized in 2009 and left the \Klein \VM in fairly usable state.
-However, up to now it lacks a proper \GC which essentially limits its real-world application.
-Yet, it proved that it is possible and build a language-runtime without a proper separation of the language-side and the \VM or base-level.
-From the literature presented about the \Klein project we see a strong focus on the improvements of the development tools.
-The fact that the language-runtime allows \VM-level reflection to change the \VM dynamically is not directly mentioned in the literature.
-While we see the practical limitations of changing the \VM at runtime we would like to open the doors to this new form of reflection.
-
-% =============================================================================
 
 
 % =============================================================================
