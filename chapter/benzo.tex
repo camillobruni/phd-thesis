@@ -15,7 +15,7 @@ Unlike more classical approaches \B does not resort to vast set of customized \V
 I see at least the question of the VM interface here, and then the question how low level functionality is provided, that's two very different things}
 Instead it relies on a generic primitive to activated native code that is generated at language-side.
 
-\B provides a unique experience of being extremely low-level yet using high-level concepts at the same time.
+\B provides a unique experience of being low-level yet using high-level concepts at the same time.
 \sm{Bla Bla, you are not saying anything here}
 This is possible since the framework is implemented at language-side and tightly integrated into the \PH development environment.
 In this chapter we present in detail how \B interacts with \PH and what the difficulties are.
@@ -617,9 +617,10 @@ The following table contains a performance comparison of three different \FFI im
     \centering
     \begin{tabular}{rSS}
                    					& {Call Time [ms]} & {Relative Time} \\\midrule
-        \NB         				& 10.53(35)        &        1.0 \\
-        \Alien, language-side \FFI  & 31.09(94)        & \approx3.0 \\
-        C-\FFI, plugin-based \FFI   &  9.55(64)        & \approx0.9
+                & {Call Time [ms]} & {Relative Time} \\\midrule
+        \NB     &  65.34(23)       &         1.00 \\
+        \Alien  & 175.77(31)       & \approx 2.69 \\
+        C-\FFI  & 148.77(21)       & \approx 2.27 \\
     \end{tabular}
     \caption[Basic \B-based \FFI Performance]{Different \FFI implementations in \PH evaluating \ttt{abs(int)}. \Alien does marshalling at language-side while \FFI does everything in \VM plugin written in C.}
     \tablabel{benzo-ffi-performance-simple}
@@ -629,12 +630,11 @@ The following table contains a performance comparison of three different \FFI im
 Included in these numbers is at least one additional \PH message send to activate the \NB method containing the actual call to the C function.
 \NB outperforms the existing language-side \FFI (\Alien) and the implementation (C-\FFI).
 
-The existing language-side \FFI has a generic plugin to call C-functions and performs type-conversions at language-side.
+The existing language-side C-\FFI has a generic plugin to call C-functions and performs type-conversions at language-side.
 However, converting \PH objects from and into low-level data is comparably expensive.
 In \NB this happens directly in custom generated native code and is thus significantly faster.
-The plugin-based \FFI is also slower than \NB since it still has generic conversion function for \PH objects, albeit written in C and thus faster than in \Alien.
+The plugin-based C-\FFI is also slower than \NB since it still has generic conversion function for \PH objects, albeit written in C and thus faster than in \Alien.
 However, \NB custom tailored \ASM code is still faster than the hard-coded C counterpart.
-\sm{There something wrong with either the number so the text, the CFFI is faster according to call time}
 
 This simple \FFI evaluation already highlights the core benefit of \B to generate very customized native code when needed.
 Yet we have to emphasize that \NB is based on the \B infrastructure whereas the other solutions require both a \VM plugin whose sole purpose is to enable the \FFI functionality.
