@@ -598,20 +598,14 @@ However, this is only a one time overhead.
 For instance the \B-based \FFI implementation presented in \secref{benzo-ffi} outperforms a \VM-level \FFI-plugin due to a more flexible language-side implementation which generates specialized code for each \FFI callout. 
 These results are shown in the following \tabref{benzo-ffi-performance-simple}.
 
-% ---------------------------------------------------------------------------
-\subsection{\B-based \FFI}
-\seclabel{benzo-nb-performance}
-% ---------------------------------------------------------------------------
-
-The first mini performance evaluation we present is for \NB the \B-based \FFI.
+As an example performance evaluation we present is for \NB the \B-based \FFI.
 Compared to a static plugin-based \FFI implementation \NB has only a one-time startup overhead.
 Generating the native code at language-side is substantially slower than directly setting up all the conversions and calling the external functions from C code. 
 In certain cases the penalty for the language-side code generation of \NB is as high as a factor of 100 compared to classic approaches.
 \sm{Approaches, to what do you compare exactly? Be more precise with those comparisons, you are slower than what exactly? Otherwise, I stop reading, because you are just saying the your whole approach is doomed...}
 Under the assumption that the method is called several times this overhead may be considered negligible.
 An in-depth evaluation of \NB comparing against other solutions is presented later in \chapref{ffi}.
-The following table contains a performance comparison of three different \FFI implementations for \PH that represents the typical showcase.
-\sm{Use case, not show case, showcase is something specifically selected that shines, nothing typical about that}
+The following table contains a performance comparison of three different \FFI implementations for \PH that represents the typical use case.
 
 \begin{table}[!ht]
     \centering
@@ -891,8 +885,6 @@ Benzo x86 generate: [ :asm |
 thisContext instVarNamed: #closureOrNil put: 1.
 \end{stcode}
 %
-However, it is not very common to directly modify the current context in \PH and it requires rather deep knowledge of the system to break the stack explicitly.
-\sm{Really? You showed me in one line how to do it}
 
 In \B the standard developer will most probably be more familiar with \PH than with C or even Assembler, which will easily lead to the aforementioned errors.
 \sm{So, it is not the right tool for the job, because it is too low level?
@@ -962,9 +954,7 @@ The following list explains the detailed steps of \figref{benzo-debugger}.
 \noindent We assume that with the outlined mechanism an important fraction of the occurring memory access violations could be handled adequately in \PH.
 However, since there is no real protection in the native code, there is no guarantee that the main \PH \VM can continue working.
 Faulty native code might have corrupted the main \PH stack or heap beyond repair.
-Nevertheless, this scheme could bring approximate a \PH like user experience for native \B code.
-\sm{Instead of Pharo -> high level (again, this is one of your thesis goals, your thesis goal is not improving Pharo, but to contribute to the global set of knowledge)}
-
+Nevertheless, this scheme could bring approximate a high-level user experience for native \B code.
 
 % -----------------------------------------------------------------------------
 \subsection{Platform Independence}
@@ -1035,7 +1025,7 @@ The current compiler is divided into the following passes:
 \item Platform Specific Assembler
 \end{itemize}
 %
-Applying these compiler passes to the example in \lstref{benzo-problem-vcpu} yields the following native instructions:
+Applying these compiler passes to the example in \lstref{benzo-problem-vcpu} yields the following native instructions with explicit register assignments:
 %
 \begin{stcode}{}
 mov   6 -> EDX

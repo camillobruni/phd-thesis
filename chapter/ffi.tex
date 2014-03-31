@@ -17,7 +17,6 @@ This need to interconnect high-level (Objects) and low-level (C functions) has a
 
 \NB is a language-side approach to \FFIs developed by Igor Stasenko that only requires minimal changes to the \VM.
 \NB directly creates specific native code at language-side and thus combines the flexibility of a language-side library with the performance of a native plugin.
-\todo{probably write a bit more...}
 
 % ===========================================================================
 \newpage
@@ -70,7 +69,7 @@ In essence, \NBFFI combines the flexibility and extensibility of \Alien that use
 The main contributions of \NBFFI are:
 
 \begin{description}
-	\item[Extensibility.] \NBFFI relies on as few \VM primitives as possible (5 primitives), essentially to call native code. 
+	\item[Extensibility:] \NBFFI relies on as few \VM primitives as possible (5 primitives), essentially to call native code. 
 	Therefore, most of the implementation resides at language-side, even low-level mechanisms.
 	\sm{Why does it need more than benzo, why is it not presented as building on benzo, why is it presented again at all?}
 	That makes \NBFFI easily extensible because its implementation can be changed at any time, without needing to update the runtime (\VM).
@@ -79,8 +78,10 @@ The main contributions of \NBFFI are:
 	But that comes at cost of less flexibility and longer development and release cycles.
 	On the opposite, we argue that extending language features, even low-level ones, should be done at language-side instead.
 	This results in higher flexibility and without incurring high runtime costs which usually happen when using high-level languages such as \PH.
-	\item[Language-side extension.] Accessing a new external library using \NBFFI involves a reduced amount of work since it is only a matter of writing a language-side extension.
-	\item[Performance.] Despite the fact it is implemented mostly at language-side, \NBFFI achieves superior performance compared to other \FFI implementations running \PH.
+	
+	\item[Language-side extension:] Accessing a new external library using \NBFFI involves a reduced amount of work since it is only a matter of writing a language-side extension.
+
+	\item[Performance:] Despite the fact it is implemented mostly at language-side, \NBFFI achieves superior performance compared to other \FFI implementations running \PH.
     This is essentially because it uses automatic and transparent native code generation at language-side for marshalling.
 \end{description}
 
@@ -781,8 +782,6 @@ Since \NB manages native code at language-side there is no special structure or 
 Native instructions are appended to compiled methods which reside on the heap.
 Hence the heap has to be executable in order to jump to the native instructions.
 
-\todo{small paragraph outlining the basic activation + link back to the benzo \secref{benzo-code-activation}}\\
-\todo{\FFI-specific activation image}
 
 % ===========================================================================
 \section{\NB Limititations}
