@@ -435,15 +435,12 @@ For a truly self-aware system the situation we found in the \PH \VM is not suffi
 \section{Summary}
 % =============================================================================
 
-\todo{a lot of work on the engineering level to get a \VM with reflective properties}\\
-\todo{- limited resources focused on maintaining the current infrastructure} \\
-\todo{for research we have already sufficient tools at hand to experiment} \\
-\todo{- outline some stuff for guido} \\
-\todo{possiblity to split up off tools to be used by \PH} \\
-\todo{- VCPU IR} \\
-\todo{- improved FFI}\\
-
-\todo{link to next section}
+We have shown in previous chapters that the dynamic high-level low-level programming framework \B is a valid option for a set of typical \VM-level components.
+However, its minimalist approach to generate native code at language-side has clear limitation as we have shown \NBJ in \secref{val-nabujito}.
+Additionally \B's current implementation lacks a seamless debugging process.
+In this chapter we have outlined solutions for these problems.
+Namely, we see that for an extended set of \B-based applications we need sufficient reification at \VM-level.
+On the language-side part of \B we see the strong requirement of a more abstract representation of the native code to build better development tools.
 
 
 % =============================================================================
