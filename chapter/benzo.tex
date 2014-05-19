@@ -21,9 +21,9 @@ This is possible since the framework is implemented at language-side and tightly
 In this chapter we present in detail how \B interacts with \PH and what the difficulties are.
 The key components of \B are:
 \begin{itemize}[noitemsep]
-	\item A generic primitive to activate native code
-	\item \AsmJIT A language-side assembler
-	\item A language-side library for installing and activating native code
+	\item A generic primitive to activate native code,
+	\item \AsmJIT A language-side assembler,
+	\item A language-side library for installing and activating native code.
 \end{itemize}
 \sm{Don't Bla Bla, be specific from the start, perhaps in more general terms, but not just with empty phrases: native code activation, native code generation, all on the language level}
 
@@ -611,9 +611,9 @@ The following table contains a performance comparison of three different \FFI im
     \centering
     \begin{tabular}{rSS}
                 & {Call Time [ms]} & {Relative Time} \\\midrule
-        \NB     &  65.34(23)       &         1.00 \\
-        \Alien  & 175.77(31)       & \approx 2.69 \\
-        C-\FFI  & 148.77(21)       & \approx 2.27 \\
+        \NB     &  65.34(46)       &         1.00 \\
+        \Alien  & 175.77(62)       & \approx 2.69 \\
+        C-\FFI  & 148.77(42)       & \approx 2.27 \\
     \end{tabular}
     \caption[Basic \B-based \FFI Performance]{Different \FFI implementations in \PH evaluating \ttt{abs(int)}. \Alien does marshalling at language-side while \FFI does everything in \VM plugin written in C.}
     \tablabel{benzo-ffi-performance-simple}
@@ -1043,6 +1043,8 @@ return
 \section{Conclusion and Summary}
 \seclabel{benzo-conclusion}
 % ===========================================================================
+
+\lt{Although Section 3 does mention in one place that Benzo isn’t created by the thesis author, it’s easily missed, and much of the section 3 unintentionally gives the impression that Benzo is a contribution of this thesis. For example, the first section of Section 3.7: “In this chapter we presented Benzo” should probably be something along the lines of “In this chapter, I gave an overview of Benzo, a pre- existing compilation system embedded in Pharo, its strengths and weaknesses” (not necessarily that, but hopefully one gets the idea).}
 
 In this chapter we presented \B, an integral approach for reflective high-level low-level programming.
 \B consists of three core parts: \AsmJIT a language-side assembler, a set of primitives to activate native code and language-side library to handle dynamic code installation and activation.

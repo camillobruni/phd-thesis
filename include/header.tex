@@ -65,7 +65,7 @@
 \usepackage{siunitx} 
 % setup the si units package globally
 \sisetup{
-%	separate-uncertainty = true % show the +/- for uncertainty, computer scienticts have no clue about the 0.2352(66) notion
+	separate-uncertainty = true % show the +/- for uncertainty, computer scienticts have no clue about the 0.2352(66) notion
 }
 
 
@@ -73,6 +73,7 @@
  % environment hooks and patching:
 \usepackage{etoolbox}
 
+% Helper command for reducing spaces after certain environment (see below...)
 \makeatletter
 % uncomment the following if you don't want \clubpenalty\@M ...
 % \let\nearly@afterheading\@afterheading
@@ -86,7 +87,7 @@
 \makeatother
 
 % Disable indentation after a certain environment: \NoIndentAfterEnv{itemize}
-% note that this might break the space for the following paragraph
+% note that this might break the space for the paragraph follwing such a modified one
 %\NoIndentAfterEnv{itemize}
 %\NoIndentAfterEnv{enumerate}
 %\NoIndentAfterEnv{description}
@@ -104,7 +105,7 @@
 
 
 % =============================================================================
-% Table of contents for each chapter
+% Settings to add a small (mini) Table of contents at the beginning of each chapter
 \usepackage[nottoc, notlof, notlot]{tocbibind}
 \usepackage[tight]{minitoc} % tight=single line spacing
 \setcounter{minitocdepth}{1}
@@ -112,7 +113,7 @@
 \renewcommand{\mtcfont}{\small\normalfont} 
 \renewcommand{\mtcSfont}{\mtcfont} 
 \renewcommand{\mtifont}{\Large\bf} % use the same font as for the section font for the title of the contents
-\nomtcrule % no minito rule
+\nomtcrule % no visual minitoc rule
 \mtcindent=2pt % indent just enough to make it visually look aligned
 
 \setcounter{secnumdepth}{3}
@@ -130,10 +131,10 @@
 %\renewcommand{\sectionmark}[1]{         % Lower case Section marker style
 %  \markright{\thesection.\ #1}}         %
 
-\fancyhead[LE,RO]{\thepage}    % Page number (boldface) on left on even
-% pages and right on odd pages
-\fancyhead[RE]{\nouppercase{\leftmark}}      % Chapter on the right on even pages
-\fancyhead[LO]{\nouppercase{\rightmark}}     % Section on the left on odd pages
+\fancyhead[LE,RO]{\thepage}					% Page number (boldface) on the left on even
+											% pages and on the right on odd pages
+\fancyhead[RE]{\nouppercase{\leftmark}}		% Chapter on the right on even pages
+\fancyhead[LO]{\nouppercase{\rightmark}}	% Section on the left on odd pages
 
 \let\headruleORIG\headrule
 \renewcommand{\headrule}{\color{black} \headruleORIG}
@@ -172,7 +173,8 @@
 
 %=============================================================================
 \usepackage{needspace}
-% \needlines{3} ensures that the followin 3 lines will be on the same page
+% \needlines{3} ensures that the following 3 lines will be on the same page
+% typically used in code examples where arbitrary broken up parts are hard to read
 \newcommand{\needlines}[1]{\Needspace{#1\baselineskip}}
 
 \usepackage{xcolor}
@@ -191,6 +193,7 @@
     emphstyle=\bf\ttfamily,
     columns=fullflexible}
 
+% define Smalltalk like grammar for the listing package
 \lstdefinelanguage{ST}{
     keywordsprefix=\#,
     morekeywords=[0]{true,false,nil},
@@ -242,7 +245,8 @@
 \lstnewenvironment{ccode}     [2][]
     {\lstset{language=C,numbers=left,escapechar=\$,numberstyle=\tiny,#1}\needlines{#2}}{}
 
-% code environment with line numbers
+% code environment with line numbers and support for \needlines which keeps a
+% given number of lines of the code together (see needline comment above)
 \lstnewenvironment{numstcode} [2][]
     {\lstset{language=ST,numbers=left,numberstyle=\tiny,numbersep=5pt,#1}\needlines{#2}}{}
 \lstnewenvironment{numstcodecont} [2][]
@@ -266,7 +270,10 @@
 \renewcommand{\lstlistingname}{Code Example}
 
 % =============================================================================
+% support for annotations direclty in the latex sources
 \newboolean{showcomments}
+% create a boolean to enable/disable comments (use \setboolean{showcomments}{false} 
+% for instance in the main file)
 \setboolean{showcomments}{true}
 \newcommand\ifshowcomment[2]{
 	\ifthenelse{\boolean{showcomments}}
@@ -311,18 +318,21 @@
 \newcommand\todo[1]{\nb{TO DO}{#1}}
 
 % shortcuts for comments by reviewers
-\newcommand\cb[1]  {\nbc{CB}{#1}{purple}}
-\newcommand\sd[1]  {\nbc{SD}{#1}{orange}}
-\newcommand\is[1]  {\nbc{IS}{#1}{gray}}
-\newcommand\sm[1]  {\nbc{SM}{#1}{olive}}
-\newcommand\ct[1]  {\nbc{CT}{#1}{teal}}
-\newcommand\md[1]  {\nbc{MD}{#1}{blue}}
-\newcommand\dc[1]  {\nbc{DC}{#1}{green}}
+\newcommand\cb[1]  {\nbc{CB}{#1}{purple}} % camillo bruni
+\newcommand\sd[1]  {\nbc{SD}{#1}{orange}} % stephane ducasse
+\newcommand\is[1]  {\nbc{IS}{#1}{gray}}   % igor stasenko
+\newcommand\sm[1]  {\nbc{SM}{#1}{olive}}  % stefan marr
+\newcommand\ct[1]  {\nbc{CT}{#1}{teal}}   % camille tereul
+\newcommand\md[1]  {\nbc{MD}{#1}{blue}}   % marcus denker
+\newcommand\dc[1]  {\nbc{DC}{#1}{green}}  % damien cassou
+\newcommand\lt[1]  {\nbc{LT}{#1}{green}}  % laurence tratt
+\newcommand\cd[1]  {\nbc{CD}{#1}{teal}}   % christophe dony
+\newcommand\gt[1]  {\nbc{GT}{#1}{blue}}   % gael thomas
 
 % =============================================================================
 \usepackage[pagebackref,hyperindex=true]{hyperref}
 
-% Links in pdf
+% Links in pdf should be black
 \definecolor{linkcol}{rgb}{0.0, 0.0, 0.0} 
 \definecolor{citecol}{rgb}{0.0, 0.0, 0.0} 
 
@@ -344,6 +354,8 @@
 }
 
 % =============================================================================
+% Reference macros for common elements
+% use \figlabel{myKey} instead of \label{fig:myKey} and the according \figref below
 \newcommand{\figlabel}[1] {\label{fig:#1}}
 \newcommand{\chaplabel}[1]{\label{chap:#1}}
 \newcommand{\seclabel}[1] {\label{sec:#1}}
@@ -356,6 +368,8 @@
 \newcommand{\tabref}[1] {\hyperref[tab:#1]{Table}~\ref{tab:#1}}
 \newcommand{\lstref}[1] {\hyperref[lst:#1]{Listing}~\ref{lst:#1}}
 
+% Macro for adding at the same time a link to the final pdf and add a footnote with 
+% the url useful for printed versions: \urlfootnote{Google}{http://google.com/}
 \newcommand{\urlfootnote}[2] {\href{#2}{#1}\footnote{\url{#2}}}
 
 \newcommand{\commented}[1]{}
@@ -382,6 +396,7 @@
 	{\oldendquote}
 	
 % =============================================================================
+% Add custom hypenation rules for difficult words here:
 \hyphenation{tool-chain pipe-line lan-guage lan-guage-side ge-ne-ric bind-ing bind-ings pri-mi-tive pri-mi-tives Na-tive-Bo-ost}
 
 % the following settings limit a bit the warnings latex spits out to focus on the
@@ -397,10 +412,12 @@
 % =============================================================================
 % by default I use 10pt for text in all figures, hence depending on the default
 % font size of the latex document you can adjust the scaling globally here if
-% you use: \includegraphics[scale=\imagescale]{myFigureName}
+% you use \includegraphics[scale=\imagescale]{myFigureName} for figures
+% this is useful if you later change the fontsize of the document
 \newcommand\imagescale{1.1}
 
 % =============================================================================
+% Add macros for common names here, Use smallcaps (\textsc) for product names
 \newcommand{\CogMethod}{\texttt{CogMethod}\xspace}
 
 \newcommand{\API}	{\textsc{api}\xspace}

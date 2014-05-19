@@ -8,6 +8,9 @@
 \introduction
 % ===========================================================================
 
+\cd{Je souhaite grouper dans ce rapport les chapitres 5 et 6}
+\cd{Les descriptions de ces deux systemes sont tres techniques et parfois cryptiques}
+
 In \chapref{ffi} we presented \NB, a mature language-side \FFI implementation that makes heavy use of \B's infrastructure.
 \NB is only one of three applications that are based on \B that were initially outlined in \secref{benzo-usecase}.
 While \NB is considered stable, the two other applications are currently only prototypes: dynamic primitives and a language-side \JIT.
@@ -23,7 +26,7 @@ Once the \VM is compiled, all the high-level definitions that existed at compila
 \WF tries to make a fraction of the original compile-time definitions accessible.
 
 \todo{probably retrofit to the final results of \NBJ}\enlargethispage{\baselineskip}
-The second prototype, \NB a language-side \JIT compiler takes the core idea of \WF even further.
+The second prototype, \NBJ a language-side \JIT compiler takes the core idea of \WF even further.
 \WF is capable of defining new primitives at runtime which are not reentrant: it is not possible to activate \PH methods from within primitives.
 However, this is what happens in jitted methods: it is possible to switch seamlessly between native methods and standard \PH methods using bytecode evaluation.
 Much like the primitives, the \JIT can not be changed from language-side and this is where we bring \NBJ into play.
@@ -38,6 +41,8 @@ High level intuition and distinction between approaches, (and remind me that I r
 \seclabel{val-waterfall}
 \seclabel{validation-waterfall}
 % ===========================================================================
+
+\lt{I found the description of Waterfall a bit confusing. The motivation is OK, but the performance of Waterfall is sufficently poor that I don’t think anyone would want to use it yet. This raises the obvious question: could such a mechanism ever be sufficiently performant? This isn’t tackled, other than to say performance issues need to be looked at. This is unfortunate, because without knowing if Waterfall could be made performant, it’s difficult to know if this is an interesting curio, or a viable approach. Perhaps making it clear upfront that this is an inconclusive experiment might help the reader?}
 
 \begin{figure}[h]
 	\centering
@@ -226,6 +231,8 @@ As shown in \figref{waterfall-architecture} the \WF compiler transforms the \AST
 	\figlabel{waterfall-architecture}
 \end{figure}
 
+\gt{I have, however, not understood all the process, especially, the figure 5.2. At one point in the figure, an AST is converted in assembly, but I don’t understand which component is in charge of the conversion and if a full compiler is written for that purpose?}
+
 \noindent We divide the \WF compiler into four distinct steps:
 \begin{description}
 \item[\Slang to \AST:] The first step is to access the \AST of the \Slang source method which happens automatically by loading the \Slang code in the \PH image.
@@ -341,9 +348,9 @@ We present the results of this experiment in ~\tabref{val-waterfall-performance}
     \centering
     \begin{tabular}{rSS}
 					& {Running Time [ms]} & {Relative Time} \\\midrule
-		Unmodified	&   6.4(14)           & 1.0\\
-		Fallback	& 195.0(16)           & \approx30.0 \\
-		\WF	        &  22.8(17)           & \approx3.6
+		Unmodified	&   6.4(28)           & 1.0\\
+		Fallback	& 195.0(32)           & \approx30.0 \\
+		\WF	        &  22.8(34)           & \approx3.6
     \end{tabular}
     \caption[\WF Speed Comparison: Large Integer]{Comparing running time of different implementations of integer arithmetic primitive.}
     \tablabel{val-waterfall-performance}
@@ -375,10 +382,10 @@ The outcome of this validation is shown in \tabref{val-waterfall-basicnew}.
     \centering
     \begin{tabular}{rSS}
 					                      & {Time [ms]} & {Relative Time} \\\midrule
-        Unmodified                        &  0.28(16)           &          1 \\
-        Secure reflective instrumentation & 27.72(40)           & \approx 99 \\
-        \WF-based instrumentation         &  7.72(27)           & \approx 28 \\
-        \WF-based non-instrumentation     &  7.08(23)           & \approx 25 \\
+        Unmodified                        &  0.28(32)           &          1 \\
+        Secure reflective instrumentation & 27.72(80)           & \approx 99 \\
+        \WF-based instrumentation         &  7.72(54)           & \approx 28 \\
+        \WF-based non-instrumentation     &  7.08(46)           & \approx 25 \\
     \end{tabular}
     \caption[\WF Speed Comparison: \ttt{basicNew}]{Slowdown comparison for instrumentation of the  essential primitive \ttt{basicNew}.}
     \tablabel{val-waterfall-basicnew}
@@ -443,6 +450,11 @@ Also, the paragraph is again reversed to what I would expect, start also with so
 \section{\NBJ: Language-side \JIT Prototype}
 \seclabel{val-nabujito}
 % ===========================================================================
+
+\lt{I found the description of Nabujito very confusing. The basic premise is simple: 3
+a JIT for Pharo written in Pharo. However, Section 5.2 spends almost all of its time explaining why Nabujito doesn’t really work. This meant that I ended up a bit unsure which bits did work. The sudden suggestion of a different JIT (Sista) doesn’t really include any hints of whether it was influenced by Nabujito or not.}
+
+\lt{Put another way: why should the reader care about Nabujito? At the moment, the way it’s presented makes it sound like a dead-end experiment from which few lessons are learnt. Those are rarely interesting, and I think a little bit of work needs to be put in to motivate the reader.}
 
 \begin{figure}[h]
 	\centering
@@ -773,8 +785,8 @@ Instead of focusing on the final performance of the generated code, we present t
     \centering
     \begin{tabular}{rS}
                       & {Compilation Time [ms]} \\\midrule
-        \PH Compiler  & 71(1) \\
-        \NBJ          & 73(1)
+        \PH Compiler  & 71(2) \\
+        \NBJ          & 73(2)
     \end{tabular}
     \caption[\NBJ Compilation Speed]{Compilation efforts of the standard \ST compiler in \PH and \NBJ for the a simple method returning the constant \ttt{nil}.}
     \tablabel{val-nabujito-performance-small}

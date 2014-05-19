@@ -18,7 +18,8 @@ However, there are other \VMs that are implemented using high-level languages wh
 More specifically we see that metacircular \VMs encourage advanced reflective features and new ways of interacting with the low-level \VM world.
 Metacircular \VMs are implemented in the same language they support.
 Typically this enables a more flexible building process where more high-level structures survive the compilation process.
-The final language-runtime can profit from this and support high-level low-level programming.
+The final language-runtime can profit from this and support \emph{high-level low-level programming} \cite{Fram09a}.
+This term was coined by the use of \Java to describe low-level components in the memory management toolkit of the \Jikes \VM.
 In several research \VMs this concept is used to implement typically isolated \VM components at language-side.
 But instead of generating a native version at \VM generation time, these components are evaluated at language-side, with the only difference that they have the capability to directly interact with low-level code.
 This means that the original separation of language-side and \VM is no longer evident.
@@ -38,10 +39,12 @@ To validate \B we describe three distinct applications built on top of it.
 \begin{description}
 	\item[\FFI:] The first one is an efficient foreign function interface (\FFI) library that is built at language-side without additional \VM support.
 	Our \FFI library outperforms existing solutions on \PH.
+	\todo{in collaboration with Igor stasenko}
 	
 	\item[Dynamic Primitives:] The second applications uses \B to dynamically generate and modify \PH primitives by reusing the metacircular \VM sources.
 	By combining high-level reflection and \B's low-level performance we outperform pure \PH-based primitive instrumentation.
-	
+	\todo{in collaboration with Igor stasenko}
+
 	\item[Language-side \JIT:] As a third, prototype application we show how \B is used to build a language-side \JIT.
 	Our prototype shows the limits of possible \VM interactions using the \B framework. 
 \end{description}
@@ -65,7 +68,6 @@ Following the problem description listed in the above introduction we identified
 To address the unification of the language-side and \VM-side we have to grant more access to the language-side.
 This includes interacting directly with low-level native instructions.
 A similar problem has been solved by applying high-level low-level programming in a more static environment \cite{Fram09a,Graal}.
-%\sm{Laurie knows a little about Graal (Oracle labs), so, as another language-side JIT, I would mention it}
 The approach outlined by Frampton et al. uses a high-level framework to generate native code at compile-time.
 We see that their approach has not yet been applied in a more dynamic environment where native code has to be generated at runtime.
 Hence we focus on the following concrete problems we wish to solve in this thesis.
@@ -89,6 +91,7 @@ Hence we validate this concept by implementing a language-side framework for nat
 Using this framework we identify the limitation of such an approach by evaluating several typical \VM-level applications.
 
 
+\gt{By allowing an application to access and to modify the internal structures of the virtual machine, the isolation property is lost. It could be interesting to discuss this point in the introduction.}
 
 % =============================================================================
 \section{Artifacts}

@@ -85,7 +85,10 @@ MyClass adoptInstance: anObject.
 \end{description}
 %
 
-\noindent Unless specified otherwise we refer by \emph{reflection} to dynamic or unanticipated behavioral reflection, where it is possible to perform intercession, hence altering the behavior at runtime.
+\noindent Unless specified otherwise we refer by \emph{reflection} or \emph{dynamic reflection} to unanticipated behavioral \emph{and} structural reflection both for performing intercession and introspection.
+In figures we use a circular arrow (\includegraphics[height=10pt]{reflection-arrow-black}) to symbolize reflection.
+
+
 
 % ---------------------------------------------------------------------------
 \subsection{Scoping Reflection: Partial Reflection}
@@ -139,9 +142,11 @@ Röthlisberger et al. propose \Gepetto a system \cite{Roet07b} that enables true
 \Gepetto provides a high-level \API to install behavior reflection.
 
 % ---------------------------------------------------------------------------
-\subsection{\VMs and Reflection}
+\subsection{Reflection in \VMs and Language Runtimes}
 \seclabel{background-vm-reflection}
 % ---------------------------------------------------------------------------
+
+\lt{I found section 2.1.2 hard to follow. I get the general idea, but the subsection is sometimes too vague, and other times too specific to easily follow. A separate issue is the slightly subjective nature of Figure 2.1; I think it might be worth being clearer that no such classification can ever be precise, and that it is best thought of as a way of understanding (rather than formally classifying) VMs.}
 
 So far we have given a basic introduction to the different types of reflection and how the effects of reflection can be limited by certain properties.
 We omitted how reflection is provided in the first place in a language runtime.
@@ -189,7 +194,9 @@ We are interested in language runtimes that are built around a \VM which introdu
 	\centering
 	\includegraphics[scale=1.1]{vm-reflection-evolution}
 	\figlabel{vm-reflection-evolution}
-	\caption[High-level Language Reflection Evolution]{Evolution of reflection in high-level language runtimes.}
+	\caption[High-level Language Reflection Evolution]{
+		Evolution of reflection in high-level language runtimes.
+		Circular arrows denote the use of reflection.}
 \end{figure}
 
 \begin{enumerate}[a)]
@@ -237,10 +244,11 @@ We are interested in language runtimes that are built around a \VM which introdu
 	The same reflective properties equally apply to language-side and the \VM.
 	The way to achieve this is by flattening out the intermediate \VM and let the language-side directly control everything.
 	Currently there are several research \VMs which can be classified as self-aware \VMs: The \P \VM \cite{Verw12a} is partially self-aware but in control of the underlying execution and the \Klein \VM is fully reflective \cite{Unga05a}. 
-	Unsurprisingly we find that these \VMs are built metacircularly, they are written in the same language they support.
+	Unsurprisingly we find that these \VMs are built metacircularly, they are written in a subset or the same language they support.
+	In the following \secref{background-open-vms} we will discuss in more details metacircular \VMs.
 \end{enumerate}
 
-From this overview of the evolution of reflection in high-level languages and their \VMs we see that there certain language runtimes that provide a form of \VM-level reflection.
+\noindent From this overview of the evolution of reflection in high-level languages and their \VMs we see that there certain language runtimes that provide a form of \VM-level reflection.
 Which is a clear indicator that the clear separation between language-side and \VM-side is mostly incidental.
 However, we see that there is only little research about self-aware \VMs or reflective \VMs.
 According to our overview, only a few research language runtimes would classify as self-aware.
@@ -250,7 +258,7 @@ In the following \secref{background-open-vms} we are now going to describe in mo
 
 
 % ===========================================================================
-\section{Open \VMs}
+\section{High-level Languages and \VMs}
 \seclabel{background-open-vms}
 % ===========================================================================
 
@@ -259,7 +267,6 @@ They have to combine two rather extreme goals: abstraction and performance.
 We have seen that the required abstraction for the running high-level language has a strong influence on the \VM design.
 At the same time the hard performance requirement requires precise interaction with the underlying hardware.
 This goes even so far that specialized hardware is conceived to match the performance requirements \cite{Unga84a,Stef84a,McGh98a,Clic05a}.
-\todo{ref to java processor}
 
 The early \VMs focused on interpreting an abstract instruction set (bytecodes).
 The benefits are twofold.
@@ -276,13 +283,13 @@ Garbage Collectors (\GC) evolved from simple helpers to complex software artifac
 The increased complexity of the \VMs lead to more novel approaches on how to build \VMs.
 \VMs are still build for a big part in C or C++ for performance reasons.
 However, there are more high-level approaches that try to simplify creating \VMs by using building blocks \cite{Geof10a}.
-\sm{Really? What is 26, I really need to jump through the PDF here? Not nice to your reader, not nice at all. If you got a point to make, make it explicit, not indirect. It is your text, you want to convey a message, do it precise and clearly, don't make me guess. If the point is not important, don't raise it.}
 In the following sections we are shedding light on metacircular \VMs which are programmed in the same language they in the end support.
 
 % ---------------------------------------------------------------------------
 \subsection{Metacircular \VMs}
 \seclabel{background-metacircular-vms}
 % ---------------------------------------------------------------------------
+\todo{this should lead to high-level low-level programming in some sense}
 The ever growing complexity of \VMs and the abstraction mismatch between the \VM definition language and the final interpreted language lead to a new movement that tried to reduce complexity.
 Among the \VMs using higher-level languages or frameworks to reduce the development effort the metacircular building process stands out.
 Unlike the classical \VM which is built in C and compiled to the a binary, a metacircular \VM is written in the same language that it provides in the end.
@@ -592,6 +599,7 @@ However, it goes one step further than \P by not relying on any C-based infrastr
 \MIST implements its own linker to build the final executable.
 Hence unlike \P it does not require kernel primitives written in C.
 \MIST brings its own implementation to directly perform system calls from within the language.
+\todo{along the track: less dependency to existing wrapped/hidden infrastrcture => more self-aware}
 \sm{Why is it relevant? It is barely a paragraph, feels like it doesn't fit in or is underrepresented here. Also, instead of being indirect about the goals, it would help to restate them}
 
 % ------------------------------------------------------------------------------
