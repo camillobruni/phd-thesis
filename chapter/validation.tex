@@ -36,7 +36,7 @@ High level intuition and distinction between approaches, (and remind me that I r
 
 
 % ===========================================================================
-%\newpage
+\newpage
 \section{\WF: Dynamic Primitives}
 \seclabel{val-waterfall}
 \seclabel{validation-waterfall}
@@ -46,8 +46,7 @@ High level intuition and distinction between approaches, (and remind me that I r
 
 
 \noindent In this section we present \WF, a compiler toolchain developed by Guido Chari that allows primitives to be changed dynamically from language-side.
-\WF is the work of Guido Chari and is based on \B.
-\WF has been successfully used to change \PH primitives on the fly.
+\WF in the core is a \Slang compiler implemented purely in \PH relying on the existing \B infrastructure. 
 In a separate work \cite{Char13a} we show how \WF is capable of recompiling whole \VM plugins.
 
 \begin{figure}[h]
@@ -890,7 +889,8 @@ However, with the previously mentioned \Sista project, efforts are being made to
 \paragraph{Missing Optimizations}
 One major performance optimization missing in both, the original \PH \VM-level \JIT and \NBJ, is inlining. 
 By inlining we are able to create methods that are potentially big enough for optimizations.
-However, inlining is a difficult task in a highly dynamic language such as \ST or \Self \cite{Cham89a}. 
+However, inlining is a difficult task in a highly dynamic language such as \ST or \Self \cite{Cham89a} when using a per method \JIT.
+A better match for this seems to be trace-based \JITs such as the one present in \PyPy or \Luajit.
 Efficient inlining can only be performed with sufficient knowledge of the system. 
 Accessing this high-level information from within the \VM is cumbersome and requires duplication of language-side reflective features.
 The \JIT lives on the same level as the information it needs relying on the already present reflective features of \ST.

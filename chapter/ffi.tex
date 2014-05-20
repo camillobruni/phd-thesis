@@ -599,9 +599,9 @@ Yet \LuaJIT outperform \NB by an impressive factor 30.
 \subsection{Marshalling Overhead for Primitive Types}
 % ---------------------------------------------------------------------------
 
-The third example calls \ttt{getenv('PWD')} expecting a string as result:  the path of the current working directory.
+The third example calls \ttt{getenv('PWD')} expecting a string as result: the path of the current working directory.
 Both argument and result have to be converted from high-level strings to C-level zero-terminated strings.
-\sm{I find those choices all questionable, why don't you call stuff under your control? A little C library, compiled with no, or predictable optimization, of which you actually know the execution cost?}
+Strictly speaking we do not measure the pure marshalling overhead, but we chose methods that heavily depend on string arguments to be converted between the internal type in \PH and the external type expected by the C function.
 %
 \begin{table}[h!]
     \centering
@@ -618,7 +618,7 @@ Both argument and result have to be converted from high-level strings to C-level
 \end{table}
 
 \noindent As a last evaluation of simple C functions with \NB, we call \ttt{printf} with a string and two integers as argument.
-The marshalling overhead is less than for the previous \ttt{getenv} example.
+The marshalling overhead is less than for the previous \ttt{getenv} example as the strings passed and returned are smaller.
 However, \ttt{printf} is a more complex C function which requires more time to complete: it has to parse the format string, format the given arguments and pipe the results to standard out.
 Hence the relative overhead of an \FFI call is reduced.
 %
@@ -764,7 +764,7 @@ Hence accessing it from low-level code is straight forward.
 However in certain situations it is required to access a high-level object from assembler.
 \PH has a moving garbage collector which means that you can not refer directly to a high-level object by a fixed address.
 
-As explained in more detail in \secref{benzo-gc-interaction} \B uses a special array at a known to deal with this problem.
+As explained in more detail in \secref{benzo-gc-interaction} \B uses a special array at a known fixed address to deal with this problem.
 Unlike normal \PH objects, this array has a known, fixed address that contains pointers to high-level objects.
 The garbage collector keeps this external roots array up to date.
 Hence it is possible to statically refer to a \PH object using a double indirection over the external roots.
@@ -891,7 +891,8 @@ pid isZero
 The first two lines pose a significant problem, still ignoring the implementation details of the rest of the method.
 What happens when we call \ttt{fork} with an \FFI callout?
 Essentially this creates a fork of the whole \VM running \PH which has some side-effects since the resources between the child and the parent \VM process are shared.
-\todo{maybe present the full details...}
+For instances the \VM has a separate process running for handling input events, which does not get forked automatically.
+Additionally we see certain file handles that are not properly recreated for the child process.
 In consequence when the \FFI callout for \ttt{fork} finishes, the \VM continues interpreting \PH code which in some cases stops to work due to the aforementioned side-effects.
 This could technically be avoided if the solve purpose of the child process is to execute some native code in the background and the exit.
 One would have to make sure that the sequence, \ttt{fork}, \textsc{pid} check, \ttt{exit} happens all in native code without handing over execution to \PH in between.
@@ -979,7 +980,11 @@ Using a in depth evaluation of \NB comparing against two other \ST \FFI implemen
 Compared to \LuaJIT there is still space for improvements.
 We measured a factor 30 lower calling overhead due to a close \JIT integration.
 However for typical \FFI calls the absolute time difference between \NB and \Lua is roughly $30\%$.
-With a partial solution ready to integrate \NB closer with the \JIT we expect to come close to \Lua's performance.
+With a partial solution ready to integrate \NB closer with the \JIT we expect to come closer to \Lua's performance.
+We implemented already a \JIT enabled \B primitive that inlines the language-side native code into the jitted code and thus avoids the overhead of the activating a primitive each time.
+However, this requires certain changes when generating native code in \NB.
+Namely, we have to respect the register strategy used by the \JIT.
+Due to these non-trivial changes we have not ported \NB to the \JIT-enabled \B primitive yet.
 
 Furthermore we showed that \NB essentially combines \VM-level performance with language-side flexibility when it comes to marshal complex types.
 New structures are defined practically at language-side and conversion optimizations are added transparently.
