@@ -134,6 +134,7 @@ This example uses a convenience method of \NB named \ttt{CLibrary} to obtain a h
 	\figlabel{ffi-nativeBoostSyntax}
 \end{figure}
 
+\lt{Why is the abs call annotated but not clock? It feels odd that parts of abs are explained in detail after they’ve already been seen in clock (e.g. primi- tiveNativeCall). Frankly, I think the clock example could be removed; abs is still simple enough to be explained in one go.}
 \figref{ffi-nativeBoostSyntax} presents the general syntax of \NBFFI through an example of a callout to the \ttt{abs} function of the \ttt{libc}.
 The \ttt{abs:} method has one argument named \ttt{anInteger} (cf. \ding{182}).
 This method uses the pragma \ttt{<primitive:module:error:>} which indicates that the \ttt{\#primitiveNativeCall} of the \ttt{\#NativeBoostPlugin} should be called when this method is executed (cf. \ding{183}).
@@ -213,21 +214,6 @@ setenv: name value: value
 In such case, \NB automatically converts \ttt{self} (which is a \ttt{SmallInteger}) into an \ttt{int}.
 This list of mapping is not exhaustive and \NB also supports the definition of new data types and new conversions into more complex C types such as structures (cf. \secref{ffi-internals}).
 
-% memory alloc & structs
-\begin{table}[h]
-	\begin{adjustwidth}{-2.0in}{-2.0in}
-	\centering
-    \begin{tabular}{lllll}
-                    &  Memory 	    & Address  & Marshalling         & Constraint  \\\midrule
-C-managed struct 	&  C heap  	    & fixed    & passed by reference & must be freed \\
-\multirow{2}{*}{\PH-managed struct}  & \multirow{2}{*}{Object memory} & \multirow{2}{*}{variable} & passed by reference & may move \\
-& & & passed by copy & costly\\
-    \end{tabular}
-    \end{adjustwidth}
-    \caption{Choice of Wrapping Structures in \NB}
-    \tablabel{ffi-wrappingstruct}
-\end{table}
-
 
 % ---------------------------------------------------------------------------
 \subsection{Supporting new types}
@@ -242,6 +228,7 @@ For example, the \urlfootnote{Cairo library}{http://cairographics.org/} provides
 \lstref{ffi-AthensCairoSurface} shows how to write a regular \PH class to wrap a C structure.
 \NB only requires a class-side method named \ttt{asNBExternalType:} that describes how to marshall this type back and forth from native code.
 In this example, we use existing marshalling mechanism defined in \ttt{NBExternalObjectType} that just copies the structure's pointer and stores it in an instance variable named \ttt{handle}.
+\lt{I’d like to know how NativeBoost handles C structures, particularly the issue of alignment, which is critical to interacting with C. Does NativeBoost encode the rules of a given C compiler? Does it call out to a C compiler to ensure things are done correctly? or...?}
 
 \begin{stcode}[
 	label={lst:ffi-AthensCairoSurface},
@@ -361,6 +348,22 @@ The second ones are allocated in the \PH object-memory.
 Their addresses are variable since their enclosing object may be moved by the garbage collector.
 They can either passed by copy which is costly or by reference.
 Passing a reference may lead to problems is the C function stores the address and try to access it later on since the address may changed.
+
+% memory alloc & structs
+\begin{table}[h]
+	\begin{adjustwidth}{-2.0in}{-2.0in}
+	\centering
+    \begin{tabular}{lllll}
+                    &  Memory 	    & Address  & Marshalling         & Constraint  \\\midrule
+C-managed struct 	&  C heap  	    & fixed    & passed by reference & must be freed \\
+\multirow{2}{*}{\PH-managed struct}  & \multirow{2}{*}{Object memory} & \multirow{2}{*}{variable} & passed by reference & may move \\
+& & & passed by copy & costly\\
+    \end{tabular}
+    \end{adjustwidth}
+    \caption{Choice of Wrapping Structures in \NB}
+    \tablabel{ffi-wrappingstruct}
+\end{table}
+
 
 
 % ---------------------------------------------------------------------------

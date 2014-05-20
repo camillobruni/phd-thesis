@@ -279,6 +279,8 @@
 	\ifthenelse{\boolean{showcomments}}
 		{#1}
 		{#2}}
+% used to deal with the spaces inserted by hidden comments
+\newcommand\commentbackspace{\!\!\!\!\!}
 
 % please rephrase
 \newcommand\ugh[1]{
@@ -294,14 +296,14 @@
 \newcommand\del[1]{
 	\ifshowcomment
 		{\textcolor{red}{\sout{#1}}}
-		{}}
+		{\commentbackspace}}
 % please change
 \newcommand\chg[2]{
 	\ifshowcomment
 		{\textcolor{red}{\sout{#1}}{\ra}
 		\textcolor{blue}{\uline{#2}}}
-		{}}
-% comment
+		{\commentbackspace}}
+% comment with color
 \newcommand\nbc[3]{
 	\ifshowcomment
 		{{\colorbox{#3}{\bfseries\sffamily\scriptsize\textcolor{white}{#1}}}
@@ -309,7 +311,7 @@
 			\sf\small$\blacktriangleright$
 			{\itshape #2}
 			$\blacktriangleleft$}}
-		{}}
+		{\commentbackspace}}
 
 
 
@@ -389,11 +391,11 @@
 
 
 % italic quotes
-\let\oldquote\quote
-\let\oldendquote\endquote
-\renewenvironment{quote}
-	{\oldquote\itshape}
-	{\oldendquote}
+%\let\oldquote\quote
+%\let\oldendquote\endquote
+%\renewenvironment{quote}
+%	{\oldquote\itshape}
+%	{\oldendquote}
 	
 % =============================================================================
 % Add custom hypenation rules for difficult words here:

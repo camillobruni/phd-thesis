@@ -54,7 +54,8 @@ In a separate work \cite{Char13a} we show how \WF is capable of recompiling whol
 	\centering
 	\includegraphics[scale=\imagescale]{waterfall-overview}
 	\caption[\WF Overview]{
-	\WF uses the \Slang definition of the \VM to generate new primitives on the fly, creating an incremental version of the default \VM compilation process that compiles the whole \VM using a C compiler (\GCC). }
+	\WF uses the \Slang definition of the \VM to generate new primitives on the fly, creating an incremental version of the default \VM compilation process that compiles the whole \VM using a C compiler (\GCC).
+	}
 	\figlabel{val-waterfall-overview}
 \end{figure}
 
@@ -455,12 +456,6 @@ Also, the paragraph is again reversed to what I would expect, start also with so
 \seclabel{val-nabujito}
 % ===========================================================================
 
-\lt{I found the description of Nabujito very confusing. The basic premise is simple: 3
-a JIT for Pharo written in Pharo. However, Section 5.2 spends almost all of its time explaining why Nabujito doesn’t really work. This meant that I ended up a bit unsure which bits did work. The sudden suggestion of a different JIT (Sista) doesn’t really include any hints of whether it was influenced by Nabujito or not.}
-
-\lt{Put another way: why should the reader care about Nabujito? At the moment, the way it’s presented makes it sound like a dead-end experiment from which few lessons are learnt. Those are rarely interesting, and I think a little bit of work needs to be put in to motivate the reader.}
-
-
 \noindent In this section we present \NBJ, a \B-based approach for a language-side \JIT compiler that tries to replicated the behavior of the existing \JIT.
 
 \begin{figure}[h]
@@ -595,7 +590,7 @@ However, due to the limited size of the \JIT space that still means that infrequ
 \cb{the previous paragraph might be a bit dense, depending on the knowledge of the reader}
 Since \Cog uses stack mapping this means that the C-based bytecode interpreter runs on the same native stack with two slightly different strategies.
 For instance, typically the C stack depth is limited to a predefined constant, whereas the \PH stack can grow as big as the whole heap.
-Which means that recursion in a \PH program is not a \ugh{direct threat}.
+Which means that recursion in a \PH program is not a direct danger.
 In the bytecode interpreter the language-side recursion is not directly present, since the interpreter only fetches and evaluates bytecodes in a loop.
 Thus, switching from \JIT-mode to bytecode interpretation requires some additional work to avoid negative side-effects.
 Essentially, \Cog separates the native stack for the \JIT and the bytecode interpreter.

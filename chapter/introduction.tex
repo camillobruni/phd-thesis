@@ -39,12 +39,10 @@ To validate \B we describe three distinct applications built on top of it.
 \begin{description}
 	\item[\FFI:] The first one is an efficient foreign function interface (\FFI) library that is built at language-side without additional \VM support.
 	Our \FFI library outperforms existing solutions on \PH.
-	\todo{in collaboration with Igor stasenko}
 	
 	\item[Dynamic Primitives:] The second applications uses \B to dynamically generate and modify \PH primitives by reusing the metacircular \VM sources.
 	By combining high-level reflection and \B's low-level performance we outperform pure \PH-based primitive instrumentation.
-	\todo{in collaboration with Igor stasenko}
-
+	
 	\item[Language-side \JIT:] As a third, prototype application we show how \B is used to build a language-side \JIT.
 	Our prototype shows the limits of possible \VM interactions using the \B framework. 
 \end{description}
@@ -85,13 +83,10 @@ Hence we focus on the following concrete problems we wish to solve in this thesi
 \section{Contributions}
 % =============================================================================
 
-\todo{reread}
-To support high-level low-level programming from language-side we provide a identify that native code generation at language-side is essential.
+To support high-level low-level programming in a dynamic context we identify that native code generation at language-side is essential.
 Hence we validate this concept by implementing a language-side framework for native code generation and execution with minimal \VM changes.
 Using this framework we identify the limitation of such an approach by evaluating several typical \VM-level applications.
 
-
-\gt{By allowing an application to access and to modify the internal structures of the virtual machine, the isolation property is lost. It could be interesting to discuss this point in the introduction.}
 
 % =============================================================================
 \section{Artifacts}
@@ -104,10 +99,9 @@ We present now our contributions of this dissertation addressing the previously 
 	The core functionality of \B is to dynamically execute native-code generated at language-side.
 	Our framework requires minimal changes to an existing \VM and three custom primitives to support dynamic code activation, the majority of \B is implemented as accessible language-side code.
 	\B allows us to directly communicate with the low-level world and thus hoist typical \VM-level applications to the language-side.
-	\sm{Just a shift of implementation language, opens up opportunities, but in itself, doesn't give more reflective power, it is still 'a runtime', no? }
 		
 	\item[\NB] is a \B-based foreign function interface (\FFI).
-	\NB makes generates customized native code at language-side, both being flexible and efficient at the same time.
+	\NB generates customized native code at language-side, both being flexible and efficient at the same time.
 	\NB outperforms other existing \FFI solutions on the \PH platform, making it an ideal evaluation for the \B framework.
 	
 	\item[\NBJ] is a prototype \JIT compiler based on \B.
@@ -165,7 +159,8 @@ We present now our contributions of this dissertation addressing the previously 
 	Our prototype implementation generates the same native code as the existing \VM-level \JIT, however, it is currently limited to simple expressions.
 	\NBJ shows that for certain applications a well-define interface with the low-level components of the \VM is required.
 
-\item[\chapref{future}] summarizes the limitations of \B and its application, furthermore we list undergoing efforts on the \B infrastructure and future work.
+\item[\chapref{future}] summarizes the limitations of \B and its application.
+Furthermore we list undergoing efforts on the \B infrastructure and future work.
 
 \item[\chapref{conclusion}] concludes the dissertation.
 

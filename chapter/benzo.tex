@@ -876,20 +876,30 @@ The latter one is also typical for C development, whereas creating a misaligned 
 
 \begin{stcode}[caption={Simple \B code possibly leading to an unbalanced stack.}]{}
 Benzo x86 generate: [ :asm |
+	"Push the EAX register on the stack"
 	asm push: asm EAX ]
 \end{stcode}
 
 \begin{stcode}[caption={\B code possibly leading memory access violation.}]{}
 Benzo x86 generate: [ :asm |
-	asm mov: asm EAX ptr to: asm EAX ]
+	"Puhs the value of the location EAX points to
+	asm push: asm EAX ptr ]
 \end{stcode}
 
 \noindent In \PH it is possible to willingly corrupt the stack by for instance injecting a wrong sender as illustrated with following the code example.
 %
 \begin{stcode}[label=lst:benzo-pharo-stack-corruption]{}
+"Store an invalid object in a context variable used 
+ by the JIT and the VM"
 thisContext instVarNamed: #closureOrNil put: 1.
 \end{stcode}
 %
+The context is exposed as first-class object to the language and thus we can reflectively modify it.
+However, at the same time there it has to fulfill a contract with the \JIT which maps it to a native stack frame for performance reasons.
+In the current \Cog \VM reflective accesses to the current context/stack frame are not checked.
+Hence we can use it to inject a wrong object, in our case a small integer.
+This would require additional checks at the \JIT to properly read the small integer.
+However, for performance reasons this is not done, resulting in a wrongly read value and a subsequent crash of the \VM.
 
 In \B the standard developer will most probably be more familiar with \PH than with C or even Assembler, which will easily lead to the aforementioned errors.
 \sm{So, it is not the right tool for the job, because it is too low level?
@@ -904,7 +914,8 @@ Enabling debugging support for the low-level \B code is not that easy as we will
 As a first step we should provide a debug mode for \B where the low-level errors do not terminate the main process.
 The most simple way to achieve this is by forking the whole \VM process at the moment the native \B code is activated.
 However, the current implementation of the \PH \VM does not support clean forking, even so close implementations such as \Squeak supports forking with a specific \urlfootnote{\VM plugin}{http://wiki.squeak.org/squeak/708/}.
-Implementing a debugging version of the \B plugin to activate native code in a forked process would solve this issue, though at the cost of an additional primitive.
+Implementing a debugging version of the \B plugin to activate native code in a forked process would solve this issue, though at the cost of an additional primitive and the use of an old \VM.
+\lt{Why doesn't Pharo support forking}
 \sm{Why can't you do it in benzo?}
 
 Addressing faulty stack management requires more effort.
