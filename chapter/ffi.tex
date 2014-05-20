@@ -526,7 +526,7 @@ Hence much care has been taken to closely integrate \Lua into C and C++ environm
 
 \paragraph{Evaluation Procedure}
 To compare the different \FFI approaches we measure 100 times the accumulative time spent to perform $1'000'000$ callouts of the given function.
-From the 100 probes we show the average and the standard deviation for a $68\%$ confidence interval in a gaussian distribution.
+From the 100 probes we show the average and the standard deviation for a $95\%$ confidence interval in a gaussian distribution.
 \sm{First, how do you know the results are normally distributed?
 Second, 68\% really, why? That will raise a lot of red flags!!!!!}
 To exclude the calling and loop overhead we subtract from each evaluation the time spent in the same setup, but without the \FFI call.
