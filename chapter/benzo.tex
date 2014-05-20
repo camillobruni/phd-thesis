@@ -71,7 +71,7 @@ A solution that crosses these barriers requires the following properties:
 
 
 % ---------------------------------------------------------------------------
-\subsection{\B a Framework for Reflective Low-level Programming}
+\subsection{\B a Framework for Reflective High-level Low-level Programming}
 % ---------------------------------------------------------------------------
 
 \sd{repetition with below}
@@ -80,6 +80,10 @@ However, in a reflective setup it fails to comply with the first requirement men
 \sm{See limitations should be made very clear and referencable in chapter 2, and here you should reference them again.}
 Our approach for overcoming this limitation consists of \B, a lightweight and reflective framework that dynamically generates native code from language-side and allows its execution on the fly.
 It relies only on a small set of generic \VM extensions described in \secref{benzo-vm-requirements}, whereas the vast majority of the framework is implemented as a language-side library.
+
+\B originally evolved from the work done by Igor Stasenko on the \NB which we will describe in more detail in the following \chapref{FFI}.
+Initially \B itself was not considered as a separate application but a core of the \FFI framework.
+We extracted the core concepts –- dynamic high-level low-level programming -- into a separated framework, \B.
 
 % ---------------------------------------------------------------------------
 \subsection{\B Applications}

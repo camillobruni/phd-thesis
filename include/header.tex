@@ -275,12 +275,9 @@
 % create a boolean to enable/disable comments (use \setboolean{showcomments}{false} 
 % for instance in the main file)
 \setboolean{showcomments}{true}
-\newcommand\ifshowcomment[2]{
-	\ifthenelse{\boolean{showcomments}}
-		{#1}
-		{#2}}
+\newcommand\ifshowcomment[2]{\ifthenelse{\boolean{showcomments}}{#1}{#2}}
 % used to deal with the spaces inserted by hidden comments
-\newcommand\commentbackspace{\!\!\!\!\!}
+\newcommand\commentbackspace{\!\!\!} %\!\!\!\!\!
 
 % please rephrase
 \newcommand\ugh[1]{
@@ -298,16 +295,15 @@
 		{\textcolor{red}{\sout{#1}}}
 		{\commentbackspace}}
 % please change
-\newcommand\chg[2]{
+\newcommand\chg[2]{ %
 	\ifshowcomment
-		{\textcolor{red}{\sout{#1}}{\ra}
-		\textcolor{blue}{\uline{#2}}}
+		{\textcolor{red}{\sout{#1}}{\ra} %
+		\textcolor{blue}{\uline{#2}}} %
 		{\commentbackspace}}
 % comment with color
-\newcommand\nbc[3]{
-	\ifshowcomment
-		{{\colorbox{#3}{\bfseries\sffamily\scriptsize\textcolor{white}{#1}}}
-		{\color{#3}
+\newcommand\nbc[3]{ %
+	\ifshowcomment{ %
+		{\colorbox{#3}{\bfseries\sffamily\scriptsize\textcolor{white}{#1}}}{\color{#3}
 			\sf\small$\blacktriangleright$
 			{\itshape #2}
 			$\blacktriangleleft$}}
@@ -320,16 +316,16 @@
 \newcommand\todo[1]{\nb{TO DO}{#1}}
 
 % shortcuts for comments by reviewers
-\newcommand\cb[1]  {\nbc{CB}{#1}{purple}} % camillo bruni
-\newcommand\sd[1]  {\nbc{SD}{#1}{orange}} % stephane ducasse
-\newcommand\is[1]  {\nbc{IS}{#1}{gray}}   % igor stasenko
-\newcommand\sm[1]  {\nbc{SM}{#1}{olive}}  % stefan marr
-\newcommand\ct[1]  {\nbc{CT}{#1}{teal}}   % camille tereul
-\newcommand\md[1]  {\nbc{MD}{#1}{blue}}   % marcus denker
-\newcommand\dc[1]  {\nbc{DC}{#1}{green}}  % damien cassou
-\newcommand\lt[1]  {\nbc{LT}{#1}{green}}  % laurence tratt
-\newcommand\cd[1]  {\nbc{CD}{#1}{teal}}   % christophe dony
-\newcommand\gt[1]  {\nbc{GT}{#1}{blue}}   % gael thomas
+\newcommand\cb[1]{\nbc{CB}{#1}{purple}} % camillo bruni
+\newcommand\sd[1]{\nbc{SD}{#1}{orange}} % stephane ducasse
+\newcommand\is[1]{\nbc{IS}{#1}{gray}}   % igor stasenko
+\newcommand\sm[1]{\nbc{SM}{#1}{olive}}  % stefan marr
+\newcommand\ct[1]{\nbc{CT}{#1}{teal}}   % camille tereul
+\newcommand\md[1]{\nbc{MD}{#1}{blue}}   % marcus denker
+\newcommand\dc[1]{\nbc{DC}{#1}{green}}  % damien cassou
+\newcommand\lt[1]{\nbc{LT}{#1}{green}}  % laurence tratt
+\newcommand\cd[1]{\nbc{CD}{#1}{teal}}   % christophe dony
+\newcommand\gt[1]{\nbc{GT}{#1}{blue}}   % gael thomas
 
 % =============================================================================
 \usepackage[pagebackref,hyperindex=true]{hyperref}
