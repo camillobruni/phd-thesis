@@ -475,7 +475,8 @@ This native code is responsible of the marshalling and calling the external func
 \begin{figure}[ht]
 	\centering
 	\includegraphics[scale=\imagescale]{nbArchitecture}
-	\caption[\NB Components Layering]{\NB main components that major part of the code resides at language-side.}
+	\caption[\NB Components Layering]{
+	\NB is implemented in \PH using the language-side assembler and then the \B primitive to activate native code.}
 	\figlabel{ffi-nbArchitecture}
 \end{figure}
 
@@ -915,6 +916,8 @@ This last change introduced a recursive dependency that is not visible on the fi
 \begin{figure}[h]
 	\centering
 	\includegraphics[scale=\imagescale]{nb-bootstrap-cycle}
+	\caption[\NB Startup Recursion]{
+	When using \NB in critical \PH components used during the startup we run into a infinite recursion due to cyclic dependencies.}
 \end{figure}
 %
 Essentially this meant that in certain cases where \NB required to compile the native code for callout it was impossible to start up \PH.
@@ -934,7 +937,7 @@ Only that the plugins are generated from the original \NB callouts rather than c
 \begin{figure}[h]
 \centering
 \includegraphics[scale=\imagescale]{nb-deployment-mode}
-\caption[\NB Deployment Mode]{Comparison of the callout actiation for a) the development mode and b) the deployment mode}
+\caption[\NB Deployment Mode]{Comparison of the callout actiation for a) the development mode where native cod eis create on demand and b) the deployment mode where we use pre-generated native code.}
 \end{figure}
 %
 At the current state of the \FFI library and the underlying assembler from \B this is only feasible for the x86 architecture while for instance \ARM support missing.

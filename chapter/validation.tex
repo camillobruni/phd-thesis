@@ -44,17 +44,19 @@ High level intuition and distinction between approaches, (and remind me that I r
 
 \lt{I found the description of Waterfall a bit confusing. The motivation is OK, but the performance of Waterfall is sufficently poor that I don’t think anyone would want to use it yet. This raises the obvious question: could such a mechanism ever be sufficiently performant? This isn’t tackled, other than to say performance issues need to be looked at. This is unfortunate, because without knowing if Waterfall could be made performant, it’s difficult to know if this is an interesting curio, or a viable approach. Perhaps making it clear upfront that this is an inconclusive experiment might help the reader?}
 
-\begin{figure}[h]
-	\centering
-	\includegraphics[scale=\imagescale]{waterfall-overview}
-	\caption{\WF Overview}
-	\figlabel{val-waterfall-overview}
-\end{figure}
 
 \noindent In this section we present \WF, a compiler toolchain developed by Guido Chari that allows primitives to be changed dynamically from language-side.
 \WF is the work of Guido Chari and is based on \B.
 \WF has been successfully used to change \PH primitives on the fly.
 In a separate work \cite{Char13a} we show how \WF is capable of recompiling whole \VM plugins.
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[scale=\imagescale]{waterfall-overview}
+	\caption[\WF Overview]{
+	\WF uses the \Slang definition of the \VM to generate new primitives on the fly, creating an incremental version of the default \VM compilation process that compiles the whole \VM using a C compiler (\GCC). }
+	\figlabel{val-waterfall-overview}
+\end{figure}
 
 % -----------------------------------------------------------------------------
 \subsection{Background}
@@ -227,7 +229,9 @@ As shown in \figref{waterfall-architecture} the \WF compiler transforms the \AST
 \begin{figure}[h]
 	\centering
 	\includegraphics[scale=\imagescale]{waterfall-architecture}
-	\caption{\WF Compilation Steps}
+	\caption[\WF Compilation Steps]{
+	\WF loads the \Slang sources and lowers the \AST to assembler instructions.
+	Using \B the binary code for a primitive is activated and installed.}
 	\figlabel{waterfall-architecture}
 \end{figure}
 
@@ -456,13 +460,48 @@ a JIT for Pharo written in Pharo. However, Section 5.2 spends almost all of its 
 
 \lt{Put another way: why should the reader care about Nabujito? At the moment, the way it’s presented makes it sound like a dead-end experiment from which few lessons are learnt. Those are rarely interesting, and I think a little bit of work needs to be put in to motivate the reader.}
 
+
+\noindent In this section we present \NBJ, a \B-based approach for a language-side \JIT compiler that tries to replicated the behavior of the existing \JIT.
+
 \begin{figure}[h]
 	\centering
 	\includegraphics[scale=\imagescale]{nabujito-overview}
+	\caption[\NBJ Overview]{
+	\NBJ tries to replicate the \JIT which resides in the \VM.
+	We use \B to compile native versions of \PH methods that match the results generated from the existing \JIT.}
 \end{figure}
 
-\noindent In this section we present \NBJ, a \B-based approach for a language-side \JIT compiler.
-\todo{Introduction}
+We have presented two other \B applications so far: a \FFI and previously the dynamic primitives.
+Both of these applications have in common that the switch or call to native code happens at the end of the \PH stack as shown in \figref{stack-waterfall}.
+%
+\begin{figure}[h]
+	\centering
+	\includegraphics[scale=\imagescale]{stack-waterfall}
+	\caption[\WF Stack Usage]{
+	\WF and \NB use native code at the end of the \PH stack.}
+	\figlabel{stack-waterfall}
+\end{figure}
+%
+We see that the \B primitive marks the enter and exit point for native code.
+As a result the native is isolated from the rest of the stack.
+However, this is no longer the case if we use \B to generate native code for \PH methods like the \VM-level \JIT.
+\figref{nbj-stack-usage} shows how the \B-based native code is embedded into the \PH stack.
+%
+\begin{figure}[h]
+	\centering
+	\includegraphics[scale=\imagescale]{stack-nabujito}
+	\caption[\NBJ Stack Usage]{
+	\NBJ generates native code for \PH methods which can themselves activate other methods.
+	Hence, the \B lies in between \PH contexts. }
+	\figlabel{stack-nabujito}
+\end{figure}
+%
+Hence a \B-based \JIT has to closely interact with the existing infrastructure since it is taking control over a part of the interpretation itself.
+For instance it is not possible to just generate native code following a different stack usage than the internal \JIT.
+If we would do so we would inevitably create a conflict.
+We will thus present first the details of the existing \JIT used by the \PH \VM to shed light on the difficult implementation of \NBJ.
+
+
 
 % ---------------------------------------------------------------------------
 \subsection{Background}
@@ -660,14 +699,18 @@ To explain that we have a look at the standard stack frame setup of a jitted met
 \begin{numstcode}[
 	caption={\Cog \JIT Stackframe Setup},
 	label={lst:val-nabujito-cog-frame}]{7}
+// push the current framepointer on the stack
 push EBP
+// use the stack pointer in ESP as new framepointer 
 mov  EBP, ESP
+// push the current jitted method on the stack
 push 0x1f452b00<CogMethod>
+// move the Pharo object nil to the EBX register
 mov  EBX, 0x1f500004<nil>
+// push nil (stored in EBX) twice on the stack
 push EBX
 push EBX
 \end{numstcode} 
-\sm{How about commenting the code?}
 %
 After finishing executing these setup instructions the stack frame looks as depicted in \figref{val-nabujito-cog-stack-frame}.
 %
@@ -701,9 +744,13 @@ We can do so since we know the following things:
 \begin{numstcode}[
 	caption={\NBJ Stack Frame Setup},
 	label={lst:val-nabujito-frame-setup}]{7}
+// push the current framepointer on the stack
 push EBP
+// use the stack pointer in ESP as new framepointer 
 mov  EBP, ESP
+// move the address of a helper function into EAX
 mov  EAX, 0x643d02e<pushCogMethodHelper>
+// call the helper method
 call EAX
 \end{numstcode}
 %
@@ -714,9 +761,13 @@ The result is shown in \lstref{val-nabujito-patched-frame-setup}.
 \begin{numstcode}[
 	caption={\NBJ Patched Stack Frame Setup},
 	label={lst:val-nabujito-patched-frame-setup}]{7}
+// push the current framepointer on the stack
 push EBP
+// use the stack pointer in ESP as new framepointer 
 mov  EBP, ESP
+// patched instructions done by pushCogMethodHelper
 push 0x1f452b00<CogMethod>
+// patched `call EAX`
 nop
 \end{numstcode}
 %
@@ -741,7 +792,10 @@ It contains simple entries which describe the location of jumps, calls, referenc
 \begin{figure}[h]
 	\centering
 	\includegraphics[scale=\imagescale]{cog-method-map}
-	\caption{\Nabujito-generated Relocation Maps}
+	\caption[\Nabujito-generated Relocation Maps]{
+	\NBJ can easily transfer a static version of the native code of a \PH method to the \JIT.
+	However, there is no interface to pass the crucial relocation information.
+	}
 	\figlabel{val-nabujito-cog-method-map}
 \end{figure}
 \todo{integrated figure}

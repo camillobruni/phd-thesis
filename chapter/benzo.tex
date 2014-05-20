@@ -175,7 +175,7 @@ In the floating point multiplication example the fallback code uses a slow conve
 \begin{figure}[ht]
 	\centering
 	\includegraphics[scale=\imagescale]{smalltalkPrimitive}
-	\caption[\PH Primitive]{Generic primitive methods in \PH: a) A primitive completely bypasses the bytecode, b) A failing primitive executes the bytecode as fallback.}
+	\caption[\PH Primitive]{Generic primitive methods in \PH: a) By default a primitive completely bypasses the bytecode, b) A failing primitive executes the bytecode as fallback.}
 	\figlabel{benzo-smalltalkPrimitive}
 \end{figure}
 
@@ -215,7 +215,9 @@ In \secref{benzo-language-side}, through more detailed examples, we describe how
 \begin{figure}[ht]
     \centering
     \includegraphics[scale=\imagescale]{nativeCodeMethodDetail}
-    \caption[\ttt{CompiledMethod} With \B Code]{Example of \PH method with native code which calls the low-level debug exception handler \ttt{INT3}. The bytecode references objects indirectly via the literal frame residing at the beginning of the method.}
+    \caption[\ttt{CompiledMethod} With \B Code]{
+    Example of \PH method with native code which calls the low-level debug exception handler \ttt{INT3}. 
+    The bytecode references objects such as symbols for messages sends indirectly via the literal frame residing at the beginning of the method.}
     \figlabel{nativeCodeMethodDetail}
 \end{figure}
 
@@ -380,7 +382,9 @@ After the native code is installed in the compiled method, we still run \PH code
 \begin{figure}[ht]
 	\centering
 	\includegraphics[scale=\imagescale]{nativeCodeActivation}
-	\caption[\B Native Code Acivation]{Native code activation with \B: The first call triggers the code generation. Then the method is restarted and the native code executed.}
+	\caption[\B Native Code Acivation]{
+	Native code activation with \B: The first call triggers the code generation written in \PH.
+	Then the method is restarted and the cached native code executed.}
 	\figlabel{benzo-nativeCodeActivation}
 \end{figure}
 %
@@ -416,13 +420,6 @@ Whereas the typical \FFI implementation is based on an separate plugin, dynamic 
 \seclabel{benzo-ffi}
 %----------------------------------------------------------------------------
 
-\begin{figure}[h]
-	\centering
-	\includegraphics[scale=\imagescale]{nativeboost-overview}
-	\caption[\NB Overview]{\NB generates native code at language-side with \B to perform an \FFI callout to an external function.}
-	\figlabel{benzo-ffi-overview}
-\end{figure}
-
 \noindent \FFIs enable a programmer to call external functions without the need to implement additional \VM extensions.
 \NB \cite{Brun13a} is a production-ready \FFI for \PH, developed on top of \B. 
 For a detailed discussion of the implementation of \NB see \chapref{ffi}.
@@ -430,6 +427,16 @@ An \FFI implementation consists of two main parts: calling external functions an
 Typically a big percentage of these two parts are implemented at \VM-level with statically defined bindings.
 Relying on \B's capability to dynamically generate and execute native code we developed a complete \FFI at language-side.
 This way the \VM no longer requires to have a specific \FFI extension.
+
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[scale=\imagescale]{nativeboost-overview}
+	\caption[\NB Overview]{
+	\NB generates native code at language-side with \B to perform an \FFI callout to an external function.}
+	\figlabel{benzo-ffi-overview}
+\end{figure}
+
 
 A very simple example to illustrate the functionality of \NB is to access the current environment variables with the \ttt{getenv} C function.
 \ttt{getenv} takes a name as single argument and returns the value of that environment variable as a string:
@@ -457,21 +464,19 @@ Each language-side library can define its own highly efficient conversion routin
 \seclabel{benzo-waterfall}
 %----------------------------------------------------------------------------
 
+
+\noindent \WF is the second application we use to validate \B.
+This project has been developed by Guido Chari and allows a programmer to dynamically replace primitives at language-side, essentially reflectively altering the \VM.
+This is a step further than previously presented \B-based \FFI which allows us to call external functions by generating the callout code at language-side.
+From an abstract point of view we replace language-side methods with native routines.
+\NB does not directly synthesize new features but only makes external functionality available to the language itself.
+
 \begin{figure}[h]
 	\centering
 	\includegraphics[scale=\imagescale]{waterfall-overview}
 	\caption[\WF Overview]{\WF reuses the definitions of \VM primtives written in \Slang and compiles them dynamically. The same primitive definition is used for generating the static primitive at \VM compilation time.}
 	\figlabel{benzo-waterfall-overview}
 \end{figure}
-
-\todo{by Guido Chari}
-\noindent The second \B-based application we present takes the concept of our \FFI solution further.
-\sm{Don't imply! Be explicit! The second is something... You neither name it nor give me clues what you are going to talk about.
-
-And also, start out with telling my what waterfall is concretely, you are now telling me what it ain't, by telling me what native boost doesn't do. That can come later, first, I want to know why I should read this section}
-\NB allows us to call external functions by generating the callout code at language-side.
-From an abstract point of view we replace language-side methods with native routines.
-\NB does not directly synthesize new features but only makes external functionality available to the language itself.
 
 As explained previously in \secref{benzo-vm-interaction} \B uses \PH's primitives to activate native code.
 Since \PH is an open system we can extend this behavior to existing methods.
@@ -938,12 +943,12 @@ And present it like that: here, a sketch for a possible solution. Complete debug
 \begin{figure}[h]
 	\centering
 	\includegraphics[scale=\imagescale]{benzo-debugger}
-	\caption{\B Debugger Outline}
+	\caption[\B Debugger Outline]{
+	Outline of a low-level debugging mechanism to transform low-level errors into a high-level exception using a designated signal handler which walks the stack until it finds the \ttt{primitiveNativeCall} activation.}
 	\figlabel{benzo-debugger}
 \end{figure}
 
 The following list explains the detailed steps of \figref{benzo-debugger}.
-\todo{missing link from the text}
 \begin{enumerate}
 	\item Standard \PH method activating a \B-enabled method through the \ttt{primitiveNativeCall} primitive.
 	\item Native code causing a memory access violation (for example \ttt{SIGSEV}) which can not be handled by \PH directly.

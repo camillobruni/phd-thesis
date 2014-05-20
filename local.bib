@@ -2,12 +2,37 @@
 %% http://bibdesk.sourceforge.net/
 
 
-%% Created for Camillo Bruni at 2014-05-19 19:22:37 +0200 
+%% Created for Camillo Bruni at 2014-05-19 19:30:32 +0200 
 
 
 %% Saved with string encoding Unicode (UTF-8) 
 
 
+
+@inproceedings{Wurt12a,
+	Abstract = {An abstract syntax tree ({AST}) interpreter is a simple and natural way to implement a programming language. However, it is also considered the slowest approach because of the high overhead of virtual method dispatch. Language implementers therefore define bytecodes to speed up interpretation, at the cost of introducing inflexible and hard to maintain bytecode formats. We present a novel approach to implementing {AST} interpreters in which the {AST} is modified during interpretation to incorporate type feedback. This tree rewriting is a general and powerful mechanism to optimize many constructs common in dynamic programming languages. Our system is implemented in Java and uses the static typing and primitive data types of Java elegantly to avoid the cost of boxed representations of primitive values in dynamic programming languages.},
+	Address = {New York, NY, USA},
+	Author = {W\"{u}rthinger, Thomas and W\"{o}ss, Andreas and Stadler, Lukas and Duboscq, Gilles and Simon, Doug and Wimmer, Christian},
+	Booktitle = {Proceedings of the 8th symposium on Dynamic languages},
+	Citeulike-Article-Id = {11981430},
+	Citeulike-Linkout-0 = {http://portal.acm.org/citation.cfm?id=2384577.2384587},
+	Citeulike-Linkout-1 = {http://dx.doi.org/10.1145/2384577.2384587},
+	Date-Added = {2014-05-19 17:30:22 +0000},
+	Date-Modified = {2014-05-19 17:30:22 +0000},
+	Doi = {10.1145/2384577.2384587},
+	Isbn = {978-1-4503-1564-7},
+	Location = {Tucson, Arizona, USA},
+	Pages = {73--82},
+	Posted-At = {2013-02-02 19:56:02},
+	Priority = {2},
+	Publisher = {ACM},
+	Read = {1},
+	Series = {DLS '12},
+	Title = {Self-optimizing {AST} interpreters},
+	Url = {http://dx.doi.org/10.1145/2384577.2384587},
+	Year = {2012},
+	Bdsk-File-1 = {YnBsaXN0MDDUAQIDBAUGJCVYJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoKgHCBMUFRYaIVUkbnVsbNMJCgsMDxJXTlMua2V5c1pOUy5vYmplY3RzViRjbGFzc6INDoACgAOiEBGABIAFgAdccmVsYXRpdmVQYXRoWWFsaWFzRGF0YV8QOC4uLy4uL3BhcGVyL1d1cnQxMmEgU2VsZi1vcHRpbWl6aW5nIEFTVCBpbnRlcnByZXRlcnMucGRm0hcLGBlXTlMuZGF0YU8RAiYAAAAAAiYAAgAAD1NhbXN1bmcgU1NEIDg0MAAAAAAAAAAAAAAAAM9h1xRIKwAAAAvOmx9XdXJ0MTJhIFNlbGYtb3B0aW1pemkjQkQ0REQucGRmAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAC9TdzTMwIAAAAAAAAAAAAAIAAgAACSAAAAAAAAAAAAAAAAAAAAAFcGFwZXIAABAACAAAz2G69AAAABEACAAAzTMiEAAAAAEAFAALzpsABigwAAYkvwAGJIIAAmWvAAIAYVNhbXN1bmcgU1NEIDg0MDpVc2VyczoAY2FtaWxsb2JydW5pOgBEb2N1bWVudHM6AGVkdWNhdGlvbjoAcGFwZXI6AFd1cnQxMmEgU2VsZi1vcHRpbWl6aSNCRDRERC5wZGYAAA4AWgAsAFcAdQByAHQAMQAyAGEAIABTAGUAbABmAC0AbwBwAHQAaQBtAGkAegBpAG4AZwAgAEEAUwBUACAAaQBuAHQAZQByAHAAcgBlAHQAZQByAHMALgBwAGQAZgAPACAADwBTAGEAbQBzAHUAbgBnACAAUwBTAEQAIAA4ADQAMAASAFlVc2Vycy9jYW1pbGxvYnJ1bmkvRG9jdW1lbnRzL2VkdWNhdGlvbi9wYXBlci9XdXJ0MTJhIFNlbGYtb3B0aW1pemluZyBBU1QgaW50ZXJwcmV0ZXJzLnBkZgAAEwABLwAAFQACABP//wAAgAbSGxwdHlokY2xhc3NuYW1lWCRjbGFzc2VzXU5TTXV0YWJsZURhdGGjHR8gVk5TRGF0YVhOU09iamVjdNIbHCIjXE5TRGljdGlvbmFyeaIiIF8QD05TS2V5ZWRBcmNoaXZlctEmJ1Ryb290gAEACAARABoAIwAtADIANwBAAEYATQBVAGAAZwBqAGwAbgBxAHMAdQB3AIQAjgDJAM4A1gMAAwIDBwMSAxsDKQMtAzQDPQNCA08DUgNkA2cDbAAAAAAAAAIBAAAAAAAAACgAAAAAAAAAAAAAAAAAAANu},
+	Bdsk-Url-1 = {http://dx.doi.org/10.1145/2384577.2384587}}
 
 @article{McGh98a,
 	Abstract = {Key to the central promise inherent in Java technology-"write once, run anywhere"-is the fact that Java programs run on the Java virtual machine, insulating them from any contact with the underlying hardware. Consequently, Java programs must execute indirectly through a translation layer built into the Java virtual machine. Translation essentially converts Java virtual machine instructions (called byte-codes) into corresponding machine-specific binary instructions. Bytecode is a single image of a program that will execute identically (in principle) on any system equipped with a {JVM}. The first step toward the development of a new class of Java processors was the creation of the bytecode execution engine itself, called the {picoJava} core. {PicoJava} directly executes Java bytecode instructions and provides hardware support for other essential functions of the {JVM}. Executing bytecode instructions in hardware eliminates the need for dynamic translation, thus extending the useful range of Java bytecode programs to embedded environments. By the end of 1998, Java processors like Sun's {microJava} 701 should be available for evaluation from several licensees of the {picoJava} core technology},
@@ -1526,7 +1551,7 @@ However I think we will differ in the sense that we keep the Smalltalk spirit al
 	Bdsk-Url-1 = {http://rmod.lille.inria.fr/archives/papers/%20Denk10a-Models10-FeatureModels.pdf},
 	Bdsk-Url-2 = {http://dx.doi.org/10.1007/978-3-642-16129-2%5C_11}}
 
-@unpublished{Char13a,
+@techreport{Char13a,
 	Abstract = {{Modern languages are typically supported by managed
                    runtimes (Virtual Machines). Since VMs have to deal
                    with many concepts such as memory management,
@@ -1549,6 +1574,8 @@ However I think we will differ in the sense that we keep the Smalltalk spirit al
                    primitive modification and runtime customization of
                    VM plug-ins.}},
 	Author = {Chari, Guido and Garbervetsky, Diego and Bruni, Camillo and Denker, Marcus and Ducasse, St{\'e}phane},
+	Date-Modified = {2014-05-19 17:28:47 +0000},
+	Institution = {INRIA},
 	Language = {English},
 	Month = {Sep},
 	Note = {Preprint: \url{http://hal.inria.fr/hal-00871353}},
