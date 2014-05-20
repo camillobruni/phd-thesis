@@ -455,7 +455,7 @@ Also, the paragraph is again reversed to what I would expect, start also with so
 \seclabel{val-nabujito}
 % ===========================================================================
 
-\noindent In this section we present \NBJ, a \B-based approach for a language-side \JIT compiler that tries to replicated the behavior of the existing \JIT.
+\noindent In this section we present \NBJ, a \B-based approach for a language-side \JIT compiler that tries to replicated the behavior of the existing \JIT as shown in \figref{validation-nabujito-overview}.
 
 \begin{figure}[h]
 	\centering
@@ -463,6 +463,7 @@ Also, the paragraph is again reversed to what I would expect, start also with so
 	\caption[\NBJ Overview]{
 	\NBJ tries to replicate the \JIT which resides in the \VM.
 	We use \B to compile native versions of \PH methods that match the results generated from the existing \JIT.}
+	\figlabel{validation-nabujito-overview}
 \end{figure}
 
 We have presented two other \B applications so far: a \FFI and previously the dynamic primitives.
@@ -890,7 +891,7 @@ However, with the previously mentioned \Sista project, efforts are being made to
 One major performance optimization missing in both, the original \PH \VM-level \JIT and \NBJ, is inlining. 
 By inlining we are able to create methods that are potentially big enough for optimizations.
 However, inlining is a difficult task in a highly dynamic language such as \ST or \Self \cite{Cham89a} when using a per method \JIT.
-A better match for this seems to be trace-based \JITs such as the one present in \PyPy or \Luajit.
+A better match for this seems to a trace-based \JIT such as the one present in \PyPy or \Luajit.
 Efficient inlining can only be performed with sufficient knowledge of the system. 
 Accessing this high-level information from within the \VM is cumbersome and requires duplication of language-side reflective features.
 The \JIT lives on the same level as the information it needs relying on the already present reflective features of \ST.
@@ -914,7 +915,6 @@ We identified that a reasonable \B-based \JIT implementation requires a well-def
 We have shown that the compilation time from bytecode to native code takes the same time as the standard bytecode compiler.
 However, from a real-world point of the view the current \NBJ setup is insufficient since it requires a customized \VM.
 A sufficient stable \JIT interface is required to efficiently implement \NBJ.
-\todo{SISTA}
 
 Both of these applications are a further validation of the \B framework and the concept of an open language-runtime without a clear distinction between language-side and \VM-side.
 With the current setup we are capable of hosting important \VM parts such as non-essential plugins and primitives to the language-side.
