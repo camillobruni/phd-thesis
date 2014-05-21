@@ -50,7 +50,8 @@ For deployment and debugging, the state of a running image can be saved at any p
 	\textcolor{darkRed}{\texttt{\$a}} & the character \textcolor{darkRed}{\texttt{a}} \\
 	\textcolor{darkRed}{\texttt{12 2r1100 16rC}} & integers twelve in decimal, binary and hexadecimal encoding\\
 	\textcolor{darkRed}{\texttt{3.14 1.2e3}} & floating-point numbers\\
-	\texttt{\#(\textcolor{string}{abc} \textcolor{darkRed}{123})} & literal array with the symbol \textcolor{string}{\texttt{\#abc}} and the number \textcolor{darkRed}{\texttt{123}} \\
+	\texttt{\#(\textcolor{string}{abc} \textcolor{darkRed}{123})} & literal array containing the symbol \textcolor{string}{\texttt{\#abc}} and the number \textcolor{darkRed}{\texttt{123}} \\
+	\texttt{\#[\textcolor{darkRed}{12} \textcolor{darkRed}{16rFF}]} & literal byte array containing the bytes/integers \textcolor{darkRed}{12} and \textcolor{darkRed}{255}\\
 	\texttt{\{\textcolor{darkBlue}{foo}\,.\ \textcolor{darkRed}{3}\,+\,\textcolor{darkRed}{2}\}} & dynamic array built from 2 expressions\\
 	
 	\\
@@ -79,32 +80,44 @@ Messages are modeled from natural languages with a subject a verb and complement
 
 \begin{alltt}
 \textcolor{darkBlue}{Array} new.
-#(\textcolor{darkRed}{1 2 3}) size.
 \end{alltt}
 
 The first example creates and returns a new instance of the \textcolor{darkBlue}{\texttt{Array}} class, by sending the message \texttt{new} to the class
 \textcolor{darkBlue}{\texttt{Array}} that is an object.
+
+\begin{alltt}
+#(\textcolor{darkRed}{1 2 3}) size.
+\end{alltt}
+
 The second message returns the size of the literal array which is \textcolor{darkRed}{\texttt{3}}.
 
 \item[Binary messages] take only one argument and are named by one or more symbol characters.
 
 \begin{alltt}
 \textcolor{darkRed}{3} + \textcolor{darkRed}{4}.
-\textcolor{string}{'Hello'}, \textcolor{string}{' World'}.
 \end{alltt}
 
 The \texttt{+} message is sent to the integer object \textcolor{darkRed}{\texttt{3}} with \textcolor{darkRed}{\texttt{4}} as the argument.
+
+\begin{alltt}
+\textcolor{string}{'Hello'}, \textcolor{string}{' World'}.
+\end{alltt}
+
 In the second case, the string \textcolor{string}{\texttt{'Hello'}} receives the message \texttt{,} (comma) with the string \textcolor{string}{\texttt{'~World'}} as the argument.
 
 \item[Keyword messages] can take one or more arguments that are inserted in the message name.
 
 \begin{alltt}
 \textcolor{string}{'Smalltalk'} allButFirst: \textcolor{darkRed}{5}.
-\textcolor{darkRed}{3} to: \textcolor{darkRed}{10} by: \textcolor{darkRed}{2}.
 \end{alltt}
 
 The first example sends the message \texttt{allButFirst:} to a string, with the argument \textcolor{darkRed}{\texttt{5}}.
 This returns the string \textcolor{string}{\texttt{'talk'}}.
+
+\begin{alltt}
+\textcolor{darkRed}{3} to: \textcolor{darkRed}{10} by: \textcolor{darkRed}{2}.
+\end{alltt}
+
 The second example sends \texttt{to:by:} to \textcolor{darkRed}{\texttt{3}}, with arguments \textcolor{darkRed}{\texttt{10}} and \textcolor{darkRed}{\texttt{2}}; this returns a collection containing \textcolor{darkRed}{\texttt{3}}, \textcolor{darkRed}{\texttt{5}}, \textcolor{darkRed}{\texttt{7}}, and \textcolor{darkRed}{\texttt{9}}.
 
 \end{description}
@@ -171,13 +184,17 @@ They are the basis for control structures like conditionals and loops.
 \begin{alltt}
 \textcolor{darkRed}{2} = \textcolor{darkRed}{2}
   ifTrue: [ \textcolor{darkBlue}{Error} signal: \textcolor{string}{'Help'} ].
-\#(\textcolor{string}{'Hello World'} \textcolor{darkRed}{\$!})
-  do: [ :\textcolor{darkBlue}{e} | \textcolor{darkBlue}{Transcript} show: \textcolor{darkBlue}{e} ]
 \end{alltt}
 
 The first example sends the message \texttt{ifTrue:} to the boolean
 \textcolor{darkRed}{\texttt{true}} (computed from \texttt{\textcolor{darkRed}{2} = \textcolor{darkRed}{2}}) with a block as argument.
 Because the boolean is \textcolor{darkRed}{\texttt{true}}, the block is executed and an exception is signaled.
+
+\begin{alltt}
+\#(\textcolor{string}{'Hello World'} \textcolor{darkRed}{\$!})
+  do: [ :\textcolor{darkBlue}{e} | \textcolor{darkBlue}{Transcript} show: \textcolor{darkBlue}{e} ]
+\end{alltt}
+
 The next example sends the message \texttt{do:} to an array.
 This evaluates the block once for each element, passing it via the \texttt{e} parameter.
 As a result, \texttt{\textcolor{string}{Hello~World!}} is printed.
@@ -206,9 +223,9 @@ For instance the \texttt{basicNew} which allocates new objects uses the primitiv
 
 \begin{alltt}
 \textcolor{darkBlue}{Behavior} >> basicNew
-    \textcolor{comment}{"Answer an instance of this class"}
-    <primitive: 70>
-    OutOfMemory signal.
+    \textcolor{comment}{"Answer a new instance of this class"}
+    <primitive: \textcolor{darkRed}{70}>
+    \textcolor{darkBlue}{OutOfMemory} signal.
 \end{alltt}
 
 
