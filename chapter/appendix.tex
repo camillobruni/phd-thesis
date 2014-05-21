@@ -1,0 +1,216 @@
+\input{chapter-header.tex}
+% =============================================================================
+\chapter{Appendix}
+\markboth{Appendix}{Appendix}
+\chaplabel{appendix}
+%\minitoc
+% =============================================================================
+
+%\clearpage
+
+\vspace*{5cm}
+% =============================================================================
+\section{\PH Programming Language}
+\seclabel{pharo}
+% =============================================================================
+
+
+\PH is a \ST inspired object-oriented and dynamically-typed general-purpose language with its own programming environment.
+The language has a simple and expressive syntax which can be learned in a few minutes.
+Concepts in \PH are very consistent, everything is an object: classes, methods, numbers, strings, even the execution context.
+
+\PH runs on top of a bytecode-based \emph{virtual machine}.
+Development takes place in an \emph{image} in which all objects reside.
+All these objects can be modified by the programmer, this includes classes and methods.
+Hence, we eliminate the typical edit/compile/run cycle and instead incrementally add, remove or modify classes and methods.
+It is worth noting that \emph{all} classes can be extended with new methods in \PH.
+For instance, one can add new operations on integers or strings, classes that are treated as unchangeable internal objects by many other high-level languages.
+For deployment and debugging, the state of a running image can be saved at any point and subsequently restored.
+
+\newpage
+
+% ---------------------------------------------------------------------------
+\subsection{Minimal Syntax}
+% ---------------------------------------------------------------------------
+
+\noindent
+\begin{tabularx}{\linewidth}{@{}rX@{}}
+	\multicolumn{2}{l}{Reserved Words}\\
+	\midrule
+	\textcolor{darkRed}{\texttt{nil}} & the undefined object\\
+	\textcolor{darkRed}{\texttt{true}}, \textcolor{darkRed}{\texttt{false}} & boolean objects\\
+	\textcolor{darkCyan}{\texttt{self}} & the receiver of the current message\\
+	\textcolor{darkCyan}{\texttt{super}} & the receiver, in the superclass context\\
+	\textcolor{darkCyan}{\texttt{thisContext}} & the current invocation on the call stack \\
+	\\
+	\multicolumn{2}{l}{Literal Object Syntax}\\
+	\midrule
+	\textcolor{string}{\texttt{'}{a string}\texttt{'}} & \\
+	\textcolor{string}{\texttt{\#symbol}} & unique string \\
+	\textcolor{darkRed}{\texttt{\$a}} & the character \textcolor{darkRed}{\texttt{a}} \\
+	\textcolor{darkRed}{\texttt{12 2r1100 16rC}} & integers twelve in decimal, binary and hexadecimal encoding\\
+	\textcolor{darkRed}{\texttt{3.14 1.2e3}} & floating-point numbers\\
+	\texttt{\#(\textcolor{string}{abc} \textcolor{darkRed}{123})} & literal array with the symbol \textcolor{string}{\texttt{\#abc}} and the number \textcolor{darkRed}{\texttt{123}} \\
+	\texttt{\{\textcolor{darkBlue}{foo}\,.\ \textcolor{darkRed}{3}\,+\,\textcolor{darkRed}{2}\}} & dynamic array built from 2 expressions\\
+	
+	\\
+	\multicolumn{2}{l}{Reserved Characters in Expressions}\\
+	\midrule
+	\textcolor{comment}{\texttt{"}{a comment}\texttt{"}} & \\
+	\texttt{.} & expression separator (period)\\
+	\texttt{;} & message cascade (semicolon)\\
+	\texttt{:=} & {assignment} \\
+	\texttt{\textasciicircum} & return a result from a method (caret)\\
+	\texttt{[\,:\textcolor{darkBlue}{p}\,|\,}\emph{expr}\texttt{\,]} & code block with a parameter \\
+	\texttt{|\,\textcolor{darkBlue}{foo bar}\,|} & declaration of two temporary variables\\
+	\texttt{<pragma>}, \texttt{<primitive: 3>} & pragma or annotations used in methods, for instances to declare a primitive method.
+\end{tabularx}
+
+% ---------------------------------------------------------------------------
+\subsection{Message Sending}
+% ---------------------------------------------------------------------------
+
+A method is called by sending a message to an object called the \emph{receiver}.
+Each message returns an object.
+Messages are modeled from natural languages with a subject a verb and complements. There are three types of messages with descending precedence: unary, binary, and keyword.
+
+\begin{description}
+\item[Unary messages] have no arguments.
+
+\begin{alltt}
+\textcolor{darkBlue}{Array} new.
+#(\textcolor{darkRed}{1 2 3}) size.
+\end{alltt}
+
+The first example creates and returns a new instance of the \textcolor{darkBlue}{\texttt{Array}} class, by sending the message \texttt{new} to the class
+\textcolor{darkBlue}{\texttt{Array}} that is an object.
+The second message returns the size of the literal array which is \textcolor{darkRed}{\texttt{3}}.
+
+\item[Binary messages] take only one argument and are named by one or more symbol characters.
+
+\begin{alltt}
+\textcolor{darkRed}{3} + \textcolor{darkRed}{4}.
+\textcolor{string}{'Hello'}, \textcolor{string}{' World'}.
+\end{alltt}
+
+The \texttt{+} message is sent to the integer object \textcolor{darkRed}{\texttt{3}} with \textcolor{darkRed}{\texttt{4}} as the argument.
+In the second case, the string \textcolor{string}{\texttt{'Hello'}} receives the message \texttt{,} (comma) with the string \textcolor{string}{\texttt{'~World'}} as the argument.
+
+\item[Keyword messages] can take one or more arguments that are inserted in the message name.
+
+\begin{alltt}
+\textcolor{string}{'Smalltalk'} allButFirst: \textcolor{darkRed}{5}.
+\textcolor{darkRed}{3} to: \textcolor{darkRed}{10} by: \textcolor{darkRed}{2}.
+\end{alltt}
+
+The first example sends the message \texttt{allButFirst:} to a string, with the argument \textcolor{darkRed}{\texttt{5}}.
+This returns the string \textcolor{string}{\texttt{'talk'}}.
+The second example sends \texttt{to:by:} to \textcolor{darkRed}{\texttt{3}}, with arguments \textcolor{darkRed}{\texttt{10}} and \textcolor{darkRed}{\texttt{2}}; this returns a collection containing \textcolor{darkRed}{\texttt{3}}, \textcolor{darkRed}{\texttt{5}}, \textcolor{darkRed}{\texttt{7}}, and \textcolor{darkRed}{\texttt{9}}.
+
+\end{description}
+
+
+% ---------------------------------------------------------------------------
+\subsection{Precedence}
+% ---------------------------------------------------------------------------
+
+There is a fixed global precedence when evaluating expressions in \PH: Parentheses\,$>$\,unary\,$>$\,binary\,$>$\,keyword, and finally from left to right.
+
+\begin{alltt}
+(\textcolor{darkRed}{10} between: \textcolor{darkRed}{1} and: \textcolor{darkRed}{2}\,+\,\textcolor{darkRed}{4}\,*\,\textcolor{darkRed}{3}) not
+\end{alltt}
+
+Here, the messages \texttt{+} and \texttt{*} are sent first, then \texttt{between:and:} is sent, and finally \texttt{not}.
+The rule suffers no exception: operators are just binary messages with \emph{no notion of mathematical precedence}, so \texttt{\textcolor{darkRed}{2}\,+\,\textcolor{darkRed}{4}\,*\,\textcolor{darkRed}{3}} reads left-to-right and thus yields \textcolor{darkRed}{18} and not the expected \textcolor{darkRed}{14}!
+
+% ---------------------------------------------------------------------------
+\subsection{Cascading Messages}
+% ---------------------------------------------------------------------------
+
+Multiple messages can be sent to the same receiver with \texttt{;}.
+
+\begin{alltt}
+\textcolor{darkBlue}{OrderedCollection} new
+  add: \textcolor{string}{#abc};
+  add: \textcolor{string}{#def};
+  add: \textcolor{string}{#ghi}.
+\end{alltt}
+
+The message \texttt{new} is sent to \texttt{\textcolor{darkBlue}{OrderedCollection}} which
+results in a new collection to which three \texttt{add:} messages are sent with different arguments.
+The value of the whole message cascade is the value of the last message sent (here, the symbol \textcolor{string}{\texttt{\#ghi}}).
+This example is the equivalent of first assigning the new collection to a temporary variable and sending three separate \texttt{add:} messages:
+
+\begin{alltt}
+| newCollection | 
+newCollection := \textcolor{darkBlue}{OrderedCollection} new.
+newCollection add: \textcolor{string}{#abc}.
+newCollection add: \textcolor{string}{#def}.
+newCollection add: \textcolor{string}{#ghi}.
+\end{alltt}
+
+
+To return the original receiver of the message cascade (\ie the collection) instead of the last result (\ie \textcolor{string}{\texttt{\#ghi}}), the \texttt{yourself} message is used:
+
+\begin{alltt}
+\textcolor{darkBlue}{OrderedCollection} new
+  add: \textcolor{string}{#abc};
+  add: \textcolor{string}{#def};
+  add: \textcolor{string}{#ghi};
+  yourself.
+\end{alltt}
+
+% ---------------------------------------------------------------------------
+\subsection{Blocks}
+% ---------------------------------------------------------------------------
+
+Blocks are objects containing code that is executed on demand,
+(anonymous functions or closures).
+They are the basis for control structures like conditionals and loops.
+
+\begin{alltt}
+\textcolor{darkRed}{2} = \textcolor{darkRed}{2}
+  ifTrue: [ \textcolor{darkBlue}{Error} signal: \textcolor{string}{'Help'} ].
+\#(\textcolor{string}{'Hello World'} \textcolor{darkRed}{\$!})
+  do: [ :\textcolor{darkBlue}{e} | \textcolor{darkBlue}{Transcript} show: \textcolor{darkBlue}{e} ]
+\end{alltt}
+
+The first example sends the message \texttt{ifTrue:} to the boolean
+\textcolor{darkRed}{\texttt{true}} (computed from \texttt{\textcolor{darkRed}{2} = \textcolor{darkRed}{2}}) with a block as argument.
+Because the boolean is \textcolor{darkRed}{\texttt{true}}, the block is executed and an exception is signaled.
+The next example sends the message \texttt{do:} to an array.
+This evaluates the block once for each element, passing it via the \texttt{e} parameter.
+As a result, \texttt{\textcolor{string}{Hello~World!}} is printed.
+
+
+% ---------------------------------------------------------------------------
+\subsection{Methods}
+% ---------------------------------------------------------------------------
+
+Methods are first-class objects in \PH and can be inspected and modified on the fly.
+Methods are created by saving expressions in the \PH development environment.
+Typically methods are printed with a special first line indicating the class the method is installed on and the name or selector it is given.
+
+\begin{alltt}
+\textcolor{darkBlue}{Array} >> helpMethod
+    \textcolor{darkRed}{2} = \textcolor{darkRed}{2}
+        ifTrue: [ \textcolor{darkBlue}{Error} signal: \textcolor{string}{'Help'} ].
+\end{alltt}
+
+This example would denote a simple method with a unary selector on the \texttt{Array} class.
+This method could be invoked by evaluating \texttt{\textcolor{darkBlue}{Array} new helpMethod}.
+
+Certain methods are marked with a pragma to use predefined primitives from the \VM.
+These are used for expressions that cannot be expressed in \PH.
+For instance the \texttt{basicNew} which allocates new objects uses the primitive number 70:
+
+\begin{alltt}
+\textcolor{darkBlue}{Behavior} >> basicNew
+    \textcolor{comment}{"Answer an instance of this class"}
+    <primitive: 70>
+    OutOfMemory signal.
+\end{alltt}
+
+
+% =============================================================================
+\input{chapter-footer.tex}

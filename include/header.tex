@@ -36,7 +36,8 @@
 \usepackage{wrapfig} % suppport for figures with text wrapped around 
 \usepackage{xspace}
 \usepackage[normalem]{ulem} % for \sout
-\usepackage{xcolor}
+\usepackage[table,svgnames]{xcolor}
+\usepackage{tabularx}
 \usepackage{tablefootnote}
 \usepackage{pifont} %  Access to PostScript standard Symbol and Dingbats fonts
 
@@ -177,8 +178,14 @@
 % typically used in code examples where arbitrary broken up parts are hard to read
 \newcommand{\needlines}[1]{\Needspace{#1\baselineskip}}
 
-\usepackage{xcolor}
 \definecolor{source}{gray}{0.95}
+\definecolor{light-gray}{rgb}{0.8,0.8,0.8}
+\definecolor{comment}{rgb}{0.35,0.35,0.35}
+\definecolor{string}{rgb}{0.5,0,0.5}
+\definecolor{darkRed}{rgb}{0.5,0,0}
+\definecolor{darkBlue}{rgb}{0,0,0.3}
+\definecolor{darkCyan}{rgb}{0,0.3,0.3}
+
 % source code formatting
 \usepackage{listings}
 % global settings for source code listing package
