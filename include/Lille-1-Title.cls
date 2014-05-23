@@ -45,7 +45,7 @@
      \centerline{\UseEntryFont{ThesisFirstPageFoot}%
                  INRIA Lille - Nord Europe
 				 }
-	 {\footnotesize Num\'ero d'ordre: 41414} %40109
+    \centerline{\UseEntryFont{ThesisFirstPageFoot} Num\'ero d'ordre : \@ThesisOrderId}
      \centerline{\UseEntryFont{ThesisFirstPageFoot}%
                  ~
 				 }
@@ -97,17 +97,21 @@
    {\renewcommand{\@ThesisPresentedBy}{{\UseEntryFont{ThesisPresentedBy}#1}}}
 \newcommand{\@ThesisAuthor}%
         {{\UseEntryFont{ThesisAuthor}%
-            \fbox{\'ecrire \tt\char`\\ThesisAuthor\{ l'auteur \}}}}
+            \fbox{Please add the following to your latex document:  \tt\char`\\ThesisAuthor\{ name FAMILY \}}}}
 \newcommand\ThesisAuthor[1]%
         {\renewcommand{\@ThesisAuthor}{{\UseEntryFont{ThesisAuthor}#1}}}
 \newcommand{\@ThesisJuryTitle}%
     {{\UseEntryFont{ThesisJuryTitle}Composition du jury}}
 \newcommand\ThesisJuryTitle[1]%
     {\renewcommand{\@ThesisJuryTitle}{{\UseEntryFont{ThesisJuryTitle}#1}}}
+\newcommand{\@ThesisOrderId}%
+    {\fbox{Please add the following to your latex document: \tt\char`\\ThesisOrderId\{ id \}}}
+\newcommand\ThesisOrderId[1]%
+    {\renewcommand{\@ThesisOrderId}{#1}}
 
 \newcommand\includesLogo {
-		\includegraphics[scale=0.5]\logoInria\hspace{10em}
-		\includegraphics[scale=0.45]\logoLifl \hspace{10em}
+		\includegraphics[scale=0.5]\logoInria\hspace{11em}
+		\includegraphics[scale=0.45]\logoLifl \hspace{11em}
 		\includegraphics[scale=0.4]\logoUSTL
 	}
 	
@@ -337,10 +341,10 @@
                                 \@ThesisAuthor
     \end{center}
        \vskip5mm plus2fil
-                 \hskip1cm\@ThesisJuryTitle
-    \begin{center}
+                                \@ThesisJuryTitle
+    \begin{flushleft}
                                 \@ThesisJury
-    \end{center}
+    \end{flushleft}
        \vskip5mm
                             \@ThesisFirstPageFoot
     %---------------------------------------------------
