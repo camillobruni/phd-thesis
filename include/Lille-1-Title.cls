@@ -45,7 +45,7 @@
      \centerline{\UseEntryFont{ThesisFirstPageFoot}%
                  INRIA Lille - Nord Europe
 				 }
-	 {\footnotesize Num\'ero d'ordre: XXXXX} %40109
+	 {\footnotesize Num\'ero d'ordre: 41414} %40109
      \centerline{\UseEntryFont{ThesisFirstPageFoot}%
                  ~
 				 }
@@ -106,8 +106,8 @@
     {\renewcommand{\@ThesisJuryTitle}{{\UseEntryFont{ThesisJuryTitle}#1}}}
 
 \newcommand\includesLogo {
-		\includegraphics[scale=0.3]\logoInria\hspace{9em}
-		\includegraphics[scale=0.45]\logoLifl \hspace{9em}
+		\includegraphics[scale=0.5]\logoInria\hspace{10em}
+		\includegraphics[scale=0.45]\logoLifl \hspace{10em}
 		\includegraphics[scale=0.4]\logoUSTL
 	}
 	
