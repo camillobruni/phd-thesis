@@ -87,6 +87,7 @@ The main contributions of \NBFFI are:
 
 
 % ===========================================================================
+\newpage
 \section{\NBFFI: an Introduction}
 \seclabel{ffi-nutshell}
 % ===========================================================================
@@ -148,6 +149,7 @@ In this example, \ttt{anInteger} refers to the argument of the \ttt{abs} method,
 Finally, this \ttt{abs} function is looked up in the \ttt{libc} whose an handle is passed in the \ttt{module:} parameter (cf. \ding{186}).
 
 % ---------------------------------------------------------------------------
+\newpage
 \subsection{Automatic Marshalling of Known Types}
 % ---------------------------------------------------------------------------
 
@@ -351,6 +353,7 @@ Passing a reference may lead to problems is the C function stores the address an
 
 % memory alloc & structs
 \begin{table}[h]
+	\footnotesize
 	\begin{adjustwidth}{-2.0in}{-2.0in}
 	\centering
     \begin{tabular}{lllll}
@@ -493,7 +496,7 @@ In \NBFFI, doing most of the \FFI call processing at language-side makes easier 
 \begin{figure*}[h]
 	\begin{adjustwidth}{-2.0in}{-2.0in}
 		\centering
-		\includegraphics[scale=\imagescale]{ffiOverview}
+		\includegraphics[width=0.9\paperwidth]{ffiOverview}
 	\end{adjustwidth}
 	\caption[\FFI Implementation Comparison]{Comparison of \FFI calls propagation in \NBFFI and a typical \VM plugin-based implementation. \NB resorts to \VM-level only for the native-code activation, whereas typical implementations cross this barrier much earlier.}
 	\figlabel{ffi-ffi}
@@ -668,6 +671,7 @@ In all cases, the allocation time of the structs is not included in the measurem
 \todo{moa text hea needed}
 
 % ---------------------------------------------------------------------------
+\newpage
 \subsection{Callbacks}
 % ---------------------------------------------------------------------------
 
@@ -700,6 +704,7 @@ To really demonstrate that these context switches are the bottleneck, \tabref{ff
 We do not argue here that callbacks should be implemented in native code but that \NB support for callback can be optimized to reach \Alien's performance at least.
 
 % ===========================================================================
+\newpage
 \section{Implementation Details}
 \seclabel{ffi-internals}
 % ===========================================================================
@@ -830,7 +835,7 @@ The current approach is to create a specific subclass for each platform.
 A simple extension to \NB to allow callout definitions for multiple platforms in a single method would greatly improve this case.
 The following code example illustrates a possible solution:
 %
-\begin{stcode}[]{}
+\begin{stcode}[]{10}
 FFI 
   unix: [ :builder |
     builder 
@@ -940,7 +945,7 @@ Only that the plugins are generated from the original \NB callouts rather than c
 %
 \begin{figure}[h]
 \centering
-\includegraphics[scale=\imagescale]{nb-deployment-mode}
+\includegraphics[width=\textwidth]{nb-deployment-mode}
 \caption[\NB Deployment Mode]{Comparison of the callout actiation for a) the development mode where native cod eis create on demand and b) the deployment mode where we use pre-generated native code.}
 \end{figure}
 %
@@ -965,6 +970,7 @@ Hence the cost for the context switch plus the cost of activating the \NB callou
 
 
 % ===========================================================================
+\newpage
 \section{Conclusion}
 \seclabel{ffi-conclusion}
 % ===========================================================================

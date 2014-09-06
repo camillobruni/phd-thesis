@@ -25,7 +25,7 @@ This is a step forward from the typical metacircular approach where the whole re
 Once the \VM is compiled, all the high-level definitions that existed at compilation time are no longer accessible from language-side.
 \WF tries to make a fraction of the original compile-time definitions accessible.
 
-\todo{probably retrofit to the final results of \NBJ}\enlargethispage{\baselineskip}
+%\todo{probably retrofit to the final results of \NBJ}\enlargethispage{\baselineskip}
 The second prototype, \NBJ a language-side \JIT compiler takes the core idea of \WF even further.
 \WF is capable of defining new primitives at runtime which are not reentrant: it is not possible to activate \PH methods from within primitives.
 However, this is what happens in jitted methods: it is possible to switch seamlessly between native methods and standard \PH methods using bytecode evaluation.
@@ -856,6 +856,7 @@ Hence our approach is even valid for short-timed script-like applications as mos
 
 
 % -----------------------------------------------------------------------------
+\newpage
 \subsection{\NBJ Limitations and Future Work}
 \seclabel{validation-nabujito-problems}
 % -----------------------------------------------------------------------------

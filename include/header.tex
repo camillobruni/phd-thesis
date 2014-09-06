@@ -2,7 +2,7 @@
 \usepackage[T1]{fontenc}
 
 % modify the default page geometry
-\usepackage[left=1.7in,right=1.5in,top=2cm,bottom=2cm,includefoot,includehead,headheight=13.6pt]{geometry}
+\usepackage[left=1.7cm,right=1.7cm,top=1cm,bottom=1cm,includefoot,includehead,headheight=13.6pt]{geometry}
 %\usepackage[bottom=1cm,top=1cm, includefoot,includehead, headheight=5pt, paperwidth=6in, paperheight=9in]{geometry}
 
 % =============================================================================
@@ -26,6 +26,7 @@
 \usepackage[htt]{hyphenat} % enable hyphenation of \textt + custom hypenation rules for words
 % \usepackage{hyperref} see at the end of the header.tex
 \usepackage{ifthen} % support boolean "branches" => enables conditional macros
+\usepackage{lettrine} % multiline first letters
 \usepackage{tgtermes} % tex gyre thermes font
 \usepackage{multirow} % fancy stuff for tables: multirow, bigdelim, bigstrut
 \usepackage{rotating} % Sideways of figures & tables
@@ -412,12 +413,17 @@
 % only report overfull hbox above this badness level
 \hfuzz=1pt
 
+\widowpenalty=10000
+\clubpenalty=10000
+
+\raggedbottom
+
 % =============================================================================
 % by default I use 10pt for text in all figures, hence depending on the default
 % font size of the latex document you can adjust the scaling globally here if
 % you use \includegraphics[scale=\imagescale]{myFigureName} for figures
 % this is useful if you later change the fontsize of the document
-\newcommand\imagescale{1.1}
+\newcommand\imagescale{1.0}
 
 % =============================================================================
 % Add macros for common names here, Use smallcaps (\textsc) for product names

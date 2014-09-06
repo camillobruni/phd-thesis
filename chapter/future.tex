@@ -34,6 +34,7 @@ This will lead to a description of required \VM-level improvements to make appli
 \todo{recheck to be in sync with the chapter structure}
 
 % =============================================================================
+\newpage
 \section{Background}
 \seclabel{future-related-work}
 \seclabel{future-background}
@@ -179,7 +180,7 @@ Benzo x86 generate: [ :asm |
 For this basic example we see that the two formats do not differ very much.
 Though, already on the example of the \ttt{return} instruction it becomes obvious that the \TAC-based solution is more explicit.
 When using more complex control structures the difference is apparent:
-\begin{stcode}{}
+\begin{stcode}{7}
 Benzo vcpu x86 generate: [ :cpu || a b c |
 	a := cpu uint: 1.
 	b := cpu uint: 2.

@@ -385,31 +385,39 @@
                       \@afterheading
                     \fi}
 
+\def\pstart#1{\noindent\smash{\lower3ex\hbox{\llap{\Cal#1}}\hskip-.2em}
+  \parshape=3 1.5em \dimexpr\hsize-1.5em 2em \dimexpr\hsize-2em 0pt \hsize}
+  
 \def\@makechapterhead#1{
   {\parindent \z@ \raggedright \normalfont
+    \vspace*{-1cm}
+  	{\fontsize{5cm}{10cm}\color{black!5} \selectfont \thechapter}
+  	\vspace*{-4cm}
     \begin{flushleft}
       \openup 5mm % enforce proper line height
       %\interlinepenalty\@M
-      \hspace*{-2mm}
-      {\fontsize{1.5cm}{10cm}  \selectfont \textsc{#1}}
+      \begin{adjustwidth}{2.5cm}{}
+	      \hspace*{-2mm}
+	      {\fontsize{1.2cm}{10cm} \selectfont \textsc{#1}}
+      \end{adjustwidth}
       \vspace*{0.3cm}
       \par
 %      \hrulefill
     \end{flushleft}
 
-    \begin{flushright}
-      \ifnum \c@secnumdepth >\m@ne
-        \if@mainmatter
-          \vspace*{-5cm}
-          \mbox{
-          	\hspace*{-2.2cm}
-          	\fontsize{3.5cm}{1em}\color{black!5}\selectfont Chapter
-          	\fontsize{10cm}{1em}\color{black!5}\selectfont \thechapter}
-          \vspace*{-3.2cm}
-          \par\nobreak
-        \fi
-      \fi
-    \end{flushright}
+%    \begin{flushright}
+%      \ifnum \c@secnumdepth >\m@ne
+%        \if@mainmatter
+%          \vspace*{-5cm}
+%          \mbox{
+%          	\hspace*{-1.5cm}
+%          	\fontsize{2.5cm}{1em}\color{black!5}\selectfont Chapter
+%          	\fontsize{10cm}{1em}\color{black!5}\selectfont \thechapter}
+%          \vspace*{-2.5cm}
+%          \par\nobreak
+%        \fi
+%      \fi
+%    \end{flushright}
 %    \vskip 20\p@
   }}
 \def\@schapter#1{\if@twocolumn
